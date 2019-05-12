@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1; width=device-width, initial-scale=1" />
+<h:outputStylesheet library="css" name="login.css"/>
+
+<title>Abraço - Login</title>
+</h:head>
+
+<h:body>
+
+<div class="loginForm">
+
+	<h:form>
+		<h:panelGrid styleClass="container" id="container-opacity" columns="1">
+
+			<!-- Abraço Cultural png logo -->
+			<h:graphicImage styleClass="logo-image" library="images" name="login/logo_abraco_cultura.png" />
+			
+			<!-- Name field with 14 characters -->				
+			<p:outputLabel styleClass="text-output" id="nameOutputId" value="E-mail:"/>
+			<p:inputText styleClass="text-input" id="nameInputId" value="#{MBLogin.name}"
+							size="14" maxlength="12" />
+			
+			<!-- Password field with 12 characters-->
+			<p:outputLabel styleClass="text-output" id="passwordOutputId" value="Password:"/>
+			<p:password styleClass="text-input" id="passwordId" value="#{MBLogin.password}"
+						size="14" maxlength="12" />
+			
+			<!-- Enter button -->
+			<p:commandButton id="enterId" value="Enter" action="templates/template.xhtml" />
+		</h:panelGrid>
+	</h:form>
+
+	<!-- <h:outputText id="login" value="fdkfteste"/> -->
+</div>
+
+</h:body>
+</html>

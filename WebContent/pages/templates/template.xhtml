@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<h:outputStylesheet library="css" name="header.css"/>
+
+<title>AbracoWebManagement</title>
+</h:head>
+
+<h:body>
+<!-- 
+	<div id="page">
+	
+	<h2><h:outputText value="teste o linke" /></h2>
+	
+		<div id="header">
+			<ui:insert name="header">
+				<ui:include src="submenus/commonHeader.xhtml" />
+			</ui:insert>
+		</div>
+		 
+		<div id="content">
+			<ui:insert name="content">
+				<ui:include src="submenus/commonContent.xhtml" />
+			</ui:insert>
+		</div>
+
+		<div id="footer">
+			<ui:insert name="footer">
+				<ui:include src="submenus/commonFooter.xhtml" />
+			</ui:insert>
+		</div>
+	</div> -->
+
+
+	<!-- Show Message -->
+	<p:growl id="idMsgGlobal" life="4000" />
+
+
+	<p:layout fullPage="true">
+		<p:layoutUnit position="north">
+
+			<!-- <h:outputText id="template" value="teste"/> -->
+			<ui:insert name="menu">
+				<ui:include src="header/commonHeader.xhtml" />
+			</ui:insert>
+		</p:layoutUnit>
+
+
+		<p:layoutUnit position="center">
+			<ui:insert name="conteudo">
+				<ui:include src="contents/commonContent.xhtml" />
+			</ui:insert>
+		</p:layoutUnit>
+	</p:layout>
+
+</h:body>
+</html>
