@@ -6,6 +6,7 @@
   <packaging>war</packaging>
   <name>Abraço Cultural WebApp Poject</name>
   <description>Volunteer WebApp Project For Abraço Cultural ONG</description>
+  <url>www.abracomanagement.com.br</url>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <plugins>
