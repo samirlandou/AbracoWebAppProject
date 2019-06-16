@@ -23,6 +23,9 @@ public class loginController {
 		this.password = password;
 	}
 	
-	
-	
+	public String teste() {
+		
+		System.out.println("this is a teste ");
+		return "teste";		
+	}
 }
