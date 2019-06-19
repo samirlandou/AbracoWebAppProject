@@ -13,15 +13,15 @@ public class LoginDomain {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name ="id_login")
-	private Long idLogin;
+	@Column(name ="ID_LOGIN")
+	private Long id;
 	
-	@Column(name = "de_username", length = 20, nullable = false)
+	@Column(name = "DE_USERNAME", length = 20, nullable = false)
 	private String userName;
 	
-	@Column(name = "de_password", length = 20, nullable = false)
+	@Column(name = "DE_PASSWORD", length = 20, nullable = false)
 	private String password;
 	
-	@Column(name = "de_remember_password", length = 100, nullable = false)
+	@Column(name = "DE_REMEMBER_PASSWORD", length = 100, nullable = false)
 	private String rememberPassword;
 }
