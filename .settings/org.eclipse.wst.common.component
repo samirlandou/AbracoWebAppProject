@@ -4,6 +4,6 @@
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
         <property name="java-output-path" value="/abracowebmagement/build/classes"/>
-        <property name="context-root" value="abracowebmanagement"/>
+        <property name="context-root" value="abracowebmagement"/>
     </wb-module>
 </project-modules>
