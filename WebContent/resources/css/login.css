@@ -5,6 +5,7 @@ body, html{
 	margin: 0;
 }
 
+/*---------------------------------  LOGIN PAGE ---------------------------------------*/
 .loginForm{
 	/* The image used */
 	background-image: url("images/login/Jolie.jpg");
@@ -90,4 +91,11 @@ body, html{
 
 .text-input{
 	border-width: medium;
+}
+
+
+/*---------------------------------  REGISTER PAGE ---------------------------------------*/
+
+.texto{
+	color: #FF671F;
 }

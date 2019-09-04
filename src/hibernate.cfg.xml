@@ -30,18 +30,16 @@
         <property name="show_sql">true</property>
 
         <!-- Drop and re-create the database schema on startup (can use update, create, validate) -->
-        <property name="hbm2ddl.auto">update</property>
+        <property name="hbm2ddl.auto">validate</property>
 
+		<mapping class="br.com.abracowebmanagement.domain.UserDomain"/>
 		<mapping class="br.com.abracowebmanagement.domain.StudentDomain"/>
-		<mapping class="br.com.abracowebmanagement.domain.ProfessorDomain"/>
-		<mapping class="br.com.abracowebmanagement.domain.CoordinatorDomain"/>
 		<mapping class="br.com.abracowebmanagement.domain.PersonalInfoDomain"/>
-		<mapping class="br.com.abracowebmanagement.domain.ContactDomain"/>
 		<mapping class="br.com.abracowebmanagement.domain.ProfileDomain"/>
-		<mapping class="br.com.abracowebmanagement.domain.ClassDomain"/>
+		<mapping class="br.com.abracowebmanagement.domain.MyClassDomain"/>
 		<mapping class="br.com.abracowebmanagement.domain.PresenceDomain"/>
-        <mapping class="br.com.abracowebmanagement.domain.AbracoDomain"/>
-        <mapping class="br.com.abracowebmanagement.domain.LoginDomain"/>
+        <mapping class="br.com.abracowebmanagement.domain.StudentInMyClassDomain"/>
+
 		
     </session-factory>
 

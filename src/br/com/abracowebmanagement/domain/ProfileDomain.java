@@ -1,14 +1,8 @@
 package br.com.abracowebmanagement.domain;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @SuppressWarnings("serial")
 @Entity
@@ -26,28 +20,20 @@ public class ProfileDomain extends GenericDomain{
 	 */
 	
 	/*
-	 * AbracoDomain
+	 * Profile
+	 * Example: STUDENT, PROFESSOR, COORDINATOR, GESTOR, VISITOR
+	 * OBS.: ADMINISTRATOR will be the profile that will allow setting configurations
 	 */
-	@OneToOne
-	@JoinColumn(nullable = false)
-	private AbracoDomain abraco;
+	@Column(name = "DE_PROFILE", length = 20, nullable = false)
+	private String profile;
 	
 	
 	/*
 	 * Status
-	 * Ex: ENABLED, DISABLED, STAND BY, BLOCKED
+	 * Example: ENABLED, DISABLED, STAND BY, BLOCKED
 	 */
-	@Column(name = "DE_STATUS", length = 10, nullable = false)
+	@Column(name = "DE_STATUS", length = 20, nullable = false)
 	private String status;
-	
-	
-	/*
-	 * Function
-	 * The function of the profile.
-	 * Example: Academics coordinator, professor
-	 */
-	@Column(name = "DE_FUNCTION", length = 30, nullable = false)
-	private String function;	
 	
 
 	/*
@@ -60,52 +46,42 @@ public class ProfileDomain extends GenericDomain{
 	 * ES --> Spanish
 	 * PT --> Portuguese
 	 */
-	@Column(name = "DE_LANGUAGE", length = 2, nullable = false)
-	private String language;		
-	
-	/*
-	 * Data register
-	 * The date when the user have been registered
-	 */
-	@Column(name = "DT_REGISTER", nullable = false)
-	@Temporal(TemporalType.DATE)
-	private Date registerDate;
+	@Column(name = "DE_LANGUAGE", length = 20, nullable = false)
+	private String language;
 
 
 	
 	/*
 	 * Getters and Setters
 	 */
-	public AbracoDomain getAbraco() {
-		return abraco;
+	
+	public String getProfile() {
+		return profile;
 	}
 
-	public void setAbraco(AbracoDomain abraco) {
-		this.abraco = abraco;
+
+	public void setProfile(String profile) {
+		this.profile = profile;
 	}
+
 
 	public String getStatus() {
 		return status;
 	}
 
+
 	public void setStatus(String status) {
 		this.status = status;
 	}
+
 
 	public String getLanguage() {
 		return language;
 	}
 
+
 	public void setLanguage(String language) {
 		this.language = language;
-	}
-
-	public Date getRegisterDate() {
-		return registerDate;
-	}
-
-	public void setRegisterDate(Date registerDate) {
-		this.registerDate = registerDate;
 	}
 	
 }

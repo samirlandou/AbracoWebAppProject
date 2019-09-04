@@ -2,54 +2,124 @@ package br.com.abracowebmanagement.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "TB_USER")
+@Table(name = "TB_USER")	
 public class UserDomain extends GenericDomain{
 	
-	@Column(name = "NM_FIRST_NAME", length = 20, nullable = false)
-	private String firstName;
+	/**
+	 * Nomenclature for data base
+	 * TB -> TABLE
+	 * NM -> NAME
+	 * DE -> DESCRIPTION
+	 * TP -> TYPE
+	 * DT -> DATE
+	 * FG -> FLAG 
+	 */
+
+	/*
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name ="ID_LOGIN")
+	private Long id;*/
 	
-	@Column(name = "NM_MIDDLE_NAME", length = 20)
-	private String middleName;
+	/*
+	 * User Name
+	 */
+	@Column(name = "NM_USER", length = 30, nullable = false)
+	private String userName;
+
 	
-	@Column(name = "NM_LAST_NAME", length = 20, nullable = false)
-	private String lastName;	
+	/*
+	 * Password
+	 * Use MD5 cryptography for encode the password
+	 */
 	
-	@Column(name = "DE_USER_STATUS", length = 20, nullable = false)
-	private String userStatus;
+	@Column(name = "DE_PASSWORD", length = 32, nullable = false)
+	private String password;
+	
+	
+	/*
+	 * Remember password
+	 * Sentence that will help to remember the password.
+	 */
+	@Column(name = "DE_REMEMBER_PASSWORD", length = 100, nullable = false)
+	private String rememberPassword;
 
-	public String getFirstName() {
-		return firstName;
+	
+	/*
+	 * Profile
+	 * Insert Profile Data Table into UserDomain 
+	 */
+	@OneToOne
+	@JoinColumn(nullable = false)
+	private ProfileDomain ProfileDomain;
+
+	
+	/*
+	 * Personal Info
+	 * Insert Personal Info Data Table into UserDomain 
+	 */
+	@OneToOne
+	@JoinColumn(nullable = false)
+	private PersonalInfoDomain personalInfoDomain;
+
+	
+	/*
+	 * Getters and Setters
+	 */
+	
+	public String getUserName() {
+		return userName;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
-	public String getMiddleName() {
-		return middleName;
+
+	public String getPassword() {
+		return password;
 	}
 
-	public void setMiddleName(String middleName) {
-		this.middleName = middleName;
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
-	public String getLastName() {
-		return lastName;
+
+	public String getRememberPassword() {
+		return rememberPassword;
 	}
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+
+	public void setRememberPassword(String rememberPassword) {
+		this.rememberPassword = rememberPassword;
 	}
 
-	public String getUserStatus() {
-		return userStatus;
+
+	public ProfileDomain getProfileDomain() {
+		return ProfileDomain;
 	}
 
-	public void setUserStatus(String userStatus) {
-		this.userStatus = userStatus;
+
+	public void setProfileDomain(ProfileDomain profileDomain) {
+		ProfileDomain = profileDomain;
 	}
+
+
+	public PersonalInfoDomain getPersonalInfoDomain() {
+		return personalInfoDomain;
+	}
+
+
+	public void setPersonalInfoDomain(PersonalInfoDomain personalInfoDomain) {
+		this.personalInfoDomain = personalInfoDomain;
+	}	
+	
 }

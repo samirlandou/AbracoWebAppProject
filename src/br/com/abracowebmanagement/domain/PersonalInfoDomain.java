@@ -22,71 +22,112 @@ public class PersonalInfoDomain extends GenericDomain{
 	
 	/*
 	 * Complete name
+	 * (Name + Surname)
 	 */
-	@Column(name = "NM_COMPLETE_NAME", length = 20, nullable = false)
+	@Column(name = "NM_COMPLETE_NAME", length = 30, nullable = false)
 	private String completeName;	
 	
 	
 	/*
 	 * Nationality
+	 * Brazil as Default
 	 */
 	@Column(name = "DE_NATIONALITY", length = 20, nullable = false)
 	private String nationality;
 
 	
 	/*
-	 * RG Identity
+	 * SEX Identity
+	 * M --> Male
+	 * F -->Female
 	 */
-	@Column(name = "DE_RG", length = 20)
-	private String rg;
+	@Column(name = "DE_SEX", length = 1,  nullable = false)
+	private Character sex;
 
 	
 	/*
-	 * RNE Identity
+	 * E-mail
 	 */
-	@Column(name = "DE_RNE", length = 20)
-	private String rne;
+	@Column(name = "DE_EMAIL", length = 60, nullable = false)
+	private String email;
 	
 	
 	/*
-	 * CPF identity
+	 * Phone number
 	 */
-	@Column(name = "DE_CPF", length = 20, nullable = false)
-	private String cpf;
+	@Column(name = "DE_TELEPHONE", length = 20, nullable = false)
+	private String telephone;
 	
 	
 	/*
-	 * CNPJ identity
+	 * Address
 	 */
-	@Column(name = "DE_CNPJ", length = 20)
-	private String cnpj;
+	@Column(name = "DE_ADDRESS", length = 100)
+	private String address;
+
 
 	
 	/*
 	 * Getters and Setters
-	 */
+	 */	
+
+	public String getCompleteName() {
+		return completeName;
+	}
+
+
+	public void setCompleteName(String completeName) {
+		this.completeName = completeName;
+	}
+
+
 	public String getNationality() {
 		return nationality;
 	}
+
 
 	public void setNationality(String nationality) {
 		this.nationality = nationality;
 	}
 
-	public String getCpf() {
-		return cpf;
+
+	public Character getSex() {
+		return sex;
 	}
 
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
+
+	public void setSex(Character sex) {
+		this.sex = sex;
 	}
 
-	public String getCnpj() {
-		return cnpj;
+
+	public String getEmail() {
+		return email;
 	}
 
-	public void setCnpj(String cnpj) {
-		this.cnpj = cnpj;
+
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
+
+	public String getTelephone() {
+		return telephone;
+	}
+
+
+	public void setTelephone(String telephone) {
+		this.telephone = telephone;
+	}
+
+
+	public String getAddress() {
+		return address;
+	}
+
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	
 }

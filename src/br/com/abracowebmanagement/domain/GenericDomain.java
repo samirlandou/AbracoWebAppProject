@@ -24,5 +24,5 @@ public class GenericDomain implements Serializable{
 	public void setId(Long id) {
 		this.id = id;
 	}
-
+	
 }

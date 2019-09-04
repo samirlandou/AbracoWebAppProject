@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -22,46 +24,57 @@ public class PresenceDomain extends GenericDomain{
 	 * DT -> DATE
 	 * FG -> FLAG 
 	 */
-	
-	/*
-	 *Presence
-	 * Informs student presence date for each class
-	 */
-	@Column(name = "DT_PRESENCE_CLASS")
-	@Temporal(TemporalType.DATE)
-	private Date presenceClassDate;
 
 	
 	/*
 	 * Presence 
 	 * Check student presence
-	 * Example: true --> PRES or false --> ABS.
+	 * Example: true --> PRESENTE or false --> ABSENT
 	 */
 	@Column(name = "FG_PRESENCE", nullable = false)
 	private Boolean presence;
 	
+
+	/*
+	 *Class Time
+	 * Inform how many was the class
+	 */
+	@Column(name = "DT_TIME_CLASS", nullable = false)
+	@Temporal(TemporalType.TIME)
+	private Date timeClass;
+
 	
 	/*
+	 *Presence
+	 * Inform student presence date for each class
+	 */
+	@Column(name = "DT_PRESENCE_CLASS", nullable = false)
+	@Temporal(TemporalType.DATE)
+	private Date presenceClassDate;
+	
+	
+	/*
+	 * Comment Class
 	 * Comment if there is a specific notification to inform
-	 * about the presence of the students
+	 * about the class
 	 * */
-	@Column(name = "DE_COMMENT", length = 50)
-	private String comment;
+	@Column(name = "DE_COMMENT_CLASS", length = 100)
+	private String commentClass;
+
+	
+	/*
+	 * Login
+	 * Insert Login Data Table into PresenceDomain 
+	 */
+	@ManyToOne
+	@JoinColumn(nullable = false)
+	private StudentInMyClassDomain studentInMyClassDomain;
 
 
 	
 	/*
 	 * Getters and Setters
 	 */
-	public Date getPresenceClassDate() {
-		return presenceClassDate;
-	}
-
-
-	public void setPresenceClassDate(Date presenceClassDate) {
-		this.presenceClassDate = presenceClassDate;
-	}
-
 
 	public Boolean getPresence() {
 		return presence;
@@ -73,12 +86,43 @@ public class PresenceDomain extends GenericDomain{
 	}
 
 
-	public String getComment() {
-		return comment;
+	public Date getTimeClass() {
+		return timeClass;
 	}
 
 
-	public void setComment(String comment) {
-		this.comment = comment;
+	public void setTimeClass(Date timeClass) {
+		this.timeClass = timeClass;
 	}
+
+
+	public Date getPresenceClassDate() {
+		return presenceClassDate;
+	}
+
+
+	public void setPresenceClassDate(Date presenceClassDate) {
+		this.presenceClassDate = presenceClassDate;
+	}
+
+
+	public String getCommentClass() {
+		return commentClass;
+	}
+
+
+	public void setCommentClass(String commentClass) {
+		this.commentClass = commentClass;
+	}
+
+
+	public StudentInMyClassDomain getStudentInMyClassDomain() {
+		return studentInMyClassDomain;
+	}
+
+
+	public void setStudentInMyClassDomain(StudentInMyClassDomain studentInMyClassDomain) {
+		this.studentInMyClassDomain = studentInMyClassDomain;
+	}
+	
 }

@@ -1,7 +1,9 @@
-package br.com.abracowebmanagement.loginController;
+package br.com.abracowebmanagement.controller;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.view.ViewScoped;
+
+import com.mysql.cj.x.protobuf.MysqlxDatatypes.Scalar.String;
 
 @ManagedBean(name = "MBLogin")
 @ViewScoped
@@ -23,9 +25,4 @@ public class loginController {
 		this.password = password;
 	}
 	
-	public String teste() {
-		
-		System.out.println("this is a teste ");
-		return "teste";		
-	}
 }

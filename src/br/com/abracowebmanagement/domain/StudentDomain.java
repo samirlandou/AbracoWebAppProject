@@ -1,16 +1,16 @@
 package br.com.abracowebmanagement.domain;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "TB_STUDENT")
+@Table(name = "TB_STUDENT")	
 public class StudentDomain extends GenericDomain{
-
+	
 	/**
 	 * Nomenclature for data base
 	 * TB -> TABLE
@@ -19,65 +19,67 @@ public class StudentDomain extends GenericDomain{
 	 * TP -> TYPE
 	 * DT -> DATE
 	 * FG -> FLAG 
-	 */	
+	 */
+
+	
+	/*
+	 * Goal
+	 * Inform here the goal of the student to teach this language.
+	 */
+	
+	@Column(name = "DE_GOAL", length = 100, nullable = false)
+	private String goal;
+
+	
+	/*
+	 * Profile
+	 * Insert Profile Data Table into StudentDomain 
+	 */
+	@OneToOne
+	@JoinColumn(nullable = false)
+	private ProfileDomain ProfileDomain;
+
 	
 	/*
 	 * Personal Info
-	 * Associate a personal info to a student
+	 * Insert Personal Info Data Table into StudentDomain 
 	 */
 	@OneToOne
 	@JoinColumn(nullable = false)
-	private PersonalInfoDomain personalInfo;
+	private PersonalInfoDomain personalInfoDomain;
 	
 	
-	/*
-	 * Contact Info
-	 * Associate a contact to a student
-	 */
-	@OneToOne
-	@JoinColumn(nullable = false)
-	private ContactDomain contact;
-	
-	
-	/*
-	 * MyClass
-	 * Associate classes to a student
-	 */
-	@ManyToOne
-	@JoinColumn(nullable = false)
-	private ClassDomain myClass;
-
-
 	/*
 	 * Getters and Setters
 	 */
-	public PersonalInfoDomain getPersonalInfo() {
-		return personalInfo;
+	
+	public String getGoal() {
+		return goal;
 	}
 
 
-	public void setPersonalInfo(PersonalInfoDomain personalInfo) {
-		this.personalInfo = personalInfo;
+	public void setGoal(String goal) {
+		this.goal = goal;
 	}
 
 
-	public ContactDomain getContact() {
-		return contact;
+	public ProfileDomain getProfileDomain() {
+		return ProfileDomain;
 	}
 
 
-	public void setContact(ContactDomain contact) {
-		this.contact = contact;
+	public void setProfileDomain(ProfileDomain profileDomain) {
+		ProfileDomain = profileDomain;
 	}
 
 
-	public ClassDomain getMyClass() {
-		return myClass;
+	public PersonalInfoDomain getPersonalInfoDomain() {
+		return personalInfoDomain;
 	}
 
 
-	public void setMyClass(ClassDomain myClass) {
-		this.myClass = myClass;
+	public void setPersonalInfoDomain(PersonalInfoDomain personalInfoDomain) {
+		this.personalInfoDomain = personalInfoDomain;
 	}
 	
 }

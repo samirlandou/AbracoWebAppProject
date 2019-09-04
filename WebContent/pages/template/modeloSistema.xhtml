@@ -6,35 +6,26 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
-<h:head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-<h:outputStylesheet library="css" name="header.css"/>
 
-<title>AbracoCultural</title>
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title>AbracoWebManagement</title>
+	<h:outputStylesheet library="css" name="header.css" />
+	<h:outputScript library="js" name="scripts.js"/> 
+	<!-- library = "Nome da pasta" e name="Nome do arquivo"; funciona porque está dentro da pasta resource-->
 </h:head>
 
 <h:body>
-
-	<!-- Show Message -->
+	<!-- Exhibir mensagem -->
 	<p:growl id="idMsgGlobal" life="4000" />
 
-
 	<p:layout fullPage="true">
-		<p:layoutUnit position="north" resizable="true" size="100" minSize="30" maxSize="50">
-
-			<!-- <h:outputText id="template" value="teste"/> -->
-			<ui:insert name="menu">
-				<ui:include src="header/commonHeader.xhtml" />
-			</ui:insert>
+		<p:layoutUnit position="north">
+			<ui:insert name="menu"></ui:insert>
 		</p:layoutUnit>
-
-
 		<p:layoutUnit position="center">
-			<ui:insert name="conteudo">
-				<ui:include src="contents/commonContent.xhtml" />
-			</ui:insert>
+			<ui:insert name="content"></ui:insert>
 		</p:layoutUnit>
 	</p:layout>
-
 </h:body>
 </html>
