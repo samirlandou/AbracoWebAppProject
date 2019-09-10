@@ -30,10 +30,10 @@ public class ProfileDomain extends GenericDomain{
 	
 	/*
 	 * Status
-	 * Example: ENABLED, DISABLED, STAND BY, BLOCKED
+	 * Example: ENABLED or DISABLED
 	 */
-	@Column(name = "DE_STATUS", length = 20, nullable = false)
-	private String status;
+	@Column(name = "FG_STATUS", nullable = false)
+	private Boolean status;
 	
 
 	/*
@@ -65,12 +65,12 @@ public class ProfileDomain extends GenericDomain{
 	}
 
 
-	public String getStatus() {
+	public Boolean getStatus() {
 		return status;
 	}
 
 
-	public void setStatus(String status) {
+	public void setStatus(Boolean status) {
 		this.status = status;
 	}
 

@@ -42,6 +42,30 @@ public class GenericDAO<Entity> {
 		}
 	}
 	
+	
+	/**
+	 * Method to merge
+	 * @param entity
+	 */
+	public void merge(Entity entity){
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction transaction = null;
+		
+		try {
+			transaction = session.beginTransaction();
+			session.merge(entity);
+			transaction.commit();
+		} catch (RuntimeException error) {
+			if(transaction != null){
+				transaction.rollback();
+			}
+			throw error;
+		}finally {
+			session.close();
+		}
+	}	
+	
+	
 	/**
 	 * Method to list
 	 * @return

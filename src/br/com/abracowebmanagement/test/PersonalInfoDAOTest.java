@@ -41,7 +41,7 @@ public class PersonalInfoDAOTest {
 	
 	
 	@Test
-	@Ignore
+	//@Ignore
 	public void listar(){
 		PersonalInfoDAO personalInfoDAO= new PersonalInfoDAO();
 		List<PersonalInfoDomain> personalInfoDomain = personalInfoDAO.list();

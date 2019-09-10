@@ -105,6 +105,16 @@
 		    <version>1.1.2</version>
 		</dependency>
 
+
+		<!-- https://mvnrepository.com/artifact/org.omnifaces/omnifaces For WebContain (TomCat) -->
+		<!-- Version 2.0 and more is for Web Application with jboss, Wildfly and other -->
+		<dependency>
+			<groupId>org.omnifaces</groupId>
+			<artifactId>omnifaces</artifactId>
+			<version>1.11</version>
+		</dependency>
+		
+
 		
 	</dependencies>
 

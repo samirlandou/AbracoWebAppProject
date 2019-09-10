@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	template="/pages/template/modeloSistema.xhtml">
+
+
+
+	<!-- MENU -->
+	<ui:define name="menu">
+		<ui:include src="/pages/includes/menuPrincipal.xhtml">
+		</ui:include>
+	</ui:define>
+
+
+
+	<!-- CONTENT -->
+	<ui:define name="content">
+
+		<!-- LISTING PANEL FORM -->
+		<h:form id="personalInfoListRegisterForm">
+			<p:panel header="Lista de pessoas">
+				<p:dataTable emptyMessage="Nenhum registro encontrado."
+					paginator="true" value="#{personalInfoController.personalInfoListDomain}" var="cursor">
+
+					
+					<!-- NM_COMPLETE_NAME -->
+					<p:column headerText="Nome completo" >
+						<h:outputText value="#{cursor.completeName}"/>
+					</p:column>
+
+					<!-- DE_NATIONALITY -->
+					<p:column headerText="Nacionalidade">
+						<h:outputText value="#{cursor.nationality}"/>
+					</p:column>
+
+					<!-- DE_SEX -->
+					<p:column headerText="Sexo">
+						<h:outputText value="#{cursor.sex}"/>					
+					</p:column>
+
+					<!-- DE_EMAIL -->
+					<p:column headerText="E-mail">
+						<h:outputText value="#{cursor.email}"/>
+					</p:column>
+
+					<!-- DE_TELEPHONE -->
+					<p:column headerText="Telefone">
+						<h:outputText value="#{cursor.telephone}"/>
+					</p:column>
+
+					<!-- DE_ADDRESS -->
+					<p:column headerText="Endereço">
+						<h:outputText value="#{cursor.address}"/>
+					</p:column>
+
+
+					<!-- FACET FOR THE FOOTER -->
+					<f:facet name="footer">
+
+						<!-- NEW BUTTON -->
+						<p:commandButton value="Novo"
+							actionListener="#{personalInfoController.doNewRegister}"
+							oncomplete="PF('dlgNewPersonalInfo').show();"
+							update=":personalInfoRegisterForm:personalInfoInputRegisterForm"/>
+					</f:facet>
+
+				</p:dataTable>
+			</p:panel>
+		</h:form>
+
+
+		<!-- DIALOG TO REGISTER NEW USER-->
+		<p:dialog header="Cadastrar Nova pessoa" widgetVar="dlgNewPersonalInfo"
+			draggable="false" resizable="false" modal="true" closable="true"
+			appendTo="@(body)">
+
+			<!-- FORM FOR THE DIALOG -->
+			<h:form id="personalInfoRegisterForm">
+			
+				<!-- PANEL GRID FOR FORMS -->
+				<h:panelGrid id="personalInfoInputRegisterForm" columns="2">			
+					<p:outputLabel value="Nome Completo: " />
+					<p:inputText value="#{personalInfoController.personalInfoDomain.completeName}" maxlength="30" size="27" />
+					
+					<p:outputLabel value="Nacionalidade: " />
+					<p:inputText value="#{personalInfoController.personalInfoDomain.nationality}" maxlength="20" size="27" />
+
+					<p:outputLabel value="Sexo: " />
+					<p:selectOneRadio value="#{personalInfoController.personalInfoDomain.sex}">
+						<f:selectItem itemLabel="Masculino" itemValue="Masculino" />
+						<f:selectItem itemLabel="Feminino" itemValue="Feminino" />
+					</p:selectOneRadio>
+
+					<p:outputLabel value="E-mail: " />
+					<p:inputText value="#{personalInfoController.personalInfoDomain.email}" maxlength="60" size="27" />
+					
+					<p:outputLabel value="Telefone: " />
+					<p:inputMask  value="#{personalInfoController.personalInfoDomain.telephone}" mask="(99) 99999-9999"/>
+					
+					<p:outputLabel value="Endereço: " />
+					<p:inputTextarea value="#{personalInfoController.personalInfoDomain.address}" rows="2" cols="30" counter="display"
+						maxlength="100" counterTemplate="{0} caracteres restantes."
+						autoResize="true" />
+					<br />
+					<h:outputText id="display"/>
+				</h:panelGrid>
+				
+				<br/>				
+				<!-- PANEL GRID FOR BUTTON SAVE AND CLOSE -->
+				<h:panelGrid columns="2">
+					<p:commandButton value="Salvar" actionListener="#{personalInfoController.doSave}" update=":idMsgGlobal :personalInfoRegisterForm:personalInfoInputRegisterForm"/>
+					<p:commandButton value="Fechar" oncomplete="PF('dlgNewPersonalInfo').hide();"/>
+				</h:panelGrid>
+				
+				
+			</h:form>
+
+
+		</p:dialog>
+
+
+
+	</ui:define>
+</ui:composition>

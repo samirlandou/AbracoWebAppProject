@@ -7,6 +7,11 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	template="/pages/template/modeloSistema.xhtml">
 
+	<style type="text/css">
+    .ui-toggleswitch {
+        vertical-align: bottom;
+    }
+	</style>
 
 
 	<!-- MENU -->
@@ -22,53 +27,29 @@
 
 		<!-- LISTING PANEL FORM -->
 		<h:form>
-			<p:panel header="Lista de Usuário (Login)">
+			<p:panel header="Lista de perfile">
 				<p:dataTable emptyMessage="Nenhum registro encontrado."
 					paginator="true">
-
-					<!-- NM_USER-->
-					<p:column headerText="Login">
-					</p:column>
-
-					<!-- NM_COMPLETE_NAME -->
-					<p:column headerText="Nome completo" >
-					</p:column>
-					
-					<!-- DE_NATIONALITY -->
-					<p:column headerText="Nacionalidade">
-					</p:column>
-
-					<!-- DE_SEX -->
-					<p:column headerText="Sexo">
-					</p:column>
-
-					<!-- DE_EMAIL -->
-					<p:column headerText="E-mail">
-					</p:column>
-
-					<!-- DE_TELEPHONE -->
-					<p:column headerText="Telefone">
-					</p:column>
 
 					<!-- DE_LANGUAGE -->
 					<p:column headerText="Língua">
 					</p:column>
 
 					<!-- DE_PROFILE -->
-					<p:column headerText="Perfile">
+					<p:column headerText="Perfil">
 					</p:column>
 
 					<!-- DE_STATUS -->
 					<p:column headerText="Status">
 					</p:column>
-					
-					
+
+
 					<!-- FACET FOR THE FOOTER -->
 					<f:facet name="footer">
 
 						<!-- NEW BUTTON -->
 						<p:commandButton value="Novo"
-							oncomplete="PF('dlgNewUser').show();" />
+							oncomplete="PF('dlgNewProfile').show();" />
 					</f:facet>
 
 				</p:dataTable>
@@ -77,7 +58,7 @@
 
 
 		<!-- DIALOG TO REGISTER NEW USER-->
-		<p:dialog header="Cadastrar Novo Usuário" widgetVar="dlgNewUser"
+		<p:dialog header="Cadastrar Novo Perfil" widgetVar="dlgNewProfile"
 			draggable="false" resizable="false" modal="true" closable="true"
 			appendTo="@(body)">
 
@@ -86,30 +67,27 @@
 			
 				<!-- PANEL GRID FOR FORMS -->
 				<h:panelGrid columns="2">			
-					<p:outputLabel value="Nome Completo: " />
-					<p:inputText maxlength="30" size="27" />
+					<p:outputLabel value="Língua: " />
+					<p:selectOneMenu filter="true">
+						<f:selectItem itemValue="PutValueHere" itemLabel="Selecione uma língua"/>
+					</p:selectOneMenu>
 					
-					<p:outputLabel value="Nacionalidade: " />
-					<p:inputText maxlength="30" size="27" />
+					<p:outputLabel value="Perfil: " />
+					<p:selectOneMenu filter="true">
+						<f:selectItem itemValue="PutValueHere" itemLabel="Selecione um perfil"/>
+					</p:selectOneMenu>
 					
-					<p:outputLabel value="Sexo: " />
-					<p:inputText maxlength="30" size="27" />
-					
-					<p:outputLabel value="E-mail: " />
-					<p:inputText maxlength="30" size="27" />
-					
-					<p:outputLabel value="Telefone: " />
-					<p:inputText maxlength="30" size="27" />
-					
-					<p:outputLabel value="Endereço: " />
-					<p:inputText maxlength="30" size="27" />
+					<p:outputLabel value="Ativo(a): " />
+					<p:selectOneButton filter="true">
+				        <p:toggleSwitch value="PutValueHere"/>
+					</p:selectOneButton>
 				</h:panelGrid>
 				
 				<br/>
 				<!-- PANEL GRID FOR BUTTON SAVE AND CLOSE -->
 				<h:panelGrid columns="2">
 					<p:commandButton value="Salvar"/>
-					<p:commandButton value="Fechar" oncomplete="PF('dlgNewUser').hide();"/>
+					<p:commandButton value="Fechar" oncomplete="PF('dlgNewProfile').hide();"/>
 				</h:panelGrid>
 				
 				
