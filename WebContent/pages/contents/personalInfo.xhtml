@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:h="http://java.sun.com/jsf/html"
@@ -21,14 +21,14 @@
 	<ui:define name="content">
 
 		<!-- LISTING PANEL FORM -->
-		<h:form id="personalInfoListRegisterForm">
+		<h:form id="personalInfoListFormId">
 			<p:panel header="Lista de pessoas">
-				<p:dataTable emptyMessage="Nenhum registro encontrado."
-					paginator="true" value="#{personalInfoController.personalInfoListDomain}" var="cursor">
+				<p:dataTable id="personalInfoDataTableFormId" emptyMessage="Nenhum registro encontrado."
+					paginator="true" value="#{personalInfoController.personalInfosDomain}" var="cursor" rows="5">
 
 					
 					<!-- NM_COMPLETE_NAME -->
-					<p:column headerText="Nome completo" >
+					<p:column headerText="Nome completo" sortBy="#{cursor.completeName}" filterBy="#{cursor.completeName}">
 						<h:outputText value="#{cursor.completeName}"/>
 					</p:column>
 
@@ -38,7 +38,7 @@
 					</p:column>
 
 					<!-- DE_SEX -->
-					<p:column headerText="Sexo">
+					<p:column headerText="Sexo" sortBy="#{cursor.sex}">
 						<h:outputText value="#{cursor.sex}"/>					
 					</p:column>
 
@@ -53,8 +53,19 @@
 					</p:column>
 
 					<!-- DE_ADDRESS -->
-					<p:column headerText="Endere�o">
+					<p:column headerText="Endereço">
 						<h:outputText value="#{cursor.address}"/>
+					</p:column>
+					
+					<!-- OPTIONS -->
+					<p:column headerText="Opções">
+					
+						<!-- Button to delete -->
+						<p:commandButton icon="ui-icon-trash" actionListener="#{personalInfoController.doDelete}"
+										update=":idMsgGlobal :personalInfoListFormId:personalInfoDataTableFormId">
+							<p:confirm header="Confirmação" message="Deseja excluir #{cursor.completeName}?" icon="ui-icon-alert"/>
+							<f:attribute name="selectedPersonalInfoByCursor" value="#{cursor}"/>
+						</p:commandButton>
 					</p:column>
 
 
@@ -65,10 +76,18 @@
 						<p:commandButton value="Novo"
 							actionListener="#{personalInfoController.doNewRegister}"
 							oncomplete="PF('dlgNewPersonalInfo').show();"
-							update=":personalInfoRegisterForm:personalInfoInputRegisterForm"/>
+							update=":personalInfoRegisterFormId:personalInfoInputRegisterFormId"/>
 					</f:facet>
 
 				</p:dataTable>
+
+				
+				<!-- CONFIRM DIALOG WHEN DELETING -->
+				<p:confirmDialog global="true" >
+					<p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>		
+					<p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+				</p:confirmDialog>
+				
 			</p:panel>
 		</h:form>
 
@@ -79,10 +98,10 @@
 			appendTo="@(body)">
 
 			<!-- FORM FOR THE DIALOG -->
-			<h:form id="personalInfoRegisterForm">
+			<h:form id="personalInfoRegisterFormId">
 			
 				<!-- PANEL GRID FOR FORMS -->
-				<h:panelGrid id="personalInfoInputRegisterForm" columns="2">			
+				<h:panelGrid id="personalInfoInputRegisterFormId" columns="2">			
 					<p:outputLabel value="Nome Completo: " />
 					<p:inputText value="#{personalInfoController.personalInfoDomain.completeName}" maxlength="30" size="27" />
 					
@@ -101,7 +120,7 @@
 					<p:outputLabel value="Telefone: " />
 					<p:inputMask  value="#{personalInfoController.personalInfoDomain.telephone}" mask="(99) 99999-9999"/>
 					
-					<p:outputLabel value="Endere�o: " />
+					<p:outputLabel value="Endereço: " />
 					<p:inputTextarea value="#{personalInfoController.personalInfoDomain.address}" rows="2" cols="30" counter="display"
 						maxlength="100" counterTemplate="{0} caracteres restantes."
 						autoResize="true" />
@@ -112,7 +131,8 @@
 				<br/>				
 				<!-- PANEL GRID FOR BUTTON SAVE AND CLOSE -->
 				<h:panelGrid columns="2">
-					<p:commandButton value="Salvar" actionListener="#{personalInfoController.doSave}" update=":idMsgGlobal :personalInfoRegisterForm:personalInfoInputRegisterForm"/>
+					<p:commandButton value="Salvar" actionListener="#{personalInfoController.doSave}"
+									update=":idMsgGlobal :personalInfoRegisterFormId:personalInfoInputRegisterFormId :personalInfoListFormId:personalInfoDataTableFormId"/>
 					<p:commandButton value="Fechar" oncomplete="PF('dlgNewPersonalInfo').hide();"/>
 				</h:panelGrid>
 				

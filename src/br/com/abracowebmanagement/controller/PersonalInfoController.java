@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.event.ActionEvent;
 
 import org.omnifaces.util.Messages;
 
@@ -18,7 +19,7 @@ import br.com.abracowebmanagement.domain.PersonalInfoDomain;
 public class PersonalInfoController implements Serializable {
 	
 	private PersonalInfoDomain personalInfoDomain;
-	private List<PersonalInfoDomain> personalInfoListDomain;
+	private List<PersonalInfoDomain> personalInfosDomain;
 
 	
 
@@ -28,11 +29,11 @@ public class PersonalInfoController implements Serializable {
 	 * @return
 	 */
 	@PostConstruct
-	public void DoList(){
+	public void doList(){
 		try {
 			//List personal Info
 			PersonalInfoDAO personalInfoDAO = new PersonalInfoDAO();
-			personalInfoDAO.list();
+			personalInfosDomain= personalInfoDAO.list();
 		} catch (Exception e) {
 			Messages.addGlobalError("Ocorreu um erro ao listar as informações das pessoas !!!");
 			e.printStackTrace();			
@@ -68,6 +69,9 @@ public class PersonalInfoController implements Serializable {
 			//Clean informations in the panelGrid
 			doNewRegister();
 			
+			//List again Personal Info (very import to update the list)
+			personalInfosDomain= personalInfoDAO.list();
+			
 			//This code is used with OmniFaces and it is more practice than PrimeFaces implementation.
 			Messages.addGlobalInfo("Salvou com sucesso");
 		} catch (Exception e) {
@@ -75,12 +79,38 @@ public class PersonalInfoController implements Serializable {
 			e.printStackTrace();
 		}		
 	}
-
 	
+	/**
+	 * Delete Method
+	 * @param event
+	 */
+	public void doDelete(ActionEvent event){
+		try {
+			
+			//Capture the event from the cursor in personalInfo.xhtml
+			personalInfoDomain = (PersonalInfoDomain) event.getComponent().getAttributes()
+					.get("selectedPersonalInfoByCursor");
+
+			//Delete Personal Info
+			PersonalInfoDAO personalInfoDAO = new PersonalInfoDAO();
+			personalInfoDAO.delete(personalInfoDomain);
+						
+			//List again Personal Info (very import to update the list)
+			personalInfosDomain= personalInfoDAO.list();
+			
+			//This code is used with OmniFaces and it is more practice than PrimeFaces implementation.
+			Messages.addGlobalInfo(personalInfoDomain.getCompleteName() + " foi excluido com sucesso!!!");
+		} catch (Exception e) {
+			Messages.addGlobalError("Ocorreu um erro ao excluir as informações de: " + personalInfoDomain.getCompleteName());
+			e.printStackTrace();			
+		}
+	}
+
 	
 	/*
 	 * Getters and Setters
 	 */
+	
 	public PersonalInfoDomain getPersonalInfoDomain() {
 		return personalInfoDomain;
 	}
@@ -91,16 +121,17 @@ public class PersonalInfoController implements Serializable {
 	}
 
 
-	public List<PersonalInfoDomain> getPersonalInfoListDomain() {
-		return personalInfoListDomain;
+	public List<PersonalInfoDomain> getPersonalInfosDomain() {
+		return personalInfosDomain;
 	}
 
 
-	public void setPersonalInfoListDomain(List<PersonalInfoDomain> personalInfoListDomain) {
-		this.personalInfoListDomain = personalInfoListDomain;
+	public void setPersonalInfosDomain(List<PersonalInfoDomain> personalInfosDomain) {
+		this.personalInfosDomain = personalInfosDomain;
 	}
+
 	
-	
+
 	
 	
 }
