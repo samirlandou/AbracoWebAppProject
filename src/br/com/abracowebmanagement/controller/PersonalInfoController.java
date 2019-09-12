@@ -22,11 +22,10 @@ public class PersonalInfoController implements Serializable {
 	private List<PersonalInfoDomain> personalInfosDomain;
 
 	
-
-	
 	/**
-	 * List Method
-	 * @return
+	 * List Method. <br/>
+	 * @author samirlandou <br/>
+	 * @since 11/09/2019
 	 */
 	@PostConstruct
 	public void doList(){
@@ -42,15 +41,20 @@ public class PersonalInfoController implements Serializable {
 	
 	
 	/**
-	 * Set here new instance of Domain.
+	 * Method for New Registration. <br/>
+	 * Set here new instance of Domain. <br/>
+	 * @author samirlandou <br/>
+	 * @since 11/09/2019
 	 */
 	public void doNewRegister(){				
-		personalInfoDomain = new PersonalInfoDomain();
+		personalInfoDomain = new PersonalInfoDomain();	
 	}
 	
 
 	/**
-	 * Save Method
+	 * Save Method. <br/>
+	 * @author samirlandou <br/>
+	 * @since 11/09/2019
 	 */
 	public void doSave(){
 		/* 
@@ -62,9 +66,9 @@ public class PersonalInfoController implements Serializable {
 		context.addMessage(null, message);*/		
 		
 		try {
-			//Save Personal Info
+			//Save Personal Info with merge method
 			PersonalInfoDAO personalInfoDAO = new PersonalInfoDAO();
-			personalInfoDAO.save(personalInfoDomain);
+			personalInfoDAO.merge(personalInfoDomain);
 			
 			//Clean informations in the panelGrid
 			doNewRegister();
@@ -81,8 +85,10 @@ public class PersonalInfoController implements Serializable {
 	}
 	
 	/**
-	 * Delete Method
-	 * @param event
+	 * Delete Method. <br/>
+	 * @author samirlandou <br/>
+	 * @param event <br/>
+	 * @since 11/09/2019
 	 */
 	public void doDelete(ActionEvent event){
 		try {
@@ -104,6 +110,24 @@ public class PersonalInfoController implements Serializable {
 			Messages.addGlobalError("Ocorreu um erro ao excluir as informações de: " + personalInfoDomain.getCompleteName());
 			e.printStackTrace();			
 		}
+	}
+	
+	/**
+	 * Edit Method. <br/>
+	 * @author samirlandou <br/>
+	 * @param event <br/>
+	 * @since 11/09/2019
+	 */
+	public void doEdit(ActionEvent event){
+		try {
+			
+			//Capture the event from the cursor in personalInfo.xhtml
+			personalInfoDomain = (PersonalInfoDomain) event.getComponent().getAttributes()
+					.get("selectedPersonalInfoByCursor");
+		} catch (Exception e) {
+			Messages.addGlobalError("Ocorreu um erro ao editar as informações de: " + personalInfoDomain.getCompleteName());
+			e.printStackTrace();			
+		}		
 	}
 
 	
@@ -128,10 +152,6 @@ public class PersonalInfoController implements Serializable {
 
 	public void setPersonalInfosDomain(List<PersonalInfoDomain> personalInfosDomain) {
 		this.personalInfosDomain = personalInfosDomain;
-	}
-
-	
-
-	
+	}	
 	
 }

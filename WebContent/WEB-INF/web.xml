@@ -21,6 +21,11 @@
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>/faces/*</url-pattern>
 	</servlet-mapping>
+	
+	<!-- Initiate Hibernate when Tomcat is starting -->
+	<listener>
+		<listener-class>br.com.abracowebmanagement.util.HibernateContext</listener-class>
+	</listener>
 
 	<!-- Define PrimeFaces Theme -->
 	<context-param>

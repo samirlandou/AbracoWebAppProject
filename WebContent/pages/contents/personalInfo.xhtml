@@ -59,8 +59,16 @@
 					
 					<!-- OPTIONS -->
 					<p:column headerText="Opções">
+
+						<!-- BUTTON TO EDIT -->
+						<p:commandButton icon="ui-icon-pencil" actionListener="#{personalInfoController.doEdit}"
+										oncomplete="PF('dlgNewPersonalInfo').show();"
+										update=":idMsgGlobal :personalInfoRegisterFormId:personalInfoInputRegisterFormId">
+							<f:attribute name="selectedPersonalInfoByCursor" value="#{cursor}"/>
+							<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+						</p:commandButton>
 					
-						<!-- Button to delete -->
+						<!-- BUTTON TO DELETE -->
 						<p:commandButton icon="ui-icon-trash" actionListener="#{personalInfoController.doDelete}"
 										update=":idMsgGlobal :personalInfoListFormId:personalInfoDataTableFormId">
 							<p:confirm header="Confirmação" message="Deseja excluir #{cursor.completeName}?" icon="ui-icon-alert"/>
@@ -76,7 +84,9 @@
 						<p:commandButton value="Novo"
 							actionListener="#{personalInfoController.doNewRegister}"
 							oncomplete="PF('dlgNewPersonalInfo').show();"
-							update=":personalInfoRegisterFormId:personalInfoInputRegisterFormId"/>
+							update=":personalInfoRegisterFormId:personalInfoInputRegisterFormId">
+							<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+							</p:commandButton>
 					</f:facet>
 
 				</p:dataTable>
@@ -102,28 +112,32 @@
 			
 				<!-- PANEL GRID FOR FORMS -->
 				<h:panelGrid id="personalInfoInputRegisterFormId" columns="2">			
-					<p:outputLabel value="Nome Completo: " />
-					<p:inputText value="#{personalInfoController.personalInfoDomain.completeName}" maxlength="30" size="27" />
+					<p:outputLabel value="Nome Completo: *" />
+					<p:inputText value="#{personalInfoController.personalInfoDomain.completeName}" maxlength="30" size="27"
+								required="true" requiredMessage="O campo 'Nome Completo' é obrigatório"/>
 					
-					<p:outputLabel value="Nacionalidade: " />
-					<p:inputText value="#{personalInfoController.personalInfoDomain.nationality}" maxlength="20" size="27" />
+					<p:outputLabel value="Nacionalidade: *" />
+					<p:inputText value="#{personalInfoController.personalInfoDomain.nationality}" maxlength="20" size="27"
+								required="true" requiredMessage="O campo 'Nacionalidade' é obrigatório"/>
 
-					<p:outputLabel value="Sexo: " />
-					<p:selectOneRadio value="#{personalInfoController.personalInfoDomain.sex}">
-						<f:selectItem itemLabel="Masculino" itemValue="Masculino" />
-						<f:selectItem itemLabel="Feminino" itemValue="Feminino" />
+					<p:outputLabel value="Sexo: *" />
+					<p:selectOneRadio value="#{personalInfoController.personalInfoDomain.sex}" required="true" requiredMessage="O campo 'Sexo' é obrigatório">
+						<f:selectItem itemLabel="Masculino" itemValue="M" />
+						<f:selectItem itemLabel="Feminino" itemValue="F" />
 					</p:selectOneRadio>
 
-					<p:outputLabel value="E-mail: " />
-					<p:inputText value="#{personalInfoController.personalInfoDomain.email}" maxlength="60" size="27" />
+					<p:outputLabel value="E-mail: *" />
+					<p:inputText value="#{personalInfoController.personalInfoDomain.email}" maxlength="60" size="27"
+								required="true" requiredMessage="O campo 'E-mail' é obrigatório"/>
 					
-					<p:outputLabel value="Telefone: " />
-					<p:inputMask  value="#{personalInfoController.personalInfoDomain.telephone}" mask="(99) 99999-9999"/>
+					<p:outputLabel value="Telefone: *" />
+					<p:inputMask  value="#{personalInfoController.personalInfoDomain.telephone}" mask="(99) 99999-9999"
+								required="true" requiredMessage="O campo 'Telefone' é obrigatório"/>
 					
 					<p:outputLabel value="Endereço: " />
 					<p:inputTextarea value="#{personalInfoController.personalInfoDomain.address}" rows="2" cols="30" counter="display"
 						maxlength="100" counterTemplate="{0} caracteres restantes."
-						autoResize="true" />
+						autoResize="true"/>
 					<br />
 					<h:outputText id="display"/>
 				</h:panelGrid>
@@ -134,11 +148,9 @@
 					<p:commandButton value="Salvar" actionListener="#{personalInfoController.doSave}"
 									update=":idMsgGlobal :personalInfoRegisterFormId:personalInfoInputRegisterFormId :personalInfoListFormId:personalInfoDataTableFormId"/>
 					<p:commandButton value="Fechar" oncomplete="PF('dlgNewPersonalInfo').hide();"/>
-				</h:panelGrid>
-				
+				</h:panelGrid>				
 				
 			</h:form>
-
 
 		</p:dialog>
 

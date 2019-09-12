@@ -59,7 +59,7 @@
 		<dependency>
 			<groupId>org.primefaces</groupId>
 			<artifactId>primefaces</artifactId>
-			<version>7.0.RC3</version>
+			<version>7.0</version>
 		</dependency>
 
 		<!-- All-theme PrimeFaces -->
@@ -112,7 +112,17 @@
 			<groupId>org.omnifaces</groupId>
 			<artifactId>omnifaces</artifactId>
 			<version>1.11</version>
-		</dependency>	
+		</dependency>
+		
+		
+		<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
+		<dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>javax.servlet-api</artifactId>
+		    <version>4.0.1</version>
+		    <scope>provided</scope>
+		</dependency>
+			
 
 		
 	</dependencies>
