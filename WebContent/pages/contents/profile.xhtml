@@ -7,11 +7,6 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	template="/pages/template/modeloSistema.xhtml">
 
-	<style type="text/css">
-    .ui-toggleswitch {
-        vertical-align: bottom;
-    }
-	</style>
 
 
 	<!-- MENU -->
@@ -26,21 +21,44 @@
 	<ui:define name="content">
 
 		<!-- LISTING PANEL FORM -->
-		<h:form>
-			<p:panel header="Lista de perfile">
-				<p:dataTable emptyMessage="Nenhum registro encontrado."
-					paginator="true">
+		<h:form id="profileListFormId">
+			<p:panel header="Lista de pessoas">
+				<p:dataTable id="profileDataTableFormId" emptyMessage="Nenhum registro encontrado."
+					paginator="true" value="#{profileController.profilesDomain}" var="cursor" rows="5">
 
+					
 					<!-- DE_LANGUAGE -->
-					<p:column headerText="Língua">
+					<p:column headerText="Língua" sortBy="#{cursor.language}" filterBy="#{cursor.completeName}">
+						<h:outputText value="#{cursor.language}"/>
 					</p:column>
 
 					<!-- DE_PROFILE -->
-					<p:column headerText="Perfil">
+					<p:column headerText="Perfil" sortBy="#{cursor.profile}">
+						<h:outputText value="#{cursor.profile}"/>
 					</p:column>
 
 					<!-- DE_STATUS -->
-					<p:column headerText="Status">
+					<p:column headerText="Status" sortBy="#{cursor.status}">
+						<h:outputText value="#{cursor.status}"/>					
+					</p:column>
+					
+					<!-- OPTIONS -->
+					<p:column headerText="Opções">
+
+						<!-- BUTTON TO EDIT -->
+						<p:commandButton icon="ui-icon-pencil" actionListener="#{profileController.doEdit}"
+										oncomplete="PF('dlgEditProfile').show();"
+										update=":idMsgGlobal">
+							<f:attribute name="selectedProfileByCursor" value="#{cursor}"/>
+							<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+						</p:commandButton>
+					
+						<!-- BUTTON TO DELETE -->
+						<p:commandButton icon="ui-icon-trash" actionListener="#{profileController.doDelete}"
+										update=":idMsgGlobal :profileListFormId:profileDataTableFormId">
+							<p:confirm header="Confirmação" message="Deseja excluir esse perfil?" icon="ui-icon-alert"/>
+							<f:attribute name="selectedProfileByCursor" value="#{cursor}"/>
+						</p:commandButton>
 					</p:column>
 
 
@@ -49,54 +67,61 @@
 
 						<!-- NEW BUTTON -->
 						<p:commandButton value="Novo"
-							oncomplete="PF('dlgNewProfile').show();" />
+							actionListener="#{profileController.doNewRegister}"
+							oncomplete="PF('dlgNewProfile').show();"
+							update=":profileRegisterFormId:profileInputRegisterFormId">
+							<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener"/>
+						</p:commandButton>
 					</f:facet>
 
 				</p:dataTable>
+
+				
+				<!-- CONFIRM DIALOG WHEN DELETING -->
+				<p:confirmDialog global="true" >
+					<p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>		
+					<p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+				</p:confirmDialog>
+				
 			</p:panel>
 		</h:form>
 
 
 		<!-- DIALOG TO REGISTER NEW USER-->
-		<p:dialog header="Cadastrar Novo Perfil" widgetVar="dlgNewProfile"
+		<p:dialog header="Cadastrar Nova pessoa" widgetVar="dlgNewProfile"
 			draggable="false" resizable="false" modal="true" closable="true"
 			appendTo="@(body)">
 
 			<!-- FORM FOR THE DIALOG -->
-			<h:form>
+			<h:form id="profileRegisterFormId">
 			
-				<!-- PANEL GRID FOR FORMS -->
-				<h:panelGrid columns="2">			
-					<p:outputLabel value="Língua: " />
-					<p:selectOneMenu filter="true">
-						<f:selectItem itemValue="PutValueHere" itemLabel="Selecione uma língua"/>
-					</p:selectOneMenu>
+				<!-- PANEL GRID TO FILL FORMS -->
+				<h:panelGrid id="profileInputRegisterFormId" columns="2">			
+					<p:outputLabel value="Língua: *" />
+					<p:inputText value="#{profileController.profileDomain.language}" maxlength="20" size="27"
+								required="true" requiredMessage="O campo 'Língua' é obrigatório" style="text-transform: uppercase"/>
 					
-					<p:outputLabel value="Perfil: " />
-					<p:selectOneMenu filter="true">
-						<f:selectItem itemValue="PutValueHere" itemLabel="Selecione um perfil"/>
-					</p:selectOneMenu>
-					
-					<p:outputLabel value="Ativo(a): " />
-					<p:selectOneButton filter="true">
-				        <p:toggleSwitch value="PutValueHere"/>
-					</p:selectOneButton>
+					<p:outputLabel value="Perfil: *" />
+					<p:inputText value="#{profileController.profileDomain.profile}" maxlength="20" size="27"
+								required="true" requiredMessage="O campo 'Perfil' é obrigatório"/>
+
+					<p:outputLabel value="Status: *" />
+					<p:toggleSwitch value="#{profileController.profileDomain.status}" required="true" requiredMessage="O campo 'Status' é obrigatório">
+						<p:ajax listener="#{profileController.addMessage}" update=":idMsgGlobal" />
+					</p:toggleSwitch>
 				</h:panelGrid>
 				
-				<br/>
+				<br/>				
 				<!-- PANEL GRID FOR BUTTON SAVE AND CLOSE -->
 				<h:panelGrid columns="2">
-					<p:commandButton value="Salvar"/>
+					<p:commandButton value="Salvar" actionListener="#{profileController.doSave}"
+									update=":idMsgGlobal :profileRegisterFormId:profileInputRegisterFormId :profileListFormId:profileDataTableFormId"/>					
 					<p:commandButton value="Fechar" oncomplete="PF('dlgNewProfile').hide();"/>
-				</h:panelGrid>
-				
+				</h:panelGrid>		
 				
 			</h:form>
 
-
 		</p:dialog>
-
-
 
 	</ui:define>
 </ui:composition>

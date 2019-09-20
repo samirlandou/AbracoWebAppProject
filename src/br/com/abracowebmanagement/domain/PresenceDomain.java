@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -63,14 +64,32 @@ public class PresenceDomain extends GenericDomain{
 
 	
 	/*
-	 * Login
-	 * Insert Login Data Table into PresenceDomain 
+	 * StudentInMyClass
+	 * Insert  StudentInMyClassDomain Data Table into PresenceDomain 
 	 */
 	@ManyToOne
 	@JoinColumn(nullable = false)
 	private StudentInMyClassDomain studentInMyClassDomain;
 
 
+	/*
+	 * Get the class code from MyClassDomain
+	 * Insert MyClassDomain Data Table into PresenceDomain
+	 */
+	@OneToOne
+	@JoinColumn(nullable = false)
+	private MyClassDomain myClassDomain;
+
+	
+	/*
+	 * Get the MyClass Access Right from AccessRightDomain
+	 * Insert AccessRightDomain Data Table into PresenceDomain.
+	 * This will allow the professor to set students presence class.
+	 */
+	/*@ManyToMany
+	@JoinColumn(nullable = false)
+	private AccessRightDomain accessRightDomain;*/
+	
 	
 	/*
 	 * Getters and Setters
@@ -124,5 +143,25 @@ public class PresenceDomain extends GenericDomain{
 	public void setStudentInMyClassDomain(StudentInMyClassDomain studentInMyClassDomain) {
 		this.studentInMyClassDomain = studentInMyClassDomain;
 	}
+
+
+	public MyClassDomain getMyClassDomain() {
+		return myClassDomain;
+	}
+
+
+	public void setMyClassDomain(MyClassDomain myClassDomain) {
+		this.myClassDomain = myClassDomain;
+	}
+
+
+	/*public AccessRightDomain getAccessRightDomain() {
+		return accessRightDomain;
+	}
+
+
+	public void setAccessRightDomain(AccessRightDomain accessRightDomain) {
+		this.accessRightDomain = accessRightDomain;
+	}*/
 	
 }

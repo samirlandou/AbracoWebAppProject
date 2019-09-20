@@ -32,21 +32,12 @@ public class StudentDomain extends GenericDomain{
 
 	
 	/*
-	 * Profile
-	 * Insert Profile Data Table into StudentDomain 
+	 * Person
+	 * Insert Person Data Table into StudentDomain 
 	 */
 	@OneToOne
 	@JoinColumn(nullable = false)
-	private ProfileDomain ProfileDomain;
-
-	
-	/*
-	 * Personal Info
-	 * Insert Personal Info Data Table into StudentDomain 
-	 */
-	@OneToOne
-	@JoinColumn(nullable = false)
-	private PersonalInfoDomain personalInfoDomain;
+	private PersonDomain personDomain;
 	
 	
 	/*
@@ -63,23 +54,13 @@ public class StudentDomain extends GenericDomain{
 	}
 
 
-	public ProfileDomain getProfileDomain() {
-		return ProfileDomain;
+	public PersonDomain getPersonDomain() {
+		return personDomain;
 	}
 
 
-	public void setProfileDomain(ProfileDomain profileDomain) {
-		ProfileDomain = profileDomain;
-	}
-
-
-	public PersonalInfoDomain getPersonalInfoDomain() {
-		return personalInfoDomain;
-	}
-
-
-	public void setPersonalInfoDomain(PersonalInfoDomain personalInfoDomain) {
-		this.personalInfoDomain = personalInfoDomain;
+	public void setPersonDomain(PersonDomain personDomain) {
+		this.personDomain = personDomain;
 	}
 	
 }

@@ -6,8 +6,8 @@ import javax.persistence.Table;
 
 @SuppressWarnings("serial")
 @Entity
-@Table(name = "TB_PERSONAL_INFO")
-public class PersonalInfoDomain extends GenericDomain{
+@Table(name = "TB_PERSON")
+public class PersonDomain extends GenericDomain{
 	
 	
 	/**
@@ -65,7 +65,35 @@ public class PersonalInfoDomain extends GenericDomain{
 	@Column(name = "DE_ADDRESS", length = 100)
 	private String address;
 
+	/*
+	 * Profile
+	 * Example: STUDENT, PROFESSOR, COORDINATOR, GESTOR, VISITOR
+	 * OBS.: ADMINISTRATOR will be the profile that will allow setting configurations
+	 */
+	@Column(name = "DE_PROFILE", length = 20, nullable = false)
+	private String profile;
+	
+	
+	/*
+	 * Status
+	 * Example: ENABLED or DISABLED
+	 */
+	@Column(name = "FG_STATUS", nullable = false)
+	private Boolean status;
+	
 
+	/*
+	 * Language
+	 * Description of teaching language
+	 * 
+	 * AR --> Arab
+	 * FR --> French
+	 * EN --> English
+	 * ES --> Spanish
+	 * PT --> Portuguese
+	 */
+	@Column(name = "DE_LANGUAGE", length = 20, nullable = false)
+	private String language;
 	
 	/*
 	 * Getters and Setters
@@ -128,6 +156,36 @@ public class PersonalInfoDomain extends GenericDomain{
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+	
+	public String getProfile() {
+		return profile;
+	}
+
+
+	public void setProfile(String profile) {
+		this.profile = profile;
+	}
+
+
+	public Boolean getStatus() {
+		return status;
+	}
+
+
+	public void setStatus(Boolean status) {
+		this.status = status;
+	}
+
+
+	public String getLanguage() {
+		return language;
+	}
+
+
+	public void setLanguage(String language) {
+		this.language = language;
 	}
 	
 }

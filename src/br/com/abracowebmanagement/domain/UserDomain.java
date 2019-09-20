@@ -52,22 +52,20 @@ public class UserDomain extends GenericDomain{
 
 	
 	/*
-	 * Profile
-	 * Insert Profile Data Table into UserDomain 
+	 * Person
+	 * Insert Person Data Table into UserDomain 
 	 */
 	@OneToOne
 	@JoinColumn(nullable = false)
-	private ProfileDomain ProfileDomain;
-
+	private PersonDomain personDomain;
+	
 	
 	/*
-	 * Personal Info
-	 * Insert Personal Info Data Table into UserDomain 
+	 * User
+	 * Image
 	 */
-	@OneToOne
-	@JoinColumn(nullable = false)
-	private PersonalInfoDomain personalInfoDomain;
-
+	@JoinColumn(name = "DE_USER_IMAGE")
+	private byte[] userImage;
 	
 	/*
 	 * Getters and Setters
@@ -103,23 +101,23 @@ public class UserDomain extends GenericDomain{
 	}
 
 
-	public ProfileDomain getProfileDomain() {
-		return ProfileDomain;
+	public PersonDomain getPersonDomain() {
+		return personDomain;
 	}
 
 
-	public void setProfileDomain(ProfileDomain profileDomain) {
-		ProfileDomain = profileDomain;
+	public void setPersonDomain(PersonDomain personDomain) {
+		this.personDomain = personDomain;
 	}
 
 
-	public PersonalInfoDomain getPersonalInfoDomain() {
-		return personalInfoDomain;
+	public byte[] getUserImage() {
+		return userImage;
 	}
 
 
-	public void setPersonalInfoDomain(PersonalInfoDomain personalInfoDomain) {
-		this.personalInfoDomain = personalInfoDomain;
+	public void setUserImage(byte[] userImage) {
+		this.userImage = userImage;
 	}	
 	
 }

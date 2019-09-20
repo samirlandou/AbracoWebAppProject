@@ -4,9 +4,6 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -29,20 +26,13 @@ public class MyClassDomain extends GenericDomain{
 	
 	/*
 	 * Class Period Reference
-	 * Example: 1st-SEM-2019 --> First Semester 2019
-	 * Example: 2nd-SEM-2019 --> Second Semester 2019
+	 * Example: 1_Sem19_EN_Ext_Sha_SEG-TER_19H-01h30
+	 * Example: 2_Sem19_FR_Int_Wak_SAB_10H-03h00
+	 * Example: 2_Sem19_ES_Prv_Ext_QUA_19H30-01h30
 	 * */
-	@Column(name = "DE_MYCLASS_REFENCE", length = 12, nullable = false)
-	private String myClassReference;
-	
-	
-	/*
-	 * Class Name 
-	 * Example: Frances1WAKANDA
-	 * Example: 2nd-SEM-2019 --> Second Semester 2019
-	 * */
-	@Column(name = "NM_MYCLASS", length = 30, nullable = false)
-	private String myClassName;	
+	@Column(name = "DE_MYCLASS_CODE", length = 40, nullable = false)
+	private String myClassCode;
+
 
 	/*
 	 * Languages
@@ -119,7 +109,7 @@ public class MyClassDomain extends GenericDomain{
 	 * Comment if there is a specific notification to inform
 	 * about the opening class
 	 * */
-	@Column(name = "DE_COMMENT_MyCLASS", length = 100)
+	@Column(name = "DE_COMMENT_MYCLASS", length = 100)
 	private String commentMyClass;
 	
 	
@@ -131,25 +121,25 @@ public class MyClassDomain extends GenericDomain{
 	 * False --> opened
 	 */
 	@Column(name = "FG_CLOSED_MYCLASS", nullable = false)
-	private Boolean myClosedClass;
+	private Boolean closeMyClass;
 	
 	
 	/*
 	 * Presence
 	 * Insert presence Data Table into MyClassDomain
 	 */
-	@ManyToOne
+	/*@ManyToOne
 	@JoinColumn
-	private PresenceDomain presenceDomain;
+	private PresenceDomain presenceDomain;*/
 
 
 	/*
 	 * Student In My Class
 	 * Insert StudentInMyClass Data Table into MyClassDomain
 	 */
-	@ManyToOne
+	/*@ManyToOne
 	@JoinColumn(nullable = false)
-	private StudentInMyClassDomain studentInMyClassDomain;
+	private StudentInMyClassDomain studentInMyClassDomain;*/
 
 	
 	/*
@@ -157,29 +147,21 @@ public class MyClassDomain extends GenericDomain{
 	 * Insert Login Data Table into MyClassDomain
 	 * Inform here the name of class teacher.
 	 */
-	@OneToOne
-	@JoinColumn
-	private UserDomain userDomain;
+	/*@OneToOne
+	@JoinColumn(nullable = false)
+	private UserDomain userDomain;*/
 	
 	
 	/*
 	 * Getters and Setters
 	 */
 	
-	public String getMyClassReference() {
-		return myClassReference;
+	public String getMyClassCode() {
+		return myClassCode;
 	}
 
-	public void setMyClassReference(String myClassReference) {
-		this.myClassReference = myClassReference;
-	}
-
-	public String getMyClassName() {
-		return myClassName;
-	}
-
-	public void setMyClassName(String myClassName) {
-		this.myClassName = myClassName;
+	public void setMyClassCode(String myClassCode) {
+		this.myClassCode = myClassCode;
 	}
 
 	public String getMyClassLanguage() {
@@ -238,14 +220,14 @@ public class MyClassDomain extends GenericDomain{
 		this.commentMyClass = commentMyClass;
 	}
 
-	public Boolean getMyClosedClass() {
-		return myClosedClass;
+	public Boolean getCloseMyClass() {
+		return closeMyClass;
 	}
 
-	public void setMyClosedClass(Boolean myClosedClass) {
-		this.myClosedClass = myClosedClass;
+	public void setCloseMyClass(Boolean closeMyClass) {
+		this.closeMyClass = closeMyClass;
 	}
-
+/*
 	public PresenceDomain getPresenceDomain() {
 		return presenceDomain;
 	}
@@ -268,6 +250,6 @@ public class MyClassDomain extends GenericDomain{
 
 	public void setLoginDomain(UserDomain userDomain) {
 		this.userDomain = userDomain;
-	}
+	}*/
 
 }
