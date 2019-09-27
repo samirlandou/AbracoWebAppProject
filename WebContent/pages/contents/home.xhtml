@@ -9,20 +9,105 @@
 
 
 
-	<!-- MENU -->
+	<!-- MENU 
 	<ui:define name="menu">
 		<ui:include src="/pages/includes/menuPrincipal.xhtml">
 		</ui:include>
-	</ui:define>
+	</ui:define>-->
 
 
 
 	<!-- CONTENT -->
 	<ui:define name="content">
 	
-		this the home This is home
+		<script type="text/javascript">
+		PrimeFaces.locales ['pt_BR'] = {
+			    closeText: 'Fechar',
+			    prevText: 'Anterior',
+			    nextText: 'Próximo',
+			    monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+			    monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun', 'Jul','Ago','Set','Out','Nov','Dez'],
+			    dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],
+			    dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'],
+			    dayNamesMin: ['D','S','T','Q','Q','S','S'],
+			    weekHeader: 'Semana',
+			    weekNumberTitle: 'Sm',
+			    firstDay: 0,
+			    isRTL: false,
+			    showMonthAfterYear: false,
+			    yearSuffix:'',
+			    timeOnlyTitle: 'Só Horas',
+			    timeText: 'Tempo',
+			    hourText: 'Hora',
+			    minuteText: 'Minuto',
+			    secondText: 'Segundo',
+			    currentText: 'Hoje',
+			    ampm: false,
+			    month: 'Mês',
+			    week: 'Semana',
+			    day: 'Dia',
+			    allDayText: 'Todo o Dia',
+			};
+		</script>
 		
+		<!--
+		<style type="text/css">
+			.value {
+				width: 1000px;
+			}
+		</style>  -->
+		
+		<!-- MENU -->
+		<ui:include src="/pages/includes/menuPrincipal.xhtml"/>
+
+		<!-- BODY -->
+		<div>
+			this the home This is home <br />
+
+			<h:form>
+				<p:growl id="messages" showDetail="true" />
+
+				<h:panelGrid columnClasses="value">
+					<h3 style="margin-top: 0">Editable Schedule</h3>
+					<p:schedule id="schedule" value="#{scheduleEventController.eventModel}" widgetVar="myschedule" locale="pt_BR" timeZone="America/Sao_Paulo">
+						<p:ajax event="dateSelect" listener="#{scheduleEventController.onDateSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
+						<p:ajax event="eventSelect" listener="#{scheduleEventController.onEventSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
+						<p:ajax event="eventMove" listener="#{scheduleEventController.onEventMove}" update="messages" />
+						<p:ajax event="eventResize" listener="#{scheduleEventController.onEventResize}" update="messages" />
+					</p:schedule>
+						
+			        <h3>Lazy Schedule</h3>
+			        <p:schedule value="#{scheduleEventController.lazyEventModel}" />						
+				</h:panelGrid>
+
+				<p:dialog widgetVar="eventDialog" header="Detalho do Evento"
+					showEffect="clip" hideEffect="clip" draggable="false" resizable="false" modal="true" closable="true" appendTo="@(body)">
+					<h:panelGrid id="eventDetails" columns="2">
+						<p:outputLabel for="title" value="Titles:" />
+						<p:inputText id="title" value="#{scheduleEventController.event.title}"
+							required="true" />
+
+						<p:outputLabel for="from" value="From:" />
+						<p:calendar id="from" value="#{scheduleEventController.event.startDate}"
+							timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy HH:mm" />
+
+						<p:outputLabel for="to" value="To:" />
+						<p:calendar id="to" value="#{scheduleEventController.event.endDate}"
+							timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy HH:mm" />
+
+						<p:outputLabel for="allDay" value="All Day:" />
+						<h:selectBooleanCheckbox id="allDay"
+							value="#{scheduleEventController.event.allDay}" />
+
+						<p:commandButton type="reset" value="Reset" />
+						<p:commandButton id="addButton" value="Save"
+							action="#{scheduleEventController.addEvent}"
+							oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
+					</h:panelGrid>
+				</p:dialog>
+			</h:form>
+		</div>
+
 	</ui:define>
-	
-	
+		
 </ui:composition>

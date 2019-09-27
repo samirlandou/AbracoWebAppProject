@@ -37,6 +37,7 @@
 		<mapping class="br.com.abracowebmanagement.domain.MyClassDomain"/>
 		<mapping class="br.com.abracowebmanagement.domain.PresenceDomain"/>
         <mapping class="br.com.abracowebmanagement.domain.StudentInMyClassDomain"/>
+        <mapping class="br.com.abracowebmanagement.domain.ScheduleEventDomain"/>
 
 		
     </session-factory>

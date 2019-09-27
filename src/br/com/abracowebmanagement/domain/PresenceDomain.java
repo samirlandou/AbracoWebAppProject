@@ -33,25 +33,34 @@ public class PresenceDomain extends GenericDomain{
 	 * Example: true --> PRESENTE or false --> ABSENT
 	 */
 	@Column(name = "FG_PRESENCE", nullable = false)
-	private Boolean presence;
+	private Boolean presenceFlag;
 	
 
 	/*
-	 *Class Time
-	 * Inform how many was the class
+	 *Presence begin date and Hour
+	 * Inform the beginning time and date of the class
+	 */
+	@Column(name = "DT_PRESENCE_CLASS_BEGIN", nullable = false)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date presenceBeginDate;
+	
+	
+	/*
+	 *Presence End date and Hour
+	 * Inform the end time and date of the class
+	 */
+	@Column(name = "DT_END_PRESENCE", nullable = false)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date presenceEndDate;	
+
+	
+	/*
+	 *Presence Time
+	 * Inform how many time were the class
 	 */
 	@Column(name = "DT_TIME_CLASS", nullable = false)
 	@Temporal(TemporalType.TIME)
-	private Date timeClass;
-
-	
-	/*
-	 *Presence
-	 * Inform student presence date for each class
-	 */
-	@Column(name = "DT_PRESENCE_CLASS", nullable = false)
-	@Temporal(TemporalType.DATE)
-	private Date presenceClassDate;
+	private Date presenceTime;
 	
 	
 	/*
@@ -60,12 +69,21 @@ public class PresenceDomain extends GenericDomain{
 	 * about the class
 	 * */
 	@Column(name = "DE_COMMENT_CLASS", length = 100)
-	private String commentClass;
+	private String presenceClassComment;
 
 	
 	/*
+	 * UserName
+	 * Get the name (through login user) of the user who created the Schedule event.
+	 * from UserDomain class.
+	 * */
+	@Column(name = "DE_LOGIN_USER_PRESENCE", length = 30)
+	private String presenceLoginUser;
+	
+	
+	/*
 	 * StudentInMyClass
-	 * Insert  StudentInMyClassDomain Data Table into PresenceDomain 
+	 * Choose information from "StudentInMyClassDomain" Data Table into PresenceDomain 
 	 */
 	@ManyToOne
 	@JoinColumn(nullable = false)
@@ -74,64 +92,75 @@ public class PresenceDomain extends GenericDomain{
 
 	/*
 	 * Get the class code from MyClassDomain
-	 * Insert MyClassDomain Data Table into PresenceDomain
+	 * Choose information from "MyClassDomain" Data Table into PresenceDomain
 	 */
 	@OneToOne
 	@JoinColumn(nullable = false)
 	private MyClassDomain myClassDomain;
-
 	
-	/*
-	 * Get the MyClass Access Right from AccessRightDomain
-	 * Insert AccessRightDomain Data Table into PresenceDomain.
-	 * This will allow the professor to set students presence class.
-	 */
-	/*@ManyToMany
-	@JoinColumn(nullable = false)
-	private AccessRightDomain accessRightDomain;*/
 	
 	
 	/*
 	 * Getters and Setters
 	 */
-
-	public Boolean getPresence() {
-		return presence;
+	
+	public Boolean getPresenceFlag() {
+		return presenceFlag;
 	}
 
 
-	public void setPresence(Boolean presence) {
-		this.presence = presence;
+	public void setPresenceFlag(Boolean presenceFlag) {
+		this.presenceFlag = presenceFlag;
 	}
 
 
-	public Date getTimeClass() {
-		return timeClass;
+	public Date getPresenceBeginDate() {
+		return presenceBeginDate;
 	}
 
 
-	public void setTimeClass(Date timeClass) {
-		this.timeClass = timeClass;
+	public void setPresenceBeginDate(Date presenceBeginDate) {
+		this.presenceBeginDate = presenceBeginDate;
 	}
 
 
-	public Date getPresenceClassDate() {
-		return presenceClassDate;
+	public Date getPresenceEndDate() {
+		return presenceEndDate;
 	}
 
 
-	public void setPresenceClassDate(Date presenceClassDate) {
-		this.presenceClassDate = presenceClassDate;
+	public void setPresenceEndDate(Date presenceEndDate) {
+		this.presenceEndDate = presenceEndDate;
 	}
 
 
-	public String getCommentClass() {
-		return commentClass;
+	public Date getPresenceTime() {
+		return presenceTime;
 	}
 
 
-	public void setCommentClass(String commentClass) {
-		this.commentClass = commentClass;
+	public void setPresenceTime(Date presenceTime) {
+		this.presenceTime = presenceTime;
+	}
+
+
+	public String getPresenceClassComment() {
+		return presenceClassComment;
+	}
+
+
+	public void setPresenceClassComment(String presenceClassComment) {
+		this.presenceClassComment = presenceClassComment;
+	}
+
+
+	public String getPresenceLoginUser() {
+		return presenceLoginUser;
+	}
+
+
+	public void setPresenceLoginUser(String presenceLoginUser) {
+		this.presenceLoginUser = presenceLoginUser;
 	}
 
 
@@ -153,15 +182,5 @@ public class PresenceDomain extends GenericDomain{
 	public void setMyClassDomain(MyClassDomain myClassDomain) {
 		this.myClassDomain = myClassDomain;
 	}
-
-
-	/*public AccessRightDomain getAccessRightDomain() {
-		return accessRightDomain;
-	}
-
-
-	public void setAccessRightDomain(AccessRightDomain accessRightDomain) {
-		this.accessRightDomain = accessRightDomain;
-	}*/
 	
 }

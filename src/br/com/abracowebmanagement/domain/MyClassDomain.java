@@ -83,7 +83,7 @@ public class MyClassDomain extends GenericDomain{
 	 */
 	@Column(name = "DT_END_MYCLASS", nullable = false)
 	@Temporal(TemporalType.DATE)
-	private Date MyClassEndDate;
+	private Date myClassEndDate;
 	
 	
 	/*
@@ -189,11 +189,11 @@ public class MyClassDomain extends GenericDomain{
 	}
 
 	public Date getMyClassEndDate() {
-		return MyClassEndDate;
+		return myClassEndDate;
 	}
 
 	public void setMyClassEndDate(Date myClassEndDate) {
-		MyClassEndDate = myClassEndDate;
+		this.myClassEndDate = myClassEndDate;
 	}
 
 	public Date getMyClassTimePackage() {

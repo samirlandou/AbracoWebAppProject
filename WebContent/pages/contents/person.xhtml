@@ -9,17 +9,22 @@
 
 
 
-	<!-- MENU -->
+	<!-- MENU
 	<ui:define name="menu">
 		<ui:include src="/pages/includes/menuPrincipal.xhtml">
 		</ui:include>
-	</ui:define>
+	</ui:define>  -->
 
 
 
 	<!-- CONTENT -->
 	<ui:define name="content">
-
+		
+		<!-- MENU -->
+		<ui:include src="/pages/includes/menuPrincipal.xhtml"/>
+		
+		
+		<!-- BODY -->
 		<!-- LISTING PANEL FORM -->
 		<h:form id="personListFormId">
 			<p:panel header="Lista de pessoas">
@@ -58,7 +63,7 @@
 					</p:column>
 					
 					<!-- DE_LANGUAGE -->
-					<p:column headerText="Língua" sortBy="#{cursor.language}" filterBy="#{cursor.completeName}">
+					<p:column headerText="Língua" sortBy="#{cursor.language}" filterBy="#{cursor.language}">
 						<h:outputText value="#{cursor.language}"/>
 					</p:column>
 
@@ -128,7 +133,7 @@
 				<!-- PANEL GRID TO FILL FORMS -->
 				<h:panelGrid id="personInputRegisterFormId" columns="2">			
 					<p:outputLabel value="Nome Completo: *" />
-					<p:inputText value="#{personController.personDomain.completeName}" maxlength="30" size="27"
+					<p:inputText value="#{personController.personDomain.completeName}" maxlength="40" size="27"
 								required="true" requiredMessage="O campo 'Nome Completo' é obrigatório"/>
 					
 					<p:outputLabel value="Nacionalidade: *" />

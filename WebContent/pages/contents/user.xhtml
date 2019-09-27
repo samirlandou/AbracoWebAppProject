@@ -9,116 +9,165 @@
 
 
 
-	<!-- MENU -->
+	<!-- MENU
 	<ui:define name="menu">
 		<ui:include src="/pages/includes/menuPrincipal.xhtml">
 		</ui:include>
-	</ui:define>
+	</ui:define>  -->
 
 
 
 	<!-- CONTENT -->
 	<ui:define name="content">
-
+		
+		<!-- MENU -->
+		<ui:include src="/pages/includes/menuPrincipal.xhtml"/>
+		
+		
+		<!-- BODY -->
 		<!-- LISTING PANEL FORM -->
-		<h:form>
-			<p:panel header="Lista de Usuário (Login)">
-				<p:dataTable emptyMessage="Nenhum registro encontrado."
-					paginator="true">
+		<h:form id="userListFormId">
+			<p:panel header="Lista de pessoas">
+				<p:dataTable id="userDataTableFormId" emptyMessage="Nenhum registro encontrado."
+					paginator="true" value="#{userController.usersDomain}" var="cursor" rows="5">
 
-					<!-- NM_USER-->
-					<p:column headerText="Login">
-					</p:column>
 
-					<!-- NM_COMPLETE_NAME -->
-					<p:column headerText="Nome completo" >
+					<!-- NM_USER -->
+					<p:column headerText="Usuário:" sortBy="#{cursor.userName}" filterBy="#{cursor.userName}">
+						<h:outputText value="#{cursor.userName}"/>
 					</p:column>
 					
+					<!-- NM_COMPLETE_NAME -->
+					<p:column headerText="Nome completo" sortBy="#{cursor.personDomain.completeName}" filterBy="#{cursor.personDomain.completeName}">
+						<h:outputText value="#{cursor.personDomain.completeName}"/>
+					</p:column>
+
 					<!-- DE_NATIONALITY -->
 					<p:column headerText="Nacionalidade">
+						<h:outputText value="#{cursor.personDomain.nationality}"/>
 					</p:column>
 
 					<!-- DE_SEX -->
-					<p:column headerText="Sexo">
+					<p:column headerText="Sexo" sortBy="#{cursor.personDomain.sex}">
+						<h:outputText value="#{cursor.personDomain.sex}"/>					
 					</p:column>
-
-					<!-- DE_EMAIL -->
-					<p:column headerText="E-mail">
-					</p:column>
-
-					<!-- DE_TELEPHONE -->
-					<p:column headerText="Telefone">
-					</p:column>
-
+					
 					<!-- DE_LANGUAGE -->
-					<p:column headerText="Língua">
+					<p:column headerText="Língua" sortBy="#{cursor.personDomain.language}" filterBy="#{cursor.personDomain.langue}">
+						<h:outputText value="#{cursor.personDomain.language}"/>
 					</p:column>
 
 					<!-- DE_PROFILE -->
-					<p:column headerText="Perfile">
+					<p:column headerText="Perfil" sortBy="#{cursor.personDomain.profile}">
+						<h:outputText value="#{cursor.personDomain.profile}"/>
 					</p:column>
 
 					<!-- DE_STATUS -->
-					<p:column headerText="Status">
+					<p:column headerText="Status" sortBy="#{cursor.personDomain.status}">
+						<h:outputText value="#{cursor.personDomain.status}"/>					
 					</p:column>
 					
+					<!-- OPTIONS -->
+					<p:column headerText="Opções">
+
+						<!-- BUTTON TO EDIT -->
+						<p:commandButton icon="ui-icon-pencil" actionListener="#{userController.doEdit}"
+										oncomplete="PF('dlgEditUser').show();"
+										update=":idMsgGlobal">
+							<f:attribute name="selectedUserByCursor" value="#{cursor}"/>
+							<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+						</p:commandButton>
 					
+						<!-- BUTTON TO DELETE -->
+						<p:commandButton icon="ui-icon-trash" actionListener="#{userController.doDelete}"
+										update=":idMsgGlobal :userListFormId:userDataTableFormId">
+							<p:confirm header="Confirmação" message="Deseja excluir #{cursor.completeName}?" icon="ui-icon-alert"/>
+							<f:attribute name="selectedUserByCursor" value="#{cursor}"/>
+						</p:commandButton>
+					</p:column>
+
+
 					<!-- FACET FOR THE FOOTER -->
 					<f:facet name="footer">
 
 						<!-- NEW BUTTON -->
 						<p:commandButton value="Novo"
-							oncomplete="PF('dlgNewUser').show();" />
+							actionListener="#{userController.doNewRegister}"
+							oncomplete="PF('dlgNewUser').show();"
+							update=":idMsgGlobal :userRegisterFormId:userInputRegisterFormId">
+							<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener"/>
+							</p:commandButton>
 					</f:facet>
 
 				</p:dataTable>
+
+				
+				<!-- CONFIRM DIALOG WHEN DELETING -->
+				<p:confirmDialog global="true" >
+					<p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>		
+					<p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+				</p:confirmDialog>
+				
 			</p:panel>
 		</h:form>
 
 
 		<!-- DIALOG TO REGISTER NEW USER-->
-		<p:dialog header="Cadastrar Novo Usuário" widgetVar="dlgNewUser"
+		<p:dialog header="Cadastrar Nova pessoa" widgetVar="dlgNewUser"
 			draggable="false" resizable="false" modal="true" closable="true"
 			appendTo="@(body)">
 
 			<!-- FORM FOR THE DIALOG -->
-			<h:form>
+			<h:form id="userRegisterFormId">
 			
-				<!-- PANEL GRID FOR FORMS -->
-				<h:panelGrid columns="2">			
-					<p:outputLabel value="Nome Completo: " />
-					<p:inputText maxlength="30" size="27" />
+				<!-- PANEL GRID TO FILL FORMS -->
+				<h:panelGrid id="userInputRegisterFormId" columns="2">			
+					<p:outputLabel value="Usuário: *" />
+					<p:inputText value="#{userController.userDomain.userName}" maxlength="30" size="27"
+								required="true" requiredMessage="O campo 'Usuário' é obrigatório"/>
 					
-					<p:outputLabel value="Nacionalidade: " />
-					<p:inputText maxlength="30" size="27" />
+					<p:outputLabel value="Senha: *" />
+					<p:inputText value="#{userController.userDomain.password}" maxlength="12" size="27"
+								required="true" requiredMessage="O campo 'Senha' é obrigatório"/>
+
+					<p:outputLabel value="lembrar Senha: *" />
+					<p:inputTextarea value="#{userController.userDomain.rememberPassword}" rows="2" cols="30" counter="display"
+						maxlength="100" counterTemplate="{0} caracteres restantes."
+						autoResize="true" required="true" requiredMessage="O campo 'Lembrar Senha' é obrigatório"/>
+					<p:selectOneMenu id="userId" filter="true" value="#{userController.userDomain.personDomain}"
+						converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="O campo 'Pessao' é obrigatório">
+						<f:selectItem noSelectionOption="true" itemLabel="Selecione uma pessoa" />
+						<f:selectItems value="#{userController.personsDomain}" var="person"
+						itemLabel="#{person.completeName}"
+						itemValue="#{person}"/>
+					</p:selectOneMenu>
+					<br/>
+					<h:outputText id="display"/>
+					<br/>
+					<p:outputLabel value="Imagem:" />
+					   <p:fileUpload fileUploadListener="#{userController.handleFileUpload}"  mode="advanced" dragDropSupport="true"
+                  		update=":idMsgGlobal" sizeLimit="512000" fileLimit="1" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" auto="true"
+                  		invalidFileMessage="São permitidas somente imagens (gif, jpeg, jpg e png)"
+                  		invalidSizeMessage="O tamanho máximo permitido é de 500KB."
+                  		onstart="console.log('Iniciando envio de arquivo')"
+    					onerror="console.log('Erro na requisição de envio')"
+   						oncomplete="console.log('Envio concluído')" />
+   						<br/>					
 					
-					<p:outputLabel value="Sexo: " />
-					<p:inputText maxlength="30" size="27" />
-					
-					<p:outputLabel value="E-mail: " />
-					<p:inputText maxlength="30" size="27" />
-					
-					<p:outputLabel value="Telefone: " />
-					<p:inputText maxlength="30" size="27" />
-					
-					<p:outputLabel value="Endereço: " />
-					<p:inputText maxlength="30" size="27" />
+					<br/>			
 				</h:panelGrid>
 				
-				<br/>
+				<br/>				
 				<!-- PANEL GRID FOR BUTTON SAVE AND CLOSE -->
 				<h:panelGrid columns="2">
-					<p:commandButton value="Salvar"/>
+					<p:commandButton value="Salvar" actionListener="#{userController.doSave}"
+									update=":idMsgGlobal :userRegisterFormId:userInputRegisterFormId :userListFormId:userDataTableFormId"/>					
 					<p:commandButton value="Fechar" oncomplete="PF('dlgNewUser').hide();"/>
-				</h:panelGrid>
-				
+				</h:panelGrid>		
 				
 			</h:form>
 
-
 		</p:dialog>
-
-
 
 	</ui:define>
 </ui:composition>

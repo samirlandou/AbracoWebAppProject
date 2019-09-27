@@ -24,7 +24,7 @@ public class PersonDomain extends GenericDomain{
 	 * Complete name
 	 * (Name + Surname)
 	 */
-	@Column(name = "NM_COMPLETE_NAME", length = 30, nullable = false)
+	@Column(name = "NM_COMPLETE_NAME", length = 40, nullable = false)
 	private String completeName;	
 	
 	

@@ -3,6 +3,7 @@ package br.com.abracowebmanagement.domain;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -39,7 +40,7 @@ public class UserDomain extends GenericDomain{
 	 * Use MD5 cryptography for encode the password
 	 */
 	
-	@Column(name = "DE_PASSWORD", length = 32, nullable = false)
+	@Column(name = "DE_PASSWORD", length = 12, nullable = false)
 	private String password;
 	
 	
@@ -64,8 +65,9 @@ public class UserDomain extends GenericDomain{
 	 * User
 	 * Image
 	 */
+	@Lob
 	@JoinColumn(name = "DE_USER_IMAGE")
-	private byte[] userImage;
+	private byte[] imageUser;
 	
 	/*
 	 * Getters and Setters
@@ -111,13 +113,13 @@ public class UserDomain extends GenericDomain{
 	}
 
 
-	public byte[] getUserImage() {
-		return userImage;
+	public byte[] getImageUser() {
+		return imageUser;
 	}
 
 
-	public void setUserImage(byte[] userImage) {
-		this.userImage = userImage;
+	public void setImageUser(byte[] userImage) {
+		this.imageUser = userImage;
 	}	
 	
 }
