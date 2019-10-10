@@ -118,7 +118,7 @@ public class PersonController implements Serializable {
 	
 	public void addMessage() {
 
-		String summary = personDomain.getStatus() ? "Desativado(a)" : "Ativo(a)";
+		String summary = personDomain.getStatus() ? "Ativo(a)" : "Desativado(a)";
 		Messages.addGlobalError(summary);
 	}
 	

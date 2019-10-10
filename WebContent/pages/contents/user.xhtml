@@ -25,8 +25,22 @@
 		
 		
 		<!-- BODY -->
+		<h:form>
+			<p:commandButton value="Show Image" action="#{userController.showImage}"
+							update=":imageFormId:imageId"/>		
+		</h:form>
+		
+		<h:form id="imageFormId">
+			<p:graphicImage id="imageId" value="#{userController.myImage}" style="height:200px;width:500px" cache="false">
+			</p:graphicImage>	
+		</h:form>	
+		
+		
+		
+		
 		<!-- LISTING PANEL FORM -->
-		<h:form id="userListFormId">
+		<h:form id="userListFormId">		
+		
 			<p:panel header="Lista de pessoas">
 				<p:dataTable id="userDataTableFormId" emptyMessage="Nenhum registro encontrado."
 					paginator="true" value="#{userController.usersDomain}" var="cursor" rows="5">
@@ -72,8 +86,8 @@
 
 						<!-- BUTTON TO EDIT -->
 						<p:commandButton icon="ui-icon-pencil" actionListener="#{userController.doEdit}"
-										oncomplete="PF('dlgEditUser').show();"
-										update=":idMsgGlobal">
+										oncomplete="PF('dlgNewUser').show();"
+										update=":idMsgGlobal :userRegisterFormId:userInputRegisterFormId :userListFormId:userDataTableFormId">
 							<f:attribute name="selectedUserByCursor" value="#{cursor}"/>
 							<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
 						</p:commandButton>
@@ -81,7 +95,7 @@
 						<!-- BUTTON TO DELETE -->
 						<p:commandButton icon="ui-icon-trash" actionListener="#{userController.doDelete}"
 										update=":idMsgGlobal :userListFormId:userDataTableFormId">
-							<p:confirm header="Confirmação" message="Deseja excluir #{cursor.completeName}?" icon="ui-icon-alert"/>
+							<p:confirm header="Confirmação" message="Deseja excluir #{cursor.personDomain.completeName}?" icon="ui-icon-alert"/>
 							<f:attribute name="selectedUserByCursor" value="#{cursor}"/>
 						</p:commandButton>
 					</p:column>
@@ -118,7 +132,7 @@
 			appendTo="@(body)">
 
 			<!-- FORM FOR THE DIALOG -->
-			<h:form id="userRegisterFormId">
+			<h:form id="userRegisterFormId" enctype="multipart/form-data">
 			
 				<!-- PANEL GRID TO FILL FORMS -->
 				<h:panelGrid id="userInputRegisterFormId" columns="2">			
@@ -130,31 +144,33 @@
 					<p:inputText value="#{userController.userDomain.password}" maxlength="12" size="27"
 								required="true" requiredMessage="O campo 'Senha' é obrigatório"/>
 
-					<p:outputLabel value="lembrar Senha: *" />
+					<p:outputLabel value="Lembrar Senha: *" />
 					<p:inputTextarea value="#{userController.userDomain.rememberPassword}" rows="2" cols="30" counter="display"
 						maxlength="100" counterTemplate="{0} caracteres restantes."
 						autoResize="true" required="true" requiredMessage="O campo 'Lembrar Senha' é obrigatório"/>
+					<br/>
+					<h:outputText id="display"/>
+					<p:outputLabel value="Nome da Pessoa: *" />
 					<p:selectOneMenu id="userId" filter="true" value="#{userController.userDomain.personDomain}"
 						converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="O campo 'Pessao' é obrigatório">
 						<f:selectItem noSelectionOption="true" itemLabel="Selecione uma pessoa" />
 						<f:selectItems value="#{userController.personsDomain}" var="person"
-						itemLabel="#{person.completeName}"
-						itemValue="#{person}"/>
+						itemValue="#{person}"
+						itemLabel="#{person.completeName}"/>
 					</p:selectOneMenu>
+
 					<br/>
-					<h:outputText id="display"/>
-					<br/>
+					<p:spacer width="10px"/>
 					<p:outputLabel value="Imagem:" />
-					   <p:fileUpload fileUploadListener="#{userController.handleFileUpload}"  mode="advanced" dragDropSupport="true"
-                  		update=":idMsgGlobal" sizeLimit="512000" fileLimit="1" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" auto="true"
-                  		invalidFileMessage="São permitidas somente imagens (gif, jpeg, jpg e png)"
-                  		invalidSizeMessage="O tamanho máximo permitido é de 500KB."
-                  		onstart="console.log('Iniciando envio de arquivo')"
-    					onerror="console.log('Erro na requisição de envio')"
-   						oncomplete="console.log('Envio concluído')" />
-   						<br/>					
-					
-					<br/>			
+					<p:fileUpload  	fileUploadListener="#{userController.handleFileUpload}" mode="advanced" dragDropSupport="true"
+					          		skinSimple="true" auto="true"
+					          		update=":idMsgGlobal" sizeLimit="512000" fileLimit="1" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" 
+					          		invalidFileMessage="São permitidas somente imagens (gif, jpeg, jpg e png)"
+					          		invalidSizeMessage="O tamanho máximo permitido é de 500KB."
+					          		onstart="console.log('Iniciando envio de arquivo')"
+									onerror="console.log('Erro na requisição de envio')"
+									oncomplete="console.log('Envio concluído')" />
+   					<br/>
 				</h:panelGrid>
 				
 				<br/>				

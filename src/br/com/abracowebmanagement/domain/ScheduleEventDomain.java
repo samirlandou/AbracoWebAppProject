@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -79,6 +81,15 @@ public class ScheduleEventDomain extends GenericDomain {
 	 * */
 	@Column(name = "DE_LOGIN_USER_SCHEDULE_EVENT", length = 30)
 	private String scheduleEventLoginUser;
+	
+	
+	/*
+	 * User
+	 * Insert User Data Table into ScheduleDomain 
+	 */
+	@OneToOne
+	@JoinColumn(nullable = false)
+	private UserDomain userDomain;
 
 
 	public String getScheduleEventDescription() {

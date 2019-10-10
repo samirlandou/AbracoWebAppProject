@@ -27,6 +27,12 @@
 		<listener-class>br.com.abracowebmanagement.util.HibernateContext</listener-class>
 	</listener>
 
+	<!-- Define PrimeFaces Type -->
+	<context-param>
+		<param-name>primefaces.UPLOADER</param-name>
+		<param-value>native</param-value>
+	</context-param>
+
 	<!-- Define PrimeFaces Theme -->
 	<context-param>
 		<param-name>primefaces.THEME</param-name>

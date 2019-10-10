@@ -1,26 +1,29 @@
 package br.com.abracowebmanagement.controller;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import javax.faces.event.PhaseId;
 
 import org.omnifaces.util.Messages;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
+import org.primefaces.model.UploadedFile;
 
 import br.com.abracowebmanagement.dao.PersonDAO;
 import br.com.abracowebmanagement.dao.UserDAO;
 import br.com.abracowebmanagement.domain.PersonDomain;
 import br.com.abracowebmanagement.domain.UserDomain;
+import br.com.abracowebmanagement.util.FileUtil;
 
 @ManagedBean
 @ViewScoped
@@ -32,34 +35,17 @@ public class UserController implements Serializable {
 	private List<UserDomain> usersDomain;
 	private List<PersonDomain> personsDomain;
 	
+	private StreamedContent sc;
+	private List <StreamedContent> userImages;
+	public FileUtil fileUtil;
 
+	private DefaultStreamedContent myImage;
 	
-	/**
-	 * Transform the image to an array bytes to save it in the data base.<br/>
-	 * @since 23/09/2019
-	 * @author samirlandou
-	 * @param event
-	 */
-    public void handleFileUpload(FileUploadEvent event) {
-    	userDomain.setImageUser(event.getFile().getContents());  	 
-    }
 	
+	public UserController(){
+		
+	}
     
-    /**
-     * Take the array bytes an converts it into an real image.
-     * @author samirlandou <br/>
-     * @since 23/09/2019 <br/>
-     * @return
-     * @throws IOException
-     */
-    public StreamedContent imageViewer() throws IOException {
-        FacesContext context = FacesContext.getCurrentInstance();
-        if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
-            return new DefaultStreamedContent();
-        } else {
-            return new DefaultStreamedContent(new ByteArrayInputStream(userDomain.getImageUser()));
-        }
-    }
 	
 	/**
 	 * List Method. <br/>
@@ -93,7 +79,7 @@ public class UserController implements Serializable {
 			
 			//Instantiate List of person
 			PersonDAO personDAO = new PersonDAO();
-			personDAO.list();
+			personsDomain = personDAO.list();
 		} catch (Exception e) {
 			Messages.addGlobalError("Ocorreu um erro tentar gerar a lista de pessoas");
 			e.printStackTrace();
@@ -118,7 +104,16 @@ public class UserController implements Serializable {
 		try {
 			//Save User with merge method
 			UserDAO userDAO = new UserDAO();
-			userDAO.merge(userDomain);
+			UserDomain result =  userDAO.merge(userDomain);
+			
+			//Get origin file
+			Path originFile = Paths.get(userDomain.getImageUserPath());
+			
+			//Get destination file
+			Path destinationFile = Paths.get("C:/Users/Samir Landou/Documents/Desenvolvimento/Uploads/Users/" + result.getId() + ".png");
+			
+			//Copy origin File do the destination path
+			Files.copy(originFile, destinationFile, StandardCopyOption.REPLACE_EXISTING);
 			
 			//Clean informations in the panelGrid
 			doNewRegister();
@@ -170,16 +165,52 @@ public class UserController implements Serializable {
 	 * @since 11/09/2019
 	 */
 	public void doEdit(ActionEvent event){
-		try {			
+		
+		try {
 			//Capture the event from the cursor in user.xhtml
 			userDomain = (UserDomain) event.getComponent().getAttributes()
 					.get("selectedUserByCursor");
+			
+			//Instantiate List of person
+			PersonDAO personDAO = new PersonDAO();
+			personsDomain = personDAO.list();
 		} catch (Exception e) {
-			Messages.addGlobalError("Ocorreu um erro ao editar as informações de: " + userDomain.getUserName());
-			e.printStackTrace();			
-		}		
+			Messages.addGlobalError("Ocorreu um erro ao tentar selecionar uma pessoas");
+			e.printStackTrace();
+		}
 	}
 
+	
+	/**
+	 * Upload File in temp windows directory .<br/>
+	 * @since 23/09/2019
+	 * @author samirlandou
+	 * @param event
+	 */
+    public void handleFileUpload(FileUploadEvent event) {
+    	//userDomain.setImageUser(event.getFile().getContents());
+    	
+    	
+    	try {
+    		//original File
+    		UploadedFile uploadFile  = event.getFile();
+    		
+    		//Destination File in Temporary Directory (C:\Users\Samir Landou\AppData\Local\Temp)
+			Path tempFile = Files.createTempFile(null, null);
+			
+			//Copy original file into destination file
+			Files.copy(uploadFile.getInputstream(), tempFile, StandardCopyOption.REPLACE_EXISTING);
+			
+			//Get path through @Transcient
+			userDomain.setImageUserPath(tempFile.toString());
+			Messages.addGlobalError("Upload realizado com sucesso!");
+			System.out.println("Temporary File: " + userDomain.getImageUserPath());
+		} catch (IOException e) {
+			Messages.addGlobalError("Ocorreu um erro ao tentar realizar o upload do arquivo.");
+			e.printStackTrace();
+		}
+    	
+    }
 	
 	/*
 	 * Getters and Setters
@@ -212,6 +243,36 @@ public class UserController implements Serializable {
 
 	public void setPersonsDomain(List<PersonDomain> personsDomain) {
 		this.personsDomain = personsDomain;
+	}
+
+
+	public StreamedContent getSc() {
+		return sc;
+	}
+
+
+	public void setSc(StreamedContent sc) {
+		this.sc = sc;
+	}
+
+
+	public List<StreamedContent> getUserImages() {
+		return userImages;
+	}
+
+
+	public void setUserImages(List<StreamedContent> userImages) {
+		this.userImages = userImages;
+	}
+
+
+	public DefaultStreamedContent getMyImage() {
+		return myImage;
+	}
+
+
+	public void setMyImage(DefaultStreamedContent myImage) {
+		this.myImage = myImage;
 	}
 
 /*

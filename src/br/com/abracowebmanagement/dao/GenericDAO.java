@@ -43,11 +43,12 @@ public class GenericDAO<Entity> {
 	}
 	
 	
+	//Merge Original
 	/**
 	 * Method to merge
 	 * @param entity
 	 */
-	public void merge(Entity entity){
+	/*public void merge(Entity entity){
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction = null;
 		
@@ -63,7 +64,7 @@ public class GenericDAO<Entity> {
 		}finally {
 			session.close();
 		}
-	}	
+	}*/
 	
 	
 	/**
@@ -153,4 +154,29 @@ public class GenericDAO<Entity> {
 			session.close();
 		}
 	}
+	
+	
+	/**
+	 * Method to merge
+	 * @param entity
+	 */
+	@SuppressWarnings("unchecked")
+	public Entity merge(Entity entity){
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction transaction = null;
+		
+		try {
+			transaction = session.beginTransaction();
+			Entity result = (Entity) session.merge(entity);
+			transaction.commit();
+			return result;
+		} catch (RuntimeException error) {
+			if(transaction != null){
+				transaction.rollback();
+			}
+			throw error;
+		}finally {
+			session.close();
+		}
+	}	
 }

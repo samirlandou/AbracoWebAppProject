@@ -14,7 +14,7 @@
 		<p:sidebar widgetVar="sidebar2" position="left" baseZIndex="10000" appendTo="@(body)">
 		    <h1 style="font-weight:normal">Abraço Cultural</h1>
 			<br/>
-			<p:menubar>					
+			<p:panelMenu >					
 				<p:submenu label="File" outcome="/pages/contents/home.xhtml" />
 				
 	
@@ -40,7 +40,7 @@
 					<p:commandButton value="Logoff" icon="ui-icon-power" action="/pages/login.xhtml"/>
 				</f:facet>
 				
-			</p:menubar>
+			</p:panelMenu>
 			
 		    <p:commandButton value="Cancel" oncomplete="PF('sidebar2').hide()"/>
 		</p:sidebar>	

@@ -82,8 +82,8 @@
 
 						<!-- BUTTON TO EDIT -->
 						<p:commandButton icon="ui-icon-pencil" actionListener="#{personController.doEdit}"
-										oncomplete="PF('dlgEditPerson').show();"
-										update=":idMsgGlobal">
+										oncomplete="PF('dlgNewPerson').show();"
+										update=":idMsgGlobal :personRegisterFormId:personInputRegisterFormId :personListFormId:personDataTableFormId">
 							<f:attribute name="selectedPersonByCursor" value="#{cursor}"/>
 							<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
 						</p:commandButton>
@@ -138,7 +138,7 @@
 					
 					<p:outputLabel value="Nacionalidade: *" />
 					<p:inputText value="#{personController.personDomain.nationality}" maxlength="20" size="27"
-								required="true" requiredMessage="O campo 'Nacionalidade' é obrigatório"/>
+								required="true" requiredMessage="O campo 'Nacionalidade' é obrigatório" style="text-transform: uppercase"/>
 
 					<p:outputLabel value="Sexo: *" />
 					<p:selectOneRadio value="#{personController.personDomain.sex}" required="true" requiredMessage="O campo 'Sexo' é obrigatório">
@@ -160,6 +160,8 @@
 						autoResize="true"/>
 					<br/>
 					<h:outputText id="display"/>
+					<p:spacer height="10px"/>
+					<p:spacer height="10px"/>
 					
 					<p:outputLabel value="Língua: *" />
 					<p:inputText value="#{personController.personDomain.language}" maxlength="20" size="27"
@@ -167,7 +169,7 @@
 					
 					<p:outputLabel value="Perfil: *" />
 					<p:inputText value="#{personController.personDomain.profile}" maxlength="20" size="27"
-								required="true" requiredMessage="O campo 'Perfil' é obrigatório"/>
+								required="true" requiredMessage="O campo 'Perfil' é obrigatório" style="text-transform: uppercase"/>
 
 					<p:outputLabel value="Status: *" />
 					<p:toggleSwitch value="#{personController.personDomain.status}" required="true" requiredMessage="O campo 'Status' é obrigatório">

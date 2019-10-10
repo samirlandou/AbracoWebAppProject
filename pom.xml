@@ -97,7 +97,7 @@
 		   <artifactId>hibernate-core</artifactId>
 		   <version>4.3.6.Final</version>
 		</dependency>
-
+		
 		<!-- https://mvnrepository.com/artifact/javax.servlet/jstl -->
 		<dependency>
 		    <groupId>javax.servlet</groupId>

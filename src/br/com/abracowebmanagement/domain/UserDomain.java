@@ -3,9 +3,9 @@ package br.com.abracowebmanagement.domain;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @SuppressWarnings("serial")
 @Entity
@@ -60,14 +60,24 @@ public class UserDomain extends GenericDomain{
 	@JoinColumn(nullable = false)
 	private PersonDomain personDomain;
 	
+
+	/*
+	 * User
+	 * Save User Image Temporarily with @Transcient
+	 */
+	@Transient
+	private String imageUserPath;
+	
 	
 	/*
 	 * User
 	 * Image
 	 */
-	@Lob
-	@JoinColumn(name = "DE_USER_IMAGE")
-	private byte[] imageUser;
+	//@Lob
+	/*@JoinColumn(name = "DE_USER_IMAGE")
+	private byte[] imageUser;*/
+
+	
 	
 	/*
 	 * Getters and Setters
@@ -113,13 +123,23 @@ public class UserDomain extends GenericDomain{
 	}
 
 
-	public byte[] getImageUser() {
+	public String getImageUserPath() {
+		return imageUserPath;
+	}
+
+
+	public void setImageUserPath(String imageUserPath) {
+		this.imageUserPath = imageUserPath;
+	}
+
+
+	/*public byte[] getImageUser() {
 		return imageUser;
 	}
 
 
 	public void setImageUser(byte[] userImage) {
 		this.imageUser = userImage;
-	}	
+	}	*/
 	
 }
