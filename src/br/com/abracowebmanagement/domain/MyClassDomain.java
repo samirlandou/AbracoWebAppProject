@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -147,9 +149,9 @@ public class MyClassDomain extends GenericDomain{
 	 * Insert Login Data Table into MyClassDomain
 	 * Inform here the name of class teacher.
 	 */
-	/*@OneToOne
+	@OneToOne
 	@JoinColumn(nullable = false)
-	private UserDomain userDomain;*/
+	private UserDomain userDomain;
 	
 	
 	/*
@@ -251,5 +253,13 @@ public class MyClassDomain extends GenericDomain{
 	public void setLoginDomain(UserDomain userDomain) {
 		this.userDomain = userDomain;
 	}*/
+
+	public UserDomain getUserDomain() {
+		return userDomain;
+	}
+
+	public void setUserDomain(UserDomain userDomain) {
+		this.userDomain = userDomain;
+	}
 
 }

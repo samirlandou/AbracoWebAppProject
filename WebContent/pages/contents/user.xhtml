@@ -25,18 +25,6 @@
 		
 		
 		<!-- BODY -->
-		<h:form>
-			<p:commandButton value="Show Image" action="#{userController.showImage}"
-							update=":imageFormId:imageId"/>		
-		</h:form>
-		
-		<h:form id="imageFormId">
-			<p:graphicImage id="imageId" value="#{userController.myImage}" style="height:200px;width:500px" cache="false">
-			</p:graphicImage>	
-		</h:form>	
-		
-		
-		
 		
 		<!-- LISTING PANEL FORM -->
 		<h:form id="userListFormId">		
@@ -128,7 +116,7 @@
 
 		<!-- DIALOG TO REGISTER NEW USER-->
 		<p:dialog header="Cadastrar Nova pessoa" widgetVar="dlgNewUser"
-			draggable="false" resizable="false" modal="true" closable="true"
+			draggable="true" resizable="false" modal="true" closable="true"
 			appendTo="@(body)">
 
 			<!-- FORM FOR THE DIALOG -->
@@ -141,15 +129,16 @@
 								required="true" requiredMessage="O campo 'Usuário' é obrigatório"/>
 					
 					<p:outputLabel value="Senha: *" />
-					<p:inputText value="#{userController.userDomain.password}" maxlength="12" size="27"
+					<p:inputText value="#{userController.userDomain.passwordWithoutCryptography}" maxlength="12" size="27"
 								required="true" requiredMessage="O campo 'Senha' é obrigatório"/>
 
-					<p:outputLabel value="Lembrar Senha: *" />
+					<p:outputLabel value="Lembre sua senha com uma frase: *" />
 					<p:inputTextarea value="#{userController.userDomain.rememberPassword}" rows="2" cols="30" counter="display"
 						maxlength="100" counterTemplate="{0} caracteres restantes."
 						autoResize="true" required="true" requiredMessage="O campo 'Lembrar Senha' é obrigatório"/>
 					<br/>
 					<h:outputText id="display"/>
+					
 					<p:outputLabel value="Nome da Pessoa: *" />
 					<p:selectOneMenu id="userId" filter="true" value="#{userController.userDomain.personDomain}"
 						converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="O campo 'Pessao' é obrigatório">
@@ -164,13 +153,14 @@
 					<p:outputLabel value="Imagem:" />
 					<p:fileUpload  	fileUploadListener="#{userController.handleFileUpload}" mode="advanced" dragDropSupport="true"
 					          		skinSimple="true" auto="true"
-					          		update=":idMsgGlobal" sizeLimit="512000" fileLimit="1" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" 
+					          		update=":idMsgGlobal" sizeLimit="512000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" 
 					          		invalidFileMessage="São permitidas somente imagens (gif, jpeg, jpg e png)"
 					          		invalidSizeMessage="O tamanho máximo permitido é de 500KB."
 					          		onstart="console.log('Iniciando envio de arquivo')"
 									onerror="console.log('Erro na requisição de envio')"
 									oncomplete="console.log('Envio concluído')" />
    					<br/>
+
 				</h:panelGrid>
 				
 				<br/>				
@@ -178,7 +168,7 @@
 				<h:panelGrid columns="2">
 					<p:commandButton value="Salvar" actionListener="#{userController.doSave}"
 									update=":idMsgGlobal :userRegisterFormId:userInputRegisterFormId :userListFormId:userDataTableFormId"/>					
-					<p:commandButton value="Fechar" oncomplete="PF('dlgNewUser').hide();"/>
+					<p:commandButton value="Fechar" oncomplete="PF('dlgNewUser').hide();" action="#{userController.doDeleteTempfiles}"/>
 				</h:panelGrid>		
 				
 			</h:form>

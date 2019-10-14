@@ -97,7 +97,16 @@ public class PresenceDomain extends GenericDomain{
 	@OneToOne
 	@JoinColumn(nullable = false)
 	private MyClassDomain myClassDomain;
+
 	
+	/*
+	 * Login
+	 * Insert Login Data Table into PresenceDomain
+	 * Inform here who save the presence list.
+	 */
+	@OneToOne
+	@JoinColumn(nullable = false)
+	private UserDomain userDomain;
 	
 	
 	/*
@@ -181,6 +190,16 @@ public class PresenceDomain extends GenericDomain{
 
 	public void setMyClassDomain(MyClassDomain myClassDomain) {
 		this.myClassDomain = myClassDomain;
+	}
+
+
+	public UserDomain getUserDomain() {
+		return userDomain;
+	}
+
+
+	public void setUserDomain(UserDomain userDomain) {
+		this.userDomain = userDomain;
 	}
 	
 }

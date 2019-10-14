@@ -92,7 +92,7 @@ public class PersonDomain extends GenericDomain{
 	 * ES --> Spanish
 	 * PT --> Portuguese
 	 */
-	@Column(name = "DE_LANGUAGE", length = 20, nullable = false)
+	@Column(name = "DE_LANGUAGE", length = 2, nullable = false)
 	private String language;
 	
 	/*

@@ -136,7 +136,7 @@
 					<p:inputText value="#{personController.personDomain.completeName}" maxlength="40" size="27"
 								required="true" requiredMessage="O campo 'Nome Completo' é obrigatório"/>
 					
-					<p:outputLabel value="Nacionalidade: *" />
+					<p:outputLabel value="País: *" />
 					<p:inputText value="#{personController.personDomain.nationality}" maxlength="20" size="27"
 								required="true" requiredMessage="O campo 'Nacionalidade' é obrigatório" style="text-transform: uppercase"/>
 
@@ -164,13 +164,25 @@
 					<p:spacer height="10px"/>
 					
 					<p:outputLabel value="Língua: *" />
-					<p:inputText value="#{personController.personDomain.language}" maxlength="20" size="27"
-								required="true" requiredMessage="O campo 'Língua' é obrigatório" style="text-transform: uppercase"/>
+					<p:selectOneMenu id="linguaComboId" filter="false" value="#{personController.personDomain.language}"
+						converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="O campo 'Língua' é obrigatório">
+						<f:selectItem noSelectionOption="true" itemLabel="Selecione uma Língua" />
+						<f:selectItem itemLabel="ARABE" itemValue="AR"/>
+						<f:selectItem itemLabel="ESPANHOL" itemValue="ES"/>
+						<f:selectItem itemLabel="FRANCES" itemValue="FR"/>
+						<f:selectItem itemLabel="INGLES" itemValue="EN"/>
+						<f:selectItem itemLabel="PORTUGUES" itemValue="BR"/>
+					</p:selectOneMenu>
 					
 					<p:outputLabel value="Perfil: *" />
-					<p:inputText value="#{personController.personDomain.profile}" maxlength="20" size="27"
-								required="true" requiredMessage="O campo 'Perfil' é obrigatório" style="text-transform: uppercase"/>
-
+					<p:selectOneMenu id="perfilComboId" filter="false" value="#{personController.personDomain.profile}"
+						converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="O campo 'Perfil' é obrigatório">
+						<f:selectItem noSelectionOption="true" itemLabel="Selecione um perfil" />
+						<f:selectItem itemLabel="ESTUDANTE" itemValue="ESTUDANTE"/>
+						<f:selectItem itemLabel="PROFESSOR(A)" itemValue="PROFESSOR(A)"/>
+						<f:selectItem itemLabel="CORDINADOR(A)" itemValue="CORDINADOR(A)"/>
+					</p:selectOneMenu>
+					
 					<p:outputLabel value="Status: *" />
 					<p:toggleSwitch value="#{personController.personDomain.status}" required="true" requiredMessage="O campo 'Status' é obrigatório">
 						<p:ajax listener="#{personController.addMessage}" update=":idMsgGlobal" />

@@ -7,6 +7,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.apache.shiro.crypto.hash.SimpleHash;
+
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "TB_USER")	
@@ -36,16 +38,26 @@ public class UserDomain extends GenericDomain{
 
 	
 	/*
-	 * Password
-	 * Use MD5 cryptography for encode the password
+	 * Password <br/>
+	 * Using MD5 cryptography to encode the password
 	 */
 	
-	@Column(name = "DE_PASSWORD", length = 12, nullable = false)
+	@Column(name = "DE_PASSWORD", length = 32, nullable = false)
 	private String password;
+
+	
+	/*
+	 * Password <br/>
+	 * Without MD5 cryptography
+	 * 
+	 */
+	@Transient
+	private String passwordWithoutCryptography;
+	
 	
 	
 	/*
-	 * Remember password
+	 * Remember password <br/>
 	 * Sentence that will help to remember the password.
 	 */
 	@Column(name = "DE_REMEMBER_PASSWORD", length = 100, nullable = false)
@@ -53,16 +65,24 @@ public class UserDomain extends GenericDomain{
 
 	
 	/*
-	 * Person
+	 * Person <br/>
 	 * Insert Person Data Table into UserDomain 
 	 */
 	@OneToOne
 	@JoinColumn(nullable = false)
 	private PersonDomain personDomain;
 	
-
+	
 	/*
-	 * User
+	 * Image User File Name <br/>
+	 * content the file name
+	 */
+	@Column(name = "NM_IMAGE_USER_FILE", length = 100)
+	private String imageUserFileName;
+	
+	
+	/*
+	 * User <br/>
 	 * Save User Image Temporarily with @Transcient
 	 */
 	@Transient
@@ -88,7 +108,7 @@ public class UserDomain extends GenericDomain{
 	}
 
 
-	public void setUserName(String userName) {
+	public void setUserName(String userName) {		
 		this.userName = userName;
 	}
 
@@ -98,7 +118,7 @@ public class UserDomain extends GenericDomain{
 	}
 
 
-	public void setPassword(String password) {
+	public void setPassword(String password) {	
 		this.password = password;
 	}
 
@@ -130,6 +150,26 @@ public class UserDomain extends GenericDomain{
 
 	public void setImageUserPath(String imageUserPath) {
 		this.imageUserPath = imageUserPath;
+	}
+
+
+	public String getImageUserFileName() {
+		return imageUserFileName;
+	}
+
+
+	public void setImageUserFileName(String imageUserFileName) {
+		this.imageUserFileName = imageUserFileName;
+	}
+
+
+	public String getPasswordWithoutCryptography() {
+		return passwordWithoutCryptography;
+	}
+
+
+	public void setPasswordWithoutCryptography(String passwordWithoutCryptography) {		
+		this.passwordWithoutCryptography = passwordWithoutCryptography;
 	}
 
 
