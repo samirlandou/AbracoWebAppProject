@@ -7,8 +7,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.apache.shiro.crypto.hash.SimpleHash;
-
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "TB_USER")	

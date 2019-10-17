@@ -29,7 +29,7 @@
 		<!-- LISTING PANEL FORM -->
 		<h:form id="userListFormId">		
 		
-			<p:panel header="Lista de pessoas">
+			<p:panel header="Lista de Usuários">
 				<p:dataTable id="userDataTableFormId" emptyMessage="Nenhum registro encontrado."
 					paginator="true" value="#{userController.usersDomain}" var="cursor" rows="5">
 
@@ -129,7 +129,9 @@
 								required="true" requiredMessage="O campo 'Usuário' é obrigatório"/>
 					
 					<p:outputLabel value="Senha: *" />
-					<p:inputText value="#{userController.userDomain.passwordWithoutCryptography}" maxlength="12" size="27"
+					<p:password value="#{userController.userDomain.passwordWithoutCryptography}" maxlength="12" size="27"
+								promptLabel="Digite a senha" weakLabel="fraco" goodLabel="Intermediário" strongLabel="forte"
+								feedback="true" inline="true"
 								required="true" requiredMessage="O campo 'Senha' é obrigatório"/>
 
 					<p:outputLabel value="Lembre sua senha com uma frase: *" />

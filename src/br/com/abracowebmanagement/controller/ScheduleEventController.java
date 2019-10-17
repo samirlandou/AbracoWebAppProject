@@ -7,7 +7,7 @@ import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
 import org.primefaces.event.ScheduleEntryMoveEvent;
@@ -20,7 +20,7 @@ import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
 
 @ManagedBean
-@ViewScoped
+@SessionScoped
 public class ScheduleEventController implements Serializable {
  
     /**

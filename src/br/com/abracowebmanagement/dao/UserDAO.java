@@ -61,7 +61,8 @@ public class UserDAO extends GenericDAO<UserDomain> {
 			consult.add(Restrictions.eq("userName", userName));
 			
 			//Get result
-			UserDomain result = (UserDomain) consult.uniqueResult();
+			UserDomain result = new UserDomain();;
+			result = (UserDomain) consult.uniqueResult();
 			
 			return result;
 			
@@ -96,6 +97,5 @@ public class UserDAO extends GenericDAO<UserDomain> {
 			session.close();
 		}
 	}
-	
 	
 }

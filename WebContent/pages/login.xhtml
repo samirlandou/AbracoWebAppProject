@@ -14,29 +14,51 @@
 
 <h:body>
 
-<div class="loginForm">
+<p:growl id="idMsgGlobal"/>
 
+<div class="loginForm">
 	<h:form>
 		<h:panelGrid styleClass="container" id="container-opacity" columns="1">
 
 			<!-- Abraço Cultural png logo -->
 			<h:graphicImage styleClass="logo-image" library="images" name="login/logo_abraco_cultura.png" />
 			
-			<!-- Name field with 14 characters -->				
-			<p:outputLabel styleClass="text-output" id="nameOutputId" value="E-mail:"/>
-			<p:inputText styleClass="text-input" id="nameInputId" value="#{MBLogin.name}"
-							size="14" maxlength="12" />
+			<!-- Name field with 12 characters -->				
+			<p:outputLabel id="nameOutputId" for="nameInputId" styleClass="text-output"  value="E-mail:"/>
+			<p:inputText id="nameInputId" styleClass="text-input" value="#{loginController.user.userName}"
+							size="14" maxlength="12" required="true" requiredMessage="O campo 'Usuário' é obrigatório"/>
 			
 			<!-- Password field with 12 characters-->
-			<p:outputLabel styleClass="text-output" id="passwordOutputId" value="Password:"/>
-			<p:password styleClass="text-input" id="passwordId" value="#{MBLogin.password}"
-						size="14" maxlength="12" />
+			<p:outputLabel id="passwordOutputId" for="passwordId" styleClass="text-output" value="Password:"/>
+			<p:password id="passwordId" styleClass="text-input" value="#{loginController.user.password}"
+						size="14" maxlength="12" required="true" requiredMessage="O campo 'Senha' é obrigatório"/>
 			
 			<!-- Enter button -->
 			<!-- <p:commandButton id="enterId" value="Enter" action="templates/template.xhtml" /> -->			
-			<p:commandButton id="enterId" value="Enter" action="contents/home.xhtml" />
+			<p:commandButton id="enterId" value="Enter"
+							update=":idMsgGlobal" action="#{loginController.doAuthenticate}"/>
+			<p:spacer height="20px"/>
+			<p:commandLink value="Esqueci minha Senha!" actionListener="#{loginController.doRememberPassword}"
+							oncomplete="PF('dlgRememberPassword').show();" style="font-size: 11px"
+							update=":idFormRememberPassword:idPnlRememberPassword"/>
 		</h:panelGrid>
 	</h:form>
+	
+	
+	<!-- DIALOG TO REMEMBER THE PASSWORD -->
+	<p:dialog header="Sua senha?" widgetVar="dlgRememberPassword"
+		draggable="false" resizable="false" modal="true" closable="true"
+		appendTo="@(body)" >
+		<h:form id="idFormRememberPassword">
+			<h:panelGrid id="idPnlRememberPassword">
+				<p:outputLabel value="#{loginController.rememberPassword.rememberPassword}" style="color:red;"/>
+				<p:spacer height="10px"/>
+				<p:outputLabel value="Caso não se lembre da sua senha, favor informar um(a) cordenador(a) do Abaço Cultural."
+								style="font-size:11px"/>
+				<p:commandButton value="Fechar" oncomplete="PF('dlgRememberPassword').hide();" update=":idMsgGlobal"/>
+			</h:panelGrid>
+		</h:form>
+	</p:dialog>
 
 	<!-- <h:outputText id="login" value="fdkfteste"/> -->
 </div>

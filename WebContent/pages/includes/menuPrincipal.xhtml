@@ -10,47 +10,45 @@
 
 	<h:form>
 		<div>
-		<p:commandButton value="Menu" icon="ui-icon-gear" oncomplete="PF('sidebar2').show()" />
-		<p:sidebar widgetVar="sidebar2" position="left" baseZIndex="10000" appendTo="@(body)">
-		    <h1 style="font-weight:normal">Abraço Cultural</h1>
-			<br/>
-			<p:panelMenu >					
-				<p:submenu label="File" outcome="/pages/contents/home.xhtml" />
+			<p:commandButton value="Menu" icon="ui-icon-gear" oncomplete="PF('sidebar2').show()" />
+			<p:sidebar widgetVar="sidebar2" position="left" baseZIndex="10000" appendTo="@(body)">
+			    <h1 style="font-weight:normal">Abraço Cultural</h1>
+				<br/>
+				<p:panelMenu >					
+					<p:submenu label="File" outcome="/pages/contents/home.xhtml" />
+					
+		
+					<p:submenu label="Cadastro">
+						<p:menuitem value="Pessoas" outcome="/pages/contents/person.xhtml"/>
+						<p:menuitem value="Usuarios" outcome="/pages/contents/user.xhtml"/>
+						<p:menuitem value="Aluno(a)s" outcome="/pages/contents/student.xhtml"/>
+					</p:submenu>
+		
 				
+					<p:submenu label="Ajuda">
+						<p:menuitem value="Sobre" />
+					</p:submenu>
+					
+					
+					<f:facet name="options">
+						<p:commandButton value="Home" icon="ui-icon-home" action="/pages/contents/home.xhtml"/>
+					</f:facet>			
+					
+					
+					<f:facet name="options">
+						<p:commandButton value="Logoff" icon="ui-icon-power" action="/pages/login.xhtml"/>
+					</f:facet>
+					
+				</p:panelMenu>
+				
+			    <p:commandButton value="Cancel" oncomplete="PF('sidebar2').hide()"/>
+			</p:sidebar>	
+		</div>
 	
-				<p:submenu label="Cadastro">
-					<p:menuitem value="Pessoas" outcome="/pages/contents/person.xhtml"/>
-					<p:menuitem value="Perfil" outcome="/pages/contents/profile.xhtml"/>
-					<p:menuitem value="Usuarios" outcome="/pages/contents/user.xhtml"/>
-					<p:menuitem value="Aluno(a)s" outcome="/pages/contents/student.xhtml"/>
-				</p:submenu>
-	
-			
-				<p:submenu label="Ajuda">
-					<p:menuitem value="Sobre" />
-				</p:submenu>
-				
-				
-				<f:facet name="options">
-					<p:commandButton value="Home" icon="ui-icon-home" action="/pages/contents/home.xhtml"/>
-				</f:facet>			
-				
-				
-				<f:facet name="options">
-					<p:commandButton value="Logoff" icon="ui-icon-power" action="/pages/login.xhtml"/>
-				</f:facet>
-				
-			</p:panelMenu>
-			
-		    <p:commandButton value="Cancel" oncomplete="PF('sidebar2').hide()"/>
-		</p:sidebar>	
-	</div>
-	
-	<br/>
+		<br/>
 	
 	
 <!--
-
 		<p:menubar>
 					
 			<p:submenu label="File" outcome="/pages/contents/home.xhtml" />
@@ -78,7 +76,9 @@
 				<p:commandButton value="Logoff" icon="ui-icon-power" action="/pages/login.xhtml"/>
 			</f:facet>
 			
-		</p:menubar>-->
+		</p:menubar>
+-->
+
 	</h:form>
 
 </ui:composition>
