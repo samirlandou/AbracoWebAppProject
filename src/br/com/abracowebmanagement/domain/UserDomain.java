@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @SuppressWarnings("serial")
 @Entity
@@ -35,16 +36,26 @@ public class UserDomain extends GenericDomain{
 
 	
 	/*
-	 * Password
-	 * Use MD5 cryptography for encode the password
+	 * Password <br/>
+	 * Using MD5 cryptography to encode the password
 	 */
 	
 	@Column(name = "DE_PASSWORD", length = 32, nullable = false)
 	private String password;
+
+	
+	/*
+	 * Password <br/>
+	 * Without MD5 cryptography
+	 * 
+	 */
+	@Transient
+	private String passwordWithoutCryptography;
+	
 	
 	
 	/*
-	 * Remember password
+	 * Remember password <br/>
 	 * Sentence that will help to remember the password.
 	 */
 	@Column(name = "DE_REMEMBER_PASSWORD", length = 100, nullable = false)
@@ -52,7 +63,7 @@ public class UserDomain extends GenericDomain{
 
 	
 	/*
-	 * Person
+	 * Person <br/>
 	 * Insert Person Data Table into UserDomain 
 	 */
 	@OneToOne
@@ -61,11 +72,30 @@ public class UserDomain extends GenericDomain{
 	
 	
 	/*
+	 * Image User File Name <br/>
+	 * content the file name
+	 */
+	@Column(name = "NM_IMAGE_USER_FILE", length = 100)
+	private String imageUserFileName;
+	
+	
+	/*
+	 * User <br/>
+	 * Save User Image Temporarily with @Transcient
+	 */
+	@Transient
+	private String imageUserPath;
+	
+	
+	/*
 	 * User
 	 * Image
 	 */
-	@JoinColumn(name = "DE_USER_IMAGE")
-	private byte[] userImage;
+	//@Lob
+	/*@JoinColumn(name = "DE_USER_IMAGE")
+	private byte[] imageUser;*/
+
+	
 	
 	/*
 	 * Getters and Setters
@@ -76,7 +106,7 @@ public class UserDomain extends GenericDomain{
 	}
 
 
-	public void setUserName(String userName) {
+	public void setUserName(String userName) {		
 		this.userName = userName;
 	}
 
@@ -86,7 +116,7 @@ public class UserDomain extends GenericDomain{
 	}
 
 
-	public void setPassword(String password) {
+	public void setPassword(String password) {	
 		this.password = password;
 	}
 
@@ -111,13 +141,43 @@ public class UserDomain extends GenericDomain{
 	}
 
 
-	public byte[] getUserImage() {
-		return userImage;
+	public String getImageUserPath() {
+		return imageUserPath;
 	}
 
 
-	public void setUserImage(byte[] userImage) {
-		this.userImage = userImage;
-	}	
+	public void setImageUserPath(String imageUserPath) {
+		this.imageUserPath = imageUserPath;
+	}
+
+
+	public String getImageUserFileName() {
+		return imageUserFileName;
+	}
+
+
+	public void setImageUserFileName(String imageUserFileName) {
+		this.imageUserFileName = imageUserFileName;
+	}
+
+
+	public String getPasswordWithoutCryptography() {
+		return passwordWithoutCryptography;
+	}
+
+
+	public void setPasswordWithoutCryptography(String passwordWithoutCryptography) {		
+		this.passwordWithoutCryptography = passwordWithoutCryptography;
+	}
+
+
+	/*public byte[] getImageUser() {
+		return imageUser;
+	}
+
+
+	public void setImageUser(byte[] userImage) {
+		this.imageUser = userImage;
+	}	*/
 	
 }

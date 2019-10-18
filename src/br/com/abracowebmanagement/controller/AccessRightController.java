@@ -15,7 +15,7 @@ import br.com.abracowebmanagement.domain.PersonDomain;
 
 @ManagedBean
 @ViewScoped
-public class PersonController implements Serializable {
+public class AccessRightController implements Serializable {
 	
 	private static final long serialVersionUID = 4006387744926175284L;
 	
@@ -110,11 +110,7 @@ public class PersonController implements Serializable {
 			//This code is used with OmniFaces and it is more practice than PrimeFaces implementation.
 			Messages.addGlobalInfo(personDomain.getCompleteName() + " foi excluido com sucesso!!!");
 		} catch (Exception e) {
-			if(e.equals("ConstraintViolationException")){
-				Messages.addGlobalError("Não pode deletar pois os dados de " + personDomain.getCompleteName() + " está sendo usado em outro processo!!!");
-			} else{
-				Messages.addGlobalError("Ocorreu um erro ao tentar excluir as informações de: " + personDomain.getCompleteName());
-			}
+			Messages.addGlobalError("Ocorreu um erro ao excluir as informações de: " + personDomain.getCompleteName());
 			e.printStackTrace();			
 		}
 	}
@@ -122,8 +118,8 @@ public class PersonController implements Serializable {
 	
 	public void addMessage() {
 
-		String summary = personDomain.getStatus() ? "Ativo(a)" : "Desativado(a)";
-		Messages.addGlobalInfo(summary);
+		String summary = personDomain.getStatus() ? "Desativado(a)" : "Ativo(a)";
+		Messages.addGlobalError(summary);
 	}
 	
 	/**

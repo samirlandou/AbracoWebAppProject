@@ -51,7 +51,7 @@
 		<dependency>
 			<groupId>org.glassfish</groupId>
 			<artifactId>javax.faces</artifactId>
-			<version>2.2.5</version>
+			<version>2.2.12</version>
 		</dependency>
 
 
@@ -97,7 +97,7 @@
 		   <artifactId>hibernate-core</artifactId>
 		   <version>4.3.6.Final</version>
 		</dependency>
-
+		
 		<!-- https://mvnrepository.com/artifact/javax.servlet/jstl -->
 		<dependency>
 		    <groupId>javax.servlet</groupId>
@@ -122,7 +122,15 @@
 		    <version>4.0.1</version>
 		    <scope>provided</scope>
 		</dependency>
+
 			
+		<!-- https://mvnrepository.com/artifact/org.apache.shiro/shiro-core -->
+		<!-- Apache SHIRO for Password cryptography -->
+		<dependency>
+		    <groupId>org.apache.shiro</groupId>
+		    <artifactId>shiro-core</artifactId>
+		    <version>1.4.0</version>
+		</dependency>
 
 		
 	</dependencies>

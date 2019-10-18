@@ -24,7 +24,7 @@ public class PersonDomain extends GenericDomain{
 	 * Complete name
 	 * (Name + Surname)
 	 */
-	@Column(name = "NM_COMPLETE_NAME", length = 30, nullable = false)
+	@Column(name = "NM_COMPLETE_NAME", length = 40, nullable = false)
 	private String completeName;	
 	
 	
@@ -92,7 +92,7 @@ public class PersonDomain extends GenericDomain{
 	 * ES --> Spanish
 	 * PT --> Portuguese
 	 */
-	@Column(name = "DE_LANGUAGE", length = 20, nullable = false)
+	@Column(name = "DE_LANGUAGE", length = 2, nullable = false)
 	private String language;
 	
 	/*
