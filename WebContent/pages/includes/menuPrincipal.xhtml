@@ -13,6 +13,8 @@
 			<p:commandButton value="Menu" icon="ui-icon-gear" oncomplete="PF('sidebar2').show()" />
 			<p:sidebar widgetVar="sidebar2" position="left" baseZIndex="10000" appendTo="@(body)">
 			    <h1 style="font-weight:normal">Abraço Cultural</h1>
+			    <br/>
+			    <p:outputLabel value="Bem-vindo(a) #{loginController.loggedUser.userName}"/>
 				<br/>
 				<p:panelMenu >					
 					<p:submenu label="File" outcome="/pages/contents/home.xhtml" />

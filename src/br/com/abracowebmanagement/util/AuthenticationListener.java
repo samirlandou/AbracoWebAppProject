@@ -21,7 +21,7 @@ public class AuthenticationListener implements PhaseListener{
 		//Get current page
 		String 	currentPage = Faces.getViewId();
 		
-		System.out.println("Current page: " + currentPage);
+		//System.out.println("Current page: " + currentPage);
 		
 		//Boolean to check if the current page is a login page.
 		boolean isLoginPage = currentPage.contains("login.xhtml");
@@ -32,7 +32,7 @@ public class AuthenticationListener implements PhaseListener{
 			//Get Session
 			LoginController loginController = Faces.getSessionAttribute("loginController");
 			
-			System.out.println("AuthenticationController: " + loginController);			
+			//System.out.println("AuthenticationController: " + loginController);			
 			
 			//Check if the user has already passed to the login page.
 			if(loginController == null){
