@@ -3,6 +3,8 @@ package br.com.abracowebmanagement.controller;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 
 import org.omnifaces.util.Messages;
 
@@ -24,37 +26,32 @@ public class LoginController {
 	@PostConstruct
 	public void init() {
 		
-		//instantiate UserDomain
+		//UserDomain
 		user = new UserDomain();
 		user.setPersonDomain(new PersonDomain());
 		
 		loggedUser = new UserDomain();
+		
 		rememberPassword = new UserDomain();
-				
-		redirect = "";
-		/*instantiate PersonDomain
-		user.setPersonDomain(new PersonDomain());*/
-		//login.setPersonDomain(new PersonDomain());
 		rememberPassword.setPersonDomain(new PersonDomain());
 	}
 
 	
-	public String doAuthenticate() {
-		
+	public String doConnect() {
+		String redirectTo = "";
 		try {
 			UserDAO userDAO = new UserDAO();
 			loggedUser = userDAO.authenticate(user.getUserName(), user.getPassword());
 			
 			if (loggedUser == null) {
 				Messages.addGlobalError("Usuário e/ou senha incorretos");
-				redirect = "";
 			} else {
-				redirect = "contents/home.xhtml";
+				redirectTo = "contents/home.xhtml?faces-redirect=true";
 			} 
 		} catch (Exception e) {
 				Messages.addGlobalError("Usuário e/ou senha incorretos");
 		}
-		return redirect;
+		return redirectTo;
 	}
 
 	
@@ -76,6 +73,16 @@ public class LoginController {
 			Messages.addGlobalError(e.getMessage());
 		}		
 	}
+	
+	
+    public String doDisconnect() {
+
+        FacesContext fc = FacesContext.getCurrentInstance();
+        HttpSession session = (HttpSession) fc.getExternalContext().getSession(false);       
+        session.invalidate();
+        Messages.addGlobalError("Desconetado com sucesso !!!");
+		return "client.deconnect";
+    }
 
 	
 	/*

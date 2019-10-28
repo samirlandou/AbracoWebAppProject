@@ -9,4 +9,21 @@
 	    <phase-listener>br.com.abracowebmanagement.util.AuthenticationListener</phase-listener>
 	</lifecycle>
 
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+
+		<navigation-case>
+			<from-outcome>client.deconnect</from-outcome>
+			<to-view-id>pages/login.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+
+		<navigation-case>
+			<from-outcome>home</from-outcome>
+			<to-view-id>pages/contents/home.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+	</navigation-rule>	
+
 </faces-config>

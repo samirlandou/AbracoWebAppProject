@@ -10,40 +10,54 @@
 
 	<h:form>
 		<div>
-			<p:commandButton value="Menu" icon="ui-icon-gear" oncomplete="PF('sidebar2').show()" />
-			<p:sidebar widgetVar="sidebar2" position="left" baseZIndex="10000" appendTo="@(body)">
+			<div>
+				<!-- Left position -->
+				<p:commandButton value="Menu" icon="ui-icon-grip-solid-horizontal" oncomplete="PF('sidebar').show()" style="float:left;"/>
+				<p:commandButton value="Home" icon="ui-icon-home" action="home" style="float:left;"/>
+				
+				<!-- Right position -->
+				<p:commandButton value="Sair" icon="ui-icon-power" action="#{loginController.doDisconnect}" style="float:right;" update=":idMsgGlobal"/>
+				<p:spacer width="10px" style="float:right;" />
+				<p:outputLabel value="Bem-vindo(a), #{loginController.loggedUser.userName}" style="float:right;"/>
+			</div>
+			
+			<p:sidebar widgetVar="sidebar" position="left" baseZIndex="10000" appendTo="@(body)">
+				
+				<!-- Abraço Cultural
 			    <h1 style="font-weight:normal">Abraço Cultural</h1>
-			    <br/>
-			    <p:outputLabel value="Bem-vindo(a) #{loginController.loggedUser.userName}"/>
+				<p:spacer height="5px"/> -->
+				
+				<!-- Abraço Cultural png logo -->
+				<h:graphicImage styleClass="logo-image" library="images" name="login/logo_abraco_cultura.png" width="80%"/>
 				<br/>
+				
+				<!-- Menu -->
 				<p:panelMenu >					
-					<p:submenu label="File" outcome="/pages/contents/home.xhtml" />
+					<p:submenu label="File" outcome="/pages/contents/home.xhtml">
+						<p:menuitem value="Relatorio das aulas" icon="ui-icon-document"/>
+						<p:menuitem value="Note" icon="ui-icon-note"/>
+					</p:submenu>
 					
 		
 					<p:submenu label="Cadastro">
-						<p:menuitem value="Pessoas" outcome="/pages/contents/person.xhtml"/>
-						<p:menuitem value="Usuarios" outcome="/pages/contents/user.xhtml"/>
-						<p:menuitem value="Aluno(a)s" outcome="/pages/contents/student.xhtml"/>
+						<p:menuitem value="Pessoas" icon="ui-icon-person" outcome="/pages/contents/person.xhtml"/>
+						<p:menuitem value="Usuarios" icon="ui-icon-key" outcome="/pages/contents/user.xhtml"/>
+						<p:menuitem value="Aulas" icon="ui-icon-calendar" outcome="/pages/contents/student.xhtml"/>
+					</p:submenu>
+					
+				
+					<p:submenu label="Outros">
+						<p:menuitem value="Configuração" icon="ui-icon-wrench"/>
+						<p:menuitem value="Galeria" icon="ui-icon-image"/>
+						<p:menuitem value="Contatos" icon="ui-icon-contact"/>
+						<p:menuitem value="Sobre" icon="ui-icon-info"/>
+						<p:menuitem value="Sugestão" icon="ui-icon-comment"/>
 					</p:submenu>
 		
-				
-					<p:submenu label="Ajuda">
-						<p:menuitem value="Sobre" />
-					</p:submenu>
-					
-					
-					<f:facet name="options">
-						<p:commandButton value="Home" icon="ui-icon-home" action="/pages/contents/home.xhtml"/>
-					</f:facet>			
-					
-					
-					<f:facet name="options">
-						<p:commandButton value="Logoff" icon="ui-icon-power" action="/pages/login.xhtml"/>
-					</f:facet>
-					
 				</p:panelMenu>
 				
-			    <p:commandButton value="Cancel" oncomplete="PF('sidebar2').hide()"/>
+				<br/>
+			    <p:commandButton value="Fechar" oncomplete="PF('sidebar').hide()"/>
 			</p:sidebar>	
 		</div>
 	

@@ -70,7 +70,7 @@ public class UserController implements Serializable {
 		try {
 			//List User
 			UserDAO userDAO = new UserDAO();
-			usersDomain= userDAO.list();
+			usersDomain= userDAO.descendList("id");
 		} catch (Exception e) {
 			Messages.addGlobalError("Ocorreu um erro ao listar as informações das pessoas !!!");
 			e.printStackTrace();			

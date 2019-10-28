@@ -65,6 +65,7 @@ public class PersonDomain extends GenericDomain{
 	@Column(name = "DE_ADDRESS", length = 100)
 	private String address;
 
+	
 	/*
 	 * Profile
 	 * Example: STUDENT, PROFESSOR, COORDINATOR, GESTOR, VISITOR

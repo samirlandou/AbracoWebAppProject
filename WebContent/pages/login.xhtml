@@ -17,7 +17,7 @@
 <p:growl id="idMsgGlobal"/>
 
 <div class="loginForm">
-	<h:form>
+	<h:form id="idFormLogin">
 		<h:panelGrid styleClass="container" id="container-opacity" columns="1">
 
 			<!-- Abraço Cultural png logo -->
@@ -36,31 +36,30 @@
 			<!-- Enter button -->
 			<!-- <p:commandButton id="enterId" value="Enter" action="templates/template.xhtml" /> -->			
 			<p:commandButton id="enterId" value="Enter"
-							update=":idMsgGlobal" action="#{loginController.doAuthenticate}"/>
+							update=":idMsgGlobal" action="#{loginController.doConnect}"/>
+			
 			<p:spacer height="20px"/>
-			<p:commandLink value="Esqueci minha Senha!" actionListener="#{loginController.doRememberPassword}"
-							oncomplete="PF('dlgRememberPassword').show();" style="font-size: 11px"
-							update=":idFormRememberPassword:idPnlRememberPassword"/>
+			
+			<!-- Remember Password Link -->
+			<p:commandLink value="Esqueci minha Senha!" action="#{loginController.doRememberPassword}"
+							oncomplete="PF('dlgRememberPasswordId').show();" style="font-size: 11px"/>
+							
 		</h:panelGrid>
 	</h:form>
 	
 	
 	<!-- DIALOG TO REMEMBER THE PASSWORD -->
-	<p:dialog header="Sua senha?" widgetVar="dlgRememberPassword"
+	<p:dialog header="Sua senha?" widgetVar="dlgRememberPasswordId"
 		draggable="false" resizable="false" modal="true" closable="true"
 		appendTo="@(body)" >
-		<h:form id="idFormRememberPassword">
-			<h:panelGrid id="idPnlRememberPassword">
-				<p:outputLabel value="#{loginController.rememberPassword.rememberPassword}" style="color:red;"/>
-				<p:spacer height="10px"/>
-				<p:outputLabel value="Caso não se lembre da sua senha, favor informar um(a) cordenador(a) do Abaço Cultural."
-								style="font-size:11px"/>
-				<p:commandButton value="Fechar" oncomplete="PF('dlgRememberPassword').hide();" update=":idMsgGlobal"/>
+		<h:form id="formRememberPasswordId">
+			<h:panelGrid id="pnlRememberPasswordId">
+				<p:outputLabel value="Favor solicitar outra senha enviando um e-mail para mari@abracocultural.com.br" style="font-size:11px"/>
+				<br/>
+				<p:commandButton value="Fechar" oncomplete="PF('dlgRememberPasswordId').hide();" update=":idMsgGlobal"/>
 			</h:panelGrid>
 		</h:form>
 	</p:dialog>
-
-	<!-- <h:outputText id="login" value="fdkfteste"/> -->
 </div>
 
 </h:body>
