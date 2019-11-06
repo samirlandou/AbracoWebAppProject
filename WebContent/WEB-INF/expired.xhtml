@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<h:head>
+<meta http-equiv="refresh" content="text/html; charset=ISO-8859-1; width=device-width, initial-scale=1; 0; url=#{request.contextPath}/pages/login.xhtml" />
+<h:outputStylesheet library="css" name="login.css"/>
+<title>Abraço-Sessão</title>
+</h:head>
+
+<h:body>
+
+<p:growl id="idMsgGlobal"/>
+
+<div class="loginForm">
+	<h:form id="idFormLogin">
+		<h:panelGrid styleClass="container" id="container-opacity" columns="1">
+
+			<!-- Abraço Cultural png logo -->
+			<h:graphicImage styleClass="logo-image" library="images" name="login/logo_abraco_cultura.png" />
+			
+			<!-- Session Expired Text -->				
+			<p:outputLabel id="nameOutputId" for="nameInputId" styleClass="text-output"  value="Sessão Expirada"/>
+			
+			<p:spacer height="20px"/>
+			
+			<!-- Remember Password Link -->
+			<p:commandLink value="Esqueci minha Senha!" action="#{request.contextPath}/pages/login.xhtml?faces-redirect=true" style="font-size: 11px"/>
+							
+		</h:panelGrid>
+	</h:form>
+</div>
+
+</h:body>
+</html>

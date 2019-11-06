@@ -1,5 +1,6 @@
 package br.com.abracowebmanagement.util;
 
+import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
@@ -29,21 +30,26 @@ public class AuthenticationListener implements PhaseListener{
 		//if current pages is not the login page, redirect current pages to login pages to force the user authentication
 		if(!isLoginPage){
 			
-			//Get Session
-			LoginController loginController = Faces.getSessionAttribute("loginController");
+			FacesContext fc = FacesContext.getCurrentInstance();
 			
-			//System.out.println("AuthenticationController: " + loginController);			
+			//Get Session
+			//LoginController loginController = Faces.getSessionAttribute("loginController");
+			LoginController loginController = (LoginController) fc.getExternalContext().getSessionMap().get("loginController");
+			
+			//System.out.println("AuthenticationController: " + loginController);
+			
+			//boolean variable to verify if the user have already logged.
+			boolean isLogged = false;
+			boolean isDisconnected = false;
+			
+			if(loginController!= null){
+				isLogged = loginController.isLogged();
+				isDisconnected = loginController.isDisconnected();
+			}
 			
 			//Check if the user has already passed to the login page.
-			if(loginController == null){
-				Faces.navigate("/pages/login.xhtml");
-				return;
-			}
-						
-			//if the user has not already logged one time, redirect him to do login page.
-			UserDomain user = loginController.getLoggedUser();
-			if(user == null){
-				Faces.navigate("/pages/login.xhtml");
+			if(!isLogged && !isDisconnected){				
+				Faces.navigate("/pages/login.xhtml?faces-redirect=true");
 				return;
 			}
 		}		

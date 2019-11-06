@@ -1,9 +1,12 @@
 package br.com.abracowebmanagement.controller;
 
+import java.io.Serializable;
+
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Named;
 import javax.servlet.http.HttpSession;
 
 import org.omnifaces.util.Messages;
@@ -15,12 +18,17 @@ import br.com.abracowebmanagement.domain.UserDomain;
 
 @ManagedBean
 @SessionScoped
-public class LoginController {
+@Named("login")
+public class LoginController implements Serializable{
 
-	private UserDomain user;
+	private static final long serialVersionUID = 5358085187631674579L;
+	
+	private UserDomain user ;
 	private UserDomain loggedUser;
 	private UserDomain rememberPassword;
 	private String redirect;
+	private boolean isLogged = false;
+	private boolean isDisconnected = false;
 
 	
 	@PostConstruct
@@ -47,6 +55,7 @@ public class LoginController {
 				Messages.addGlobalError("Usuário e/ou senha incorretos");
 			} else {
 				redirectTo = "contents/home.xhtml?faces-redirect=true";
+				isLogged = true;
 			} 
 		} catch (Exception e) {
 				Messages.addGlobalError("Usuário e/ou senha incorretos");
@@ -76,7 +85,7 @@ public class LoginController {
 	
 	
     public String doDisconnect() {
-
+    	isDisconnected = true;
         FacesContext fc = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) fc.getExternalContext().getSession(false);       
         session.invalidate();
@@ -121,6 +130,26 @@ public class LoginController {
 
 	public void setRedirect(String redirect) {
 		this.redirect = redirect;
+	}
+
+
+	public boolean isLogged() {
+		return isLogged;
+	}
+
+
+	public void setLogged(boolean isLogged) {
+		this.isLogged = isLogged;
+	}
+
+
+	public boolean isDisconnected() {
+		return isDisconnected;
+	}
+
+
+	public void setDisconnected(boolean isDisconnected) {
+		this.isDisconnected = isDisconnected;
 	}
 	
 }

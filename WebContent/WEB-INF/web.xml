@@ -42,14 +42,14 @@
 
 	<!-- Session Timeout -->
 	<session-config>
-	        <session-timeout>10</session-timeout>
+	        <session-timeout>1</session-timeout>
 	</session-config>
 	
-	<!-- Error Pages -->	
+	<!-- Error Pages
 	<error-page>
         <exception-type>javax.faces.application.ViewExpiredException</exception-type>
-        <location>/faces/login.jsp</location>
-</error-page>
+        <location>/WEB-INF/expired.xhtml</location>
+	</error-page>  -->
 
 
 
