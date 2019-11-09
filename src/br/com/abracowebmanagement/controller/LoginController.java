@@ -1,6 +1,8 @@
 package br.com.abracowebmanagement.controller;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -27,6 +29,8 @@ public class LoginController implements Serializable{
 	private UserDomain loggedUser;
 	private UserDomain rememberPassword;
 	private String redirect;
+	private String loginTime;
+	private String logoffTime;
 	private boolean isLogged = false;
 	private boolean isDisconnected = false;
 
@@ -56,6 +60,10 @@ public class LoginController implements Serializable{
 			} else {
 				redirectTo = "contents/home.xhtml?faces-redirect=true";
 				isLogged = true;
+				
+				//Log
+				loginTime = (new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")).format(new Date());       
+		        System.out.println("Accesso:  " + loginTime + " [" + loggedUser.getUserName() + "]");
 			} 
 		} catch (Exception e) {
 				Messages.addGlobalError("Usuário e/ou senha incorretos");
@@ -89,8 +97,13 @@ public class LoginController implements Serializable{
         FacesContext fc = FacesContext.getCurrentInstance();
         HttpSession session = (HttpSession) fc.getExternalContext().getSession(false);       
         session.invalidate();
+        
+        //Log
+		logoffTime = (new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")).format(new Date());       
+        System.out.println("Desconetado:  " + logoffTime + " [" + loggedUser.getUserName() + "]");
+        
         Messages.addGlobalError("Desconetado com sucesso !!!");
-		return "client.deconnect";
+		return "client.disconnect";
     }
 
 	
@@ -150,6 +163,26 @@ public class LoginController implements Serializable{
 
 	public void setDisconnected(boolean isDisconnected) {
 		this.isDisconnected = isDisconnected;
+	}
+
+
+	public String getLoginTime() {
+		return loginTime;
+	}
+
+
+	public void setLoginTime(String loginTime) {
+		this.loginTime = loginTime;
+	}
+
+
+	public String getLogoffTime() {
+		return logoffTime;
+	}
+
+
+	public void setLogoffTime(String logoffTime) {
+		this.logoffTime = logoffTime;
 	}
 	
 }

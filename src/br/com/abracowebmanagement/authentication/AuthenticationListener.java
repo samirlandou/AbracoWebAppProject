@@ -1,4 +1,4 @@
-package br.com.abracowebmanagement.util;
+package br.com.abracowebmanagement.authentication;
 
 import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
@@ -8,7 +8,6 @@ import javax.faces.event.PhaseListener;
 import org.omnifaces.util.Faces;
 
 import br.com.abracowebmanagement.controller.LoginController;
-import br.com.abracowebmanagement.domain.UserDomain;
 
 public class AuthenticationListener implements PhaseListener{
 
@@ -26,33 +25,39 @@ public class AuthenticationListener implements PhaseListener{
 		
 		//Boolean to check if the current page is a login page.
 		boolean isLoginPage = currentPage.contains("login.xhtml");
+
+		FacesContext fc = FacesContext.getCurrentInstance();
+		
+		//Get Session
+		//LoginController loginController = Faces.getSessionAttribute("loginController");
+		LoginController loginController = (LoginController) fc.getExternalContext().getSessionMap().get("loginController");
+		
+		//System.out.println("AuthenticationController: " + loginController);
+		
+		//boolean variable to verify if the user have already logged.
+		boolean isLogged = false;
+		boolean isDisconnected = false;
+		
+		if(loginController!= null){
+			isLogged = loginController.isLogged();
+			isDisconnected = loginController.isDisconnected();
+		}
+		
 		
 		//if current pages is not the login page, redirect current pages to login pages to force the user authentication
 		if(!isLoginPage){
 			
-			FacesContext fc = FacesContext.getCurrentInstance();
-			
-			//Get Session
-			//LoginController loginController = Faces.getSessionAttribute("loginController");
-			LoginController loginController = (LoginController) fc.getExternalContext().getSessionMap().get("loginController");
-			
-			//System.out.println("AuthenticationController: " + loginController);
-			
-			//boolean variable to verify if the user have already logged.
-			boolean isLogged = false;
-			boolean isDisconnected = false;
-			
-			if(loginController!= null){
-				isLogged = loginController.isLogged();
-				isDisconnected = loginController.isDisconnected();
-			}
-			
+
 			//Check if the user has already passed to the login page.
 			if(!isLogged && !isDisconnected){				
 				Faces.navigate("/pages/login.xhtml?faces-redirect=true");
 				return;
 			}
-		}		
+		}else{
+			if(isLogged){
+				Faces.navigate("/pages/contents/home.xhtml?faces-redirect=true");
+			}
+		}
 	}
 
 	@Override

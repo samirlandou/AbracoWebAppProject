@@ -1,4 +1,4 @@
-package br.com.abracowebmanagement.util;
+package br.com.abracowebmanagement.hibernate;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;

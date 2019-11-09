@@ -1,0 +1,104 @@
+@charset "ISO-8859-1";
+
+body, html{
+	height: 100%;
+	margin: 0;
+}
+
+/*---------------------------------  LOGIN PAGE ---------------------------------------*/
+.loginForm{
+	/* The image used */
+	background-image: url("images/login/Jolie.jpg");
+	
+	/* Full height */
+	height: 100%;
+	
+	/* Center and Scale the image nicely */
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.container{
+	position: absolute;
+	right: 0;
+	margin: 20px;
+	max-width: 300px;
+	padding: 16px;
+	background-color: white;
+	
+	/* IE 5-7, microsoft Edge */ 
+ 	filter: alpha(opacity=70);
+	
+	/* IE 8 */
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=70)"; 
+ 	
+ 	/* khtml, old safari 1.x */
+    -khtml-opacity: 0.3;
+    S
+    /* mozilla, netscape */
+  	-moz-opacity: 0.3;
+  	
+  	/* chrome, fx, safari, opera*/
+	opacity: 0.3;
+  	
+  	/*transition: all 0.5s, background 0.5s;*/
+}
+
+
+.container:hover{
+	
+	/* --- SHADOW --- */
+	
+	-webkit-box-shadow: 2px 2px 40px 1px rgba(255,102,31,0.7);
+	-moz-box-shadow: 2px 2px 40px 1px rgba(255,102,31,0.7);
+	box-shadow: 2px 2px 40px 1px rgba(255,102,31,0.7);	
+
+
+	/* --- OPACITY --- */
+
+	/* IE 5-7, microsoft Edge */ 
+ 	filter: alpha(opacity=100);
+	
+	/* IE 8 */
+	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)"; 
+ 	
+ 	/* khtml, old safari 1.x */
+    -khtml-opacity: 1.0;
+    
+    /* mozilla, netscape */
+  	-moz-opacity: 1.0;
+  	
+  	/* chrome, fx, safari, opera*/
+	opacity: 1.0;
+ 
+ 
+ 	/* --- TRANSITION --- */ 	
+  	transition-property: all 0.7s, background 0.7s;
+}
+
+.logo-image{
+    height: auto; 
+    width: auto; 
+    max-width: 150px; 
+    max-height: 150px;
+}
+
+.text-output{
+	color: #FF671F;
+	font-size: medium;
+}
+
+.text-input{
+	border-width: medium;
+}
+
+
+/*---------------------------------  REGISTER PAGE ---------------------------------------*/
+
+.texto{
+	color: #FF671F;
+}
+
+
+@CHARSET "ISO-8859-1";

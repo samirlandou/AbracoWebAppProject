@@ -1,4 +1,4 @@
-package br.com.abracowebmanagement.util;
+package br.com.abracowebmanagement.hibernate;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;

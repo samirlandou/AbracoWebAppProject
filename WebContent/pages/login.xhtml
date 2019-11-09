@@ -4,7 +4,8 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:p="http://primefaces.org/ui"
-	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:o="http://omnifaces.org/ui">
 
 <h:head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1; width=device-width, initial-scale=1" />
@@ -18,7 +19,11 @@
 
 <div class="loginForm">
 	<h:form id="idFormLogin">
-		<h:panelGrid styleClass="container" id="container-opacity" columns="1">
+			<f:metadata>
+				<o:enableRestorableView />
+			</f:metadata>
+			
+			<h:panelGrid styleClass="container" id="container-opacity" columns="1">
 
 			<!-- Abraço Cultural png logo -->
 			<h:graphicImage styleClass="logo-image" library="images" name="login/logo_abraco_cultura.png" />
@@ -36,7 +41,7 @@
 			<!-- Enter button -->
 			<!-- <p:commandButton id="enterId" value="Enter" action="templates/template.xhtml" /> -->			
 			<p:commandButton id="enterId" value="Enter"
-							update=":idMsgGlobal" action="#{loginController.doConnect}"/>
+							update=":idMsgGlobal" action="#{loginController.doConnect}" ajax="true"/>
 			
 			<p:spacer height="20px"/>
 			

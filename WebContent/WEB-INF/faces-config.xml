@@ -6,14 +6,20 @@
     version="2.2">
     
 	<lifecycle>
-	    <phase-listener>br.com.abracowebmanagement.util.AuthenticationListener</phase-listener>
+	    <phase-listener>br.com.abracowebmanagement.authentication.AuthenticationListener</phase-listener>
 	</lifecycle>
 
 	<navigation-rule>
 		<from-view-id>*</from-view-id>
 
 		<navigation-case>
-			<from-outcome>client.deconnect</from-outcome>
+			<from-outcome>client.disconnect</from-outcome>
+			<to-view-id>pages/login.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+
+		<navigation-case>
+			<from-outcome>client.login</from-outcome>
 			<to-view-id>pages/login.xhtml</to-view-id>
 			<redirect />
 		</navigation-case>

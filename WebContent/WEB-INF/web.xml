@@ -24,7 +24,7 @@
 	
 	<!-- Initiate Hibernate when Tomcat is starting -->
 	<listener>
-		<listener-class>br.com.abracowebmanagement.util.HibernateContext</listener-class>
+		<listener-class>br.com.abracowebmanagement.hibernate.HibernateContext</listener-class>
 	</listener>
 
 	<!-- Define PrimeFaces Type -->
@@ -45,13 +45,17 @@
 	        <session-timeout>1</session-timeout>
 	</session-config>
 	
-	<!-- Error Pages
+	<!-- Session Listener -->
+	<listener>
+		<listener-class>br.com.abracowebmanagement.session.SessionListener</listener-class>
+	</listener>
+	
+	<!-- Error Pages -->
 	<error-page>
         <exception-type>javax.faces.application.ViewExpiredException</exception-type>
-        <location>/WEB-INF/expired.xhtml</location>
-	</error-page>  -->
-
-
-
+        <location>/pages/login.xhtml</location>
+	</error-page>
+	
+	
 	
 </web-app>

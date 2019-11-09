@@ -7,9 +7,9 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
 <h:head>
-<meta http-equiv="refresh" content="text/html; charset=ISO-8859-1; width=device-width, initial-scale=1; 0; url=#{request.contextPath}/pages/login.xhtml" />
-<h:outputStylesheet library="css" name="login.css"/>
-<title>Abraço-Sessão</title>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1; width=device-width, initial-scale=1" />
+<h:outputStylesheet library="css" name="expired.css"/>
+<title>Abraço-Login</title>
 </h:head>
 
 <h:body>
@@ -23,14 +23,14 @@
 			<!-- Abraço Cultural png logo -->
 			<h:graphicImage styleClass="logo-image" library="images" name="login/logo_abraco_cultura.png" />
 			
-			<!-- Session Expired Text -->				
-			<p:outputLabel id="nameOutputId" for="nameInputId" styleClass="text-output"  value="Sessão Expirada"/>
+			<!-- Name field with 12 characters -->				
+			<p:outputText id="nameOutputId" for="nameInputId" styleClass="text-output"  value="Sessão epirada!"/>
 			
-			<p:spacer height="20px"/>
+			<p:spacer height="10px"/>
 			
 			<!-- Remember Password Link -->
-			<p:commandLink value="Esqueci minha Senha!" action="#{request.contextPath}/pages/login.xhtml?faces-redirect=true" style="font-size: 11px"/>
-							
+			<p:commandLink value="voltar para a tela login" action="client.login"
+							oncomplete="PF('dlgRememberPasswordId').show();" style="font-size: 11px" ajax="true"/>							
 		</h:panelGrid>
 	</h:form>
 </div>

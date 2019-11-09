@@ -1,6 +1,6 @@
 package br.com.abracowebmanagement.main;
 
-import br.com.abracowebmanagement.util.HibernateUtil;
+import br.com.abracowebmanagement.hibernate.HibernateUtil;
 
 public class GenerateTable {
 	
