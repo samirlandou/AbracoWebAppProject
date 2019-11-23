@@ -25,6 +25,7 @@ public class UserDAO extends GenericDAO<UserDomain> {
 		try{
 			Criteria consult = session.createCriteria(UserDomain.class);
 			
+			//CreatAlias
 			consult.createAlias("personDomain", "p");
 			
 			//Add restriction for userName

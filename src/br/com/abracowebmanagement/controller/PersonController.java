@@ -61,7 +61,7 @@ public class PersonController implements Serializable {
 	 */
 	public void doSave(){
 		/* 
-		//this code is used with PrimeFaces
+		//This code is used with PrimeFaces
 		String messageText = "Programação Web com java";
 		
 		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, messageText, messageText);
@@ -77,12 +77,12 @@ public class PersonController implements Serializable {
 			doNewRegister();
 			
 			//List again Person (very import to update the list)
-			personsDomain= personDAO.list();
+			personsDomain = personDAO.list();
 			
 			//This code is used with OmniFaces and it is more practice than PrimeFaces implementation.
-			Messages.addGlobalInfo("Salvou com sucesso");
+			Messages.addGlobalInfo("Salvou com sucesso!");
 		} catch (Exception e) {
-			Messages.addGlobalError("Ocorreu um erro ao salvar as informações de uma pessoa !!!");
+			Messages.addGlobalError("Ocorreu um erro ao salvar as informações de uma pessoa!");
 			e.printStackTrace();
 		}		
 	}
@@ -121,7 +121,7 @@ public class PersonController implements Serializable {
 
 	
 	public void addMessage() {
-
+		//Add Message for toggleSwitch Component from person.xhtml
 		String summary = personDomain.getStatus() ? "Ativo(a)" : "Desativado(a)";
 		Messages.addGlobalInfo(summary);
 	}

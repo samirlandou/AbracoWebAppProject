@@ -9,6 +9,10 @@
 	    <phase-listener>br.com.abracowebmanagement.authentication.AuthenticationListener</phase-listener>
 	</lifecycle>
 
+	<lifecycle>
+		<phase-listener>org.omnifaces.eventlistener.ResetInputAjaxActionListener</phase-listener>
+	</lifecycle>
+
 	<navigation-rule>
 		<from-view-id>*</from-view-id>
 

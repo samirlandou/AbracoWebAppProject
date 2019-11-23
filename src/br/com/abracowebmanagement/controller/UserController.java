@@ -151,7 +151,7 @@ public class UserController implements Serializable {
 				if(result2 == null){
 					completeNameFlag = true;
 				} else{
-					Messages.addGlobalError(" Essa pessoa já foi cadastrado. Favor escolher outra pessoa.");
+					Messages.addGlobalError("Essa pessoa já foi cadastrada. Favor escolher outra pessoa.");
 					completeNameFlag = false;				
 				}				
 			} else{
@@ -194,14 +194,14 @@ public class UserController implements Serializable {
 				usersDomain = userDAO.list();
 				
 				//This code is used with OmniFaces and it is more practice than PrimeFaces implementation.
-				Messages.addGlobalInfo("Salvou com sucesso!!!");
+				Messages.addGlobalInfo("Salvou com sucesso!");
 				
 				//Set upload image to false
 				upload = false;
 			}
 				
 		} catch (Exception e) {
-			Messages.addGlobalError("Ocorreu um erro ao salvar as informações de uma pessoa !!!");
+			Messages.addGlobalError("Ocorreu um erro ao salvar as informações de uma pessoa!");
 			e.printStackTrace();
 		}		
 	}

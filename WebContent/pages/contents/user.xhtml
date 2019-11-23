@@ -76,7 +76,7 @@
 							<!-- BUTTON TO EDIT -->
 							<p:commandButton icon="ui-icon-pencil" actionListener="#{userController.doEdit}"
 											oncomplete="PF('dlgNewUser').show();"
-											update=":idMsgGlobal :userRegisterFormId:userInputRegisterFormId :userListFormId:userDataTableFormId">
+											update=":idMsgGlobal :userRegisterFormId:userInputRegisterPnlId :userListFormId:userDataTableFormId">
 								<f:attribute name="selectedUserByCursor" value="#{cursor}"/>
 								<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
 							</p:commandButton>
@@ -97,9 +97,9 @@
 							<p:commandButton value="Novo"
 								actionListener="#{userController.doNewRegister}"
 								oncomplete="PF('dlgNewUser').show();"
-								update=":idMsgGlobal :userRegisterFormId:userInputRegisterFormId">
+								update=":idMsgGlobal :userRegisterFormId:userInputRegisterPnlId">
 								<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener"/>
-								</p:commandButton>
+							</p:commandButton>
 						</f:facet>
 	
 					</p:dataTable>
@@ -124,7 +124,7 @@
 				<h:form id="userRegisterFormId" enctype="multipart/form-data">
 				
 					<!-- PANEL GRID TO FILL FORMS -->
-					<h:panelGrid id="userInputRegisterFormId" columns="2">			
+					<h:panelGrid id="userInputRegisterPnlId" columns="2">			
 						<p:outputLabel value="Usuário: *" />
 						<p:inputText value="#{userController.userDomain.userName}" maxlength="30" size="27"
 									required="true" requiredMessage="O campo 'Usuário' é obrigatório"/>
@@ -132,7 +132,7 @@
 						<p:outputLabel value="Senha: *" />
 						<p:password value="#{userController.userDomain.passwordWithoutCryptography}" maxlength="12" size="27"
 									promptLabel="Digite a senha" weakLabel="fraco" goodLabel="Intermediário" strongLabel="forte"
-									feedback="true" inline="true"
+									feedback="true" inline="true" redisplay="true"
 									required="true" requiredMessage="O campo 'Senha' é obrigatório"/>
 	
 						<p:outputLabel value="Lembre sua senha com uma frase: *" />
@@ -170,7 +170,7 @@
 					<!-- PANEL GRID FOR BUTTON SAVE AND CLOSE -->
 					<h:panelGrid columns="2">
 						<p:commandButton value="Salvar" actionListener="#{userController.doSave}"
-										update=":idMsgGlobal :userRegisterFormId:userInputRegisterFormId :userListFormId:userDataTableFormId"/>					
+										update=":idMsgGlobal :userRegisterFormId:userInputRegisterPnlId :userListFormId:userDataTableFormId"/>					
 						<p:commandButton value="Fechar" oncomplete="PF('dlgNewUser').hide();" action="#{userController.doDeleteTempfiles}"/>
 					</h:panelGrid>		
 					

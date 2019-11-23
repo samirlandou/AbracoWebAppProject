@@ -125,7 +125,7 @@
 	
 	
 			<!-- DIALOG TO REGISTER NEW USER-->
-			<p:dialog header="Cadastrar Nova pessoa" widgetVar="dlgNewPerson"
+			<p:dialog header="Cadastrar Nova Pessoa" widgetVar="dlgNewPerson"
 				draggable="false" resizable="false" modal="true" closable="true"
 				appendTo="@(body)">
 	
@@ -162,8 +162,8 @@
 							autoResize="true"/>
 						<br/>
 						<h:outputText id="display"/>
-						<p:spacer height="10px"/>
-						<p:spacer height="10px"/>
+						<br/>
+						<p:spacer height="20px"/>
 						
 						<p:outputLabel value="Língua: *" />
 						<p:selectOneMenu id="linguaComboId" filter="false" value="#{personController.personDomain.language}"

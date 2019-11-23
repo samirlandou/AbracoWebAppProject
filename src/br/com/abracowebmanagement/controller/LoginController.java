@@ -33,6 +33,7 @@ public class LoginController implements Serializable{
 	private String logoffTime;
 	private boolean isLogged = false;
 	private boolean isDisconnected = false;
+	private boolean accessRightByProfile;
 
 	
 	@PostConstruct
@@ -46,24 +47,38 @@ public class LoginController implements Serializable{
 		
 		rememberPassword = new UserDomain();
 		rememberPassword.setPersonDomain(new PersonDomain());
+		
+		accessRightByProfile = false;
 	}
 
 	
 	public String doConnect() {
 		String redirectTo = "";
 		try {
+			
 			UserDAO userDAO = new UserDAO();
 			loggedUser = userDAO.authenticate(user.getUserName(), user.getPassword());
 			
 			if (loggedUser == null) {
 				Messages.addGlobalError("Usuário e/ou senha incorretos");
 			} else {
-				redirectTo = "contents/home.xhtml?faces-redirect=true";
-				isLogged = true;
-				
-				//Log
-				loginTime = (new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")).format(new Date());       
-		        System.out.println("Accesso:  " + loginTime + " [" + loggedUser.getUserName() + "]");
+				if(loggedUser.getPersonDomain().getStatus() == true){
+					//Execute it to find the user access 
+					doAccessRight();
+					System.out.println("Access Right User [" + loggedUser.getUserName() + "] = " + accessRightByProfile);
+					
+					redirectTo = "contents/home.xhtml?faces-redirect=true";
+					isLogged = true;
+					
+
+					
+					//Log
+					loginTime = (new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")).format(new Date());       
+			        System.out.println("Accesso:  " + loginTime + " [" + loggedUser.getUserName() + "]");			
+				} else{
+					Messages.addGlobalError("Acesso Exprirado!");
+				}
+	
 			} 
 		} catch (Exception e) {
 				Messages.addGlobalError("Usuário e/ou senha incorretos");
@@ -104,6 +119,17 @@ public class LoginController implements Serializable{
         
         Messages.addGlobalError("Desconetado com sucesso !!!");
 		return "client.disconnect";
+    }
+    
+    
+	private void doAccessRight(){
+    	if(loggedUser.getUserName() != null
+    			&& (loggedUser.getPersonDomain().getProfile().equals("ADMINISTRADOR(A)")
+    			|| loggedUser.getPersonDomain().getProfile().equals("CORDINADOR(A)"))){
+    		accessRightByProfile = true;
+    	}else{
+    		accessRightByProfile = false;
+    	}
     }
 
 	
@@ -183,6 +209,16 @@ public class LoginController implements Serializable{
 
 	public void setLogoffTime(String logoffTime) {
 		this.logoffTime = logoffTime;
+	}
+
+
+	public boolean isAccessRightByProfile() {
+		return accessRightByProfile;
+	}
+
+
+	public void setAccessRightByProfile(boolean accessRightByProfile) {
+		this.accessRightByProfile = accessRightByProfile;
 	}
 	
 }

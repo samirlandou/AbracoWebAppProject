@@ -1,203 +1,435 @@
 package br.com.abracowebmanagement.controller;
 
 import java.io.Serializable;
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
+import org.omnifaces.util.Messages;
 import org.primefaces.event.ScheduleEntryMoveEvent;
 import org.primefaces.event.ScheduleEntryResizeEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultScheduleEvent;
-import org.primefaces.model.DefaultScheduleModel;
 import org.primefaces.model.LazyScheduleModel;
 import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
 
+import br.com.abracowebmanagement.dao.ScheduleEventDAO;
+import br.com.abracowebmanagement.domain.ScheduleEventDomain;
+import br.com.abracowebmanagement.util.DateUtil;
+
 @ManagedBean
-@SessionScoped
+@ViewScoped
+//@ApplicationScoped
 public class ScheduleEventController implements Serializable {
  
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = 1065769617077195953L;
 
-	private ScheduleModel eventModel;
-     
-    private ScheduleModel lazyEventModel;
- 
-    private ScheduleEvent event = new DefaultScheduleEvent();
- 
-    @PostConstruct
-    public void init() {
-        eventModel = new DefaultScheduleModel();
-        eventModel.addEvent(new DefaultScheduleEvent("Champions League Match", previousDay8Pm(), previousDay11Pm()));
-        eventModel.addEvent(new DefaultScheduleEvent("Birthday Party", today1Pm(), today6Pm()));
-        eventModel.addEvent(new DefaultScheduleEvent("Breakfast at Tiffanys", nextDay9Am(), nextDay11Am()));
-        eventModel.addEvent(new DefaultScheduleEvent("Plant the new garden stuff", theDayAfter3Pm(), fourDaysLater3pm()));
-         
-        lazyEventModel = new LazyScheduleModel() {
-             
-            /**
-			 * 
-			 */
-			private static final long serialVersionUID = -2708109058838376577L;
+	//DateUtil
+	DateUtil dateUtil = new DateUtil();
+	
+	//Login Controller
+	LoginController loginController = new LoginController();
+	
+	//Domain
+	private ScheduleEventDomain scheduleEventDomain;
+	private List<ScheduleEventDomain> scheduleEventsDomain;
+	
+	//Default Schedule Model for Calendar
+	private ScheduleModel lazyScheduleModel;
+	
+	//Default Schedule Event for Calendar
+	private ScheduleEvent scheduleEvent;
+	
+	//Default Schedule Entry  Move Event
+	private ScheduleEntryMoveEvent entryMoveEvent;
+	
+	//Variable New Register
+	boolean newRegisterFlag = false;
+	
+	//Delete Button
+	boolean onEventSelectFlag;
+	
+	//On Event Move
+	boolean onEventMoveFlag = false;
+	
+	//On Event Resize
+	boolean onEventResizeFlag = false;
+	
+	//Begin Period
+	private Date loadEventsBeginPeriod;
+	
+	//End Period
+	private Date loadEventsEndPeriod;
+	
+	//Begin Date
+	private Date beginDate;
+	
+	//End Date
+	private Date endDate;
+	
+		
+	//Constructor
+	public ScheduleEventController(){
+		
+	}
+	
+	
+	@PostConstruct
+	public void doList(){
+		
+		//Instantiate Calendar Event
+		scheduleEvent = new DefaultScheduleEvent();
+		
+		//Instantiate Domain List
+		scheduleEventsDomain = new ArrayList<ScheduleEventDomain>();
+		
+		//Login
+		FacesContext fc = FacesContext.getCurrentInstance();
+		loginController = (LoginController) fc.getExternalContext().getSessionMap().get("loginController");
+
+		
+		//Instantiate Lazy Schedule Model
+		//lazyScheduleModel = new DefaultScheduleModel();
+		lazyScheduleModel = new LazyScheduleModel(){
+
+			private static final long serialVersionUID = -6109817173734864738L;
 
 			@Override
-            public void loadEvents(Date start, Date end) {
-                Date random = getRandomDate(start);
-                addEvent(new DefaultScheduleEvent("Lazy Event 1", random, random));
-                 
-                random = getRandomDate(start);
-                addEvent(new DefaultScheduleEvent("Lazy Event 2", random, random));
-            }   
-        };
+           public void loadEvents(Date start, Date end) {
+				
+				//Initialize start and end dates
+				loadEventsBeginPeriod = start;
+				loadEventsEndPeriod = end;
+				
+				//Populate ScheduleEventDomain List
+				ScheduleEventDAO scheduleEventDAO = new ScheduleEventDAO();
+				scheduleEventsDomain = scheduleEventDAO.searchByBeginDateAndEndDate(start,end);
+				
+				//Populate Schedule Event Model List
+				for(ScheduleEventDomain scheduleEventDomain: scheduleEventsDomain){
+					lazyScheduleModel.addEvent(new DefaultScheduleEvent(scheduleEventDomain.getScheduleEventDescription(),
+							scheduleEventDomain.getScheduleEventBeginDate(),
+							scheduleEventDomain.getScheduleEventEndDate()));
+				}
+			}
+		};
+	}
+	
+	
+	public void doClean(){
+		//scheduleEventDomain = new ScheduleEventDomain();
+		newRegisterFlag = false;
+		onEventSelectFlag = false;
+		onEventMoveFlag = false;
+		onEventResizeFlag = false;
+	}
+
+	
+	public void doSelect(SelectEvent selectEvent){
+		onEventSelectFlag = true;
+		
+		//Cast selected object to Event
+		scheduleEvent = (ScheduleEvent) selectEvent.getObject();
+		
+		//Instantiate Domain
+		scheduleEventDomain = new ScheduleEventDomain();
+
+		//Find Object in data base
+		ScheduleEventDAO scheduleEventDAO = new ScheduleEventDAO();
+		scheduleEventDomain = scheduleEventDAO.searchByDescriptionAndBeginDateAndEndDate(scheduleEvent.getTitle(), 
+				scheduleEvent.getStartDate(), scheduleEvent.getEndDate());
+	}
+	
+	
+	public void doNewRegister(SelectEvent selectEvent){
+		newRegisterFlag = true;
+		onEventSelectFlag = false;
+		
+		//Instantiate Domain
+		scheduleEventDomain = new ScheduleEventDomain();
+		
+		//Set Begin Date
+		scheduleEventDomain.setScheduleEventBeginDate((Date) selectEvent.getObject());
+		
+		//Set End Date
+		scheduleEventDomain.setScheduleEventEndDate((Date) selectEvent.getObject());
+		
+		//Set LogginUser
+		scheduleEventDomain.setScheduleEventLoginUser(loginController.getLoggedUser().getUserName());
+		
+		
+	}
+	
+	
+	public void doSave(){
+		try {
+			
+			//Instantiate DAO
+			ScheduleEventDAO scheduleEventDAO = new ScheduleEventDAO();
+			
+			//Instantiate local Domain object
+			ScheduleEventDomain uniqueScheduleEventDomain = new ScheduleEventDomain();
+			
+			//Search event by Description in the current loadEvents
+			uniqueScheduleEventDomain = scheduleEventDAO.searchByDescriptionAndLoadEventsPeriod(
+					scheduleEventDomain.getScheduleEventDescription(),
+					loadEventsBeginPeriod,
+					loadEventsEndPeriod);
+			
+			//Verify if the description already exist in the current loadEvents period
+			if(uniqueScheduleEventDomain != null){
+				
+				if(onEventMoveFlag || onEventResizeFlag){
+					
+					//Set scheduleEventDomain
+					scheduleEventDomain = uniqueScheduleEventDomain;
+			    	
+			    	//Set New Begin Date
+			    	scheduleEventDomain.setScheduleEventBeginDate(beginDate);
+			    	
+					//Set new End Date
+					scheduleEventDomain.setScheduleEventEndDate(endDate);
+					
+				} else if(onEventSelectFlag){
+					
+					if(!scheduleEventDomain.getScheduleEventDescription().
+							equalsIgnoreCase(uniqueScheduleEventDomain.getScheduleEventDescription())
+									&& uniqueScheduleEventDomain != null){
+						//Inform that this register already exist
+						Messages.addGlobalInfo("Essa descrição já existe nesse periodo. Favor escolher outra.");
+						return;	
+					}
+				}
+			}
+
+			
+			//Set LogginUser
+			if(!newRegisterFlag || onEventMoveFlag || onEventResizeFlag){
+				scheduleEventDomain.setScheduleEventLoginUser(loginController.getLoggedUser().getUserName());				
+			}
+			
+			//Check if End Date is after Begin before Saving
+			if(scheduleEventDomain.getScheduleEventEndDate().
+				after(scheduleEventDomain.getScheduleEventBeginDate())){
+				
+				//Merge informations in database
+				scheduleEventDAO.merge(scheduleEventDomain);
+				
+				//Populate ScheduleEventDomain List
+				//If not executed yet, search all events Domain between begin and end Date period					
+				scheduleEventsDomain = scheduleEventDAO.searchByBeginDateAndEndDate(loadEventsBeginPeriod, loadEventsEndPeriod);
+				
+				//Populate Schedule Event Model according to the event
+				if (onEventMoveFlag || onEventResizeFlag) {
+					
+					//Clean LazyScheduleModel
+					lazyScheduleModel.clear();
+					
+					//Populate Schedule Event Model List
+					for (ScheduleEventDomain scheduleEventDomain : scheduleEventsDomain) {
+						lazyScheduleModel.addEvent(new DefaultScheduleEvent(scheduleEventDomain.getScheduleEventDescription(),
+							scheduleEventDomain.getScheduleEventBeginDate(),
+							scheduleEventDomain.getScheduleEventEndDate()));
+					}
+					
+				} else{
+					
+					//Populate Schedule Event Model List
+					doList();
+				}
+				
+				//Show Success message
+				if(onEventMoveFlag){
+			    	
+			    	//Inform the new date
+			    	Messages.addGlobalInfo("Evento movido com sucesso.");
+			    	
+				} else if(onEventResizeFlag){			    	
+			    	//Inform the new Hour
+					Messages.addGlobalInfo("Horário do Evento ajustado com sucesso.");					
+				
+				} else{					
+					//Inform generic message
+					Messages.addGlobalInfo("Salvou com sucesso!");
+				
+				}
+				
+			} else{				
+				//Show Error message
+				Messages.addGlobalError("Datas e/ou horários incorretos !!!");
+			}
+		} catch (Exception e) {
+			Messages.addGlobalError("Ocorreu um erro ao salvar esse evento !!!");
+			e.printStackTrace();
+			doList();
+		}
+	}
+	
+	
+	public void doDelete(){
+		try {
+			//Deleting
+			ScheduleEventDAO scheduleEventDAO = new ScheduleEventDAO();
+			scheduleEventDAO.delete(scheduleEventDomain);
+			
+			//Clean Flags
+			doClean();
+			
+			//Populate event model in the calendar
+			doList();
+			
+			//Show Success message
+			Messages.addGlobalInfo("Evento excluido com sucesso!");
+		} catch (Exception e) {
+			Messages.addGlobalError("Ocorreu um erro ao deletar esse evento !!!");
+			e.printStackTrace();
+			doList();
+		}
+	}
+	
+	
+    public void doEventMove(ScheduleEntryMoveEvent event) {
+        //FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event moved", "Day delta:" + event.getDayDelta() + ", Minute delta:" + event.getMinuteDelta());
+    	
+    	//Set Event Move Flag
+    	onEventMoveFlag = true;
+    	
+    	//Set Begin Date
+    	beginDate = (Date) event.getScheduleEvent().getStartDate();
+    	
+    	//Set End Date
+    	endDate = (Date) event.getScheduleEvent().getEndDate();
+    	
+		//Instantiate Domain object
+		scheduleEventDomain = new ScheduleEventDomain();
+		
+		//Set Description of Domain object
+		scheduleEventDomain.setScheduleEventDescription((String) event.getScheduleEvent().getTitle());
+		
+		//Save the change
+    	doSave();
+    	
+		//Clean Flags
+		doClean();
     }
      
-    public Date getRandomDate(Date base) {
-        Calendar date = Calendar.getInstance();
-        date.setTime(base);
-        date.add(Calendar.DATE, ((int) (Math.random()*30)) + 1);    //set random day of month
-         
-        return date.getTime();
+    public void doEventResize(ScheduleEntryResizeEvent event) {
+        //FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event resized", "Day delta:" + event.getDayDelta() + ", Minute delta:" + event.getMinuteDelta());
+    	
+    	//Set Event Resize Flag
+    	onEventResizeFlag = true;
+    	
+    	//Set Begin Date
+    	beginDate = (Date) event.getScheduleEvent().getStartDate();
+    	
+    	//Set End Date
+    	endDate = (Date) event.getScheduleEvent().getEndDate();
+    	
+		//Instantiate Domain object
+		scheduleEventDomain = new ScheduleEventDomain();
+				
+		//Set Description of Domain object
+		scheduleEventDomain.setScheduleEventDescription((String) event.getScheduleEvent().getTitle());
+		
+		//Save the change
+    	doSave();
+    	
+		//Clean Flags
+		doClean();
     }
-     
-    public Date getInitialDate() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(calendar.get(Calendar.YEAR), Calendar.FEBRUARY, calendar.get(Calendar.DATE), 0, 0, 0);
-         
-        return calendar.getTime();
-    }
-     
-    public ScheduleModel getEventModel() {
-        return eventModel;
-    }
-     
-    public ScheduleModel getLazyEventModel() {
-        return lazyEventModel;
-    }
- 
-    private Calendar today() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE), 0, 0, 0);
- 
-        return calendar;
-    }
-     
-    private Date previousDay8Pm() {
-        Calendar t = (Calendar) today().clone();
-        t.set(Calendar.AM_PM, Calendar.PM);
-        t.set(Calendar.DATE, t.get(Calendar.DATE) - 1);
-        t.set(Calendar.HOUR, 8);
-         
-        return t.getTime();
-    }
-     
-    private Date previousDay11Pm() {
-        Calendar t = (Calendar) today().clone();
-        t.set(Calendar.AM_PM, Calendar.PM);
-        t.set(Calendar.DATE, t.get(Calendar.DATE) - 1);
-        t.set(Calendar.HOUR, 11);
-         
-        return t.getTime();
-    }
-     
-    private Date today1Pm() {
-        Calendar t = (Calendar) today().clone();
-        t.set(Calendar.AM_PM, Calendar.PM);
-        t.set(Calendar.HOUR, 1);
-         
-        return t.getTime();
-    }
-     
-    private Date theDayAfter3Pm() {
-        Calendar t = (Calendar) today().clone();
-        t.set(Calendar.DATE, t.get(Calendar.DATE) + 2);     
-        t.set(Calendar.AM_PM, Calendar.PM);
-        t.set(Calendar.HOUR, 3);
-         
-        return t.getTime();
-    }
- 
-    private Date today6Pm() {
-        Calendar t = (Calendar) today().clone(); 
-        t.set(Calendar.AM_PM, Calendar.PM);
-        t.set(Calendar.HOUR, 6);
-         
-        return t.getTime();
-    }
-     
-    private Date nextDay9Am() {
-        Calendar t = (Calendar) today().clone();
-        t.set(Calendar.AM_PM, Calendar.AM);
-        t.set(Calendar.DATE, t.get(Calendar.DATE) + 1);
-        t.set(Calendar.HOUR, 9);
-         
-        return t.getTime();
-    }
-     
-    private Date nextDay11Am() {
-        Calendar t = (Calendar) today().clone();
-        t.set(Calendar.AM_PM, Calendar.AM);
-        t.set(Calendar.DATE, t.get(Calendar.DATE) + 1);
-        t.set(Calendar.HOUR, 11);
-         
-        return t.getTime();
-    }
-     
-    private Date fourDaysLater3pm() {
-        Calendar t = (Calendar) today().clone(); 
-        t.set(Calendar.AM_PM, Calendar.PM);
-        t.set(Calendar.DATE, t.get(Calendar.DATE) + 4);
-        t.set(Calendar.HOUR, 3);
-         
-        return t.getTime();
-    }
-     
-    public ScheduleEvent getEvent() {
-        return event;
-    }
- 
-    public void setEvent(ScheduleEvent event) {
-        this.event = event;
-    }
-     
-    public void addEvent() {
-        if(event.getId() == null)
-            eventModel.addEvent(event);
-        else
-            eventModel.updateEvent(event);
-         
-        event = new DefaultScheduleEvent();
-    }
-     
-    public void onEventSelect(SelectEvent selectEvent) {
-        event = (ScheduleEvent) selectEvent.getObject();
-    }
-     
-    public void onDateSelect(SelectEvent selectEvent) {
-        event = new DefaultScheduleEvent("", (Date) selectEvent.getObject(), (Date) selectEvent.getObject());
-    }
-     
-    public void onEventMove(ScheduleEntryMoveEvent event) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event moved", "Day delta:" + event.getDayDelta() + ", Minute delta:" + event.getMinuteDelta());
-         
-        addMessage(message);
-    }
-     
-    public void onEventResize(ScheduleEntryResizeEvent event) {
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event resized", "Day delta:" + event.getDayDelta() + ", Minute delta:" + event.getMinuteDelta());
-         
-        addMessage(message);
-    }
-     
-    private void addMessage(FacesMessage message) {
-        FacesContext.getCurrentInstance().addMessage(null, message);
-    }
+
+	
+    /*
+     * Getters and Setters
+     */
+	public ScheduleEventDomain getScheduleEventDomain() {
+		return scheduleEventDomain;
+	}
+
+	public void setScheduleEventDomain(ScheduleEventDomain scheduleEventDomain) {
+		this.scheduleEventDomain = scheduleEventDomain;
+	}
+
+	public ScheduleModel getLazyScheduleModel() {
+		return lazyScheduleModel;
+	}
+
+	public void setEvent(ScheduleModel event) {
+		this.lazyScheduleModel = event;
+	}
+
+	public ScheduleEvent getScheduleEvent() {
+		return scheduleEvent;
+	}
+
+	public void setScheduleEvent(ScheduleEvent scheduleEvent) {
+		this.scheduleEvent = scheduleEvent;
+	}
+
+
+	public boolean isOnEventSelectFlag() {
+		return onEventSelectFlag;
+	}
+
+
+	public void setOnEventSelectFlag(boolean onEventSelectFlag) {
+		this.onEventSelectFlag = onEventSelectFlag;
+	}
+
+
+	public ScheduleEntryMoveEvent getEntryMoveEvent() {
+		return entryMoveEvent;
+	}
+
+
+	public void setEntryMoveEvent(ScheduleEntryMoveEvent entryMoveEvent) {
+		this.entryMoveEvent = entryMoveEvent;
+	}
+
+
+	public Date getLoadEventsBeginPeriod() {
+		return loadEventsBeginPeriod;
+	}
+
+
+	public void setLoadEventsBeginPeriod(Date startDate) {
+		this.loadEventsBeginPeriod = startDate;
+	}
+
+
+	public Date getLoadEventsEndPeriod() {
+		return loadEventsEndPeriod;
+	}
+
+
+	public void setLoadEventsEndPeriod(Date endDate) {
+		this.loadEventsEndPeriod = endDate;
+	}
+
+
+	public Date getBeginDate() {
+		return beginDate;
+	}
+
+
+	public void setBeginDate(Date beginDate) {
+		this.beginDate = beginDate;
+	}
+
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
 }

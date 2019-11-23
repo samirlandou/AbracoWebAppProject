@@ -19,11 +19,11 @@
 
 <div class="loginForm">
 	<h:form id="idFormLogin">
-			<f:metadata>
-				<o:enableRestorableView />
-			</f:metadata>
+		<f:metadata>
+			<o:enableRestorableView />
+		</f:metadata>
 			
-			<h:panelGrid styleClass="container" id="container-opacity" columns="1">
+		<h:panelGrid styleClass="container" id="container-opacity" columns="1">
 
 			<!-- Abraço Cultural png logo -->
 			<h:graphicImage styleClass="logo-image" library="images" name="login/logo_abraco_cultura.png" />
@@ -46,7 +46,7 @@
 			<p:spacer height="20px"/>
 			
 			<!-- Remember Password Link -->
-			<p:commandLink value="Esqueci minha Senha!" action="#{loginController.doRememberPassword}"
+			<p:commandLink id="rememberId" value="Esqueci minha Senha!" action="#{loginController.doRememberPassword}"
 							oncomplete="PF('dlgRememberPasswordId').show();" style="font-size: 11px" ajax="true"/>
 							
 		</h:panelGrid>
@@ -58,7 +58,7 @@
 		draggable="false" resizable="false" modal="true" closable="true"
 		appendTo="@(body)" >
 		<h:form id="formRememberPasswordId">
-			<h:panelGrid id="pnlRememberPasswordId">
+			<h:panelGrid id="pnlRememberPasswordId" columns="2">
 				<p:outputLabel value="Favor solicitar outra senha enviando um e-mail para mari@abracocultural.com.br" style="font-size:11px"/>
 				<br/>
 				<p:commandButton value="Fechar" oncomplete="PF('dlgRememberPasswordId').hide();" update=":idMsgGlobal"/>

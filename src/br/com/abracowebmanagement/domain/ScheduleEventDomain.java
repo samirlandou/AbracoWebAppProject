@@ -4,8 +4,6 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -22,7 +20,8 @@ public class ScheduleEventDomain extends GenericDomain {
 	 * DE -> DESCRIPTION
 	 * TP -> TYPE
 	 * DT -> DATE
-	 * FG -> FLAG 
+	 * FG -> FLAG
+	 * VL -> VALUE
 	 */
 	/*
 	 * Schedule Event description
@@ -34,7 +33,7 @@ public class ScheduleEventDomain extends GenericDomain {
 	
 	/*
 	 * Schedule Event type
-	 * Example: Cultural Class, Pedagogic Meeting, Lecture, Event, Happy Hour,...
+	 * Example: Regular or Cultural Class(Extensive/Intensive/Private) , Pedagogic Meeting, Lecture, Event, Happy Hour,...
 	 */
 	@Column(name = "TP_SCHEDULE_EVENT", length = 20, nullable = false)
 	private String scheduleEventType;
@@ -42,7 +41,7 @@ public class ScheduleEventDomain extends GenericDomain {
 	
 	/*
 	 * Schedule Event begin date and Hour
-	 * Inform how many was the class
+	 * Inform the begin event date
 	 */
 	@Column(name = "DT_BEGIN_SCHEDULE_EVENT", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
@@ -50,7 +49,7 @@ public class ScheduleEventDomain extends GenericDomain {
 	
 	/*
 	 * Schedule Event begin date and Hour
-	 * Inform how many was the class
+	 * Inform the end of the event
 	 */
 	@Column(name = "DT_END_SCHEDULE_EVENT", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
@@ -60,18 +59,17 @@ public class ScheduleEventDomain extends GenericDomain {
 	/*
 	 * Schedule Event time
 	 * Inform how many time will be the event
-	 */	
-	@Column(name = "DT_TIME_SCHEDULE_EVENT", nullable = false)
-	@Temporal(TemporalType.TIME)
-	private Date scheduleEventTime;	
+	 	
+	@Column(name = "VL_TIME_SCHEDULE_EVENT", nullable = false)
+	private Long scheduleEventTime;	*/
 	
 	
 	/*
 	 * Schedule Event comment
 	 * Comment specific notification about the event
 	 */		
-	@Column(name = "DE_COMMENT_SCHEDULE_EVENT", length = 100, nullable = false)
-	private Date scheduleEventEndComment;
+	@Column(name = "DE_COMMENT_SCHEDULE_EVENT", length = 100, nullable = true)
+	private String scheduleEventComment;
 	
 	
 	/*
@@ -86,10 +84,10 @@ public class ScheduleEventDomain extends GenericDomain {
 	/*
 	 * User
 	 * Insert User Data Table into ScheduleDomain 
-	 */
+	 
 	@OneToOne
 	@JoinColumn(nullable = false)
-	private UserDomain userDomain;
+	private UserDomain userDomain;*/
 
 
 	public String getScheduleEventDescription() {
@@ -132,23 +130,23 @@ public class ScheduleEventDomain extends GenericDomain {
 	}
 
 
-	public Date getScheduleEventTime() {
+	/*public Long getScheduleEventTime() {
 		return scheduleEventTime;
 	}
 
 
-	public void setScheduleEventTime(Date scheduleEventTime) {
+	public void setScheduleEventTime(Long scheduleEventTime) {
 		this.scheduleEventTime = scheduleEventTime;
+	}*/
+
+
+	public String getScheduleEventComment() {
+		return scheduleEventComment;
 	}
 
 
-	public Date getScheduleEventEndComment() {
-		return scheduleEventEndComment;
-	}
-
-
-	public void setScheduleEventEndComment(Date scheduleEventEndComment) {
-		this.scheduleEventEndComment = scheduleEventEndComment;
+	public void setScheduleEventComment(String scheduleEventComment) {
+		this.scheduleEventComment = scheduleEventComment;
 	}
 
 

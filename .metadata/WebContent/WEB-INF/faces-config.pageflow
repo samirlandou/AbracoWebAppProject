@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf15711913173320" configfile="/abracowebmanagement/WebContent/WEB-INF/faces-config.xml">
   <nodes xsi:type="pageflow:PFPage" name="*" id="pf15721890237556" referenceLink="//@navigationRule.0/@fromViewId|" outlinks="pf15721905370909 pf15730103014932 pf15730925708132" path="*"/>
-  <nodes xsi:type="pageflow:PFPage" name="pages/login.xhtml" id="pf15721890237558" referenceLink="//@navigationRule.0/@navigationCase.0/@toViewId|" inlinks="pf15730103014932 pf15730925708132" path="pages/login.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/login.xhtml" id="pf15721890237558" referenceLink="//@navigationRule.0/@navigationCase.1/@toViewId|" inlinks="pf15730103014932 pf15730925708132" path="pages/login.xhtml"/>
   <nodes xsi:type="pageflow:PFPage" name="pages/contents/home.xhtml" id="pf157219053709010" referenceLink="//@navigationRule.0/@navigationCase.2/@toViewId|" inlinks="pf15721905370909" path="pages/contents/home.xhtml"/>
   <links id="pf15721905370909" target="pf157219053709010" source="pf15721890237556" outcome="home" redirect="true"/>
-  <links id="pf15730103014932" target="pf15721890237558" source="pf15721890237556" outcome="client.login" redirect="true"/>
-  <links id="pf15730925708132" target="pf15721890237558" source="pf15721890237556" outcome="client.disconnect" redirect="true"/>
+  <links id="pf15730103014932" target="pf15721890237558" source="pf15721890237556" outcome="client.disconnect" redirect="true"/>
+  <links id="pf15730925708132" target="pf15721890237558" source="pf15721890237556" outcome="client.login" redirect="true"/>
 </pageflow:Pageflow>

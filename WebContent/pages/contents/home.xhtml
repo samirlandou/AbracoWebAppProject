@@ -25,6 +25,7 @@
 			    closeText: 'Fechar',
 			    prevText: 'Anterior',
 			    nextText: 'Próximo',
+			    currentText: 'Começo',
 			    monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
 			    monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun', 'Jul','Ago','Set','Out','Nov','Dez'],
 			    dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],
@@ -35,7 +36,7 @@
 			    firstDay: 0,
 			    isRTL: false,
 			    showMonthAfterYear: false,
-			    yearSuffix:'',
+			    yearSuffix:'Ano',
 			    timeOnlyTitle: 'Só Horas',
 			    timeText: 'Tempo',
 			    hourText: 'Hora',
@@ -63,50 +64,113 @@
 		<!-- BODY -->
 		<div>
 			<br/>
-			<h:form>
-				<p:growl id="messages" showDetail="true" />
-
+			
+			<!-- SCHEDULE FORM -->
+			<h:form id="id_form_schdl">
+			
+				<!-- SCHEDULE PANELGRID -->
 				<h:panelGrid columnClasses="value">
-					<h3 style="margin-top: 0">Editable Schedule</h3>
-					<p:schedule id="schedule" value="#{scheduleEventController.eventModel}" widgetVar="myschedule" locale="pt_BR" timeZone="America/Sao_Paulo">
-						<p:ajax event="dateSelect" listener="#{scheduleEventController.onDateSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
-						<p:ajax event="eventSelect" listener="#{scheduleEventController.onEventSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
-						<p:ajax event="eventMove" listener="#{scheduleEventController.onEventMove}" update="messages" />
-						<p:ajax event="eventResize" listener="#{scheduleEventController.onEventResize}" update="messages" />
-					</p:schedule>
+				
+					<h3 style="margin-top: 0">Agenda</h3>
+					
+					<p:schedule  id="id_schedule" value="#{scheduleEventController.lazyScheduleModel}" widgetVar="wgv_schedule"
+						tooltip="true" locale="pt_BR" timeZone="America/Sao_Paulo">
 						
-			        <h3>Lazy Schedule</h3>
-			        <p:schedule value="#{scheduleEventController.lazyEventModel}" />						
+						<p:ajax event="dateSelect" listener="#{scheduleEventController.doNewRegister}" 
+							oncomplete="PF('wgv_dialog').show();" update=":id_form_detail:id_pnlgrd_detail"/>
+					
+						<p:ajax event="eventSelect" listener="#{scheduleEventController.doSelect}"
+							oncomplete="PF('wgv_dialog').show();" update=":id_form_detail:id_pnlgrd_detail"/>
+							
+						<p:ajax event="eventMove" listener="#{scheduleEventController.doEventMove}" update=":idMsgGlobal"/>
+						
+						<p:ajax event="eventResize" listener="#{scheduleEventController.doEventResize}" update=":idMsgGlobal"/>
+					
+					</p:schedule>
 				</h:panelGrid>
-
-				<p:dialog widgetVar="eventDialog" header="Detalho do Evento"
-					showEffect="clip" hideEffect="clip" draggable="false" resizable="false" modal="true" closable="true" appendTo="@(body)">
-					<h:panelGrid id="eventDetails" columns="2">
-						<p:outputLabel for="title" value="Titles:" />
-						<p:inputText id="title" value="#{scheduleEventController.event.title}"
-							required="true" />
-
-						<p:outputLabel for="from" value="From:" />
-						<p:calendar id="from" value="#{scheduleEventController.event.startDate}"
-							timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy HH:mm" />
-
-						<p:outputLabel for="to" value="To:" />
-						<p:calendar id="to" value="#{scheduleEventController.event.endDate}"
-							timeZone="America/Sao_Paulo" pattern="dd/MM/yyyy HH:mm" />
-
-						<p:outputLabel for="allDay" value="All Day:" />
-						<h:selectBooleanCheckbox id="allDay"
-							value="#{scheduleEventController.event.allDay}" />
-
-						<p:commandButton type="reset" value="Reset" />
-						<p:commandButton id="addButton" value="Save"
-							action="#{scheduleEventController.addEvent}"
-							oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
-					</h:panelGrid>
-				</p:dialog>
 			</h:form>
+		
+			<!-- DIALOG TO REGISTER NEW EVENT -->
+			<p:dialog widgetVar="wgv_dialog" header="Detalhe do Evento"
+				showEffect="clip" hideEffect="clip" draggable="false"
+				resizable="false" modal="true" closable="true" appendTo="@(body)">
+				
+				<!-- FORM FOR THE EVENT -->
+				<h:form id="id_form_detail">
+				
+					<!-- PANEL GRID TO FILL FORMS -->
+					<h:panelGrid id="id_pnlgrd_detail" columns="2">
+						<p:outputLabel for="id_description" value="Descrição:"/>
+						<p:inputText id="id_description" value="#{scheduleEventController.scheduleEventDomain.scheduleEventDescription}"
+							maxlength="20" required="true" requiredMessage="O campo 'Descrição' é obrigatório"/>
+										
+						<p:outputLabel for="id_type" value="Típo: "/>
+						<p:selectOneMenu id="id_type" value="#{scheduleEventController.scheduleEventDomain.scheduleEventType}"
+							converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="O campo 'Típo' é obrigatório">
+							<f:selectItem noSelectionOption="true" 		itemLabel="Selecione um típo" />
+							<f:selectItem itemValue="Ateliê Pedagógico" itemLabel="Ateliê Pedagógico"/>
+							<f:selectItem itemValue="Happy Hour" 		itemLabel="Happy Hour"/>
+							<f:selectItem itemValue="Palestra" 			itemLabel="Palestra"/>
+						</p:selectOneMenu>
+													
+						<p:outputLabel for="id_cald_beginDate" value="Início: "/>
+						<p:calendar id="id_cald_beginDate" value="#{scheduleEventController.scheduleEventDomain.scheduleEventBeginDate}"
+							locale="pt_BR" pattern="dd/MM/yyyy HH:mm" timeZone="America/Sao_Paulo" mask="99/99/9999 99:99"
+							required="true" requiredMessage="O campo 'Início' é obrigatório">
+							<f:convertDateTime locale="pt_BR" pattern="dd/MM/yyyy HH:mm" timeZone="America/Sao_Paulo"/>
+						</p:calendar>
+						
+						<p:outputLabel for="id_cald_endDate" value="Términio: "/>
+						<p:calendar id="id_cald_endDate" value="#{scheduleEventController.scheduleEventDomain.scheduleEventEndDate}"
+							locale="pt_BR" pattern="dd/MM/yyyy HH:mm" timeZone="America/Sao_Paulo" mask="99/99/9999 99:99"
+							 required="true" requiredMessage="O campo 'Términio:' é obrigatório">
+							<f:convertDateTime locale="pt_BR" pattern="dd/MM/yyyy HH:mm" timeZone="America/Sao_Paulo"/>
+						</p:calendar>
+						
+						<p:outputLabel value="Detalhes: "/>
+						<p:inputTextarea value="#{scheduleEventController.scheduleEventDomain.scheduleEventComment}" rows="2" cols="30" counter="display"
+							maxlength="100" counterTemplate="{0} caracteres restantes."
+							autoResize="true"/>
+						<br/>
+						<h:outputText id="display"/>
+						
+						<br/>				
+						<p:spacer width="10px"/>
+						
+						<p:outputLabel value="Criação do evento por: "/>
+						<p:outputLabel value="#{scheduleEventController.scheduleEventDomain.scheduleEventLoginUser}" style="color: orange;"/>												
+					</h:panelGrid>
+					
+					<!-- PANELGRID FOR BUTTON SAVE, DELETE AND CLOSE -->
+					<h:panelGrid columns="4">
+						<p:commandButton value="Salvar" action="#{scheduleEventController.doSave}"
+							oncomplete="PF('wgv_schedule').update();" update=":idMsgGlobal id_form_detail:id_pnlgrd_detail">
+						</p:commandButton>
+						
+						<p:commandButton value="Fechar" action="#{scheduleEventController.doClean}"
+							oncomplete="PF('wgv_dialog').hide();"
+							update=":idMsgGlobal :id_form_detail:id_pnlgrd_detail">
+						</p:commandButton>
+						 
+						 <p:spacer width="150px"/>
+						 <p:commandButton value="Excluir" action="#{scheduleEventController.doDelete}"
+						 	oncomplete="PF('wgv_dialog').hide();PF('wgv_schedule').update();"
+						 	rendered="#{loginController.accessRightByProfile}" update=":idMsgGlobal">
+						 	<p:confirm header="Confirmação" message="Deseja excluir #{cursor.personDomain.completeName}?" icon="ui-icon-alert"/>						 	
+						 </p:commandButton>
+						 			
+					</h:panelGrid>
+					
+					
+					<!-- CONFIRM DIALOG WHEN DELETING -->
+					<p:confirmDialog global="true" >
+						<p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>		
+						<p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+					</p:confirmDialog>
+					
+				</h:form>
+			</p:dialog>
 		</div>
-
 	</ui:define>
 		
 </ui:composition>
