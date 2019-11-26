@@ -55,7 +55,11 @@
         <exception-type>javax.faces.application.ViewExpiredException</exception-type>
         <location>/pages/login.xhtml</location>
 	</error-page>
-	
-	
+
+	<!-- Font Awesom -->	
+	<context-param>
+	    <param-name>primefaces.FONT_AWESOME</param-name>
+	    <param-value>true</param-value>
+	</context-param>
 	
 </web-app>

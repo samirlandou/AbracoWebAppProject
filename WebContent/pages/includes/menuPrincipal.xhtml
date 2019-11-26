@@ -12,11 +12,11 @@
 		<div>
 			<div>
 				<!-- Left position -->
-				<p:commandButton value="Menu" icon="ui-icon-grip-solid-horizontal" oncomplete="PF('sidebar').show()" style="float:left;"/>
-				<p:commandButton value="Home" icon="ui-icon-home" action="home" style="float:left;"/>
+				<p:commandButton value="Menu" icon="fa fa-navicon" oncomplete="PF('sidebar').show()" style="float:left;"/>
+				<p:commandButton value="Home" icon="fa fa-home" action="home" style="float:left;"/>
 				
 				<!-- Right position -->
-				<p:commandButton value="Sair" icon="ui-icon-power" action="#{loginController.doDisconnect}" style="float:right;" update=":idMsgGlobal"/>
+				<p:commandButton value="Sair" icon="fa fa-power-off" action="#{loginController.doDisconnect}" style="float:right;" update=":idMsgGlobal"/>
 				<p:spacer width="10px" style="float:right;" />
 				<p:outputLabel value="Bem-vindo(a), #{loginController.loggedUser.userName}" style="float:right;"/>
 			</div>
@@ -34,30 +34,30 @@
 				<!-- Menu -->
 				<p:panelMenu >					
 					<p:submenu label="File" outcome="/pages/contents/home.xhtml">
-						<p:menuitem value="Relatorio das aulas" icon="ui-icon-document"/>
-						<p:menuitem value="Note" icon="ui-icon-note"/>
+						<p:menuitem value="Relatorio das aulas" icon="fa fa-file-text"/>
+						<p:menuitem value="Note" icon="fa fa-pencil-square-o"/>
 					</p:submenu>
 					
 		
 					<p:submenu label="Cadastro">
-						<p:menuitem value="Pessoas" icon="ui-icon-person" outcome="/pages/contents/person.xhtml"/>
-						<p:menuitem value="Usuarios" icon="ui-icon-key" outcome="/pages/contents/user.xhtml"/>
-						<p:menuitem value="Aulas" icon="ui-icon-calendar" outcome="/pages/contents/student.xhtml"/>
+						<p:menuitem value="Pessoas" icon="fa fa-users" outcome="/pages/contents/person.xhtml"/>
+						<p:menuitem value="Usuarios" icon="fa fa-user-plus" outcome="/pages/contents/user.xhtml"/>
+						<p:menuitem value="Aulas" icon="fa fa-calendar-o" outcome="/pages/contents/student.xhtml"/>
 					</p:submenu>
 					
 				
 					<p:submenu label="Outros">
-						<p:menuitem value="Configuração" icon="ui-icon-wrench"/>
-						<p:menuitem value="Galeria" icon="ui-icon-image"/>
-						<p:menuitem value="Contatos" icon="ui-icon-contact"/>
-						<p:menuitem value="Sobre" icon="ui-icon-info"/>
-						<p:menuitem value="Sugestão" icon="ui-icon-comment"/>
+						<p:menuitem value="Configuração" icon="fa fa-cog"/>
+						<p:menuitem value="Galeria" icon="fa fa-photo"/>
+						<p:menuitem value="Contatos" icon="fa fa-id-card-o"/>
+						<p:menuitem value="Sobre" icon="fa fa-info"/>
+						<p:menuitem value="Sugestão" icon="fa fa-comments-o"/>
 					</p:submenu>
 		
 				</p:panelMenu>
 				
 				<br/>
-			    <p:commandButton value="Fechar" oncomplete="PF('sidebar').hide()"/>
+			    <p:commandButton value="Fechar" icon="fa fa-remove" oncomplete="PF('sidebar').hide()"/>
 			</p:sidebar>	
 		</div>
 	
