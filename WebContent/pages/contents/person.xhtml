@@ -31,7 +31,9 @@
 			<h:form id="personListFormId">
 				<p:panel header="Lista de pessoas">
 					<p:dataTable id="personDataTableFormId" emptyMessage="Nenhum registro encontrado."
-						paginator="true" value="#{personController.personsDomain}" var="cursor" rows="10">
+						paginator="true" value="#{personController.personsDomain}" var="cursor" rows="10"
+						resizableColumns="true" resizeMode="fit" reflow="true" rowHover="true"
+						draggableColumns="true">
 	
 						
 						<!-- NM_COMPLETE_NAME -->

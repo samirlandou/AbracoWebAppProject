@@ -32,7 +32,9 @@
 			
 				<p:panel header="Lista de Usuários">
 					<p:dataTable id="userDataTableFormId" emptyMessage="Nenhum registro encontrado."
-						paginator="true" value="#{userController.usersDomain}" var="cursor" rows="10">
+						paginator="true" value="#{userController.usersDomain}" var="cursor" rows="10"
+						resizableColumns="true" resizeMode="fit" reflow="true" rowHover="true"
+						draggableColumns="true">
 	
 	
 						<!-- NM_USER -->
