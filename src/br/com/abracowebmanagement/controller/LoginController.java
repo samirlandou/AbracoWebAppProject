@@ -117,7 +117,7 @@ public class LoginController implements Serializable{
 		logoffTime = (new SimpleDateFormat("dd/MM/yyyy HH:mm:ss")).format(new Date());       
         System.out.println("Desconetado:  " + logoffTime + " [" + loggedUser.getUserName() + "]");
         
-        Messages.addGlobalError("Desconetado com sucesso !!!");
+        Messages.addGlobalInfo("Desconetado com sucesso !!!");
 		return "client.disconnect";
     }
     

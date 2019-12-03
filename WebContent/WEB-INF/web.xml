@@ -36,8 +36,10 @@
 	<!-- Define PrimeFaces Theme -->
 	<context-param>
 		<param-name>primefaces.THEME</param-name>
+		<param-value>#{themeSwitcherController.theme}</param-value>
 		<!-- <param-value>aristo</param-value> -->
-		<param-value>ui-lightness</param-value>
+		<!-- <param-value>ui-lightness</param-value> -->
+		
 	</context-param>
 
 	<!-- Session Timeout -->

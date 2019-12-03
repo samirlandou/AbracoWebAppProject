@@ -6,7 +6,7 @@
     version="2.2">
     
 	<lifecycle>
-	    <phase-listener>br.com.abracowebmanagement.authentication.AuthenticationListener</phase-listener>
+	    <phase-listener>br.com.abracowebmanagement.listener.AuthenticationListener</phase-listener>
 	</lifecycle>
 
 	<lifecycle>

@@ -78,6 +78,13 @@ public class UserDomain extends GenericDomain{
 	@Column(name = "NM_IMAGE_USER_FILE", length = 100)
 	private String imageUserFileName;
 	
+		
+	/*
+	 * User Theme <br/>
+	 * content user theme description
+	 */
+	@Column(name = "DE_USER_THEME", length = 20)
+	private String userTheme;
 	
 	/*
 	 * User <br/>
@@ -168,6 +175,16 @@ public class UserDomain extends GenericDomain{
 
 	public void setPasswordWithoutCryptography(String passwordWithoutCryptography) {		
 		this.passwordWithoutCryptography = passwordWithoutCryptography;
+	}
+
+
+	public String getUserTheme() {
+		return userTheme;
+	}
+
+
+	public void setUserTheme(String userTheme) {
+		this.userTheme = userTheme;
 	}
 
 

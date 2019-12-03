@@ -197,9 +197,9 @@
 					<br/>				
 					<!-- PANEL GRID FOR BUTTON SAVE AND CLOSE -->
 					<h:panelGrid columns="2">
-						<p:commandButton value="Salvar" actionListener="#{personController.doSave}"
+						<p:commandButton value="Salvar" icon="fa fa-floppy-o" actionListener="#{personController.doSave}"
 										update=":idMsgGlobal :personRegisterFormId:personInputRegisterFormId :personListFormId:personDataTableFormId"/>					
-						<p:commandButton value="Fechar" oncomplete="PF('dlgNewPerson').hide();"/>
+						<p:commandButton value="Fechar" icon="fa fa-remove" oncomplete="PF('dlgNewPerson').hide();"/>
 					</h:panelGrid>		
 					
 				</h:form>
