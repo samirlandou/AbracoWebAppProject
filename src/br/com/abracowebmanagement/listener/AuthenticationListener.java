@@ -6,6 +6,7 @@ import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 
 import org.omnifaces.util.Faces;
+import org.omnifaces.util.Messages;
 
 import br.com.abracowebmanagement.controller.LoginController;
 import br.com.abracowebmanagement.controller.ThemeSwitcherController;
@@ -66,10 +67,16 @@ public class AuthenticationListener implements PhaseListener{
 				return;
 			}
 						
-			//Set theme value
-			if(loginController.getLoggedUser().getUserTheme() != null
-					&& themeSwitcherController.getInitialTheme().equals(themeSwitcherController.getTheme())){
-				themeSwitcherController.setTheme(loginController.getLoggedUser().getUserTheme());					
+			try {
+				//Set theme value
+				if (loginController.getLoggedUser().getUserTheme() != null
+						&& themeSwitcherController.getInitialTheme().equals(themeSwitcherController.getTheme())) {
+					themeSwitcherController.setTheme(loginController.getLoggedUser().getUserTheme());
+				} 
+			} catch (Exception e) {
+				if(e.equals("NullPointerException")){
+					Messages.addGlobalInfo("Favor deslogar e logar de novo para aplicar o tema escolido");
+				}
 			}			
 			
 		}else{

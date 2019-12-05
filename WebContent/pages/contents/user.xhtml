@@ -69,7 +69,7 @@
 	
 						<!-- DE_STATUS -->
 						<p:column headerText="Status" sortBy="#{cursor.personDomain.status}">
-							<h:outputText value="#{cursor.personDomain.status}"/>					
+							<h:outputText value="#{cursor.personDomain.status}"/>				
 						</p:column>
 						
 						<!-- OPTIONS -->
@@ -134,7 +134,7 @@
 						<p:outputLabel value="Senha: *" />
 						<p:password value="#{userController.userDomain.passwordWithoutCryptography}" maxlength="12" size="27"
 									promptLabel="Digite a senha" weakLabel="fraco" goodLabel="Intermediário" strongLabel="forte"
-									feedback="true" inline="true" redisplay="true"
+									feedback="true" inline="true" 
 									required="true" requiredMessage="O campo 'Senha' é obrigatório"/>
 	
 						<p:outputLabel value="Lembre sua senha com uma frase: *" />

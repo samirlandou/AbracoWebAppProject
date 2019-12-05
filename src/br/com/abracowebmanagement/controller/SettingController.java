@@ -67,8 +67,7 @@ public class SettingController {
 			themeSwitcherController.setInitialTheme(loginController.getLoggedUser().getUserTheme());
 			
 			//Inform messages for saving successful
-			Messages.addGlobalInfo("O tema '" + themeSwitcherController.getTheme() + "' foi salvo com sucesso!");	
-			Messages.addGlobalInfo("Favor deslogar e logar de novo para aplicar as mudanças");
+			Messages.addGlobalInfo("O tema '" + themeSwitcherController.getTheme() + "' foi salvo com sucesso!");
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

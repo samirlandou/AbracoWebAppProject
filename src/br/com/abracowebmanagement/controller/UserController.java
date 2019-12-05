@@ -2,11 +2,13 @@ package br.com.abracowebmanagement.controller;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -71,6 +73,13 @@ public class UserController implements Serializable {
 			//List User
 			UserDAO userDAO = new UserDAO();
 			usersDomain= userDAO.descendList("id");
+			
+			//String md5 = "5756ba3274a81093b0eae45beef96488";
+		    //Fazer o teste --> byte[] bytes = Base64.encodeBase64(new BigInteger(md5, 16 /*or 128bits*/).toByteArray());
+		    //String s = new String(bytes);
+		    //System.out.println(s);
+		    // V1a6MnSoEJOw6uRb7vlkiA==*/
+		      
 		} catch (Exception e) {
 			Messages.addGlobalError("Ocorreu um erro ao listar as informações das pessoas !!!");
 			e.printStackTrace();			
@@ -162,6 +171,11 @@ public class UserController implements Serializable {
 			
 			//Condition to save or not the information according to the userName
 			if(userNameFlag && completeNameFlag){
+				
+				//Set Default Theme Value While Saving
+				if(userDomain.getUserTheme() == null){
+					userDomain.setUserTheme("ui-lightness");
+				}
 				result = userDAO.merge(userDomain);
 				
 				//verify if there was an upload file.
