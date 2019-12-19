@@ -2,13 +2,11 @@ package br.com.abracowebmanagement.controller;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -53,8 +51,6 @@ public class UserController implements Serializable {
 	boolean completeNameFlag;
 	boolean upload = false;
 
-	
-	
 	
 	public UserController(){
 		

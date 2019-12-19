@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 public class DateUtil {
 
-	private Date beginDate;
+	//private Date beginDate;
 
 
 	public void Dateutil(){
@@ -57,17 +57,31 @@ public class DateUtil {
 	}
 	
 	
-	public Date getFormatedDate(String date, String format){
-		
+	public Date getFormatedDate(String value, String inputFormat, String outputFormat){
+		Date outputDate = null;
+		String convertDate;
 		try {
-			beginDate = null;			
-			SimpleDateFormat beginDateFormat = new SimpleDateFormat("format");
-			beginDateFormat.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));
-			beginDate = beginDateFormat.parse(date);		
+			
+			// Set InputFormat
+			SimpleDateFormat inputDateFormat = new SimpleDateFormat(inputFormat);
+			inputDateFormat.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));			
+			
+            //Parse value into Date object
+            Date inputDate = inputDateFormat.parse(value);
+			
+            //Set OutputFormat
+			SimpleDateFormat outputDateFormat = new SimpleDateFormat(outputFormat);
+			outputDateFormat.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));
+			
+			//Convert result to String
+			convertDate = outputDateFormat.format(inputDate);
+			
+			//parse result into Date object
+			outputDate = outputDateFormat.parse(convertDate);		
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		return beginDate;		
-	}	
+		return outputDate;		
+	}
 	
 }

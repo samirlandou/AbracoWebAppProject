@@ -32,12 +32,13 @@
         <!-- Drop and re-create the database schema on startup (can use update, create, validate) -->
         <property name="hbm2ddl.auto">update</property>
 
-		<mapping class="br.com.abracowebmanagement.domain.UserDomain"/>
-		<mapping class="br.com.abracowebmanagement.domain.PersonDomain"/>
+		<mapping class="br.com.abracowebmanagement.domain.ContractDomain"/>
 		<mapping class="br.com.abracowebmanagement.domain.MyClassDomain"/>
+		<mapping class="br.com.abracowebmanagement.domain.PersonDomain"/>		
 		<mapping class="br.com.abracowebmanagement.domain.PresenceDomain"/>
         <mapping class="br.com.abracowebmanagement.domain.StudentInMyClassDomain"/>
         <mapping class="br.com.abracowebmanagement.domain.ScheduleEventDomain"/>
+        <mapping class="br.com.abracowebmanagement.domain.UserDomain"/>
 
 		
     </session-factory>
