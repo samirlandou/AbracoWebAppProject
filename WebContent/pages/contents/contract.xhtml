@@ -189,11 +189,6 @@
 									<f:convertDateTime locale="pt_BR" pattern="HH:mm" timeZone="America/Sao_Paulo"/>
 								</p:calendar>
 								
-								<p:outputLabel value="Aula-Hora Total : "/>
-								<p:outputLabel id="totalHourClassID" value="#{contractController.contractDomain.hourTotalClass}">
-									<f:convertDateTime locale="pt_BR" pattern="HH:mm" timeZone="America/Sao_Paulo"/>
-								</p:outputLabel>
-								
 																					
 							</h:panelGrid>
 						</p:panel>			
@@ -203,8 +198,8 @@
 							<p:panel header="Informações sobre o lugar.">
 								<p:messages/>
 								<h:panelGrid id="placeInputRegisterFormID" columns="2">		
-									<p:outputLabel value="Professor: " for="professorComboID"/>
-									<p:selectOneMenu id="languageComboID" filter="false" value="#{contractController.contractDomain.classroomDescription}"
+									<p:outputLabel value="Lugar: " for="placeComboID"/>
+									<p:selectOneMenu id="placeComboID" filter="false" value="#{contractController.contractDomain.classroomDescription}"
 										converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="O campo 'Língua' é obrigatório">
 										<f:selectItem noSelectionOption="true" itemLabel="Selecione uma Língua" />
 										<f:selectItem itemLabel="PINHEIROS" itemValue="PINH"/>
