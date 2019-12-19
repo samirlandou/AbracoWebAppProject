@@ -183,32 +183,32 @@ public class GenericDAO<Entity> {
 	
 	
 	@SuppressWarnings("unchecked")
-	public List<Entity> ascendList(String campoOrdenacao) {
-		Session sessao = HibernateUtil.getSessionFactory().openSession();
+	public List<Entity> ascendList(String field) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
-			Criteria consulta = sessao.createCriteria(myEntityClass);
-			consulta.addOrder(Order.asc(campoOrdenacao));
-			List<Entity> resultado = consulta.list();
-			return resultado;
-		} catch (RuntimeException erro) {
-			throw erro;
+			Criteria consult = session.createCriteria(myEntityClass);
+			consult.addOrder(Order.asc(field));
+			List<Entity> result = consult.list();
+			return result;
+		} catch (RuntimeException error) {
+			throw error;
 		} finally {
-			sessao.close();
+			session.close();
 		}
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Entity> descendList(String campoOrdenacao) {
-		Session sessao = HibernateUtil.getSessionFactory().openSession();
+	public List<Entity> descendList(String field) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {
-			Criteria consulta = sessao.createCriteria(myEntityClass);
-			consulta.addOrder(Order.desc(campoOrdenacao));
-			List<Entity> resultado = consulta.list();
-			return resultado;
-		} catch (RuntimeException erro) {
-			throw erro;
+			Criteria consult = session.createCriteria(myEntityClass);
+			consult.addOrder(Order.desc(field));
+			List<Entity> result = consult.list();
+			return result;
+		} catch (RuntimeException error) {
+			throw error;
 		} finally {
-			sessao.close();
+			session.close();
 		}
 	}
 }
