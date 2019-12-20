@@ -40,9 +40,9 @@
 					
 		
 					<p:submenu label="Cadastro">
-						<p:menuitem value="Pessoas" icon="fa fa-users" outcome="/pages/contents/person.xhtml"/>
-						<p:menuitem value="Usuarios" icon="fa fa-user-plus" outcome="/pages/contents/user.xhtml"/>
-						<p:menuitem value="Contratos" icon="fa fa-edit" outcome="/pages/contents/contract.xhtml"/>
+						<p:menuitem value="Pessoas" icon="fa fa-users" outcome="/pages/contents/person.xhtml" rendered="#{loginController.accessRightByProfile}"/>
+						<p:menuitem value="Usuarios" icon="fa fa-user-plus" outcome="/pages/contents/user.xhtml" rendered="#{loginController.accessRightByProfile}"/>
+						<p:menuitem value="Contratos" icon="fa fa-edit" outcome="/pages/contents/contract.xhtml" rendered="#{loginController.accessRightByProfile}"/>
 						<p:menuitem value="Aulas" icon="fa fa-calendar-o" outcome="/pages/contents/myclass.xhtml"/>
 					</p:submenu>
 					
