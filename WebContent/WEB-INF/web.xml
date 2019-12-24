@@ -58,10 +58,16 @@
         <location>/pages/login.xhtml</location>
 	</error-page>
 
-	<!-- Font Awesom -->	
+	<!-- Font Awesome -->	
 	<context-param>
 	    <param-name>primefaces.FONT_AWESOME</param-name>
 	    <param-value>true</param-value>
+	</context-param>
+	
+	<!-- PrimeFaces Extensions Uncompressed -->
+	<context-param>
+	    <param-name>org.primefaces.extensions.DELIVER_UNCOMPRESSED_RESOURCES</param-name>
+	    <param-value>false</param-value>
 	</context-param>
 	
 </web-app>

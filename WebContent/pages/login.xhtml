@@ -33,12 +33,12 @@
 			<!-- Name field with 12 characters -->				
 			<p:outputLabel id="nameOutputId" for="nameInputId" styleClass="text-output"  value="E-mail:"/>
 			<p:inputText id="nameInputId" styleClass="text-input" value="#{loginController.user.userName}"
-							size="14" maxlength="12" required="true" requiredMessage="O campo 'Usuário' é obrigatório"/>
+							size="14" maxlength="30" required="true" requiredMessage="O campo 'Usuário' é obrigatório"/>
 			
 			<!-- Password field with 12 characters-->
 			<p:outputLabel id="passwordOutputId" for="passwordId" styleClass="text-output" value="Senha:"/>
 			<p:password id="passwordId" styleClass="text-input" value="#{loginController.user.password}"
-						size="14" maxlength="12" required="true" requiredMessage="O campo 'Senha' é obrigatório"/>
+						size="14" maxlength="20" required="true" requiredMessage="O campo 'Senha' é obrigatório"/>
 			
 			<!-- Enter button -->
 			<!-- <p:commandButton id="enterId" value="Enter" action="templates/template.xhtml" /> -->			

@@ -74,7 +74,7 @@ public class PersonDAO extends GenericDAO<PersonDomain> {
 	public List<PersonDomain> findByActiveProfessorAndLanguage(String language){
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		
-		String[] profile = {"PROFESSOR(A)", "CORDINADOR(A)"};
+		String[] profile = {"PROFESSOR(A)", "COORDENADOR(A)"};
 		
 		try{
 			Criteria consult = session.createCriteria(PersonDomain.class);

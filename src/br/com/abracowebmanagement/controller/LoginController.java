@@ -125,7 +125,7 @@ public class LoginController implements Serializable{
 	private void doAccessRight(){
     	if(loggedUser.getUserName() != null
     			&& (loggedUser.getPersonDomain().getProfile().equals("ADMINISTRADOR(A)")
-    			|| loggedUser.getPersonDomain().getProfile().equals("CORDINADOR(A)"))){
+    			|| loggedUser.getPersonDomain().getProfile().equals("COORDENADOR(A)"))){
     		accessRightByProfile = true;
     	}else{
     		accessRightByProfile = false;
