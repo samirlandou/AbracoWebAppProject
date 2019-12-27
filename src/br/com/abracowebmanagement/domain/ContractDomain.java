@@ -29,11 +29,13 @@ public class ContractDomain extends GenericDomain{
 	
 	/*
 	 * Class Code to Define Period Reference
+	 * Composition: Number Semester + Semester + Type + Level + Place + Period (date + hour class)
 	 * Example: 1Sem19_EN1_Ext_PINH_SEG-TER_19H_01h30
-	 * Example: 2Sem19_INT_FR_Int_TUAP_SAB_10H_03h00
-	 * Example: 2Sem19_ES_Prv_EXT_QUA_19H30_01h30
+	 * Example: 2Sem19_INT_FRA1.1_Int_TATU_SAB_10H_03h00
+	 * Example: 2Sem19_ES_PAR_EXT_QUA_19H30_01h30
+	 * 
 	 * */
-	@Column(name = "DE_CODE", length = 40, nullable = false)
+	@Column(name = "DE_CODE", length = 50, nullable = false)
 	private String codeDescription;
 
 
@@ -67,17 +69,18 @@ public class ContractDomain extends GenericDomain{
 	 * Arab:	Arábe 1; Arábe 2; Arábe 3; Arábe 4;
 	 */
 	 
-	@Column(name = "DE_LEVEL", length = 3, nullable = false) 
+	@Column(name = "DE_LEVEL", length = 6, nullable = false) 
 	private String levelDescription;
 	
 	/* 
 	 * Class type
 	 * Example:
-	 * PRV --> Private
+	 * PAR --> Particular
 	 * EXT --> Extensive
 	 * INT --> Intensive
+	 * INC --> InCompany
 	 */
-	@Column(name = "TP_CLASS", length = 3, nullable = false) 
+	@Column(name = "TP_CLASS", length = 4, nullable = false) 
 	private String classType;
 	
 	
@@ -120,42 +123,53 @@ public class ContractDomain extends GenericDomain{
 	 * Pause Time
 	 */
 	@Column(name = "HR_PAUSE_CLASS", nullable = false)
-	@Temporal(TemporalType.TIME)
-	private Date hourPauseClass;
-	
-	
+	private int hourPauseClass;
+		
 	/*
 	 * Total Hour of the Class
 	 * Total Hour
 	 */
 	@Column(name = "HR_TOTAL_CLASS", nullable = false)
-	@Temporal(TemporalType.TIME)
-	private Date hourTotalClass;	
+	private int hourTotalClass;
 	
 	/*
-	 *Class Time Package
-	 * informs the total time package of the class
+	 * Day 1 of the Class
+	 * day number 1
 	 */
-	@Column(name = "DE_PACKAGE", nullable = false)
-	@Temporal(TemporalType.TIME)
-	private Date packageDescription;
-	
+	@Column(name = "DE_FIRST_DAY_CLASS", length = 3, nullable = false)
+	private String dayClass1;
 	
 	/*
-	 *Class time
-	 * informs the total time package of the class
+	 * Day 2 of the Class
+	 * day number 2
 	 */
-	@Column(name = "DE_PRICE", precision = 3, scale = 2, nullable = false)
-	private double priceDescription;
-
+	@Column(name = "DE_SECOND_DAY_CLASS", length = 3)
+	private String dayClass2;
+	
 	
 	/*
 	 * Class level
 	 * Choose Where will be the class
 	 * Example: Class 1, Class 2, Class 3 , ...
 	 */
-	@Column(name = "DE_CLASSROOM", length = 16) 
-	private String classroomDescription;
+	@Column(name = "DE_PLACE", length = 4) 
+	private String placeDescription;
+	
+	
+	/*
+	 *Class Time Package
+	 * informs the total time package of the class
+	 */
+	@Column(name = "DE_PACKAGE", length = 6, nullable = false)
+	private int packageDescription;
+	
+	
+	/*
+	 *Class time
+	 * informs the total time package of the class
+	 */
+	@Column(name = "DE_PRICE", precision = 7, scale = 2, nullable = false)
+	private double priceDescription;
 	
 	
 	/*
@@ -163,7 +177,7 @@ public class ContractDomain extends GenericDomain{
 	 * Comment if there is a specific notification to inform
 	 * about the opening class
 	 * */
-	@Column(name = "DE_COMMENT", length = 200)
+	@Column(name = "DE_COMMENT", length = 100)
 	private String commentDescription;
 	
 	
@@ -176,24 +190,6 @@ public class ContractDomain extends GenericDomain{
 	 */
 	@Column(name = "FG_CLOSED", nullable = false)
 	private Boolean closedFlag;
-	
-	
-	/*
-	 * Presence
-	 * Insert presence Data Table into ClassDomain
-	 */
-	/*@ManyToOne
-	@JoinColumn
-	private PresenceDomain presenceDomain;*/
-
-
-	/*
-	 * Student In My Class
-	 * Insert StudentInClass Data Table into ClassDomain
-	 */
-	/*@ManyToOne
-	@JoinColumn(nullable = false)
-	private StudentInClassDomain studentInClassDomain;*/
 
 	
 	/*
@@ -269,22 +265,6 @@ public class ContractDomain extends GenericDomain{
 		this.endDate = myClassEndDate;
 	}
 
-	public Date getPackageDescription() {
-		return packageDescription;
-	}
-
-	public void setPackageDescription(Date myClassTimePackage) {
-		this.packageDescription = myClassTimePackage;
-	}
-
-	public String getClassroomDescription() {
-		return classroomDescription;
-	}
-
-	public void setClassroomDescription(String myClassRoom) {
-		this.classroomDescription = myClassRoom;
-	}
-
 	public Boolean getClosedFlag() {
 		return closedFlag;
 	}
@@ -292,30 +272,6 @@ public class ContractDomain extends GenericDomain{
 	public void setClosedFlag(Boolean closedFlag) {
 		this.closedFlag = closedFlag;
 	}
-/*
-	public PresenceDomain getPresenceDomain() {
-		return presenceDomain;
-	}
-
-	public void setPresenceDomain(PresenceDomain presenceDomain) {
-		this.presenceDomain = presenceDomain;
-	}
-
-	public StudentInMyClassDomain getStudentInMyClassDomain() {
-		return studentInMyClassDomain;
-	}
-
-	public void setStudentInMyClassDomain(StudentInMyClassDomain studentInMyClassDomain) {
-		this.studentInMyClassDomain = studentInMyClassDomain;
-	}
-
-	public UserDomain getLoginDomain() {
-		return userDomain;
-	}
-
-	public void setLoginDomain(UserDomain userDomain) {
-		this.userDomain = userDomain;
-	}*/
 
 	public UserDomain getUserDomain() {
 		return userDomain;
@@ -365,14 +321,6 @@ public class ContractDomain extends GenericDomain{
 		this.hourEndClass = hourEndClass;
 	}
 
-	public Date getHourPauseClass() {
-		return hourPauseClass;
-	}
-
-	public void setHourPauseClass(Date hourPauseClass) {
-		this.hourPauseClass = hourPauseClass;
-	}
-
 	public String getCommentDescription() {
 		return commentDescription;
 	}
@@ -389,11 +337,51 @@ public class ContractDomain extends GenericDomain{
 		this.substituteUserDomain = substituteUserDomain;
 	}
 
-	public Date getHourTotalClass() {
+	public String getDayClass1() {
+		return dayClass1;
+	}
+
+	public void setDayClass1(String dayClass1) {
+		this.dayClass1 = dayClass1;
+	}
+
+	public String getDayClass2() {
+		return dayClass2;
+	}
+
+	public void setDayClass2(String dayClass2) {
+		this.dayClass2 = dayClass2;
+	}
+
+	public String getPlaceDescription() {
+		return placeDescription;
+	}
+
+	public void setPlaceDescription(String placeDescription) {
+		this.placeDescription = placeDescription;
+	}
+
+	public int getPackageDescription() {
+		return packageDescription;
+	}
+
+	public void setPackageDescription(int packageDescription) {
+		this.packageDescription = packageDescription;
+	}
+
+	public int getHourPauseClass() {
+		return hourPauseClass;
+	}
+
+	public void setHourPauseClass(int hourPauseClass) {
+		this.hourPauseClass = hourPauseClass;
+	}
+
+	public int getHourTotalClass() {
 		return hourTotalClass;
 	}
 
-	public void setHourTotalClass(Date hourTotalClass) {
+	public void setHourTotalClass(int hourTotalClass) {
 		this.hourTotalClass = hourTotalClass;
 	}
 

@@ -13,13 +13,17 @@ import javax.faces.event.ActionEvent;
 
 import org.omnifaces.util.Messages;
 import org.primefaces.event.FlowEvent;
+import org.primefaces.extensions.event.ClipboardErrorEvent;
+import org.primefaces.extensions.event.ClipboardSuccessEvent;
 
 import br.com.abracowebmanagement.dao.ContractDAO;
 import br.com.abracowebmanagement.dao.PersonDAO;
 import br.com.abracowebmanagement.domain.ContractDomain;
 import br.com.abracowebmanagement.domain.PersonDomain;
 import br.com.abracowebmanagement.domain.UserDomain;
+import br.com.abracowebmanagement.util.ContractUtil;
 import br.com.abracowebmanagement.util.DateUtil;
+import br.com.abracowebmanagement.util.NumberFormatUtil;
 
 @ManagedBean
 @ViewScoped
@@ -27,14 +31,18 @@ public class ContractController implements Serializable {
 	
 	private static final long serialVersionUID = 3166453786287189367L;
 	
-	//DateUtils
+	//Classes with Utilities
 	public DateUtil dateUtil = new DateUtil();
+	public ContractUtil contractUtil = new ContractUtil();
+	public NumberFormatUtil numberFormatUtil = new NumberFormatUtil();
 	
 	private ContractDomain contractDomain;
 	private List<ContractDomain> contractsDomain;
 	
 	//Create Map to store levels values
 	private Map<String, String> levels;
+	private Map<String, String>	firstClassDay;
+	private Map<String, String>	secondClassDay;
 	
 	//User and Person
 	private List<UserDomain> usersDomain;
@@ -43,9 +51,20 @@ public class ContractController implements Serializable {
 	
 	//Skip for wizard component
 	private boolean skip;
+	private boolean skipRendered;
+	private boolean	secondClassDayRendered;
 	
 	//to calculate total time
-	private Date total;
+	private String total;
+	private String contractStatus;
+	private String semester;
+	private String contractCode;
+	private String dayClass;
+	private String dayClassFullDescription;
+	private String classLanguage;
+	private String classPlace;
+	
+	private String decimalPriceDescription;
 	
 
 	
@@ -62,6 +81,9 @@ public class ContractController implements Serializable {
 			ContractDAO contractDAO = new ContractDAO();
 			contractsDomain= contractDAO.list();
 			
+			//List first class day
+			firstClassDay = contractUtil.getClassDayComboList();
+						
 		} catch (Exception e) {
 			Messages.addGlobalError("Ocorreu um erro ao listar as informações das pessoas !!!");
 			e.printStackTrace();			
@@ -77,64 +99,23 @@ public class ContractController implements Serializable {
 	 */
 	public void doNewRegister(){		
 		//Instantiate new Contract
-		contractDomain = new ContractDomain();	
-		/*if(contractDomain.getLanguageDescription() != null){
-			doUpdateLevel();
-		}	*/
+		contractDomain = new ContractDomain();
+		
+		//set skipRendered
+		skipRendered = false;
+		
+		//set secondClassDayRendered
+		//secondClassDayRendered = false;
 	}
 
-	/*
-	 * Class level
-	 * Example:
-	 * 
-	 * Spanish:	Espanhol 1 (A1); Espanhol 1 (A2); Espanhol 3 (B1.1);
-	 * 			Espanhol 4 (B1.2); Espanhol 5 (B1.3); Conversação (B1/B2);
-	 * 
-	 * French:	Francês 1 (A1.1); Francês 2 (A1.2); Francês 3 (A2.1);
-	 *  		Francês 4 (A2.2); Francês 5 (B1.1); Francês 6 (B1.2);
-	 *  		Francês 7 (B1.3); Conversação (B1/B2);
-	 *  
-	 * English:	Inglês 1 (A1.1); Inglês 2 (A1.2); Inglês 3 (A2.1);
-	 * 			Inglês 4 (A2.2); Inglês 5 (B1.1); Inglês 6 (B1.2);
-	 * 			Conversação (B1/B2);
-	 * 
-	 * Arab:	Arábe 1; Arábe 2; Arábe 3; Arábe 4;
-	 */	
 	public void doUpdateLevel(){
 		
-		//Store Levels
+		//Instantiate Levels
 		levels = new TreeMap<String, String>();
+		
 		if(contractDomain != null){
-			if(contractDomain.getLanguageDescription().equals("AR")){
-				levels.put("Arábe 1", "AR1");
-				levels.put("Arábe 2", "AR2");
-				levels.put("Arábe 3", "AR3");
-				levels.put("Arábe 4", "AR4");
-			} else if(contractDomain.getLanguageDescription().equals("ES")){
-				levels.put("Espanhol 1 (A1)", "ES1");
-				levels.put("Espanhol 2 (A2)", "ES2");
-				levels.put("Espanhol 3 (B1.1)", "ES3");
-				levels.put("Espanhol 4 (B1.2)", "ES4");
-				levels.put("Espanhol 5 (B1.3)", "ES5");
-				levels.put("Espanhol Conv.(B1/B2)", "ESconv");	
-			} else if(contractDomain.getLanguageDescription().equals("EN")){
-				levels.put("Inglês 1 (A1.1)", "EN1");
-				levels.put("Inglês 2 (A1.2)", "EN2");
-				levels.put("Inglês 3 (A2.1)", "EN3");
-				levels.put("Inglês 4 (A2.2)", "EN4");
-				levels.put("Inglês 5 (B1.1)", "EN5");
-				levels.put("Inglês 6 (A1.2)", "EN6");
-				levels.put("Inglês Conv.(B1/B2)", "ENconv");
-			} else if(contractDomain.getLanguageDescription().equals("FR")){
-				levels.put("Francês 1 (A1.1)", "FR1");
-				levels.put("Francês 2 (A1.2)", "FR2");
-				levels.put("Francês 3 (A2.1)", "FR3");
-				levels.put("Francês 4 (A2.2)", "FR4");
-				levels.put("Francês 5 (B1.1)", "FR5");
-				levels.put("Francês 6 (B1.2)", "FR6");
-				levels.put("Francês 7 (B1.3)", "FR7");
-				levels.put("Francês Conv.(B1/B2)", "FRconv");
-			}
+			
+			levels = contractUtil.getLevelComboList(contractDomain.getLanguageDescription());
 			
 			//List Students
 			PersonDAO personDAO = new PersonDAO();
@@ -143,30 +124,91 @@ public class ContractController implements Serializable {
 		}
 	}
 	
+	public void doUpdateSecondClassDay(){
+		
+		//Instantiate second class day
+		secondClassDay = new TreeMap<String, String>();
+		
+		//List secondClassDay
+		if(contractDomain.getDayClass1() != null){
+			if(contractDomain.getDayClass1().equals("SEX")
+					|| contractDomain.getDayClass1().equals("SAB")){
+				secondClassDayRendered = false;
+			} else{
+				secondClassDay.putAll(firstClassDay);
+				secondClassDay.remove(contractDomain.getDayClass1());
+				secondClassDay.remove("SEX");
+				secondClassDay.remove("SAB");
+				secondClassDayRendered = true;
+			}
+		}else{
+			secondClassDayRendered = false;
+		}
+	}
+	
 	
 	public void doCalculateClassHour(){
 		Date begin = contractDomain.getHourBeginClass();
 		Date end = contractDomain.getHourEndClass();
-		Date pause = contractDomain.getHourPauseClass();
-		long diff =0, diffMinutes = 0;
-		
+		int pause = contractDomain.getHourPauseClass();
 		
 		if(begin != null && end != null && begin.before(end)){
+			contractDomain.setHourTotalClass(DateUtil.returnDiffInMinutes(begin, end, pause));
+			total = DateUtil.returnDiffBetweenDates2(begin, end, pause);
+		} else{
+			Messages.addGlobalError("Ocorreu um erro. Favor verificar as datas");
+		}	
+	}
+	
+	public void doCreateContractCode(){
+		String year = DateUtil.formatDate(new Date(), "yyyy");
+		String reference = "01/06/" + year;
+		Date semesterReference;
+		try {
+			semesterReference = DateUtil.parse(reference, "dd/mm/yyyy");
 			
-			if(pause != null){
-				if(pause.before(end)){
-					diff = end.getTime() - begin.getTime() - pause.getTime();
-					diffMinutes = diff / (60 * 1000);									
-				} else{
-					Messages.addGlobalError("Ocorreu um erro: o horário total é negativo");
-				}
+			if(contractDomain.getBeginDate().before(semesterReference)){
+				semester = "1°SEM"+ year.substring(2, 4);
 			} else{
-				diff = end.getTime() - begin.getTime();
-				diffMinutes = diff / (60 * 1000);
+				semester = "2°SEM"+ year.substring(2, 4);
 			}
-			total = dateUtil.getFormatedDate(Long.toString(diffMinutes), "mm", "HH:mm");
+			
+			if(contractDomain.getDayClass2().isEmpty()){
+				dayClass = contractDomain.getDayClass1();
+				dayClassFullDescription = contractUtil.getClassDayFullDescription(contractDomain.getDayClass1());
+			} else{
+				dayClass = contractDomain.getDayClass1()
+						+ "_"
+						+ contractDomain.getDayClass2();
+				
+				dayClassFullDescription = contractUtil.getClassDayFullDescription(contractDomain.getDayClass1())
+						+ " e "
+						+ contractUtil.getClassDayFullDescription(contractDomain.getDayClass2());
+			}
+			
+			
+			//Code Description Example: 1°SEM19_EN1_EXT_PINH_SEG_TER_19H00_20H30			
+			String classHour = DateUtil.formatDate(contractDomain.getHourBeginClass(), "HH:mm")
+								+ "_"
+								+ DateUtil.formatDate(contractDomain.getHourEndClass(), "HH:mm");
+			
+			contractCode = semester
+							+ "_"
+							+ contractDomain.getLevelDescription()
+							+ "_"
+							+ contractDomain.getClassType()
+							+ "_"
+							+ contractDomain.getPlaceDescription()
+							+ "_"
+							+ dayClass
+							+ "_"
+							+ classHour.replace(":", "H");
+			
+			contractDomain.setCodeDescription(contractCode);
+							
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		
 	}
 
 	/**
@@ -174,14 +216,7 @@ public class ContractController implements Serializable {
 	 * @author samirlandou <br/>
 	 * @since 19/12/2019
 	 */
-	public void doSave(){
-		/* 
-		//This code is used with PrimeFaces
-		String messageText = "Programação Web com java";
-		
-		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, messageText, messageText);
-		FacesContext context = FacesContext.getCurrentInstance();
-		context.addMessage(null, message);*/		
+	public void doSave(){		
 		
 		try {
 			//Save Contract with merge method
@@ -248,10 +283,13 @@ public class ContractController implements Serializable {
 	 * @since 19/12/2019
 	 */
 	public void doEdit(ActionEvent event){
+		
+		//Set skip rendered
+		skipRendered = true;
+		
 		try {			
 			//Capture the event from the cursor in contract.xhtml
-			contractDomain = (ContractDomain) event.getComponent().getAttributes()
-					.get("selectedContractByCursor");
+			contractDomain = (ContractDomain) event.getComponent().getAttributes().get("selectedContractByCursor");
 		} catch (Exception e) {
 			Messages.addGlobalError("Ocorreu um erro ao editar as informações de: " + contractDomain.getCodeDescription());
 			e.printStackTrace();			
@@ -267,13 +305,44 @@ public class ContractController implements Serializable {
 	 */
     public String doFlowProcess(FlowEvent event) {
         if(skip) {
-            skip = false;   //reset in case user goes back
+            skip = false; //reset in case user goes back
             return "confirm";
         } else {
+        	
+        	/*if(event.getNewStep().equals("placeTabID")){
+        		doCalculateClassHour();
+        	}*/
+        	
+        	if(event.getNewStep().equals("resumeTabID")){
+        		doCreateContractCode();
+        		doCalculateClassHour();
+        		addContractMessage();
+        		classPlace = contractUtil.getPlaceFullDescription(contractDomain.getPlaceDescription());
+        		classLanguage = contractUtil.getLanguageFullDescription(contractDomain.getLanguageDescription());
+        		decimalPriceDescription = numberFormatUtil.currencyFormat(contractDomain.getPriceDescription());
+        	}
+        	
             return event.getNewStep();
         }
     }
-
+    
+    
+	public void addContractMessage() {
+		//Add Message for toggleSwitch Component from person.xhtml
+		contractStatus = contractDomain.getClosedFlag() ? "Contrato Ativo!" : "Contrato não Ativo!";
+		Messages.addGlobalInfo(contractStatus);
+	}
+	
+	
+	public void successListener(final ClipboardSuccessEvent successEvent){
+		Messages.addGlobalInfo("O código foi copiado com sucesso!");
+	}
+	
+	
+	public void errorListener(final ClipboardErrorEvent errorEvent){
+		Messages.addGlobalError("Erro ao copiar o código do contrato!");
+	}
+	
 	
 	/*
 	 * Getters and Setters
@@ -349,13 +418,133 @@ public class ContractController implements Serializable {
 	}
 
 
-	public Date getTotal() {
+	public String getTotal() {
 		return total;
 	}
 
 
-	public void setTotal(Date total) {
+	public void setTotal(String total) {
 		this.total = total;
+	}
+
+
+	public boolean isSkipRendered() {
+		return skipRendered;
+	}
+
+
+	public void setSkipRendered(boolean skipRendered) {
+		this.skipRendered = skipRendered;
+	}
+
+
+	public Map<String, String> getSecondClassDay() {
+		return secondClassDay;
+	}
+
+
+	public void setSecondClassDay(Map<String, String> secondClassDay) {
+		this.secondClassDay = secondClassDay;
+	}
+
+
+	public Map<String, String> getFirstClassDay() {
+		return firstClassDay;
+	}
+
+
+	public void setFirstClassDay(Map<String, String> firstClassDay) {
+		this.firstClassDay = firstClassDay;
+	}
+
+
+	public boolean isSecondClassDayRendered() {
+		return secondClassDayRendered;
+	}
+
+
+	public void setSecondClassDayRendered(boolean secondClassDayRendered) {
+		this.secondClassDayRendered = secondClassDayRendered;
+	}
+
+
+	public String getContractStatus() {
+		return contractStatus;
+	}
+
+
+	public void setContractStatus(String summary) {
+		this.contractStatus = summary;
+	}
+
+
+	public String getSemester() {
+		return semester;
+	}
+
+
+	public void setSemester(String semester) {
+		this.semester = semester;
+	}
+
+
+	public String getContractCode() {
+		return contractCode;
+	}
+
+
+	public void setContractCode(String contractCode) {
+		this.contractCode = contractCode;
+	}
+
+
+	public String getDayClass() {
+		return dayClass;
+	}
+
+
+	public void setDayClass(String dayClass) {
+		this.dayClass = dayClass;
+	}
+
+
+	public String getClassLanguage() {
+		return classLanguage;
+	}
+
+
+	public void setClassLanguage(String language) {
+		this.classLanguage = language;
+	}
+
+
+	public String getClassPlace() {
+		return classPlace;
+	}
+
+
+	public void setClassPlace(String classPlace) {
+		this.classPlace = classPlace;
+	}
+
+
+	public String getDayClassFullDescription() {
+		return dayClassFullDescription;
+	}
+
+
+	public void setDayClassFullDescription(String dayClassFullDescription) {
+		this.dayClassFullDescription = dayClassFullDescription;
+	}
+
+
+	public String getDecimalPriceDescription() {
+		return decimalPriceDescription;
+	}
+
+
+	public void setDecimalPriceDescription(String decimalPriceDescription) {
+		this.decimalPriceDescription = decimalPriceDescription;
 	}	
 	
 }
