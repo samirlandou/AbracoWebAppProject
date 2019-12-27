@@ -1,5 +1,6 @@
 package br.com.abracowebmanagement.util;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -82,6 +83,70 @@ public class DateUtil {
 			e.printStackTrace();
 		}
 		return outputDate;		
+	}
+	
+/**
+ * Calculate difference between two hours (date1 & date2) and minutes (date3).	
+ * @param data1
+ * @param data2
+ * @param date3
+ * @return
+ */
+	public static String returnDiffBetweenDates(Date data1, Date data2, int date3){
+		long difMilli = data2.getTime() - data1.getTime();
+		
+		int timeInSeconds = (int)((difMilli / 1000) - (date3 * 60)) ;  
+		int hours, minutes, seconds;
+		hours = timeInSeconds / 3600;  
+		timeInSeconds = timeInSeconds - (hours * 3600);  
+		minutes = timeInSeconds / 60;  
+		timeInSeconds = timeInSeconds - (minutes * 60);  
+		seconds = timeInSeconds;  
+		return fillZero(hours) + ":" + fillZero(minutes) + ":" + fillZero(seconds);
+		
+	}
+	
+	public static String returnDiffBetweenDates2(Date data1, Date data2, int date3){
+		long difMilli = data2.getTime() - data1.getTime();
+		
+		int timeInSeconds = (int)((difMilli / 1000) - (date3 * 60)) ;  
+		int hours, minutes;
+		hours = timeInSeconds / 3600;  
+		timeInSeconds = timeInSeconds - (hours * 3600);  
+		minutes = timeInSeconds / 60;  
+		timeInSeconds = timeInSeconds - (minutes * 60);
+		return fillZero(hours) + ":" + fillZero(minutes);
+		
+	}
+	
+	public static int returnDiffInMinutes(Date data1, Date data2, int date3){
+		long diffMilli = data2.getTime() - data1.getTime();
+		int diffMin = (int)(((diffMilli / 1000) - (date3 * 60))/60);
+		return diffMin;
+	}
+	
+	private static String fillZero(int number ){
+		if(number >=0 && number <10){
+			return "0"+number;
+		}
+		return String.valueOf(number);
+	}
+	
+	public static synchronized String formatDate(Date data, String commonsPattern) {
+		if (data == null || commonsPattern == null || "".equals(commonsPattern)) {
+			return "";
+		}
+		DateFormat formatter = new SimpleDateFormat(commonsPattern);
+		formatter.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));
+		return formatter.format(data);
+	}
+	
+	public static synchronized Date parse(String value, String commonsPattern) throws Exception {
+		SimpleDateFormat sdf = new SimpleDateFormat();
+		sdf.setTimeZone(TimeZone.getTimeZone("America/Sao_Paulo"));
+		sdf.applyPattern(commonsPattern);
+		return sdf.parse(value);
+		
 	}
 	
 }
