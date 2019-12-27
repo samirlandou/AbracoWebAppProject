@@ -23,6 +23,7 @@ import br.com.abracowebmanagement.domain.PersonDomain;
 import br.com.abracowebmanagement.domain.UserDomain;
 import br.com.abracowebmanagement.util.ContractUtil;
 import br.com.abracowebmanagement.util.DateUtil;
+import br.com.abracowebmanagement.util.NumberFormatUtil;
 
 @ManagedBean
 @ViewScoped
@@ -30,9 +31,10 @@ public class ContractController implements Serializable {
 	
 	private static final long serialVersionUID = 3166453786287189367L;
 	
-	//DateUtil and ContractUtil
+	//Classes with Utilities
 	public DateUtil dateUtil = new DateUtil();
 	public ContractUtil contractUtil = new ContractUtil();
+	public NumberFormatUtil numberFormatUtil = new NumberFormatUtil();
 	
 	private ContractDomain contractDomain;
 	private List<ContractDomain> contractsDomain;
@@ -61,6 +63,8 @@ public class ContractController implements Serializable {
 	private String dayClassFullDescription;
 	private String classLanguage;
 	private String classPlace;
+	
+	private String decimalPriceDescription;
 	
 
 	
@@ -133,6 +137,8 @@ public class ContractController implements Serializable {
 			} else{
 				secondClassDay.putAll(firstClassDay);
 				secondClassDay.remove(contractDomain.getDayClass1());
+				secondClassDay.remove("SEX");
+				secondClassDay.remove("SAB");
 				secondClassDayRendered = true;
 			}
 		}else{
@@ -176,7 +182,7 @@ public class ContractController implements Serializable {
 						+ contractDomain.getDayClass2();
 				
 				dayClassFullDescription = contractUtil.getClassDayFullDescription(contractDomain.getDayClass1())
-						+ "_"
+						+ " e "
 						+ contractUtil.getClassDayFullDescription(contractDomain.getDayClass2());
 			}
 			
@@ -312,7 +318,8 @@ public class ContractController implements Serializable {
         		doCalculateClassHour();
         		addContractMessage();
         		classPlace = contractUtil.getPlaceFullDescription(contractDomain.getPlaceDescription());
-        		classLanguage = contractUtil.getLanguageFullDescription(contractDomain.getLanguageDescription());       		
+        		classLanguage = contractUtil.getLanguageFullDescription(contractDomain.getLanguageDescription());
+        		decimalPriceDescription = numberFormatUtil.currencyFormat(contractDomain.getPriceDescription());
         	}
         	
             return event.getNewStep();
@@ -528,6 +535,16 @@ public class ContractController implements Serializable {
 
 	public void setDayClassFullDescription(String dayClassFullDescription) {
 		this.dayClassFullDescription = dayClassFullDescription;
+	}
+
+
+	public String getDecimalPriceDescription() {
+		return decimalPriceDescription;
+	}
+
+
+	public void setDecimalPriceDescription(String decimalPriceDescription) {
+		this.decimalPriceDescription = decimalPriceDescription;
 	}	
 	
 }

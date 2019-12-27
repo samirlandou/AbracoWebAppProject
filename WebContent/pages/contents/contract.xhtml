@@ -167,53 +167,7 @@
 									 required="true" requiredMessage="O campo 'Periodo-Data Término:' é obrigatório">
 									<f:convertDateTime locale="pt_BR" pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo"/>
 								</p:calendar>
-								
-								<p:outputLabel for="beginHourClassID" value="Aula-Hora Início: "/>
-								<p:calendar id="beginHourClassID" value="#{contractController.contractDomain.hourBeginClass}"
-									locale="pt_BR" pattern="HH:mm" timeZone="America/Sao_Paulo" mask="99:99"
-									timeOnly="true"
-									required="true" requiredMessage="O campo 'Aula-Hora Início' é obrigatório">
-									<f:convertDateTime locale="pt_BR" pattern="HH:mm" timeZone="America/Sao_Paulo"/>
-								</p:calendar>								
-								
-								<p:outputLabel for="endHourClassID" value="Aula-Hora Término: "/>
-								<p:calendar id="endHourClassID" value="#{contractController.contractDomain.hourEndClass}"
-									locale="pt_BR" pattern="HH:mm" timeZone="America/Sao_Paulo" mask="99:99"
-									timeOnly="true"
-									required="true" requiredMessage="O campo 'Aula-Hora Término' é obrigatório">
-									<f:convertDateTime locale="pt_BR" pattern="HH:mm" timeZone="America/Sao_Paulo"/>
-								</p:calendar>
-								
-								<p:outputLabel for="pauseHourClassID" value="Aula-Minutos Pausa: "/>
-								<p:outputLabel id="pauseHourOutputLabel" value="Aula-Minutos Pausa: "/>
-								<h:inputHidden id="pauseHourClassID" value="#{contractController.contractDomain.hourPauseClass}"/>
-        						<p:slider for="pauseHourClassID" step="5" minValue="0" maxValue="30" style="width: 150px"
-        							display="pauseHourOutputLabel" displayTemplate="{value}min"/>
-        						
-        													
-								<p:outputLabel value="1° Dia Letivo: " for="firstDayClassComboID"/>
-								<p:selectOneMenu id="firstDayClassComboID" filter="false" value="#{contractController.contractDomain.dayClass1}"
-									converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="O campo '1° Dia Letivo' é obrigatório">
-									<f:selectItem noSelectionOption="true" itemLabel="Escolhe o 1° dia letivo"/>
-									<f:selectItems value="#{contractController.firstClassDay}"
-										var="firstDay"
-										itemValue="#{firstDay}"
-										itemLabel="#{firstDay}"/>
-									<p:ajax event="change"
-										process="@this" global="false"
-										listener="#{contractController.doUpdateSecondClassDay}"
-										update="contractRegisterFormID:secondDayClassComboID"/>									
-								</p:selectOneMenu>
-								
-								<p:outputLabel value="2° Dia Letivo: "/>
-								<p:selectOneMenu id="secondDayClassComboID" filter="false" value="#{contractController.contractDomain.dayClass2}"
-									converter="omnifaces.SelectItemsConverter">
-									<f:selectItem itemValue="" itemLabel="Escolhe o 2° dia letivo"/>
-									<f:selectItems value="#{contractController.secondClassDay}"
-										var="secondDay"
-										itemValue="#{secondDay}"
-										itemLabel="#{secondDay}"/>									
-								</p:selectOneMenu>																	
+														
 							</h:panelGrid>
 						</p:panel>			
 						</p:tab>
@@ -230,6 +184,89 @@
 										<f:selectItem itemLabel="TATUAPÉ" itemValue="TATU"/>
 									</p:selectOneMenu>
 								</h:panelGrid>								
+							</p:panel>
+						</p:tab>
+
+						<p:tab id="otherTabID" title="Aula">
+							<p:panel header="Informar outro típo de informação.">
+								<p:messages/>
+								<h:panelGrid id="classRegisterFormID" columns="2">
+					
+									<p:outputLabel for="beginHourClassID" value="Aula-Hora Início: "/>
+									<p:calendar id="beginHourClassID" value="#{contractController.contractDomain.hourBeginClass}"
+										locale="pt_BR" pattern="HH:mm" timeZone="America/Sao_Paulo" mask="99:99"
+										timeOnly="true"
+										required="true" requiredMessage="O campo 'Aula-Hora Início' é obrigatório">
+										<f:convertDateTime locale="pt_BR" pattern="HH:mm" timeZone="America/Sao_Paulo"/>
+									</p:calendar>
+											
+									<p:outputLabel for="endHourClassID" value="Aula-Hora Término: "/>
+									<p:calendar id="endHourClassID" value="#{contractController.contractDomain.hourEndClass}"
+										locale="pt_BR" pattern="HH:mm" timeZone="America/Sao_Paulo" mask="99:99"
+										timeOnly="true"
+										required="true" requiredMessage="O campo 'Aula-Hora Término' é obrigatório">
+										<f:convertDateTime locale="pt_BR" pattern="HH:mm" timeZone="America/Sao_Paulo"/>
+									</p:calendar>
+									
+									<p:outputLabel for="pauseHourClassID" value="Aula-Minutos Pausa: "/>
+									<p:outputLabel id="pauseHourOutputLabel" value="Aula-Minutos Pausa: "/>
+									<h:inputHidden id="pauseHourClassID" value="#{contractController.contractDomain.hourPauseClass}"/>
+	        						<p:slider for="pauseHourClassID" step="5" minValue="0" maxValue="30" style="width: 150px"
+	        							display="pauseHourOutputLabel" displayTemplate="{value}min"/>
+	        						
+	        													
+									<p:outputLabel value="1° Dia Letivo: " for="firstDayClassComboID"/>
+									<p:selectOneMenu id="firstDayClassComboID" filter="false" value="#{contractController.contractDomain.dayClass1}"
+										converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="O campo '1° Dia Letivo' é obrigatório">
+										<f:selectItem noSelectionOption="true" itemLabel="Escolhe o 1° dia letivo"/>
+										<f:selectItems value="#{contractController.firstClassDay}"
+											var="firstDay"
+											itemValue="#{firstDay}"
+											itemLabel="#{firstDay}"/>
+										<p:ajax event="change"
+											process="@this" global="false"
+											listener="#{contractController.doUpdateSecondClassDay}"
+											update="contractRegisterFormID:secondDayClassComboID"/>									
+									</p:selectOneMenu>
+									
+									<p:outputLabel value="2° Dia Letivo: "/>
+									<p:selectOneMenu id="secondDayClassComboID" filter="false" value="#{contractController.contractDomain.dayClass2}"
+										converter="omnifaces.SelectItemsConverter">
+										<f:selectItem itemValue="" itemLabel="Escolhe o 2° dia letivo"/>
+										<f:selectItems value="#{contractController.secondClassDay}"
+											var="secondDay"
+											itemValue="#{secondDay}"
+											itemLabel="#{secondDay}"/>									
+									</p:selectOneMenu>								
+									<p:outputLabel value="Típo de Aula: " for="typeComboID"/>
+									<p:selectOneMenu id="typeComboID" filter="false" value="#{contractController.contractDomain.classType}"
+										converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="O campo 'Típo de Aula' é obrigatório">
+										<f:selectItem noSelectionOption="true" itemLabel="Escolhe um típo"/>
+										<f:selectItem itemLabel="EXTENSIVO" itemValue="EXT"/>
+										<f:selectItem itemLabel="INTENSIVO" itemValue="INT"/>
+										<f:selectItem itemLabel="PARTICULAR" itemValue="PAR"/>
+										<f:selectItem itemLabel="INCOMPANY" itemValue="INC"/>																	
+									</p:selectOneMenu>
+									
+									<p:outputLabel value="Pacote de horas: " for="packageComboID"/>
+									<p:inputText id="packageComboID" value="#{contractController.contractDomain.packageDescription}"
+										required="true" requiredMessage="O campo 'Pacote' é obrigatório"/>
+									
+									<p:outputLabel value="Preço por hora: " for="pricePerHourID"/>
+									<p:inputNumber id="pricePerHourID" value="#{contractController.contractDomain.priceDescription}"
+										symbol="R$ "  maxlength="6" decimalSeparator="," thousandSeparator="." minValue="0"
+										required="true" requiredMessage="O campo 'Preço por Hora' é obrigatório"/>
+									
+									<p:outputLabel value="Comentário: " />
+									<p:inputTextarea value="#{contractController.contractDomain.commentDescription}" rows="2" cols="30" counter="display"
+										maxlength="100" counterTemplate="{0} caracteres restantes."
+										autoResize="true"/>
+									<br/>
+									<h:outputText id="display"/>
+									<br/>
+									<p:spacer height="20px"/>																	
+										
+								</h:panelGrid>							
 							</p:panel>
 						</p:tab>
 						
@@ -249,43 +286,7 @@
 								</h:panelGrid>
 							</p:panel>
 						</p:tab>
-
-						<p:tab id="otherTabID" title="Aula">
-							<p:panel header="Informar outro típo de informação.">
-								<p:messages/>
-								<h:panelGrid id="otherRegisterFormID" columns="2">		
-									<p:outputLabel value="Típo de Aula: " for="typeComboID"/>
-									<p:selectOneMenu id="typeComboID" filter="false" value="#{contractController.contractDomain.classType}"
-										converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="O campo 'Típo de Aula' é obrigatório">
-										<f:selectItem noSelectionOption="true" itemLabel="Escolhe um típo"/>
-										<f:selectItem itemLabel="EXTENSIVO" itemValue="EXT"/>
-										<f:selectItem itemLabel="INTENSIVO" itemValue="INT"/>
-										<f:selectItem itemLabel="PARTICULAR" itemValue="PAR"/>
-										<f:selectItem itemLabel="INCOMPANY" itemValue="INC"/>																	
-									</p:selectOneMenu>
-									
-									<p:outputLabel value="Pacote de horas: " for="packageComboID"/>
-									<p:inputText id="packageComboID" value="#{contractController.contractDomain.packageDescription}"
-										required="true" requiredMessage="O campo 'Pacote' é obrigatório"/>
-									
-									<p:outputLabel value="Preço por hora: " for="pricePerHourID"/>
-									<p:inputNumber id="pricePerHourID" value="#{contractController.contractDomain.priceDescription}"
-										symbol="R$ "  maxlength="6" decimalSeparator="," thousandSeparator="."
-										required="true" requiredMessage="O campo 'Preço por Hora' é obrigatório"/>
-									
-									<p:outputLabel value="Comentário: " />
-									<p:inputTextarea value="#{contractController.contractDomain.commentDescription}" rows="2" cols="30" counter="display"
-										maxlength="100" counterTemplate="{0} caracteres restantes."
-										autoResize="true"/>
-									<br/>
-									<h:outputText id="display"/>
-									<br/>
-									<p:spacer height="20px"/>																	
-										
-								</h:panelGrid>							
-							</p:panel>
-						</p:tab>
-						
+												
 						<p:tab id="statusTabID" title="Estado">
 							<p:panel header="Informar o estado do contrato.">
 								<p:messages/>
@@ -328,7 +329,7 @@
 									<p:outputLabel value="#{contractController.contractDomain.levelDescription}"/>
 									
 									
-									<h3 style="position: left;">Periodo do Contrato</h3>
+									<h3 style="position: left;">Período do Contrato</h3>
 									<p:separator/>
 									
 									<p:outputLabel value="Data Início: "/>
@@ -342,6 +343,17 @@
 										<f:convertDateTime locale="pt_BR" pattern="dd/MM/yyyy"
 											timeZone="America/Sao_Paulo" />
 									</p:outputLabel>
+
+
+									<h3 style="position: left;">Lugar</h3>
+									<p:separator/>
+									
+									<p:outputLabel value="Lugar: "/>
+									<p:outputLabel value="#{contractController.classPlace}"/>
+
+
+									<h3 style="position: left;">Aula</h3>
+									<p:separator/>
 																		
 									<p:outputLabel value="Hora Início:  "/>
 									<p:outputLabel value="#{contractController.contractDomain.hourBeginClass}">
@@ -358,38 +370,28 @@
 									<p:outputLabel value="Pausa: "/>
 									<p:outputLabel value="#{contractController.contractDomain.hourPauseClass}min"/>
 
-									<p:outputLabel value="Hora Total : " />
+									<p:outputLabel value="Hora total de Aula: " />
 									<p:outputLabel style="color:red;" value="#{contractController.total}"/>
 									
 									<p:outputLabel value="Dia(s) letivo(s): "/>
 									<p:outputLabel value="#{contractController.dayClassFullDescription}"/>
-
-
-									<h3 style="position: left;">Lugar</h3>
-									<p:separator/>
 									
-									<p:outputLabel value="Lugar: "/>
-									<p:outputLabel value="#{contractController.classPlace}"/>
 									
+									<p:outputLabel value="Pacote de Horas: "/>
+									<p:outputLabel value="#{contractController.contractDomain.packageDescription}h"/>
+									
+									<p:outputLabel value="Preço por Hora: "/>
+									<p:outputLabel value="#{contractController.decimalPriceDescription}"/>
+									
+									<p:outputLabel value="Comentário: " />
+									<p:outputLabel value="#{contractController.contractDomain.commentDescription}"/>
+																		
 														
 									<h3 style="position: left;">Professor(a) Contratado(a)</h3>
 									<p:separator/>
 															
 									<p:outputLabel value="Professor(a): " />
-									<p:outputLabel value="#{contractController.contractDomain.personDomain.completeName}"/>
-
-
-									<h3 style="position: left;">Aula</h3>
-									<p:separator/>
-									
-									<p:outputLabel value="Pacote de Horas: "/>
-									<p:outputLabel value="#{contractController.contractDomain.packageDescription} h"/>
-									
-									<p:outputLabel value="Preço por Hora: "/>
-									<p:outputLabel value="R$ #{contractController.contractDomain.priceDescription}"/>
-									
-									<p:outputLabel value="Comentário: " />
-									<p:outputLabel value="#{contractController.contractDomain.commentDescription}"/>							
+									<p:outputLabel value="#{contractController.contractDomain.personDomain.completeName}"/>															
 																				
 								</h:panelGrid>
 								</p:scrollPanel>
