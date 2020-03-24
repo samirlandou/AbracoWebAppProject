@@ -115,6 +115,8 @@ public class ContractUtil {
 			placeValue = "PINHEIROS";
 		} else if(description.equals("TATU")){
 			placeValue = "TATUAPÉ";
+		} else if(description.equals("EXTR")){
+			placeValue = "EXTERIOR";
 		}
 		return placeValue;
 	}

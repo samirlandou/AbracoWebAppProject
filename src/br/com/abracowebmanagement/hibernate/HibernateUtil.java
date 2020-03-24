@@ -1,13 +1,38 @@
 package br.com.abracowebmanagement.hibernate;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.jdbc.ReturningWork;
 import org.hibernate.service.ServiceRegistry;
 
 public class HibernateUtil {
 
     private static final SessionFactory sessionFactory = buildSessionFactory();
+    
+    
+    //Transform a session to a connection
+    public static Connection getOpenConnection(){
+    	
+    	Session session = sessionFactory.openSession();
+    	
+    	Connection connection = session.doReturningWork(new ReturningWork<Connection>() {
+    		
+    		@Override
+    		public Connection execute(Connection conn) throws SQLException {
+    			// TODO Auto-generated method stub
+    			return conn;
+    		}
+		});
+    	
+    	return connection;
+    	
+    }
+    
 
     private static SessionFactory buildSessionFactory() {
         try {

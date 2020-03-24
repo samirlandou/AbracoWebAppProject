@@ -10,31 +10,31 @@ import javax.faces.event.ActionEvent;
 
 import org.omnifaces.util.Messages;
 
-import br.com.abracowebmanagement.dao.PersonDAO;
-import br.com.abracowebmanagement.domain.PersonDomain;
+import br.com.abracowebmanagement.dao.ContractModelDAO;
+import br.com.abracowebmanagement.domain.ContractModelDomain;
 
 @ManagedBean
 @ViewScoped
-public class PersonController implements Serializable {
+public class TestController implements Serializable {
 	
-	private static final long serialVersionUID = 4006387744926175284L;
+	private static final long serialVersionUID = -1051465978591927531L;
 	
-	private PersonDomain personDomain;
-	private List<PersonDomain> personsDomain;
+	private ContractModelDomain contractModelDomain;
+	private List<ContractModelDomain> contractModelsDomain;
 	
 
 	
 	/**
 	 * List Method. <br/>
 	 * @author samirlandou <br/>
-	 * @since 11/09/2019
+	 * @since 04/02/2020
 	 */
 	@PostConstruct
 	public void doList(){
 		try {
 			//List Person
-			PersonDAO personDAO = new PersonDAO();
-			personsDomain = personDAO.list();
+			ContractModelDAO contractModelDAO = new ContractModelDAO();
+			contractModelsDomain= contractModelDAO.list();
 		} catch (Exception e) {
 			Messages.addGlobalError("Ocorreu um erro ao listar as informações das pessoas !!!");
 			e.printStackTrace();			
@@ -46,18 +46,18 @@ public class PersonController implements Serializable {
 	 * Method for New Registration. <br/>
 	 * Set here new instance of Domain. <br/>
 	 * @author samirlandou <br/>
-	 * @since 11/09/2019
+	 * @since 04/02/2020
 	 */
 	public void doNewRegister(){		
 		//Instantiate new Person
-		personDomain = new PersonDomain();	
+		contractModelDomain = new ContractModelDomain();	
 	}
 	
 
 	/**
 	 * Save Method. <br/>
 	 * @author samirlandou <br/>
-	 * @since 11/09/2019
+	 * @since 04/02/2020
 	 */
 	public void doSave(){
 		/* 
@@ -70,14 +70,14 @@ public class PersonController implements Serializable {
 		
 		try {
 			//Save Person with merge method
-			PersonDAO personDAO = new PersonDAO();
-			personDAO.merge(personDomain);
+			ContractModelDAO contractModelDAO = new ContractModelDAO();
+			contractModelDAO.merge(contractModelDomain);
 			
 			//Clean informations in the panelGrid
 			doNewRegister();
 			
 			//List again Person (very import to update the list)
-			personsDomain = personDAO.list();
+			contractModelsDomain = contractModelDAO.list();
 			
 			//This code is used with OmniFaces and it is more practice than PrimeFaces implementation.
 			Messages.addGlobalInfo("Salvou com sucesso!");
@@ -91,54 +91,47 @@ public class PersonController implements Serializable {
 	 * Delete Method. <br/>
 	 * @author samirlandou <br/>
 	 * @param event <br/>
-	 * @since 11/09/2019
+	 * @since 04/02/2020
 	 */
 	public void doDelete(ActionEvent event){
 		try {
 			
 			//Capture the event from the cursor in person.xhtml
-			personDomain = (PersonDomain) event.getComponent().getAttributes()
+			contractModelDomain = (ContractModelDomain) event.getComponent().getAttributes()
 					.get("selectedPersonByCursor");
 
 			//Delete Person
-			PersonDAO personDAO = new PersonDAO();
-			personDAO.delete(personDomain);
+			ContractModelDAO contractModelDAO = new ContractModelDAO();
+			contractModelDAO.delete(contractModelDomain);
 						
 			//List again Person (very import to update the list)
-			personsDomain = personDAO.list();
+			contractModelsDomain= contractModelDAO.list();
 			
 			//This code is used with OmniFaces and it is more practice than PrimeFaces implementation.
-			Messages.addGlobalInfo(personDomain.getCompleteName() + " foi excluido com sucesso!!!");
+			Messages.addGlobalInfo(contractModelDomain + " foi excluido com sucesso!!!");
 		} catch (Exception e) {
 			if(e.equals("ConstraintViolationException")){
-				Messages.addGlobalError("Não pode deletar pois os dados de " + personDomain.getCompleteName() + " está sendo usado em outro processo!!!");
+				Messages.addGlobalError("Não pode deletar pois os dados de " + contractModelDomain + " está sendo usado em outro processo!!!");
 			} else{
-				Messages.addGlobalError("Ocorreu um erro ao tentar excluir as informações de: " + personDomain.getCompleteName());
+				Messages.addGlobalError("Ocorreu um erro ao tentar excluir as informações de: " + contractModelDomain);
 			}
 			e.printStackTrace();			
 		}
-	}
-
-	
-	public void addMessage() {
-		//Add Message for toggleSwitch Component from person.xhtml
-		String summary = personDomain.getStatus() ? "Ativo(a)" : "Desativado(a)";
-		Messages.addGlobalInfo(summary);
 	}
 	
 	/**
 	 * Edit Method. <br/>
 	 * @author samirlandou <br/>
 	 * @param event <br/>
-	 * @since 11/09/2019
+	 * @since 04/02/2020ss
 	 */
 	public void doEdit(ActionEvent event){
 		try {			
 			//Capture the event from the cursor in person.xhtml
-			personDomain = (PersonDomain) event.getComponent().getAttributes()
+			contractModelDomain = (ContractModelDomain) event.getComponent().getAttributes()
 					.get("selectedPersonByCursor");
 		} catch (Exception e) {
-			Messages.addGlobalError("Ocorreu um erro ao editar as informações de: " + personDomain.getCompleteName());
+			Messages.addGlobalError("Ocorreu um erro ao editar as informações de: " + contractModelDomain);
 			e.printStackTrace();			
 		}		
 	}
@@ -148,23 +141,23 @@ public class PersonController implements Serializable {
 	 * Getters and Setters
 	 */
 	
-	public PersonDomain getPersonDomain() {
-		return personDomain;
+	public ContractModelDomain getContractModelDomain() {
+		return contractModelDomain;
 	}
 
 
-	public void setPersonDomain(PersonDomain personDomain) {
-		this.personDomain = personDomain;
+	public void setContractModelDomain(ContractModelDomain contractModelDomain) {
+		this.contractModelDomain = contractModelDomain;
 	}
 
 
-	public List<PersonDomain> getPersonsDomain() {
-		return personsDomain;
+	public List<ContractModelDomain> getPersonsDomain() {
+		return contractModelsDomain;
 	}
 
 
-	public void setPersonsDomain(List<PersonDomain> personsDomain) {
-		this.personsDomain = personsDomain;
+	public void setPersonsDomain(List<ContractModelDomain> contractModelsDomain) {
+		this.contractModelsDomain = contractModelsDomain;
 	}	
 	
 }

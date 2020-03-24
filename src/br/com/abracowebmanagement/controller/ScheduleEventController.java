@@ -160,7 +160,7 @@ public class ScheduleEventController implements Serializable {
 		//Set End Date
 		scheduleEventDomain.setScheduleEventEndDate((Date) selectEvent.getObject());
 		
-		//Set LogginUser
+		//Set LoginUser
 		scheduleEventDomain.setScheduleEventLoginUser(loginController.getLoggedUser().getUserName());
 		
 		

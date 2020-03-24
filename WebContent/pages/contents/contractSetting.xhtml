@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	template="/pages/template/systemModel.xhtml">
+
+
+	<!-- CONTENT -->
+	<ui:define name="content">
+	
+		<!-- MENU -->
+		<ui:include src="/pages/includes/menuPrincipal.xhtml"/>
+
+		<!-- BODY -->		
+		<div align="center">
+			<br/>
+			<br/>
+			<!-- FORM FOR THEME SWITCHER -->
+			<h:form>
+				<f:view>
+					<h:panelGrid id="contractSettingFormId" columns="2">
+					
+						<h3 style="position: left;">Extensivo</h3>
+						<p:separator/>	
+												
+						<p:outputLabel value="Preço Padrão: " for="extensiveRealPricePerHourID"/>
+						<p:inputNumber id="extensiveRealPricePerHourID" value="#{contractSettingController.contractSettingDomain.extensiveRealPriceDescription}"
+							symbol="R$ "  maxlength="5" decimalSeparator="," thousandSeparator="." minValue="1"
+							required="true" requiredMessage="O campo 'Preço Real do Extensivo' é obrigatório"/>
+														
+						<p:outputLabel value="Preço Professor: " for="extensiveProfessorPricePerHourID"/>
+						<p:inputNumber id="extensiveProfessorPricePerHourID" value="#{contractSettingController.contractSettingDomain.extensiveProfessorPriceDescription}"
+							symbol="R$ "  maxlength="5" decimalSeparator="," thousandSeparator="." minValue="1"
+							required="true" requiredMessage="O campo 'Preço Prof. do Extensivo' é obrigatório"/>
+
+
+						
+						<h3 style="position: left;">Intensivo</h3>
+						<p:separator/>	
+												
+						<p:outputLabel value="Preço Padrão: " for="intensiveRealPricePerHourID"/>
+						<p:inputNumber id="intensiveRealPricePerHourID" value="#{contractSettingController.contractSettingDomain.intensiveRealPriceDescription}"
+							symbol="R$ "  maxlength="5" decimalSeparator="," thousandSeparator="." minValue="1"
+							required="true" requiredMessage="O campo 'Preço real do Intensivo' é obrigatório"/>
+						
+						<p:outputLabel value="Preço Professor: " for="intensiveProfessorPricePerHourID"/>
+						<p:inputNumber id="intensiveProfessorPricePerHourID" value="#{contractSettingController.contractSettingDomain.intensiveProfessorPriceDescription}"
+							symbol="R$ "  maxlength="5" decimalSeparator="," thousandSeparator="." minValue="1"
+							required="true" requiredMessage="O campo 'Preço Prof. do Intensivo' é obrigatório"/>
+
+
+						
+						<h3 style="position: left;">Particular</h3>
+						<p:separator/>	
+												
+						<p:outputLabel value="Preço Padrão: " for="privateRealPricePerHourID"/>
+						<p:inputNumber id="privateRealPricePerHourID" value="#{contractSettingController.contractSettingDomain.privateRealPriceDescription}"
+							symbol="R$ "  maxlength="5" decimalSeparator="," thousandSeparator="." minValue="1"
+							required="true" requiredMessage="O campo 'Preço real do Particular' é obrigatório"/>
+						
+						<p:outputLabel value="Preço Professor: " for="privateProfessorPricePerHourID"/>
+						<p:inputNumber id="privateProfessorPricePerHourID" value="#{contractSettingController.contractSettingDomain.privateProfessorPriceDescription}"
+							symbol="R$ "  maxlength="5" decimalSeparator="," thousandSeparator="." minValue="1"
+							required="true" requiredMessage="O campo 'Preço Prof. do Particular' é obrigatório"/>
+							
+
+						
+						<h3 style="position: left;">InCompany</h3>
+						<p:separator/>	
+												
+						<p:outputLabel value="Preço Padrão: " for="inCompanyRealPricePerHourID"/>
+						<p:inputNumber id="inCompanyRealPricePerHourID" value="#{contractSettingController.contractSettingDomain.inCompanyRealPriceDescription}"
+							symbol="R$ "  maxlength="5" decimalSeparator="," thousandSeparator="." minValue="1"
+							required="true" requiredMessage="O campo 'Preço real do InCompany' é obrigatório"/>
+						
+						<p:outputLabel value="Preço Professor: " for="inCompanyProfessorPricePerHourID"/>
+						<p:inputNumber id="inCompanyProfessorPricePerHourID" value="#{contractSettingController.contractSettingDomain.inCompanyProfessorPriceDescription}"
+							symbol="R$ "  maxlength="5" decimalSeparator="," thousandSeparator="." minValue="1"
+							required="true" requiredMessage="O campo 'Preço Prof. do InCompany' é obrigatório"/>							
+					</h:panelGrid>
+					
+					<p:spacer height="10px"/>
+				
+					<!-- PANEL GRID FOR USER AND SAVING DATE -->
+					<h:panelGrid id="contractSettingInputRegisterUserFormID" columns="2">
+						<p:outputLabel value="Ultima atualização: "/>
+						<p:spacer width="5px"/>
+						<p:outputLabel value="Feita no dia: "/>
+						<p:outputLabel value="#{contractSettingController.contractSettingDomain.saveContractSettingDate}">
+							<f:convertDateTime locale="pt_BR" pattern="dd/MM/yyyy HH:mm"
+												timeZone="America/Sao_Paulo"/>
+						</p:outputLabel>												
+						<p:outputLabel value="Pelo usário: "/>
+						<p:outputLabel value="#{contractSettingController.contractSettingDomain.contractSettingSaveLoginUser}" style="color: orange;"/>						
+					</h:panelGrid>
+													
+					<br/>				
+					<br/>
+								
+					<!-- PANEL GRID FOR BUTTON SAVE AND CLOSE -->
+					<h:panelGrid columns="2">
+						<p:commandButton value="Salvar" icon="fa fa-floppy-o" action="#{contractSettingController.doSave}"
+										update=":idMsgGlobal" />					
+						<p:commandButton value="Voltar" icon="fa fa-reply" action="/pages/contents/setting.xhtml"/>
+					</h:panelGrid>
+				</f:view>				
+				
+			</h:form>
+			
+			
+		</div>		
+	
+	</ui:define>
+	
+
+</ui:composition>

@@ -6,7 +6,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -166,14 +165,22 @@ public class ContractDomain extends GenericDomain{
 	
 	/*
 	 *Class time
-	 * informs the total time package of the class
+	 * informs the class Professor price of the class
 	 */
-	@Column(name = "DE_PRICE", precision = 7, scale = 2, nullable = false)
-	private double priceDescription;
+	@Column(name = "DE_PROFESSOR_PRICE", precision = 3, scale = 2, nullable = false)
+	private double professorPriceDescription;
 	
 	
 	/*
-	 * Comment Class
+	 *Class time
+	 * informs the class real price of the class
+	 */
+	@Column(name = "DE_REAL_PRICE", precision = 3, scale = 2, nullable = false)
+	private double realPriceDescription;
+	
+	
+	/*
+	 * Comment Contract
 	 * Comment if there is a specific notification to inform
 	 * about the opening class
 	 * */
@@ -182,7 +189,7 @@ public class ContractDomain extends GenericDomain{
 	
 	
 	/*
-	 * Close Class Flag
+	 * Close ContractFlag
 	 * Close the class when it ends.
 	 * Example:
 	 * True ---> closed
@@ -190,35 +197,46 @@ public class ContractDomain extends GenericDomain{
 	 */
 	@Column(name = "FG_CLOSED", nullable = false)
 	private Boolean closedFlag;
-
+	
 	
 	/*
-	 * User
-	 * Insert User Data Table into ClassDomain
-	 * Inform here the name of the teacher.
+	 * Save Contract Date
+	 * Get Contract Saving Date
+	 * 
 	 */
-	@OneToOne
-	@JoinColumn(nullable = false)
-	private UserDomain userDomain;
-
+	@Column(name = "DT_SAVE_CONTRACT")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date saveContractDate;
+	
+	
 	
 	/*
-	 * User
-	 * Insert User Data Table into ClassDomain
-	 * Inform here the name of the substitute teacher.
+	 * Contract Save Login User
+	 * Get the Last Login User Who Has Saved the Contract
+	 * 
 	 */
-	@ManyToOne
-	@JoinColumn(nullable = false)
-	private UserDomain substituteUserDomain;
+	@Column(name = "DE_LOGIN_USER_SAVE_CONTRACT", nullable = false)
+	private String  contractSaveLoginUser;
+
 	
 	/*
 	 * Person
-	 * Insert Person Data Table into ClassDomain
+	 * Insert Person Data Table into ContractDomain
 	 * Inform here the name of the student.
 	 */	
 	@ManyToOne
-	@JoinColumn(nullable = false)
+	@JoinColumn(nullable = true)
 	private PersonDomain personDomain;
+	
+	
+	/*
+	 * Person
+	 * Insert Contract Model Data Table into ContractDomain
+	 * Inform here the name of the student.
+	 */	
+	@ManyToOne
+	@JoinColumn(nullable = true)
+	private ContractModelDomain contractModelDomain;
 	
 	
 	/*
@@ -273,14 +291,6 @@ public class ContractDomain extends GenericDomain{
 		this.closedFlag = closedFlag;
 	}
 
-	public UserDomain getUserDomain() {
-		return userDomain;
-	}
-
-	public void setUserDomain(UserDomain userDomain) {
-		this.userDomain = userDomain;
-	}
-
 	public String getLevelDescription() {
 		return levelDescription;
 	}
@@ -289,12 +299,12 @@ public class ContractDomain extends GenericDomain{
 		this.levelDescription = levelDescription;
 	}
 
-	public double getPriceDescription() {
-		return priceDescription;
+	public double getProfessorPriceDescription() {
+		return professorPriceDescription;
 	}
 
-	public void setPriceDescription(double priceDescription) {
-		this.priceDescription = priceDescription;
+	public void setProfessorPriceDescription(double professorPriceDescription) {
+		this.professorPriceDescription = professorPriceDescription;
 	}
 
 	public PersonDomain getPersonDomain() {
@@ -327,14 +337,6 @@ public class ContractDomain extends GenericDomain{
 
 	public void setCommentDescription(String commentDescription) {
 		this.commentDescription = commentDescription;
-	}
-
-	public UserDomain getSubstituteUserDomain() {
-		return substituteUserDomain;
-	}
-
-	public void setSubstituteUserDomain(UserDomain substituteUserDomain) {
-		this.substituteUserDomain = substituteUserDomain;
 	}
 
 	public String getDayClass1() {
@@ -383,6 +385,38 @@ public class ContractDomain extends GenericDomain{
 
 	public void setHourTotalClass(int hourTotalClass) {
 		this.hourTotalClass = hourTotalClass;
+	}
+
+	public Date getSaveContractDate() {
+		return saveContractDate;
+	}
+
+	public void setSaveContractDate(Date hourSaveContract) {
+		this.saveContractDate = hourSaveContract;
+	}
+
+	public String getContractSaveLoginUser() {
+		return contractSaveLoginUser;
+	}
+
+	public void setContractSaveLoginUser(String contractSaveLoginUser) {
+		this.contractSaveLoginUser = contractSaveLoginUser;
+	}
+
+	public ContractModelDomain getContractModelDomain() {
+		return contractModelDomain;
+	}
+
+	public void setContractModelDomain(ContractModelDomain contractModelDomain) {
+		this.contractModelDomain = contractModelDomain;
+	}
+
+	public double getRealPriceDescription() {
+		return realPriceDescription;
+	}
+
+	public void setRealPriceDescription(double realPriceDescription) {
+		this.realPriceDescription = realPriceDescription;
 	}
 
 }

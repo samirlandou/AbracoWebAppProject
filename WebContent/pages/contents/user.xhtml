@@ -34,41 +34,41 @@
 					<p:dataTable id="userDataTableFormId" emptyMessage="Nenhum registro encontrado."
 						paginator="true" value="#{userController.usersDomain}" var="cursor" rows="10"
 						resizableColumns="true" resizeMode="fit" reflow="true" rowHover="true"
-						draggableColumns="true">
+						draggableColumns="true" >
 	
 	
 						<!-- NM_USER -->
-						<p:column headerText="Usuário:" sortBy="#{cursor.userName}" filterBy="#{cursor.userName}">
+						<p:column headerText="Usuário:" sortBy="#{cursor.userName}" filterBy="#{cursor.userName}" style="text-align: center;">
 							<h:outputText value="#{cursor.userName}"/>
 						</p:column>
 						
 						<!-- NM_COMPLETE_NAME -->
-						<p:column headerText="Nome completo" sortBy="#{cursor.personDomain.completeName}" filterBy="#{cursor.personDomain.completeName}">
+						<p:column headerText="Nome completo" sortBy="#{cursor.personDomain.completeName}" filterBy="#{cursor.personDomain.completeName}" style="text-align: center;">
 							<h:outputText value="#{cursor.personDomain.completeName}"/>
 						</p:column>
 	
 						<!-- DE_NATIONALITY -->
-						<p:column headerText="Nacionalidade">
+						<p:column headerText="Nacionalidade" style="text-align: center;">
 							<h:outputText value="#{cursor.personDomain.nationality}"/>
 						</p:column>
 	
 						<!-- DE_SEX -->
-						<p:column headerText="Sexo" sortBy="#{cursor.personDomain.sex}">
+						<p:column headerText="Sexo" sortBy="#{cursor.personDomain.sex}" style="text-align: center;">
 							<h:outputText value="#{cursor.personDomain.sex}"/>					
 						</p:column>
 						
 						<!-- DE_LANGUAGE -->
-						<p:column headerText="Língua" sortBy="#{cursor.personDomain.language}" filterBy="#{cursor.personDomain.langue}">
+						<p:column headerText="Língua" sortBy="#{cursor.personDomain.language}" filterBy="#{cursor.personDomain.langue}" style="text-align: center;">
 							<h:outputText value="#{cursor.personDomain.language}"/>
 						</p:column>
 	
 						<!-- DE_PROFILE -->
-						<p:column headerText="Perfil" sortBy="#{cursor.personDomain.profile}">
+						<p:column headerText="Perfil" sortBy="#{cursor.personDomain.profile}" style="text-align: center;">
 							<h:outputText value="#{cursor.personDomain.profile}"/>
 						</p:column>
 	
 						<!-- DE_STATUS -->
-						<p:column headerText="Status" sortBy="#{cursor.personDomain.status}">
+						<p:column headerText="Status" sortBy="#{cursor.personDomain.status}" style="text-align: center;">
 							<h:outputText value="#{cursor.personDomain.status}"/>				
 						</p:column>
 						

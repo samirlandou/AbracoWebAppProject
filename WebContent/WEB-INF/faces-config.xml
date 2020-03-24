@@ -34,6 +34,18 @@
 			<redirect />
 		</navigation-case>
 		
+		<navigation-case>
+			<from-outcome>client.contractModel</from-outcome>
+			<to-view-id>/pages/contents/contractModel.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		
+		<navigation-case>
+			<from-outcome>client.contract</from-outcome>
+			<to-view-id>/pages/contents/contract.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>			
+		
 	</navigation-rule>	
 
 </faces-config>
