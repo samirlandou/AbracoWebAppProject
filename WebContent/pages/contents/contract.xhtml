@@ -426,7 +426,7 @@
 										
 										<h3 style="position: left;">Língua e Nível do Curso</h3>
 										<p:separator/>
-										
+									
 										<p:outputLabel value="Língua: "/>
 										<p:outputLabel value="#{contractController.classLanguage}"/>
 										
@@ -453,14 +453,18 @@
 										<h3 style="position: left;">Lugar do Curso</h3>
 										<p:separator/>
 										
-										<p:outputLabel value="Lugar: "/>
+										<p:outputLabel value="Unidade: "/>
 										<p:outputLabel value="#{contractController.classPlace}"/>
 	
 	
 										<h3 style="position: left;">Informações sobre o Curso</h3>
 										<p:separator/>
+
+										<p:outputLabel value="Módulo: "/>
+										<p:outputLabel value="#{contractController.contractDomain.classType}"/>
+
 																			
-										<p:outputLabel value="Hora Início:  "/>
+										<p:outputLabel value="Hora Início: "/>
 										<p:outputLabel value="#{contractController.contractDomain.hourBeginClass}">
 											<f:convertDateTime locale="pt_BR" pattern="HH:mm"
 												timeZone="America/Sao_Paulo"/>
@@ -500,13 +504,7 @@
 																
 										<p:outputLabel value="Modelo Contrato: " />
 										<p:outputLabel value="#{contractController.contractDomain.contractModelDomain.contractModelName}"/>																			
-															
-										<h3 style="position: left;">Professor(a) Contratado(a)</h3>
-										<p:separator/>
-																
-										<p:outputLabel value="Professor(a): " />
-										<p:outputLabel value="#{contractController.contractDomain.personDomain.completeName}"/>
-																					
+																															
 									</h:panelGrid>									
 
 									<p:spacer height="40px"/>				

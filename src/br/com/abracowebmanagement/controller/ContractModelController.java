@@ -12,6 +12,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
 import org.omnifaces.util.Messages;
+import org.primefaces.extensions.event.ClipboardErrorEvent;
+import org.primefaces.extensions.event.ClipboardSuccessEvent;
 
 import br.com.abracowebmanagement.dao.ContractModelDAO;
 import br.com.abracowebmanagement.domain.ContractModelDomain;
@@ -144,6 +146,7 @@ public class ContractModelController implements Serializable {
 			e.printStackTrace();			
 		}
 	}
+
 	
 	/**
 	 * Edit Method. <br/>
@@ -162,6 +165,24 @@ public class ContractModelController implements Serializable {
 			Messages.addGlobalError("Ocorreu um erro ao editar as informações de: " + contractModelDomain.getContractModelName());
 			e.printStackTrace();			
 		}		
+	}
+	
+	
+	/**
+	 * Success Message
+	 * @param successEvent
+	 */
+	public void successListener(final ClipboardSuccessEvent successEvent){
+		Messages.addGlobalInfo("O código foi copiado com sucesso!");
+	}
+	
+	
+	/**
+	 * Error Message
+	 * @param errorEvent
+	 */
+	public void errorListener(final ClipboardErrorEvent errorEvent){
+		Messages.addGlobalError("Erro ao copiar o código do contrato!");
 	}
 
 

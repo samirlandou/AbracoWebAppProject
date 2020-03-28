@@ -5,6 +5,7 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
 	template="/pages/template/systemModel.xhtml">
 
 
@@ -100,7 +101,7 @@
 
 
 
-			<!-- DIALOG TO REGISTER NEW CONTRACT BODY TEXT -->			
+			<!-- DIALOG TO REGISTER NEW CONTRACT MODEL BODY TEXT -->			
 			<p:dialog header="Editar Texto do Contrato" widgetVar="dlgTextEditContractModel"
 				draggable="true" modal="true" closable="true"
 				appendTo="@(body)" closeOnEscape="true"
@@ -154,7 +155,7 @@
 						<p:commandButton value="Contrato" icon="fa fa-file-pdf-o" action="#{contractController.doShowContractReport}"
 						 				ajax="false" onclick="this.form.target='_blank'"/>
 					    <p:commandButton value="Limpar" type="button" onclick="PF('textEditor').clear();" icon="fa fa-eraser" />
-						<p:spacer height="100px"/>				
+						<p:commandButton value="Tags" type="button" onclick="PF('dlgViewTag').show();" icon="fa fa-tags" />				
 						<p:commandButton value="Fechar" icon="fa fa-close" oncomplete="PF('dlgTextEditContractModel').hide();" />
 						<p:commandButton value="Salvar" icon="fa fa-floppy-o" actionListener="#{contractModelController.doSave}"
 										update=":idMsgGlobal 
@@ -167,12 +168,230 @@
 					
 					<!-- DIALOG TO SHOW TEXTEDITOR RESULT -->
 				    <p:dialog header="Conteúdo do Corpo do Contrato" widgetVar="dlgView" showEffect="fade" hideEffect="fade"
-				    		appendTo="@(body)" closeOnEscape="true" closable="true">				    		
-				        <p:outputPanel id="displayContractModelID">
-				            <h:outputText value="#{contractModelController.textFromEditor}" escape="false" />
-				        </p:outputPanel>				        
+				    		appendTo="@(body)" closeOnEscape="true" closable="true" maximizable="true" draggable="true">
+				    	<p:scrollPanel mode="native" style="width:605px;height:475px">			    		
+					        <p:outputPanel id="displayContractModelID">
+					            <h:outputText value="#{contractModelController.textFromEditor}" escape="false" />
+					        </p:outputPanel>
+				       	</p:scrollPanel>			        
 				    </p:dialog>  
-				       
+
+					<!-- DIALOG TO SHOW TAG FOR CONTRACT -->
+				    <p:dialog header="Tags do Contrato" widgetVar="dlgViewTag" showEffect="fade" hideEffect="fade"
+				    		appendTo="@(body)" closeOnEscape="true" closable="true" maximizable="true" position="right,top">				    		
+				        				        
+				        <p:outputPanel id="displaytagID">
+				        	<p:scrollPanel mode="native" style="width:300px;height:475px">
+				        		<h:panelGrid columns="3">
+
+									<h3 style="position: left;"> CONTRATANTE </h3>
+									<p:separator/>
+									<br/>																			        		
+									
+									<p:outputLabel value="PROFESSOR_CURSO "/>
+									<p:commandButton id="btnCopylClassProfessorID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
+									<pe:clipboard id="clipAjaxClassProfessorID" trigger="btnCopylClassProfessorID" action="copy" text="PROFESSOR_CURSO">  
+							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
+							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
+									</pe:clipboard>
+									
+									<p:outputLabel value="ALUNO_CURSO "/>
+									<p:commandButton id="btnCopylClassStudentID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
+									<pe:clipboard id="clipAjaxClassStudentID" trigger="btnCopylClassStudentID" action="copy" text="ALUNO_CURSO">  
+							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
+							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
+									</pe:clipboard>
+									
+									<p:outputLabel value="E-MAIL "/>
+									<p:commandButton id="btnCopylEmailID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
+									<pe:clipboard id="clipAjaxEmailID" trigger="btnCopylEmailID" action="copy" text="E-MAIL">  
+							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
+							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
+									</pe:clipboard>										
+									
+									<p:outputLabel value="TELEFONE "/>
+									<p:commandButton id="btnCopylTelephoneID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
+									<pe:clipboard id="clipAjaxTelephoneID" trigger="btnCopylTelephoneID" action="copy" text="TELEFONE">  
+							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
+							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
+									</pe:clipboard>																			        		
+									
+									<p:outputLabel value="CPF "/>
+									<p:commandButton id="btnCopylCpfID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
+									<pe:clipboard id="clipAjaxCpfID" trigger="btnCopylCpfID" action="copy" text="CPF">  
+							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
+							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
+									</pe:clipboard>
+									
+									<p:outputLabel value="CNPJ "/>
+									<p:commandButton id="btnCopylCnpjID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
+									<pe:clipboard id="clipAjaxCnpjID" trigger="btnCopylCnpjID" action="copy" text="CNPJ">  
+							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
+							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
+									</pe:clipboard>
+									
+									<p:outputLabel value="ENDERECO "/>
+									<p:commandButton id="btnCopylAddressID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
+									<pe:clipboard id="clipAjaxAddressID" trigger="btnCopylAddressID" action="copy" text="ENDERECO">  
+							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
+							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
+									</pe:clipboard>
+																		
+									<h3 style="position: left;"> CURSO </h3>
+									<p:separator/>
+									<br/>																
+				        					        		
+									<p:outputLabel value="CODIGO_CONTRATO "/>
+									<p:commandButton id="btnCopyContractCodeID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
+									<pe:clipboard id="clipAjaxContractCodeID" trigger="btnCopyContractCodeID" action="copy" text="CODIGO_CONTRATO">  
+							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
+							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
+									</pe:clipboard>
+									
+									<p:outputLabel value="UNIDADE_CURSO "/>
+									<p:commandButton id="btnCopyClassPlaceID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
+									<pe:clipboard id="clipAjaxClassPlaceID" trigger="btnCopyClassPlaceID" action="copy" text="LUGAR_CURSO">  
+							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
+							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
+									</pe:clipboard>
+																	
+									<p:outputLabel value="MODULO_CURSO "/>
+									<p:commandButton id="btnCopyClassModuleID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
+									<pe:clipboard id="clipAjaxClassModuleID" trigger="btnCopyClassModuleID" action="copy" text="MODULO_CURSO">  
+							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
+							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
+									</pe:clipboard>									
+								
+									<p:outputLabel value="LINGUA_CURSO "/>
+									<p:commandButton id="btnCopyClassLanguageID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
+									<pe:clipboard id="clipAjaxClassLanguageID" trigger="btnCopyClassLanguageID" action="copy" text="LINGUA_CURSO">  
+							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
+							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
+									</pe:clipboard>
+									
+									<p:outputLabel value="NIVEL_CURSO "/>
+									<p:commandButton id="btnCopylClassLevelID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
+									<pe:clipboard id="clipAjaxClassLevelID" trigger="btnCopylClassLevelID" action="copy" text="NIVEL_CURSO">  
+							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
+							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
+									</pe:clipboard>
+									
+									<p:outputLabel value="HORA_INICIO_CURSO "/>
+									<p:commandButton id="btnCopylBeginClassHourID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
+									<pe:clipboard id="clipAjaxBeginClassHourID" trigger="btnCopylBeginClassHourID" action="copy" text="HORA_INICIO_CURSO">  
+							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
+							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
+									</pe:clipboard>
+									
+									<p:outputLabel value="HORA_TERMINO_CURSO "/>
+									<p:commandButton id="btnCopylEndClassHourID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
+									<pe:clipboard id="clipAjaxEndClassHourID" trigger="btnCopylEndClassHourID" action="copy" text="HORA_TERMINO_CURSO">  
+							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
+							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
+									</pe:clipboard>
+									
+									<p:outputLabel value="PAUSA_CURSO "/>
+									<p:commandButton id="btnCopylPauseClassID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
+									<pe:clipboard id="clipAjaxPauseClassID" trigger="btnCopylPauseClassID" action="copy" text="PAUSA_CURSO">  
+							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
+							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
+									</pe:clipboard>
+																		
+									<p:outputLabel value="TEMPO_CURSO "/>
+									<p:commandButton id="btnCopylClassTimeID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
+									<pe:clipboard id="clipAjaxTotalClassTimeID" trigger="btnCopylClassTimeID" action="copy" text="TEMPO_CURSO">  
+							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
+							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
+									</pe:clipboard>
+									
+									<p:outputLabel value="HORA_SEMANAL_CURSO "/>
+									<p:commandButton id="btnCopylTotalWeeklyHourClassID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
+									<pe:clipboard id="clipAjaxTotalWeeklyHourClassID" trigger="btnCopylTotalWeeklyHourClassID" action="copy" text="HORA_SEMANAL_CURSO">  
+							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
+							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
+									</pe:clipboard>
+																		
+									<p:outputLabel value="PRIMEIRO_DIA_LETIVO "/>
+									<p:commandButton id="btnCopylFirstDayClassID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
+									<pe:clipboard id="clipAjaxFirstDayClassID" trigger="btnCopylFirstDayClassID" action="copy" text="PRIMEIRO_DIA_LETIVO">  
+							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
+							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
+									</pe:clipboard>
+									
+									<p:outputLabel value="SEGUNDO_DIA_LETIVO "/>
+									<p:commandButton id="btnCopylSecondDayClassID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
+									<pe:clipboard id="clipAjaxSecondDayClassID" trigger="btnCopylSecondDayClassID" action="copy" text="SEGUNDO_DIA_LETIVO">  
+							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
+							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
+									</pe:clipboard>
+									
+									<p:outputLabel value="PRECO_PADRAO_CURSO "/>
+									<p:commandButton id="btnCopylClassRealPriceID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
+									<pe:clipboard id="clipAjaxClassRealPriceID" trigger="btnCopylClassRealPriceID" action="copy" text="PRECO_PADRAO_CURSO">  
+							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
+							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
+									</pe:clipboard>
+									
+									<p:outputLabel value="PRECO_PROFESSOR_CURSO "/>
+									<p:commandButton id="btnCopylClassProfessorPriceID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
+									<pe:clipboard id="clipAjaxClassProfessorPriceID" trigger="btnCopylClassProfessorPriceID" action="copy" text="PRECO_PROFESSOR_CURSO">  
+							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
+							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
+									</pe:clipboard>
+									
+									<p:outputLabel value="PACOTE_HORA_CURSO "/>
+									<p:commandButton id="btnCopylPackageHourClassID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
+									<pe:clipboard id="clipAjaxPackageHourClassID" trigger="btnCopylPackageHourClassID" action="copy" text="PACOTE_HORA_CURSO">  
+							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
+							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
+									</pe:clipboard>
+									
+									<p:outputLabel value="PRECO_TOTAL_CURSO "/>
+									<p:commandButton id="btnCopylClassTotalPriceID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
+									<pe:clipboard id="clipAjaxClassProfessorTotalPriceID" trigger="btnCopylClassTotalPriceID" action="copy" text="PRECO_TOTAL_CURSO">  
+							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
+							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
+									</pe:clipboard>	
+																		
+									<h3 style="position: left;"> PRAZO </h3>
+									<p:separator/>
+									<br/>									
+									
+									<p:outputLabel value="DATA_INICIO_CURSO "/>
+									<p:commandButton id="btnCopylBeginClassDateID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
+									<pe:clipboard id="clipAjaxBeginClassDateID" trigger="btnCopylBeginClassDateID" action="copy" text="DATA_INICIO_CURSO">  
+							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
+							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
+									</pe:clipboard>
+									
+									<p:outputLabel value="DATA_TERMINO_CURSO "/>
+									<p:commandButton id="btnCopylEndClassDateID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
+									<pe:clipboard id="clipAjaxEndClassDateID" trigger="btnCopylEndClassDateID" action="copy" text="DATA_TERMINO_CURSO">  
+							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
+							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
+									</pe:clipboard>																				
+																																																						
+									<h3 style="position: left;"> PAGAMENTO </h3>
+									<p:separator/>
+									<br/>		
+									
+									<p:outputLabel value="PAGAMENTO "/>
+									<p:commandButton id="btnCopylPaymentID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
+									<pe:clipboard id="clipAjaxClassPaymentID" trigger="btnCopylPaymentID" action="copy" text="PRECO_PROFESSOR_CURSO">  
+							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
+							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
+									</pe:clipboard>
+									
+									<p:outputLabel value="FORMA_PAGAMENTO "/>
+									<p:commandButton id="btnCopyPaymentFormID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
+									<pe:clipboard id="clipAjaxClassPaymentFormID" trigger="btnCopyPaymentFormID" action="copy" text="FORMA_PAGAMENTO">  
+							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
+							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
+									</pe:clipboard>									
+				        		</h:panelGrid>				        						        	
+				            </p:scrollPanel>
+				        </p:outputPanel>					        			        
+				    </p:dialog> 				       
 				</h:form>
 			</p:dialog>			
 			
