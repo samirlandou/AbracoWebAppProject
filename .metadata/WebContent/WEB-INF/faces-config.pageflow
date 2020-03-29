@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf15711913173320" configfile="/abracowebmanagement/WebContent/WEB-INF/faces-config.xml">
-  <nodes xsi:type="pageflow:PFPage" name="*" id="pf15721890237556" referenceLink="//@navigationRule.0/@fromViewId|" outlinks="pf15766283728860 pf15766283728861 pf15766283728862 pf15833681090611 pf15833682410163" path="*"/>
+  <nodes xsi:type="pageflow:PFPage" name="*" id="pf15721890237556" referenceLink="//@navigationRule.0/@fromViewId|" outlinks="pf15766283728860 pf15766283728861 pf15766283728862 pf15833681090611 pf15833682410163 pf15855206223010" path="*"/>
   <nodes xsi:type="pageflow:PFPage" name="pages/login.xhtml" id="pf15766283728863" referenceLink="//@navigationRule.0/@navigationCase.1/@toViewId|" inlinks="pf15766283728860 pf15766283728861" path="/pages/login.xhtml"/>
-  <nodes xsi:type="pageflow:PFPage" name="pages/contents/home.xhtml" id="pf15766283728864" referenceLink="//@navigationRule.0/@navigationCase.3/@toViewId|" inlinks="pf15766283728862" path="/pages/contents/home.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/contents/home.xhtml" id="pf15766283728864" referenceLink="//@navigationRule.0/@navigationCase.2/@toViewId|" inlinks="pf15766283728862" path="/pages/contents/home.xhtml"/>
   <nodes xsi:type="pageflow:PFPage" name="pages/contents/contractModel.xhtml" id="pf15833681090612" referenceLink="//@navigationRule.0/@navigationCase.4/@toViewId|" inlinks="pf15833681090611" path="/pages/contents/contractModel.xhtml"/>
   <nodes xsi:type="pageflow:PFPage" name="pages/contents/contract.xhtml" id="pf15833682410164" referenceLink="//@navigationRule.0/@navigationCase.4/@toViewId|" inlinks="pf15833682410163" path="/pages/contents/contract.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="pages/contents/contractSetting.xhtml" id="pf15855206223021" referenceLink="//@navigationRule.0/@navigationCase.4/@toViewId|" inlinks="pf15855206223010" path="/pages/contents/contractSetting.xhtml"/>
   <links id="pf15766283728860" target="pf15766283728863" source="pf15721890237556" outcome="client.disconnect" redirect="true"/>
   <links id="pf15766283728861" target="pf15766283728863" source="pf15721890237556" outcome="client.login" redirect="true"/>
   <links id="pf15766283728862" target="pf15766283728864" source="pf15721890237556" outcome="home" redirect="true"/>
   <links id="pf15833681090611" target="pf15833681090612" source="pf15721890237556" outcome="client.contractModel" redirect="true"/>
   <links id="pf15833682410163" target="pf15833682410164" source="pf15721890237556" outcome="client.contract" redirect="true"/>
+  <links id="pf15855206223010" target="pf15855206223021" source="pf15721890237556" outcome="client.contractSetting" redirect="true"/>
 </pageflow:Pageflow>

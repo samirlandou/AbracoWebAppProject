@@ -74,7 +74,7 @@ public class PersonController implements Serializable {
 			personDAO.merge(personDomain);
 			
 			//Clean informations in the panelGrid
-			doNewRegister();
+			//doNewRegister();
 			
 			//List again Person (very import to update the list)
 			personsDomain = personDAO.list();

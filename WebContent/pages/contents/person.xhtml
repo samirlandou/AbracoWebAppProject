@@ -29,103 +29,121 @@
 		<div>
 			<br/>
 			<h:form id="personListFormId">
-				<p:panel header="Lista de pessoas">
-					<p:dataTable id="personDataTableFormId" emptyMessage="Nenhum registro encontrado."
-						paginator="true" value="#{personController.personsDomain}" var="cursor" rows="10"
-						resizableColumns="true" resizeMode="fit" reflow="true" rowHover="true"
-						draggableColumns="true">
-	
-						
-						<!-- NM_COMPLETE_NAME -->
-						<p:column headerText="Nome completo" sortBy="#{cursor.completeName}" filterBy="#{cursor.completeName}">
-							<h:outputText value="#{cursor.completeName}"/>
-						</p:column>
-	
-						<!-- DE_NATIONALITY -->
-						<p:column headerText="Nacionalidade">
-							<h:outputText value="#{cursor.nationality}"/>
-						</p:column>
-	
-						<!-- DE_SEX -->
-						<p:column headerText="Sexo" sortBy="#{cursor.sex}">
-							<h:outputText value="#{cursor.sex}"/>					
-						</p:column>
-	
-						<!-- DE_EMAIL -->
-						<p:column headerText="E-mail">
-							<h:outputText value="#{cursor.email}"/>
-						</p:column>
-	
-						<!-- DE_TELEPHONE -->
-						<p:column headerText="Telefone">
-							<h:outputText value="#{cursor.telephone}"/>
-						</p:column>
-	
-						<!-- DE_ADDRESS -->
-						<p:column headerText="Endereço">
-							<h:outputText value="#{cursor.address}"/>
-						</p:column>
-						
-						<!-- DE_LANGUAGE -->
-						<p:column headerText="Língua" sortBy="#{cursor.language}" filterBy="#{cursor.language}">
-							<h:outputText value="#{cursor.language}"/>
-						</p:column>
-	
-						<!-- DE_PROFILE -->
-						<p:column headerText="Perfil" sortBy="#{cursor.profile}">
-							<h:outputText value="#{cursor.profile}"/>
-						</p:column>
-	
-						<!-- DE_STATUS -->
-						<p:column headerText="Status" sortBy="#{cursor.status}">
-							<h:outputText value="#{cursor.status}"/>					
-						</p:column>
-						
-						<!-- OPTIONS -->
-						<p:column headerText="Opções">
-	
-							<!-- BUTTON TO EDIT -->
-							<p:commandButton icon="ui-icon-pencil" actionListener="#{personController.doEdit}"
-											oncomplete="PF('dlgNewPerson').show();"
-											update=":idMsgGlobal
-													:personRegisterFormId:personInputRegisterFormId
-													:personListFormId:personDataTableFormId">
-								<f:attribute name="selectedPersonByCursor" value="#{cursor}"/>
-								<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
-							</p:commandButton>
-						
-							<!-- BUTTON TO DELETE -->
-							<p:commandButton icon="ui-icon-trash" actionListener="#{personController.doDelete}"
-											update=":idMsgGlobal
-													:personListFormId:personDataTableFormId">
-								<p:confirm header="Confirmação" message="Deseja excluir #{cursor.completeName}?" icon="ui-icon-alert"/>
-								<f:attribute name="selectedPersonByCursor" value="#{cursor}"/>
-							</p:commandButton>
-						</p:column>
-	
-	
-						<!-- FACET FOR THE FOOTER -->
-						<f:facet name="footer">
-	
-							<!-- NEW BUTTON -->
-							<p:commandButton value="Novo"
-								actionListener="#{personController.doNewRegister}"
-								oncomplete="PF('dlgNewPerson').show();"
-								update=":personRegisterFormId:personInputRegisterFormId">
-								<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener"/>
-								</p:commandButton>
-						</f:facet>
-	
-					</p:dataTable>
-	
+			
+				<h3 align="center">Lista de Pessoas</h3>
+				<br/>
+				<p:dataTable id="personDataTableFormId" emptyMessage="Nenhum registro encontrado."
+					paginator="true" value="#{personController.personsDomain}" var="cursor" rows="10"
+					resizableColumns="true" resizeMode="fit" reflow="true" rowHover="true"
+					draggableColumns="true" style="text-align: center; width:90%; margin: 0 auto;">
+
 					
-					<!-- CONFIRM DIALOG WHEN DELETING -->
-					<p:confirmDialog global="true" >
-						<p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>		
-						<p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
-					</p:confirmDialog>
+					<!-- NM_COMPLETE_NAME -->
+					<p:column headerText="Nome completo"
+							sortBy="#{cursor.completeName}"
+							filterBy="#{cursor.completeName}">
+						<h:outputText value="#{cursor.completeName}"/>
+					</p:column>
+
+					<!-- DE_NATIONALITY -->
+					<p:column headerText="Nacionalidade">
+						<h:outputText value="#{cursor.nationality}"/>
+					</p:column>
+
+					<!-- DE_SEX -->
+					<p:column headerText="Sexo" sortBy="#{cursor.sex}" style="width: 5%">
+						<h:outputText value="#{cursor.sex}"/>					
+					</p:column>
+
+					<!-- DE_EMAIL -->
+					<p:column headerText="E-mail">
+						<h:outputText value="#{cursor.email}"/>
+					</p:column>
+
+					<!-- DE_TELEPHONE -->
+					<p:column headerText="Telefone">
+						<h:outputText value="#{cursor.telephone}"/>
+					</p:column>
+
+					<!-- DE_ADDRESS -->
+					<p:column headerText="Endereço">
+						<h:outputText value="#{cursor.address}"/>
+					</p:column>
 					
-				</p:panel>
+					<!-- DE_LANGUAGE -->
+					<p:column headerText="Língua" sortBy="#{cursor.language}" filterBy="#{cursor.language}">
+						<h:outputText value="#{cursor.language}"/>
+					</p:column>
+
+					<!-- DE_PROFILE -->
+					<p:column headerText="Perfil" sortBy="#{cursor.profile}">
+						<h:outputText value="#{cursor.profile}"/>
+					</p:column>
+
+					<!-- DE_STATUS -->
+					<p:column headerText="Status" sortBy="#{cursor.status}" style="width: 8%">
+						<h:outputText value="#{cursor.status == true? 'Ativo' : 'Desativado'}"/>					
+					</p:column>
+					
+					<!-- OPTIONS -->
+					<p:column headerText="Opções" style="width: 8%">
+
+						<!-- BUTTON TO EDIT -->
+						<p:commandButton icon="fa fa-edit" actionListener="#{personController.doEdit}"
+										title="Editar Registro"
+										oncomplete="PF('dlgNewPerson').show();"
+										update=":idMsgGlobal
+												:personRegisterFormId:personInputRegisterFormId
+												:personListFormId:personDataTableFormId">
+												
+							<f:attribute name="selectedPersonByCursor" value="#{cursor}"/>
+							<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+						</p:commandButton>
+					
+						<!-- BUTTON TO DELETE -->
+						<p:commandButton icon="fa fa-trash" actionListener="#{personController.doDelete}"
+										title="Deletar Registro"
+										update=":idMsgGlobal
+												:personListFormId:personDataTableFormId">
+												
+							<p:confirm header="Confirmação" message="Deseja excluir #{cursor.completeName}?" icon="ui-icon-alert"/>
+							<f:attribute name="selectedPersonByCursor" value="#{cursor}"/>
+						</p:commandButton>
+					</p:column>
+
+
+					<!-- FACET FOR THE FOOTER -->
+					<f:facet name="footer">
+
+						<!-- NEW BUTTON -->
+						<p:commandButton value="Novo"
+										icon="fa fa-plus"
+										title="Novo Registro"
+										actionListener="#{personController.doNewRegister}"
+										oncomplete="PF('dlgNewPerson').show();"
+										update=":personRegisterFormId:personInputRegisterFormId">
+							
+							<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener"/>
+							</p:commandButton>
+					</f:facet>
+
+				</p:dataTable>
+
+				
+				<!-- CONFIRM DIALOG WHEN DELETING -->
+				<p:confirmDialog global="true" >
+				
+					<p:commandButton value="Sim" 
+									type="button" 
+									styleClass="ui-confirmdialog-yes" 
+									icon="ui-icon-check"/>
+											
+					<p:commandButton value="Não" 
+									type="button" 
+									styleClass="ui-confirmdialog-no" 
+									icon="ui-icon-close"/>
+				</p:confirmDialog>
+					
 			</h:form>
 	
 	
@@ -201,10 +219,15 @@
 					<!-- PANEL GRID FOR BUTTON SAVE AND CLOSE -->
 					<h:panelGrid columns="2">
 						<p:commandButton value="Salvar" icon="fa fa-floppy-o" actionListener="#{personController.doSave}"
+										title="Salvar Registro"
 										update=":idMsgGlobal
 												:personRegisterFormId:personInputRegisterFormId
-												:personListFormId:personDataTableFormId"/>			
-						<p:commandButton value="Fechar" icon="fa fa-remove" oncomplete="PF('dlgNewPerson').hide();"/>
+												:personListFormId:personDataTableFormId"/>
+														
+						<p:commandButton value="Fechar"
+										title="Sair do Registro"
+										icon="fa fa-remove"
+										oncomplete="PF('dlgNewPerson').hide();"/>
 					</h:panelGrid>		
 					
 				</h:form>

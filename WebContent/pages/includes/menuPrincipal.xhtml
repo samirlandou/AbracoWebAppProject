@@ -13,12 +13,25 @@
 		<div>
 			<div>
 				<!-- Left position -->
-				<p:commandButton value="Menu" icon="fa fa-navicon" oncomplete="PF('sidebarLeft').show()" style="float:left;"/>
-				<p:commandButton value="Home" icon="fa fa-home" action="home" style="float:left;"/>
+				<p:commandButton value="Menu" icon="fa fa-navicon"
+								oncomplete="PF('sidebarLeft').show()"
+								style="float:left;"
+								title="Abrir o Menu"/>
+								
+				<p:commandButton value="Home" icon="fa fa-home"
+								action="home" 
+								style="float:left;"
+								title="Ir na tela Principal"/>
 				
 				<!-- Right position -->
-				<p:commandButton value="Sair" icon="fa fa-power-off" action="#{loginController.doDisconnect}" style="float:right;" update=":idMsgGlobal"/>
+				<p:commandButton value="Sair" icon="fa fa-power-off"
+								action="#{loginController.doDisconnect}"
+								style="float:right;"
+								update=":idMsgGlobal"
+								title="Sair da Aplicação"/>
+								
 				<p:spacer width="10px" style="float:right;" />
+				
 				<p:outputLabel value="Bem-vindo(a), #{loginController.loggedUser.userName}" style="float:right;"/>
 			</div>
 			
@@ -41,30 +54,57 @@
 					
 		
 					<p:submenu label="Cadastro">
-						<p:menuitem value="Pessoas" icon="fa fa-users" outcome="/pages/contents/person.xhtml" rendered="#{loginController.accessRightByProfile}"/>
-						<p:menuitem value="Usuarios" icon="fa fa-user-plus" outcome="/pages/contents/user.xhtml" rendered="#{loginController.accessRightByProfile}"/>
-						<p:menuitem value="Contratos" icon="fa fa-edit" outcome="/pages/contents/contract.xhtml" rendered="#{loginController.accessRightByProfile}"/>
-						<p:menuitem value="Aulas" icon="fa fa-calendar-o" outcome="/pages/contents/myclass.xhtml"/>
+						<p:menuitem value="Pessoas"
+									icon="fa fa-users"
+									outcome="/pages/contents/person.xhtml"
+									rendered="#{loginController.accessRightByProfile}"/>
+									
+						<p:menuitem value="Usuarios"
+									icon="fa fa-user-plus" 
+									outcome="/pages/contents/user.xhtml" 
+									rendered="#{loginController.accessRightByProfile}"/>
+									
+						<p:menuitem value="Contratos" 
+									icon="fa fa-edit" 
+									outcome="/pages/contents/contract.xhtml" 
+									rendered="#{loginController.accessRightByProfile}"/>
+									
+						<p:menuitem value="Aulas" 
+									icon="fa fa-calendar-o" 
+									outcome="/pages/contents/myclass.xhtml"/>
 					</p:submenu>
 					
 				
 					<p:submenu label="Outros">
-						<p:menuitem value="Configuração" icon="fa fa-cog" outcome="/pages/contents/setting.xhtml"/>
-						<p:menuitem value="Galeria" icon="fa fa-photo"/>
-						<p:menuitem value="Contatos" icon="fa fa-id-card-o"/>
-						<p:menuitem value="Sobre" icon="fa fa-info"/>
-						<p:menuitem value="Sugestão" icon="fa fa-comments-o"/>
+						<p:menuitem value="Configuração" 
+									icon="fa fa-gears" 
+									outcome="/pages/contents/setting.xhtml"/>
+									
+						<p:menuitem value="Galeria" 
+									icon="fa fa-photo"/>
+									
+						<p:menuitem value="Contatos"
+									icon="fa fa-id-card-o"/>
+									
+						<p:menuitem value="Sobre"
+									icon="fa fa-info"/>
+									
+						<p:menuitem value="Sugestão"
+									icon="fa fa-comments-o"/>
 					</p:submenu>
 		
 				</p:panelMenu>
 				
 				<br/>
-			    <p:commandButton value="Fechar" icon="fa fa-remove" oncomplete="PF('sidebarLeft').hide()"/>
+			    <p:commandButton value="Fechar" icon="fa fa-remove" 
+			    				oncomplete="PF('sidebarLeft').hide()"
+			    				title="Fechar o Menu"/>
 			</p:sidebar>
 
 			<!-- FAB Component from extended PrimeFace -->
 			<pe:fab id="fabMenu" icon="fa fa-plus" style="background: #FF671F;">
-				<p:menuitem value="Configuração" icon="fa fa-cog"
+				<p:menuitem value="Configuração"
+							icon="fa fa-gears"
 							outcome="/pages/contents/setting.xhtml"/>
 							
 				<p:menuitem value="Galeria" icon="fa fa-photo"/>

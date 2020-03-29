@@ -29,72 +29,74 @@
 		<div>
 			<br/>
 			<h:form id="contractModelListFormID">
-				<p:panel header="Lista de Modelo de Contrato">
-					<p:dataTable id="contractModelDataTableFormID" emptyMessage="Nenhum registro encontrado."
-						paginator="true" value="#{contractModelController.contractModelsDomain}" var="cursor" rows="10"
-						resizableColumns="true" resizeMode="fit" reflow="true" rowHover="true" style="text-align: center"
-						draggableColumns="true">
-	
-						
-						<!-- NM_CONTRACT_MODEL -->
-						<p:column headerText="Nome completo" sortBy="#{cursor.completeName}" filterBy="#{cursor.contractModelName}">
-							<h:outputText value="#{cursor.contractModelName}"/>
-						</p:column>
-	
-						<!-- OPTIONS -->
-						<p:column headerText="Opções" id="optionID">
-	
-							<!-- BUTTON TO EDIT -->
-							<p:commandButton icon="fa fa-edit" actionListener="#{contractModelController.doEdit}"
-											oncomplete="PF('dlgTextEditContractModel').show();"
-											update=":idMsgGlobal 
-													:contractModelRegisterFormID:contractModelInputRegisterFormID 
-													:contractModelRegisterFormID:contractModelInputRegisterTextFormID
-													:contractModelRegisterFormID:contractModelInputRegisterUserFormID
-													:contractModelListFormID:contractModelDataTableFormID">
-								<f:attribute name="selectedPersonByCursor" value="#{cursor}"/>
-								<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
-							</p:commandButton>
-						
-							<!-- BUTTON TO DELETE -->
-							<p:commandButton icon="fa fa-trash" actionListener="#{contractModelController.doDelete}"
-											update=":idMsgGlobal 
-													:contractModelListFormID:contractModelDataTableFormID">
-								<p:confirm header="Confirmação" message="Deseja excluir #{cursor.contractModelName}?" icon="ui-icon-alert"/>
-								<f:attribute name="selectedPersonByCursor" value="#{cursor}"/>
-							</p:commandButton>
-						</p:column>
-	
-	
-						<!-- FACET FOR THE FOOTER -->
-						<f:facet name="footer">
-							
-							<!-- RETURN TO CONTRACT PAGE -->
-							<p:commandButton value="Voltar" action="client.contract" icon="fa fa-reply"/>
-								
-							<!-- NEW BUTTON -->
-							<p:commandButton value="Novo" icon="fa fa-plus"
-								actionListener="#{contractModelController.doNewRegister}"
-								oncomplete="PF('dlgTextEditContractModel').show();"
-								update=":contractModelRegisterFormID:contractModelInputRegisterFormID 
-										:contractModelRegisterFormID:contractModelInputRegisterTextFormID
-										:contractModelRegisterFormID:contractModelInputRegisterUserFormID
-										:contractModelRegisterFormID:editorID">
-								<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener"/>
-							</p:commandButton>
-							
-						</f:facet>
-	
-					</p:dataTable>
-	
+				<h3 align="center">Lista de Modelo de Contrato</h3>
+				<br/>
+				<p:dataTable id="contractModelDataTableFormID" emptyMessage="Nenhum registro encontrado."
+					paginator="true" value="#{contractModelController.contractModelsDomain}" var="cursor" rows="10"
+					resizableColumns="true" resizeMode="fit" reflow="true" rowHover="true" 
+					draggableColumns="true" style="text-align: center; width: 50%; margin: 0 auto;">
+
 					
-					<!-- CONFIRM DIALOG WHEN DELETING -->
-					<p:confirmDialog global="true" >
-						<p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>		
-						<p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
-					</p:confirmDialog>
+					<!-- NM_CONTRACT_MODEL -->
+					<p:column headerText="Nome completo" sortBy="#{cursor.completeName}" filterBy="#{cursor.contractModelName}">
+						<h:outputText value="#{cursor.contractModelName}"/>
+					</p:column>
+
+					<!-- OPTIONS -->
+					<p:column headerText="Opções" id="optionID" style="width: 20%">
+
+						<!-- BUTTON TO EDIT -->
+						<p:commandButton icon="fa fa-edit" actionListener="#{contractModelController.doEdit}"
+										oncomplete="PF('dlgTextEditContractModel').show();"
+										title="Editar Modelo Contrato"
+										update=":idMsgGlobal 
+												:contractModelRegisterFormID:contractModelInputRegisterFormID 
+												:contractModelRegisterFormID:contractModelInputRegisterTextFormID
+												:contractModelRegisterFormID:contractModelInputRegisterUserFormID
+												:contractModelListFormID:contractModelDataTableFormID">
+							<f:attribute name="selectedPersonByCursor" value="#{cursor}"/>
+							<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+						</p:commandButton>
 					
-				</p:panel>
+						<!-- BUTTON TO DELETE -->
+						<p:commandButton icon="fa fa-trash" actionListener="#{contractModelController.doDelete}"
+										title="Deletar Modelo Contrato"
+										update=":idMsgGlobal 
+												:contractModelListFormID:contractModelDataTableFormID">
+							<p:confirm header="Confirmação" message="Deseja excluir #{cursor.contractModelName}?" icon="ui-icon-alert"/>
+							<f:attribute name="selectedPersonByCursor" value="#{cursor}"/>
+						</p:commandButton>
+					</p:column>
+
+
+					<!-- FACET FOR THE FOOTER -->
+					<f:facet name="footer">
+						
+						<!-- RETURN TO CONTRACT PAGE -->
+						<p:commandButton value="Voltar" action="client.contract" icon="fa fa-reply"/>
+							
+						<!-- NEW BUTTON -->
+						<p:commandButton value="Novo" icon="fa fa-plus"
+							actionListener="#{contractModelController.doNewRegister}"
+							oncomplete="PF('dlgTextEditContractModel').show();"
+							update=":contractModelRegisterFormID:contractModelInputRegisterFormID 
+									:contractModelRegisterFormID:contractModelInputRegisterTextFormID
+									:contractModelRegisterFormID:contractModelInputRegisterUserFormID
+									:contractModelRegisterFormID:editorID">
+							<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener"/>
+						</p:commandButton>
+						
+					</f:facet>
+
+				</p:dataTable>
+
+				
+				<!-- CONFIRM DIALOG WHEN DELETING -->
+				<p:confirmDialog global="true" >
+					<p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>		
+					<p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+				</p:confirmDialog>
+
 			</h:form>
 			
 
@@ -160,7 +162,6 @@
 										title="Salvar os Dados"
 										update=":idMsgGlobal 
 												:contractModelRegisterFormID:contractModelInputRegisterFormID 
-												:contractModelRegisterFormID:contractModelInputRegisterTextFormID
 												:contractModelRegisterFormID:contractModelInputRegisterUserFormID
 												:contractModelListFormID:contractModelDataTableFormID"/>																		
 					</h:panelGrid>

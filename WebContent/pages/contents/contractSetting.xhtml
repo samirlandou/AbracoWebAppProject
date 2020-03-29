@@ -101,10 +101,21 @@
 					<br/>
 								
 					<!-- PANEL GRID FOR BUTTON SAVE AND CLOSE -->
-					<h:panelGrid columns="2">
-						<p:commandButton value="Salvar" icon="fa fa-floppy-o" action="#{contractSettingController.doSave}"
-										update=":idMsgGlobal" />					
-						<p:commandButton value="Voltar" icon="fa fa-reply" action="/pages/contents/setting.xhtml"/>
+					<h:panelGrid columns="3">
+						<p:commandButton value="Voltar" icon="fa fa-reply"
+										 title="Voltar para a Tela 'Parâmetros'"
+										 action="/pages/contents/setting.xhtml"/>
+										
+						<p:commandButton value="Salvar" icon="fa fa-floppy-o"
+										 title="Salvar Registro"
+										 action="#{contractSettingController.doSave}"
+										 update=":idMsgGlobal" />
+										
+						<p:commandButton value="Contrato"
+										 icon="fa fa-edit"
+										 title="Ir para a Tela 'Contrato'"
+										 action="client.contract"/>														
+
 					</h:panelGrid>
 				</f:view>				
 				
