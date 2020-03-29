@@ -4,6 +4,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
 
@@ -60,7 +61,22 @@
 				<br/>
 			    <p:commandButton value="Fechar" icon="fa fa-remove" oncomplete="PF('sidebarLeft').hide()"/>
 			</p:sidebar>
+
+			<!-- FAB Component from extended PrimeFace -->
+			<pe:fab id="fabMenu" icon="fa fa-plus" style="background: #FF671F;">
+				<p:menuitem value="Configuração" icon="fa fa-cog"
+							outcome="/pages/contents/setting.xhtml"/>
+							
+				<p:menuitem value="Galeria" icon="fa fa-photo"/>
 				
+				<p:menuitem value="Contatos" icon="fa fa-id-card-o"/>
+				
+				<p:menuitem value="Sobre" icon="fa fa-info"/>
+				
+				<p:menuitem value="Sugestão" icon="fa fa-comments-o"/>
+							 
+			</pe:fab>
+			
 		</div>
 	
 		<br/>

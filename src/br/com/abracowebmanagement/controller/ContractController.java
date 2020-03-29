@@ -467,7 +467,7 @@ public class ContractController extends HttpServlet implements Serializable {
 
 
 	/**
-	 * Show OR Download OR Print Report.</br>
+	 * Show OR Download OR Print Report Without Data Base Connection.</br>
 	 * @param event
 	 */
     public void doContractReportByProfessor(ActionEvent event) {

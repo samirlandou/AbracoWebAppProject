@@ -102,7 +102,7 @@ public class ContractModelController implements Serializable {
 			contractModelDAO.merge(contractModelDomain);
 			
 			//Clean informations in the panelGrid
-			doNewRegister();
+			//doNewRegister();
 			
 			//List again Person (very import to update the list)
 			contractModelsDomain = contractModelDAO.list();

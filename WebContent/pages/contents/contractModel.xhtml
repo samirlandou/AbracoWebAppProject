@@ -17,10 +17,9 @@
 	</ui:define>  -->
 
 
-
 	<!-- CONTENT -->
 	<ui:define name="content">
-		
+
 		<!-- MENU -->
 		<ui:include src="/pages/includes/menuPrincipal.xhtml"/>
 		
@@ -33,7 +32,7 @@
 				<p:panel header="Lista de Modelo de Contrato">
 					<p:dataTable id="contractModelDataTableFormID" emptyMessage="Nenhum registro encontrado."
 						paginator="true" value="#{contractModelController.contractModelsDomain}" var="cursor" rows="10"
-						resizableColumns="true" resizeMode="fit" reflow="true" rowHover="true"
+						resizableColumns="true" resizeMode="fit" reflow="true" rowHover="true" style="text-align: center"
 						draggableColumns="true">
 	
 						
@@ -151,13 +150,14 @@
 					
 					<!-- PANEL GRID FOR BUTTON VIEW, PDFVIEW, CLEAR, SAVE AND CLOSE -->
 					<h:panelGrid columns="6" id="buttonPannelGridID">
-					    <p:commandButton value="Visualizar" update="displayContractModelID" oncomplete="PF('dlgView').show()" icon="fa fa-eye" />
-						<p:commandButton value="Contrato" icon="fa fa-file-pdf-o" action="#{contractController.doShowContractReport}"
-						 				ajax="false" onclick="this.form.target='_blank'"/>
-					    <p:commandButton value="Limpar" type="button" onclick="PF('textEditor').clear();" icon="fa fa-eraser" />
-						<p:commandButton value="Tags" type="button" onclick="PF('dlgViewTag').show();" icon="fa fa-tags" />				
-						<p:commandButton value="Fechar" icon="fa fa-close" oncomplete="PF('dlgTextEditContractModel').hide();" />
+					    <p:commandButton value="Visualizar" update="displayContractModelID" oncomplete="PF('dlgView').show()" icon="fa fa-eye" title="Visualizar Modelo"/>
+					    
+					    <p:commandButton value="Limpar" type="button" onclick="PF('textEditor').clear();" icon="fa fa-eraser" title="Limpar o Texto"/>
+						<p:commandButton value="Tags" type="button" onclick="PF('dlgViewTag').show();" icon="fa fa-tags" title="Consultar as Tags"/>				
+						<p:spacer width="150px"/>
+						<p:commandButton value="Fechar" icon="fa fa-close" oncomplete="PF('dlgTextEditContractModel').hide();" title="Fechar a Janela"/>
 						<p:commandButton value="Salvar" icon="fa fa-floppy-o" actionListener="#{contractModelController.doSave}"
+										title="Salvar os Dados"
 										update=":idMsgGlobal 
 												:contractModelRegisterFormID:contractModelInputRegisterFormID 
 												:contractModelRegisterFormID:contractModelInputRegisterTextFormID
@@ -188,7 +188,7 @@
 									<p:separator/>
 									<br/>																			        		
 									
-									<p:outputLabel value="PROFESSOR_CURSO "/>
+									<p:outputLabel value="PROFESSOR_CURSO " />
 									<p:commandButton id="btnCopylClassProfessorID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
 									<pe:clipboard id="clipAjaxClassProfessorID" trigger="btnCopylClassProfessorID" action="copy" text="PROFESSOR_CURSO">  
 							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  

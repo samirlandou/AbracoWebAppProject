@@ -14,7 +14,7 @@
 		<!-- MENU -->
 		<ui:include src="/pages/includes/menuPrincipal.xhtml"/>
 
-		<!-- BODY -->		
+		<!-- BODY -->	
 		<div align="center">
 			<br/>
 			<br/>
@@ -24,10 +24,17 @@
 				<br/>
 				<h3>DEFINIR PARAMETROS</h3>
 				<br/>
-				<p:link value="Tema" outcome="/pages/contents/themeSetting.xhtml" title="Define o Visual da Aplicação"/>
+				<p:link id="themeParametersID"
+						value="Tema"						
+						outcome="/pages/contents/themeSetting.xhtml"/> 
+				<p:tooltip for="themeParametersID" value="Define o Visual da Aplicação"/>
+				
 				<br/>
 				<br/>				
-				<p:link value="Contrato" outcome="/pages/contents/contractSetting.xhtml" title="Define Parâmetros do Contrato"/>
+				<p:link id="contractParametersID"
+						value="Contrato"					
+						outcome="/pages/contents/contractSetting.xhtml"/>
+				<p:tooltip for="contractParametersID" value="Define os Parâmetros do Contrato"/>
 						
 				
 			</h:form>
