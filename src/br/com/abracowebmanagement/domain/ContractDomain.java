@@ -23,8 +23,11 @@ public class ContractDomain extends GenericDomain{
 	 * TP -> TYPE
 	 * DT -> DATE
 	 * FG -> FLAG 
+	 * HR -> HOUR
 	 */
+
 	
+	//-------------  Class ------------------------------
 	
 	/*
 	 * Class Code to Define Period Reference
@@ -34,10 +37,35 @@ public class ContractDomain extends GenericDomain{
 	 * Example: 2Sem19_ES_PAR_EXT_QUA_19H30_01h30
 	 * 
 	 * */
-	@Column(name = "DE_CODE", length = 50, nullable = false)
-	private String codeDescription;
+	@Column(name = "DE_CONTRACT_CODE", length = 50, nullable = false)
+	private String contractCodeDescription;
+	
+	
+	/*
+	 * Class level
+	 * Choose the place of the class
+	 * Example:  
+	 * PINH -->PINHEIROS,
+	 * TATU -->TATUAPE,
+	 * COMP -->INCOMPANY
+	 * Tentar criar aqui uma Tela para registraro o lugar da aula
+	 * (TABLE TB_CLASS_PLACE (ID, DE_PLACE_CODE(15), DE_PLACE DESCRIPTION(5))
+	 */
+	@Column(name = "DE_CLASS_PLACE", length = 15) 
+	private String classPlaceDescription;
 
-
+	
+	/* 
+	 * Class type
+	 * Example:
+	 * PAR --> Particular
+	 * EXT --> Extensive
+	 * INT --> Intensive
+	 * INC --> InCompany
+	 */
+	@Column(name = "DE_CLASS_MODULE", length = 15, nullable = false) 
+	private String classModuleDescription;
+	
 	/*
 	 * Language Description
 	 * Example:
@@ -46,8 +74,8 @@ public class ContractDomain extends GenericDomain{
 	 * EN --> English
 	 * ES --> Spanish
 	 * */
-	@Column(name = "DE_LANGUAGE", length = 20, nullable = false)
-	private String languageDescription;
+	@Column(name = "DE_CLASS_LANGUAGE", length = 15, nullable = false)
+	private String classLanguageDescription;
 	
 	
 	/*
@@ -68,20 +96,103 @@ public class ContractDomain extends GenericDomain{
 	 * Arab:	Arábe 1; Arábe 2; Arábe 3; Arábe 4;
 	 */
 	 
-	@Column(name = "DE_LEVEL", length = 6, nullable = false) 
-	private String levelDescription;
+	@Column(name = "DE_CLASS_LEVEL", length = 15, nullable = false) 
+	private String classLevelDescription;
+
 	
-	/* 
-	 * Class type
-	 * Example:
-	 * PAR --> Particular
-	 * EXT --> Extensive
-	 * INT --> Intensive
-	 * INC --> InCompany
+	/*
+	 * Hour Begin Class
+	 * Time - when the class begins
 	 */
-	@Column(name = "TP_CLASS", length = 4, nullable = false) 
-	private String classType;
+	@Column(name = "HR_BEGIN_CLASS", nullable = false)
+	@Temporal(TemporalType.TIME)
+	private Date beginClassHour;
 	
+	
+	/*
+	 * Hour End Class
+	 * Time - when the class will end
+	 */
+	@Column(name = "HR_END_CLASS", nullable = false)
+	@Temporal(TemporalType.TIME)
+	private Date endClassHour;	
+
+	
+	/*
+	 * Hour Break Class
+	 * Break Time
+	 */
+	@Column(name = "HR_BREAK_CLASS", nullable = false)
+	private int breakClassHour;
+
+		
+	/*
+	 * Class Time
+	 * Number of hour for each class
+	 */
+	@Column(name = "HR_CLASS_TIME", nullable = false)
+	private int classTimeHour;
+	
+	
+	/*
+	 * Class Time in  Week
+	 * Number of hour for each class
+	 */
+	@Column(name = "HR_WEEKLY_CLASS_TIME", nullable = false)
+	private int weeklyClassTimeHour;	
+	
+	
+	
+	/*
+	 * First Class Day
+	 * day number 1
+	 */
+	@Column(name = "DE_FIRST_CLASS_DAY", length = 15, nullable = false)
+	private String firstClassDayDescription;
+	
+	/*
+	 * Second Class Day
+	 * day number 2 (If exist)
+	 */
+	@Column(name = "DE_SECOND_CLASS_DAY", length = 15)
+	private String secondClassDayDescription;
+
+	
+	
+	/*
+	 *Class price
+	 * informs the real price of the class
+	 */
+	@Column(name = "DE_REAL_PRICE", precision = 3, scale = 2, nullable = false)
+	private double realPriceDescription;
+	
+	
+	/*
+	 *Class price
+	 * Informs the Professor Price of the class
+	 */
+	@Column(name = "DE_PROFESSOR_PRICE", precision = 3, scale = 2, nullable = false)
+	private double professorPriceDescription;
+	
+		
+	/*
+	 *Class Time Package
+	 * Informs the total time package of the class
+	 */
+	@Column(name = "HR_CLASS_PACKAGE", length = 5, nullable = false)
+	private int classPackageHour;
+	
+	
+	/*
+	 *Class time
+	 * Informs the Total package Price.
+	 */
+	@Column(name = "DE_TOTAL_PACKAGE_PRICE", precision = 3, scale = 2, nullable = false)
+	private double totalPackagePriceDescription;
+
+	
+
+	//-------------  Deadline ------------------------------
 	
 	/*
 	 * Begin date
@@ -100,89 +211,16 @@ public class ContractDomain extends GenericDomain{
 	@Temporal(TemporalType.DATE)
 	private Date endDate;
 	
-	/*
-	 * Hour Begin Class
-	 * Time - when the class begins
-	 */
-	@Column(name = "HR_BEGIN_CLASS", nullable = false)
-	@Temporal(TemporalType.TIME)
-	private Date hourBeginClass;
+
+
 	
+	//-------------- Others -----------------------------
 	
-	/*
-	 * Hour End Class
-	 * Time - when the class will end
-	 */
-	@Column(name = "HR_END_CLASS", nullable = false)
-	@Temporal(TemporalType.TIME)
-	private Date hourEndClass;
-	
-	/*
-	 * Hour Pause Class
-	 * Pause Time
-	 */
-	@Column(name = "HR_PAUSE_CLASS", nullable = false)
-	private int hourPauseClass;
-		
-	/*
-	 * Total Hour of the Class
-	 * Total Hour
-	 */
-	@Column(name = "HR_TOTAL_CLASS", nullable = false)
-	private int hourTotalClass;
-	
-	/*
-	 * Day 1 of the Class
-	 * day number 1
-	 */
-	@Column(name = "DE_FIRST_DAY_CLASS", length = 3, nullable = false)
-	private String dayClass1;
-	
-	/*
-	 * Day 2 of the Class
-	 * day number 2
-	 */
-	@Column(name = "DE_SECOND_DAY_CLASS", length = 3)
-	private String dayClass2;
-	
-	
-	/*
-	 * Class level
-	 * Choose Where will be the class
-	 * Example: Class 1, Class 2, Class 3 , ...
-	 */
-	@Column(name = "DE_PLACE", length = 4) 
-	private String placeDescription;
-	
-	
-	/*
-	 *Class Time Package
-	 * informs the total time package of the class
-	 */
-	@Column(name = "DE_PACKAGE", length = 6, nullable = false)
-	private int packageDescription;
-	
-	
-	/*
-	 *Class time
-	 * informs the class Professor price of the class
-	 */
-	@Column(name = "DE_PROFESSOR_PRICE", precision = 3, scale = 2, nullable = false)
-	private double professorPriceDescription;
-	
-	
-	/*
-	 *Class time
-	 * informs the class real price of the class
-	 */
-	@Column(name = "DE_REAL_PRICE", precision = 3, scale = 2, nullable = false)
-	private double realPriceDescription;
 	
 	
 	/*
 	 * Comment Contract
-	 * Comment if there is a specific notification to inform
-	 * about the opening class
+	 * Comment if there is a specific notification to inform about the class.
 	 * */
 	@Column(name = "DE_COMMENT", length = 100)
 	private String commentDescription;
@@ -195,9 +233,12 @@ public class ContractDomain extends GenericDomain{
 	 * True ---> closed
 	 * False --> opened
 	 */
-	@Column(name = "FG_CLOSED", nullable = false)
-	private Boolean closedFlag;
+	@Column(name = "FG_CLOSED_CONTRACT", nullable = false)
+	private Boolean closedContractFlag;
 	
+	
+	
+	//----------- Date when the Contract has been saved ------------------
 	
 	/*
 	 * Save Contract Date
@@ -208,8 +249,7 @@ public class ContractDomain extends GenericDomain{
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date saveContractDate;
 	
-	
-	
+		
 	/*
 	 * Contract Save Login User
 	 * Get the Last Login User Who Has Saved the Contract
@@ -218,6 +258,10 @@ public class ContractDomain extends GenericDomain{
 	@Column(name = "DE_LOGIN_USER_SAVE_CONTRACT", nullable = false)
 	private String  contractSaveLoginUser;
 
+	
+	
+	//-------------- Foreign Keys -----------------------------
+		
 	
 	/*
 	 * Person
@@ -237,186 +281,253 @@ public class ContractDomain extends GenericDomain{
 	@ManyToOne
 	@JoinColumn(nullable = true)
 	private ContractModelDomain contractModelDomain;
+
+	
 	
 	
 	/*
 	 * Getters and Setters
 	 */
 	
-	public String getCodeDescription() {
-		return codeDescription;
+
+
+	public String getContractCodeDescription() {
+		return contractCodeDescription;
 	}
 
-	public void setCodeDescription(String myClassCode) {
-		this.codeDescription = myClassCode;
+
+	public void setContractCodeDescription(String contractCodeDescription) {
+		this.contractCodeDescription = contractCodeDescription;
 	}
 
-	public String getLanguageDescription() {
-		return languageDescription;
+
+	public String getClassPlaceDescription() {
+		return classPlaceDescription;
 	}
 
-	public void setLanguageDescription(String myClassLanguage) {
-		this.languageDescription = myClassLanguage;
+
+	public void setClassPlaceDescription(String classPlaceDescription) {
+		this.classPlaceDescription = classPlaceDescription;
 	}
 
-	public String getClassType() {
-		return classType;
+
+	public String getClassModuleDescription() {
+		return classModuleDescription;
 	}
 
-	public void setClassType(String classType) {
-		this.classType = classType;
+
+	public void setClassModuleDescription(String classModuleDescription) {
+		this.classModuleDescription = classModuleDescription;
 	}
 
-	public Date getBeginDate() {
-		return beginDate;
+
+	public String getClassLanguageDescription() {
+		return classLanguageDescription;
 	}
 
-	public void setBeginDate(Date myclassBeginDate) {
-		this.beginDate = myclassBeginDate;
+
+	public void setClassLanguageDescription(String classLanguageDescription) {
+		this.classLanguageDescription = classLanguageDescription;
 	}
 
-	public Date getEndDate() {
-		return endDate;
+
+	public String getClassLevelDescription() {
+		return classLevelDescription;
 	}
 
-	public void setEndDate(Date myClassEndDate) {
-		this.endDate = myClassEndDate;
+
+	public void setClassLevelDescription(String classLevelDescription) {
+		this.classLevelDescription = classLevelDescription;
 	}
 
-	public Boolean getClosedFlag() {
-		return closedFlag;
+
+	public Date getBeginClassHour() {
+		return beginClassHour;
 	}
 
-	public void setClosedFlag(Boolean closedFlag) {
-		this.closedFlag = closedFlag;
+
+	public void setBeginClassHour(Date beginClassHour) {
+		this.beginClassHour = beginClassHour;
 	}
 
-	public String getLevelDescription() {
-		return levelDescription;
+
+	public Date getEndClassHour() {
+		return endClassHour;
 	}
 
-	public void setLevelDescription(String levelDescription) {
-		this.levelDescription = levelDescription;
+
+	public void setEndClassHour(Date endClassHour) {
+		this.endClassHour = endClassHour;
 	}
 
-	public double getProfessorPriceDescription() {
-		return professorPriceDescription;
+
+	public int getBreakClassHour() {
+		return breakClassHour;
 	}
 
-	public void setProfessorPriceDescription(double professorPriceDescription) {
-		this.professorPriceDescription = professorPriceDescription;
+
+	public void setBreakClassHour(int breakClassHour) {
+		this.breakClassHour = breakClassHour;
 	}
 
-	public PersonDomain getPersonDomain() {
-		return personDomain;
+
+	public int getClassTimeHour() {
+		return classTimeHour;
 	}
 
-	public void setPersonDomain(PersonDomain personDomain) {
-		this.personDomain = personDomain;
+
+	public void setClassTimeHour(int classTimeHour) {
+		this.classTimeHour = classTimeHour;
 	}
 
-	public Date getHourBeginClass() {
-		return hourBeginClass;
+
+	public int getWeeklyClassTimeHour() {
+		return weeklyClassTimeHour;
 	}
 
-	public void setHourBeginClass(Date hourBeginClass) {
-		this.hourBeginClass = hourBeginClass;
+
+	public void setWeeklyClassTimeHour(int weeklyClassTime) {
+		this.weeklyClassTimeHour = weeklyClassTime;
 	}
 
-	public Date getHourEndClass() {
-		return hourEndClass;
+
+	public String getFirstClassDayDescription() {
+		return firstClassDayDescription;
 	}
 
-	public void setHourEndClass(Date hourEndClass) {
-		this.hourEndClass = hourEndClass;
+
+	public void setFirstClassDayDescription(String firstClassDayDescription) {
+		this.firstClassDayDescription = firstClassDayDescription;
 	}
 
-	public String getCommentDescription() {
-		return commentDescription;
+
+	public String getSecondClassDayDescription() {
+		return secondClassDayDescription;
 	}
 
-	public void setCommentDescription(String commentDescription) {
-		this.commentDescription = commentDescription;
+
+	public void setSecondClassDayDescription(String secondClassDayDescription) {
+		this.secondClassDayDescription = secondClassDayDescription;
 	}
 
-	public String getDayClass1() {
-		return dayClass1;
-	}
-
-	public void setDayClass1(String dayClass1) {
-		this.dayClass1 = dayClass1;
-	}
-
-	public String getDayClass2() {
-		return dayClass2;
-	}
-
-	public void setDayClass2(String dayClass2) {
-		this.dayClass2 = dayClass2;
-	}
-
-	public String getPlaceDescription() {
-		return placeDescription;
-	}
-
-	public void setPlaceDescription(String placeDescription) {
-		this.placeDescription = placeDescription;
-	}
-
-	public int getPackageDescription() {
-		return packageDescription;
-	}
-
-	public void setPackageDescription(int packageDescription) {
-		this.packageDescription = packageDescription;
-	}
-
-	public int getHourPauseClass() {
-		return hourPauseClass;
-	}
-
-	public void setHourPauseClass(int hourPauseClass) {
-		this.hourPauseClass = hourPauseClass;
-	}
-
-	public int getHourTotalClass() {
-		return hourTotalClass;
-	}
-
-	public void setHourTotalClass(int hourTotalClass) {
-		this.hourTotalClass = hourTotalClass;
-	}
-
-	public Date getSaveContractDate() {
-		return saveContractDate;
-	}
-
-	public void setSaveContractDate(Date hourSaveContract) {
-		this.saveContractDate = hourSaveContract;
-	}
-
-	public String getContractSaveLoginUser() {
-		return contractSaveLoginUser;
-	}
-
-	public void setContractSaveLoginUser(String contractSaveLoginUser) {
-		this.contractSaveLoginUser = contractSaveLoginUser;
-	}
-
-	public ContractModelDomain getContractModelDomain() {
-		return contractModelDomain;
-	}
-
-	public void setContractModelDomain(ContractModelDomain contractModelDomain) {
-		this.contractModelDomain = contractModelDomain;
-	}
 
 	public double getRealPriceDescription() {
 		return realPriceDescription;
 	}
 
-	public void setRealPriceDescription(double realPriceDescription) {
-		this.realPriceDescription = realPriceDescription;
+
+	public void setRealPriceDescription(double patternPriceDescription) {
+		this.realPriceDescription = patternPriceDescription;
+	}
+
+
+	public double getProfessorPriceDescription() {
+		return professorPriceDescription;
+	}
+
+
+	public void setProfessorPriceDescription(double professorPriceDescription) {
+		this.professorPriceDescription = professorPriceDescription;
+	}
+
+
+	public int getClassPackageHour() {
+		return classPackageHour;
+	}
+
+
+	public void setClassPackageHour(int classPackageHour) {
+		this.classPackageHour = classPackageHour;
+	}
+
+
+	public double getTotalPackagePriceDescription() {
+		return totalPackagePriceDescription;
+	}
+
+
+	public void setTotalPackagePriceDescription(double totalPackagePriceDescription) {
+		this.totalPackagePriceDescription = totalPackagePriceDescription;
+	}
+
+
+	public String getCommentDescription() {
+		return commentDescription;
+	}
+
+
+	public void setCommentDescription(String commentDescription) {
+		this.commentDescription = commentDescription;
+	}
+
+
+	public Boolean getClosedContractFlag() {
+		return closedContractFlag;
+	}
+
+
+	public void setClosedContractFlag(Boolean closedFlag) {
+		this.closedContractFlag = closedFlag;
+	}
+
+
+	public Date getBeginDate() {
+		return beginDate;
+	}
+
+
+	public void setBeginDate(Date beginDate) {
+		this.beginDate = beginDate;
+	}
+
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
+
+	public Date getSaveContractDate() {
+		return saveContractDate;
+	}
+
+
+	public void setSaveContractDate(Date saveContractDate) {
+		this.saveContractDate = saveContractDate;
+	}
+
+
+	public String getContractSaveLoginUser() {
+		return contractSaveLoginUser;
+	}
+
+
+	public void setContractSaveLoginUser(String contractSaveLoginUser) {
+		this.contractSaveLoginUser = contractSaveLoginUser;
+	}
+
+
+	public PersonDomain getPersonDomain() {
+		return personDomain;
+	}
+
+
+	public void setPersonDomain(PersonDomain personDomain) {
+		this.personDomain = personDomain;
+	}
+
+
+	public ContractModelDomain getContractModelDomain() {
+		return contractModelDomain;
+	}
+
+
+	public void setContractModelDomain(ContractModelDomain contractModelDomain) {
+		this.contractModelDomain = contractModelDomain;
 	}
 
 }

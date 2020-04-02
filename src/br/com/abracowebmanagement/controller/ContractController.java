@@ -166,11 +166,11 @@ public class ContractController extends HttpServlet implements Serializable {
 		
 		if(contractDomain != null){
 			
-			levels = contractUtil.getLevelComboList(contractDomain.getLanguageDescription());
+			levels = contractUtil.getFullDescriptionLevelComboList(contractDomain.getClassLanguageDescription());
 			
 			//List Students
 			PersonDAO personDAO = new PersonDAO();
-			professors = personDAO.findByActiveProfessorAndLanguage(contractDomain.getLanguageDescription());
+			professors = personDAO.findByActiveProfessorAndLanguage(contractDomain.getClassLanguageDescription());
 			//students = personDAO.findByActiveStudentAndLanguage(contractDomain.getLanguageDescription());
 		}
 	}
@@ -179,49 +179,49 @@ public class ContractController extends HttpServlet implements Serializable {
 	
 	public void doUpdatePrice(){
 		
-		if(contractDomain.getClassType()!= null){
+		if(contractDomain.getClassModuleDescription()!= null){
 			
 			//EXTENSIVE
-			if(contractDomain.getClassType().equals("EXT")){
+			if(contractDomain.getClassModuleDescription().equals("EXT")){
 				//Real Price
 				contractDomain.setRealPriceDescription(getContractSettingDomain().getExtensiveRealPriceDescription());
 				
 				//Professor Price
-				contractDomain.setProfessorPriceDescription(getContractSettingDomain().getExtensiveProfessorPriceDescription());
+				contractDomain.setTotalPackagePriceDescription(getContractSettingDomain().getExtensiveProfessorPriceDescription());
 			}
 
 			
 			//INTENSIVE
-			if(contractDomain.getClassType().equals("INT")){
+			if(contractDomain.getClassModuleDescription().equals("INT")){
 				//Real Price
 				contractDomain.setRealPriceDescription(getContractSettingDomain().getIntensiveRealPriceDescription());
 				
 				//Professor Price
-				contractDomain.setProfessorPriceDescription(getContractSettingDomain().getIntensiveProfessorPriceDescription());
+				contractDomain.setTotalPackagePriceDescription(getContractSettingDomain().getIntensiveProfessorPriceDescription());
 			}
 			
 			
 			//PRIVATE
-			if(contractDomain.getClassType().equals("PAR")){
+			if(contractDomain.getClassModuleDescription().equals("PAR")){
 				//Real Price
 				contractDomain.setRealPriceDescription(getContractSettingDomain().getPrivateRealPriceDescription());
 				
 				//Professor Price
-				contractDomain.setProfessorPriceDescription(getContractSettingDomain().getPrivateProfessorPriceDescription());
+				contractDomain.setTotalPackagePriceDescription(getContractSettingDomain().getPrivateProfessorPriceDescription());
 			}			
 			
 			
 			//INCOMPANY
-			if(contractDomain.getClassType().equals("PAR")){
+			if(contractDomain.getClassModuleDescription().equals("PAR")){
 				//Real Price
 				contractDomain.setRealPriceDescription(getContractSettingDomain().getInCompanyRealPriceDescription());
 				
 				//Professor Price
-				contractDomain.setProfessorPriceDescription(getContractSettingDomain().getInCompanyProfessorPriceDescription());
+				contractDomain.setTotalPackagePriceDescription(getContractSettingDomain().getInCompanyProfessorPriceDescription());
 			}
 			
 			decimalRealPriceDescription = numberFormatUtil.currencyFormat(contractDomain.getRealPriceDescription());
-			decimalProfessorPriceDescription = numberFormatUtil.currencyFormat(contractDomain.getProfessorPriceDescription());
+			decimalProfessorPriceDescription = numberFormatUtil.currencyFormat(contractDomain.getTotalPackagePriceDescription());
 		}		
 	}
 	
@@ -235,13 +235,13 @@ public class ContractController extends HttpServlet implements Serializable {
 		secondClassDay = new TreeMap<String, String>();
 		
 		//List secondClassDay
-		if(contractDomain.getDayClass1() != null){
-			if(contractDomain.getDayClass1().equals("SEX")
-					|| contractDomain.getDayClass1().equals("SAB")){
+		if(contractDomain.getFirstClassDayDescription() != null){
+			if(contractDomain.getFirstClassDayDescription().equals("SEX")
+					|| contractDomain.getFirstClassDayDescription().equals("SAB")){
 				secondClassDayRendered = false;
 			} else{
 				secondClassDay.putAll(firstClassDay);
-				secondClassDay.remove(contractDomain.getDayClass1());
+				secondClassDay.remove(contractDomain.getFirstClassDayDescription());
 				secondClassDay.remove("SEX");
 				secondClassDay.remove("SAB");
 				secondClassDayRendered = true;
@@ -256,12 +256,12 @@ public class ContractController extends HttpServlet implements Serializable {
 	 * Calculate Class Hour
 	 */
 	public void doCalculateClassHour(){
-		Date begin = contractDomain.getHourBeginClass();
-		Date end = contractDomain.getHourEndClass();
-		int pause = contractDomain.getHourPauseClass();
+		Date begin = contractDomain.getBeginClassHour();
+		Date end = contractDomain.getEndClassHour();
+		int pause = contractDomain.getBreakClassHour();
 		
 		if(begin != null && end != null && begin.before(end)){
-			contractDomain.setHourTotalClass(DateUtil.returnDiffInMinutes(begin, end, pause));
+			contractDomain.setWeeklyClassTimeHour(DateUtil.returnDiffInMinutes(begin, end, pause));
 			total = DateUtil.returnDiffBetweenDates2(begin, end, pause);
 		} else{
 			Messages.addGlobalError("Ocorreu um erro. Favor verificar as datas");
@@ -285,38 +285,38 @@ public class ContractController extends HttpServlet implements Serializable {
 				semester = "2°SEM"+ year.substring(2, 4);
 			}
 			
-			if(contractDomain.getDayClass2().isEmpty()){
-				dayClass = contractDomain.getDayClass1();
-				dayClassFullDescription = contractUtil.getClassDayFullDescription(contractDomain.getDayClass1());
+			if(contractDomain.getSecondClassDayDescription().isEmpty()){
+				dayClass = contractDomain.getFirstClassDayDescription();
+				dayClassFullDescription = contractUtil.getClassDayFullDescription(contractDomain.getFirstClassDayDescription());
 			} else{
-				dayClass = contractDomain.getDayClass1()
+				dayClass = contractDomain.getFirstClassDayDescription()
 						+ "_"
-						+ contractDomain.getDayClass2();
+						+ contractDomain.getSecondClassDayDescription();
 				
-				dayClassFullDescription = contractUtil.getClassDayFullDescription(contractDomain.getDayClass1())
+				dayClassFullDescription = contractUtil.getClassDayFullDescription(contractDomain.getFirstClassDayDescription())
 						+ " e "
-						+ contractUtil.getClassDayFullDescription(contractDomain.getDayClass2());
+						+ contractUtil.getClassDayFullDescription(contractDomain.getSecondClassDayDescription());
 			}
 			
 			
 			//Code Description Example: 1°SEM19_EN1_EXT_PINH_SEG_TER_19H00_20H30			
-			String classHour = DateUtil.formatDate(contractDomain.getHourBeginClass(), "HH:mm")
+			String classHour = DateUtil.formatDate(contractDomain.getBeginClassHour(), "HH:mm")
 								+ "_"
-								+ DateUtil.formatDate(contractDomain.getHourEndClass(), "HH:mm");
+								+ DateUtil.formatDate(contractDomain.getEndClassHour(), "HH:mm");
 			
 			contractCode = semester
 							+ "_"
-							+ contractDomain.getLevelDescription()
+							+ contractDomain.getClassLevelDescription()
 							+ "_"
-							+ contractDomain.getClassType()
+							+ contractDomain.getClassModuleDescription()
 							+ "_"
-							+ contractDomain.getPlaceDescription()
+							+ contractDomain.getClassPlaceDescription()
 							+ "_"
 							+ dayClass
 							+ "_"
 							+ classHour.replace(":", "H");
 			
-			contractDomain.setCodeDescription(contractCode);
+			contractDomain.setContractCodeDescription(contractCode);
 							
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -333,7 +333,7 @@ public class ContractController extends HttpServlet implements Serializable {
 		
 		try {
 			
-        	if(contractDomain.getPackageDescription() == 0){
+        	if(contractDomain.getClassPackageHour() == 0){
         		Messages.addGlobalError("O pacote tem que ser maior ou igual a '1'. Favor volte na Aba 'Curso'");
         		
         	} else{
@@ -347,7 +347,7 @@ public class ContractController extends HttpServlet implements Serializable {
 			contractDomain.setContractSaveLoginUser(loginController.getLoggedUser().getUserName());
 			
 			//Set closed Flag
-			contractDomain.setClosedFlag(false);
+			contractDomain.setClosedContractFlag(false);
 			
 			//Merge information
 			contractDAO.merge(contractDomain);
@@ -389,12 +389,12 @@ public class ContractController extends HttpServlet implements Serializable {
 			contractsDomain= contractDAO.list();
 			
 			//This code is used with OmniFaces and it is more practice than PrimeFaces implementation.
-			Messages.addGlobalInfo(contractDomain.getCodeDescription() + " foi excluido com sucesso!!!");
+			Messages.addGlobalInfo(contractDomain.getContractCodeDescription() + " foi excluido com sucesso!!!");
 		} catch (Exception e) {
 			if(e.equals("ConstraintViolationException")){
-				Messages.addGlobalError("Não pode deletar pois os dados de " + contractDomain.getCodeDescription() + " está sendo usado em outro processo!!!");
+				Messages.addGlobalError("Não pode deletar pois os dados de " + contractDomain.getContractCodeDescription() + " está sendo usado em outro processo!!!");
 			} else{
-				Messages.addGlobalError("Ocorreu um erro ao tentar excluir as informações de: " + contractDomain.getCodeDescription());
+				Messages.addGlobalError("Ocorreu um erro ao tentar excluir as informações de: " + contractDomain.getContractCodeDescription());
 			}
 			e.printStackTrace();			
 		}
@@ -406,7 +406,7 @@ public class ContractController extends HttpServlet implements Serializable {
 	 */
 	public void addMessage() {
 		//Add Message for toggleSwitch Component from contract.xhtml
-		String summary = contractDomain.getClosedFlag() ? "Ativo(a)" : "Desativado(a)";
+		String summary = contractDomain.getClosedContractFlag() ? "Ativo(a)" : "Desativado(a)";
 		Messages.addGlobalInfo(summary);
 	}
 	
@@ -425,7 +425,7 @@ public class ContractController extends HttpServlet implements Serializable {
 			//Capture the event from the cursor in contract.xhtml
 			contractDomain = (ContractDomain) event.getComponent().getAttributes().get("selectedContractByCursor");
 		} catch (Exception e) {
-			Messages.addGlobalError("Ocorreu um erro ao editar as informações de: " + contractDomain.getCodeDescription());
+			Messages.addGlobalError("Ocorreu um erro ao editar as informações de: " + contractDomain.getContractCodeDescription());
 			e.printStackTrace();			
 		}		
 	}
@@ -589,8 +589,8 @@ public class ContractController extends HttpServlet implements Serializable {
         		doCreateContractCode();
         		doCalculateClassHour();
         		//addContractMessage();
-        		classPlace = contractUtil.getPlaceFullDescription(contractDomain.getPlaceDescription());
-        		classLanguage = contractUtil.getLanguageFullDescription(contractDomain.getLanguageDescription());
+        		classPlace = contractUtil.getPlaceFullDescription(contractDomain.getClassPlaceDescription());
+        		classLanguage = contractUtil.getLanguageFullDescription(contractDomain.getClassLanguageDescription());
         	}
 
             return event.getNewStep();
@@ -604,7 +604,7 @@ public class ContractController extends HttpServlet implements Serializable {
      */
 	public void addContractMessage() {
 		//Add Message for toggleSwitch Component from person.xhtml
-		contractStatus = contractDomain.getClosedFlag() ? "Contrato Finalizado!" : "Contrato Ativo!";
+		contractStatus = contractDomain.getClosedContractFlag() ? "Contrato Finalizado!" : "Contrato Ativo!";
 		Messages.addGlobalInfo(contractStatus);
 	}
 	

@@ -42,31 +42,23 @@ public class ContractUtil {
 		return languageValue;
 	}	
 	
-		
-	public TreeMap<String, String> getLevelComboList(String description){
+/*		
+	public TreeMap<String, String> getShortDescriptionLevelComboList(String description){
 		TreeMap<String, String> languageList = new TreeMap<String, String>();
 		
-		if(description.equals("AR")){
+		if(description.equals("ARÁBE")){
 			languageList.put("Arábe 1", "AR1");
 			languageList.put("Arábe 2", "AR2");
 			languageList.put("Arábe 3", "AR3");
 			languageList.put("Arábe 4", "AR4");
-		} else if(description.equals("ES")){
+		} else if(description.equals("ESPANHOL")){
 			languageList.put("Espanhol 1 (A1)", "ES1");
 			languageList.put("Espanhol 2 (A2)", "ES2");
 			languageList.put("Espanhol 3 (B1.1)", "ES3");
 			languageList.put("Espanhol 4 (B1.2)", "ES4");
 			languageList.put("Espanhol 5 (B1.3)", "ES5");
 			languageList.put("Espanhol Conv.(B1/B2)", "ESconv");	
-		} else if(description.equals("EN")){
-			languageList.put("Inglês 1 (A1.1)", "EN1");
-			languageList.put("Inglês 2 (A1.2)", "EN2");
-			languageList.put("Inglês 3 (A2.1)", "EN3");
-			languageList.put("Inglês 4 (A2.2)", "EN4");
-			languageList.put("Inglês 5 (B1.1)", "EN5");
-			languageList.put("Inglês 6 (A1.2)", "EN6");
-			languageList.put("Inglês Conv.(B1/B2)", "ENconv");
-		} else if(description.equals("FR")){
+		} else if(description.equals("FRANCÊS")){
 			languageList.put("Francês 1 (A1.1)", "FR1");
 			languageList.put("Francês 2 (A1.2)", "FR2");
 			languageList.put("Francês 3 (A2.1)", "FR3");
@@ -75,11 +67,68 @@ public class ContractUtil {
 			languageList.put("Francês 6 (B1.2)", "FR6");
 			languageList.put("Francês 7 (B1.3)", "FR7");
 			languageList.put("Francês Conv.(B1/B2)", "FRconv");
+		} else if(description.equals("INGLÊS")){
+			languageList.put("Inglês 1 (A1.1)", "EN1");
+			languageList.put("Inglês 2 (A1.2)", "EN2");
+			languageList.put("Inglês 3 (A2.1)", "EN3");
+			languageList.put("Inglês 4 (A2.2)", "EN4");
+			languageList.put("Inglês 5 (B1.1)", "EN5");
+			languageList.put("Inglês 6 (A1.2)", "EN6");
+			languageList.put("Inglês Conv.(B1/B2)", "ENconv");
+		} else if(description.equals("PORTUGUÊS")){
+			languageList.put("Português Básico", "PTbas");
+			languageList.put("Português Intermediário", "PTint");
+			languageList.put("Português Avançado", "PTAv");
+			languageList.put("Português Conversação", "PTconv");
 		}
 
 		return languageList;
-	}
+	}*/
+
 	
+	
+	
+	public TreeMap<String, String> getFullDescriptionLevelComboList(String description){
+		TreeMap<String, String> languageList = new TreeMap<String, String>();
+		
+		if(description.equals("ARÁBE")){
+			languageList.put("Arábe 1", "Arábe 1");
+			languageList.put("Arábe 2", "Arábe 2");
+			languageList.put("Arábe 3", "Arábe 3");
+			languageList.put("Arábe 4", "Arábe 4");
+		} else if(description.equals("ESPANHOL")){
+			languageList.put("Espanhol 1 (A1)", "Espanhol 1 (A1)");
+			languageList.put("Espanhol 2 (A2)", "Espanhol 2 (A2)");
+			languageList.put("Espanhol 3 (B1.1)", "Espanhol 3 (B1.1)");
+			languageList.put("Espanhol 4 (B1.2)", "Espanhol 4 (B1.2)");
+			languageList.put("Espanhol 5 (B1.3)", "Espanhol 5 (B1.3)");
+			languageList.put("Espanhol Conv.(B1/B2)", "Espanhol Conv.(B1/B2)");	
+		} else if(description.equals("FRANCÊS")){
+			languageList.put("Francês 1 (A1.1)", "Francês 1 (A1.1)");
+			languageList.put("Francês 2 (A1.2)", "Francês 2 (A1.2)");
+			languageList.put("Francês 3 (A2.1)", "Francês 3 (A2.1)");
+			languageList.put("Francês 4 (A2.2)", "Francês 4 (A2.2)");
+			languageList.put("Francês 5 (B1.1)", "Francês 5 (B1.1)");
+			languageList.put("Francês 6 (B1.2)", "Francês 6 (B1.2)");
+			languageList.put("Francês 7 (B1.3)", "Francês 7 (B1.3)");
+			languageList.put("Francês Conv.(B1/B2)", "Francês Conv.(B1/B2)");
+		} else if(description.equals("INGLÊS")){
+			languageList.put("Inglês 1 (A1.1)", "Inglês 1 (A1.1)");
+			languageList.put("Inglês 2 (A1.2)", "Inglês 2 (A1.2)");
+			languageList.put("Inglês 3 (A2.1)", "Inglês 3 (A2.1)");
+			languageList.put("Inglês 4 (A2.2)", "Inglês 4 (A2.2)");
+			languageList.put("Inglês 5 (B1.1)", "Inglês 5 (B1.1)");
+			languageList.put("Inglês 6 (A1.2)", "Inglês 6 (A1.2)");
+			languageList.put("Inglês Conv.(B1/B2)", "Inglês Conv.(B1/B2)");
+		} else if(description.equals("PORTUGUÊS")){
+			languageList.put("Português Básico", "Português Básico");
+			languageList.put("Português Intermediário", "Português Intermediário");
+			languageList.put("Português Avançado", "Português Avançado");
+			languageList.put("Português Conversação", "Português Conversação");
+		}
+
+		return languageList;
+	}	
 	public String getKey(Map<String, String> level, String description){
 		String keyValues = "";
         Set<String> keys = level.keySet();

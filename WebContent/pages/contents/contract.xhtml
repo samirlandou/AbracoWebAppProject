@@ -288,17 +288,17 @@
 												   
 									<p:selectOneMenu id="languageComboID"
 													 filter="false" 
-													 value="#{contractController.contractDomain.languageDescription}"
+													 value="#{contractController.contractDomain.classLanguageDescription}"
 													 converter="omnifaces.SelectItemsConverter" 
 													 required="true" 
 													 requiredMessage="O campo 'Língua' é obrigatório">
 																 
 													 <f:selectItem noSelectionOption="true" itemLabel="Selecione uma Língua" />
-													 <f:selectItem itemLabel="ARÁBE" itemValue="AR"/>
-													 <f:selectItem itemLabel="ESPANHOL" itemValue="ES"/>
-													 <f:selectItem itemLabel="FRANCÊS" itemValue="FR"/>
-													 <f:selectItem itemLabel="INGLÊS" itemValue="EN"/>
-													 <f:selectItem itemLabel="PORTUGUÊS" itemValue="BR"/>
+													 <f:selectItem itemLabel="ARÁBE" itemValue="ARÁBE"/>
+													 <f:selectItem itemLabel="ESPANHOL" itemValue="ESPANHOL"/>
+													 <f:selectItem itemLabel="FRANCÊS" itemValue="FRANCÊS"/>
+													 <f:selectItem itemLabel="INGLÊS" itemValue="INGLÊS"/>
+													 <f:selectItem itemLabel="PORTUGUÊS" itemValue="PORTUGUÊS"/>
 									
 													 <p:ajax event="change"
 															 process="@this" 
@@ -313,7 +313,7 @@
 												   
 									<p:selectOneMenu id="levelComboID"
 													 filter="false"
-													 value="#{contractController.contractDomain.levelDescription}"
+													 value="#{contractController.contractDomain.classLevelDescription}"
 													 converter="omnifaces.SelectItemsConverter" 
 													 required="true" 
 													 requiredMessage="O campo 'Nível' é obrigatório">
@@ -430,15 +430,15 @@
 												   
 									<p:selectOneMenu id="placeComboID"
 													 filter="false"
-													 value="#{contractController.contractDomain.placeDescription}"
+													 value="#{contractController.contractDomain.classPlaceDescription}"
 													 converter="omnifaces.SelectItemsConverter" 
 													 required="true" 
 													 requiredMessage="O campo 'Lugar' é obrigatório">
 													 
 													 <f:selectItem noSelectionOption="true" itemLabel="Selecione uma lugar" />
-													 <f:selectItem itemLabel="PINHEIROS" itemValue="PINH"/>
-													 <f:selectItem itemLabel="TATUAPÉ" itemValue="TATU"/>
-													 <f:selectItem itemLabel="EXTERIOR" itemValue="EXTR"/>								
+													 <f:selectItem itemLabel="PINHEIROS" itemValue="PINHEIROS"/>
+													 <f:selectItem itemLabel="TATUAPÉ" itemValue="TATUAPÉ"/>
+													 <f:selectItem itemLabel="EXTERIOR" itemValue="EXTERIOR"/>								
 									</p:selectOneMenu>
 									
 								</h:panelGrid>
@@ -477,7 +477,7 @@
 												   value="Aula-Hora Início: "/>
 												   
 									<p:calendar id="beginHourClassID"
-												value="#{contractController.contractDomain.hourBeginClass}"
+												value="#{contractController.contractDomain.beginClassHour}"
 												locale="pt_BR" 
 												pattern="HH:mm" 
 												timeZone="America/Sao_Paulo" 
@@ -495,7 +495,7 @@
 												   value="Aula-Hora Término: "/>
 												   
 									<p:calendar id="endHourClassID"
-												value="#{contractController.contractDomain.hourEndClass}"
+												value="#{contractController.contractDomain.endClassHour}"
 												locale="pt_BR" 
 												pattern="HH:mm" 
 												timeZone="America/Sao_Paulo" 
@@ -516,7 +516,7 @@
 												   value="Aula-Minutos Pausa: "/>
 												   
 									<h:inputHidden id="pauseHourClassID"
-												   value="#{contractController.contractDomain.hourPauseClass}"/>
+												   value="#{contractController.contractDomain.breakClassHour}"/>
 												   
 	        						<p:slider for="pauseHourClassID"
 	        								  step="5" 
@@ -533,7 +533,7 @@
 												   
 									<p:selectOneMenu id="firstDayClassComboID"
 													 filter="false"
-													 value="#{contractController.contractDomain.dayClass1}"
+													 value="#{contractController.contractDomain.firstClassDayDescription}"
 													 converter="omnifaces.SelectItemsConverter" 
 													 required="true" 
 													 requiredMessage="O campo '1° Dia Letivo' é obrigatório">
@@ -555,7 +555,7 @@
 									
 									<p:selectOneMenu id="secondDayClassComboID"
 													 filter="false"
-													 value="#{contractController.contractDomain.dayClass2}"
+													 value="#{contractController.contractDomain.secondClassDayDescription}"
 													 converter="omnifaces.SelectItemsConverter">
 													 
 										<f:selectItem itemValue="" itemLabel="Escolhe o 2° dia letivo"/>
@@ -571,7 +571,7 @@
 								   
 									<p:selectOneMenu id="typeComboID"
 													 filter="false"
-													 value="#{contractController.contractDomain.classType}"
+													 value="#{contractController.contractDomain.classModuleDescription}"
 													 converter="omnifaces.SelectItemsConverter" 
 													 required="true" 
 													 requiredMessage="O campo 'Típo de Aula' é obrigatório">
@@ -608,7 +608,7 @@
 												   for="packageComboID"/>
 												   
 									<p:inputNumber id="packageComboID"
-												   value="#{contractController.contractDomain.packageDescription}"
+												   value="#{contractController.contractDomain.classPackageHour}"
 												   required="true" 
 												   requiredMessage="O campo 'Pacote' é obrigatório"/>
 								
@@ -771,7 +771,7 @@
 										<p:outputLabel value="Código: "/>
 										
 										<p:outputLabel id="contractCodeID" style="color:green;"
-													   value="#{contractController.contractDomain.codeDescription}"/>									
+													   value="#{contractController.contractDomain.contractCodeDescription}"/>									
 										
 										<p:outputLabel value="Copiar Código: "/>
 										
@@ -784,7 +784,7 @@
 										<pe:clipboard id="clipAjax"
 													  trigger="btnCopyContractCodeID"
 													  action="copy" 
-													  text="#{contractController.contractDomain.codeDescription}">
+													  text="#{contractController.contractDomain.contractCodeDescription}">
 													   
 								            		  <p:ajax event="success"
 								            		  		  listener="#{contractController.successListener}" 
@@ -810,7 +810,7 @@
 										
 										<p:outputLabel value="Nível: "/>
 										
-										<p:outputLabel value="#{contractController.contractDomain.levelDescription}"/>
+										<p:outputLabel value="#{contractController.contractDomain.classLevelDescription}"/>
 										
 										
 										
@@ -856,11 +856,11 @@
 
 										<p:outputLabel value="Módulo: "/>
 										
-										<p:outputLabel value="#{contractController.contractDomain.classType}"/>
+										<p:outputLabel value="#{contractController.contractDomain.classModuleDescription}"/>
 												
 										<p:outputLabel value="Hora Início: "/>
 										
-										<p:outputLabel value="#{contractController.contractDomain.hourBeginClass}">
+										<p:outputLabel value="#{contractController.contractDomain.beginClassHour}">
 											
 		    										   <f:convertDateTime locale="pt_BR"
 		    										   					  pattern="HH:mm"
@@ -869,7 +869,7 @@
 										
 										<p:outputLabel value="Hora Término: "/>
 										
-										<p:outputLabel value="#{contractController.contractDomain.hourEndClass}">
+										<p:outputLabel value="#{contractController.contractDomain.endClassHour}">
 										
 													   <f:convertDateTime locale="pt_BR"
 													   					  pattern="HH:mm"
@@ -878,7 +878,7 @@
 										
 										<p:outputLabel value="Pausa: "/>
 										
-										<p:outputLabel value="#{contractController.contractDomain.hourPauseClass}min"/>
+										<p:outputLabel value="#{contractController.contractDomain.breakClassHour}min"/>
 	
 	
 										<p:outputLabel value="Hora total de Aula: " />
@@ -893,7 +893,7 @@
 														
 										<p:outputLabel value="Pacote de Horas: "/>
 										
-										<p:outputLabel value="#{contractController.contractDomain.packageDescription}h"/>
+										<p:outputLabel value="#{contractController.contractDomain.classPackageHour}h"/>
 
 										
 										<p:outputLabel value="Preço Padrão/Hora: "/>
