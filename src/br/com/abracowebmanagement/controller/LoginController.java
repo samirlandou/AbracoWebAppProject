@@ -94,7 +94,7 @@ public class LoginController implements Serializable{
 				
 			} else{
 				UserDAO userDAO = new UserDAO();
-				rememberPassword = userDAO.FindByUserName(user.getUserName());
+				rememberPassword = userDAO.findByUserName(user.getUserName());
 				
 				if(rememberPassword == null){
 					Messages.addGlobalWarn("Favor informar um usuário válido!");

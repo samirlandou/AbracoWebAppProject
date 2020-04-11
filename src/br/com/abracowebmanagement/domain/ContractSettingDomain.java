@@ -93,6 +93,23 @@ public class ContractSettingDomain extends GenericDomain{
 	@Column(name = "DE_INCOMPANY_PROFESSOR_PRICE", precision = 3, scale = 2, nullable = false)
 	private double inCompanyProfessorPriceDescription;
 
+	
+	
+	
+	//----------------- ONLINE --------------------------------------------------------------	
+	/*
+	 *Class Price
+	 * informs the Online Real Price per Hour
+	 */
+	@Column(name = "DE_ONLINE_REAL_PRICE", precision = 3, scale = 2, nullable = false)
+	private double onlineRealPriceDescription;
+	
+	
+	/*Class Price
+	 * informs the Online Professor Price Per Hour
+	 */
+	@Column(name = "DE_ONLINE_PROFESSOR_PRICE", precision = 3, scale = 2, nullable = false)
+	private double onlineProfessorPriceDescription;
 
 	
 	/*
@@ -212,6 +229,26 @@ public class ContractSettingDomain extends GenericDomain{
 
 	public void setContractSettingSaveLoginUser(String contractSettingSaveLoginUser) {
 		this.contractSettingSaveLoginUser = contractSettingSaveLoginUser;
+	}
+
+
+	public double getOnlineRealPriceDescription() {
+		return onlineRealPriceDescription;
+	}
+
+
+	public void setOnlineRealPriceDescription(double onlineRealPriceDescription) {
+		this.onlineRealPriceDescription = onlineRealPriceDescription;
+	}
+
+
+	public double getOnlineProfessorPriceDescription() {
+		return onlineProfessorPriceDescription;
+	}
+
+
+	public void setOnlineProfessorPriceDescription(double onlineProfessorPriceDescription) {
+		this.onlineProfessorPriceDescription = onlineProfessorPriceDescription;
 	}
 
 }

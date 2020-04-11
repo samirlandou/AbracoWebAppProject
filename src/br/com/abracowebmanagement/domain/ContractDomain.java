@@ -63,7 +63,7 @@ public class ContractDomain extends GenericDomain{
 	 * INT --> Intensive
 	 * INC --> InCompany
 	 */
-	@Column(name = "DE_CLASS_MODULE", length = 15, nullable = false) 
+	@Column(name = "DE_CLASS_MODULE", length = 25, nullable = false) 
 	private String classModuleDescription;
 	
 	/*
@@ -74,7 +74,7 @@ public class ContractDomain extends GenericDomain{
 	 * EN --> English
 	 * ES --> Spanish
 	 * */
-	@Column(name = "DE_CLASS_LANGUAGE", length = 15, nullable = false)
+	@Column(name = "DE_CLASS_LANGUAGE", length = 25, nullable = false)
 	private String classLanguageDescription;
 	
 	
@@ -96,7 +96,7 @@ public class ContractDomain extends GenericDomain{
 	 * Arab:	Arábe 1; Arábe 2; Arábe 3; Arábe 4;
 	 */
 	 
-	@Column(name = "DE_CLASS_LEVEL", length = 15, nullable = false) 
+	@Column(name = "DE_CLASS_LEVEL", length = 25, nullable = false) 
 	private String classLevelDescription;
 
 	
@@ -131,15 +131,7 @@ public class ContractDomain extends GenericDomain{
 	 * Number of hour for each class
 	 */
 	@Column(name = "HR_CLASS_TIME", nullable = false)
-	private int classTimeHour;
-	
-	
-	/*
-	 * Class Time in  Week
-	 * Number of hour for each class
-	 */
-	@Column(name = "HR_WEEKLY_CLASS_TIME", nullable = false)
-	private int weeklyClassTimeHour;	
+	private int classTimeHour;	
 	
 	
 	
@@ -147,14 +139,14 @@ public class ContractDomain extends GenericDomain{
 	 * First Class Day
 	 * day number 1
 	 */
-	@Column(name = "DE_FIRST_CLASS_DAY", length = 15, nullable = false)
+	@Column(name = "DE_FIRST_CLASS_DAY", length = 25, nullable = false)
 	private String firstClassDayDescription;
 	
 	/*
 	 * Second Class Day
 	 * day number 2 (If exist)
 	 */
-	@Column(name = "DE_SECOND_CLASS_DAY", length = 15)
+	@Column(name = "DE_SECOND_CLASS_DAY", length = 25)
 	private String secondClassDayDescription;
 
 	
@@ -179,7 +171,7 @@ public class ContractDomain extends GenericDomain{
 	 *Class Time Package
 	 * Informs the total time package of the class
 	 */
-	@Column(name = "HR_CLASS_PACKAGE", length = 5, nullable = false)
+	@Column(name = "HR_CLASS_PACKAGE", length = 3, nullable = false)
 	private int classPackageHour;
 	
 	
@@ -187,8 +179,17 @@ public class ContractDomain extends GenericDomain{
 	 *Class time
 	 * Informs the Total package Price.
 	 */
-	@Column(name = "DE_TOTAL_PACKAGE_PRICE", precision = 3, scale = 2, nullable = false)
-	private double totalPackagePriceDescription;
+	@Column(name = "DE_TOTAL_PACKAGE_REAL_PRICE", precision = 6, scale = 2, nullable = false)
+	private double totalPackageRealPriceDescription;
+	
+	
+	
+	/*
+	 *Class time
+	 * Informs the Total package Price.
+	 */
+	@Column(name = "DE_TOTAL_PACKAGE_PROFESSOR_PRICE", precision = 6, scale = 2, nullable = false)
+	private double totalPackageProfessorPriceDescription;
 
 	
 
@@ -381,16 +382,6 @@ public class ContractDomain extends GenericDomain{
 	}
 
 
-	public int getWeeklyClassTimeHour() {
-		return weeklyClassTimeHour;
-	}
-
-
-	public void setWeeklyClassTimeHour(int weeklyClassTime) {
-		this.weeklyClassTimeHour = weeklyClassTime;
-	}
-
-
 	public String getFirstClassDayDescription() {
 		return firstClassDayDescription;
 	}
@@ -441,13 +432,13 @@ public class ContractDomain extends GenericDomain{
 	}
 
 
-	public double getTotalPackagePriceDescription() {
-		return totalPackagePriceDescription;
+	public double getTotalPackageRealPriceDescription() {
+		return totalPackageRealPriceDescription;
 	}
 
 
-	public void setTotalPackagePriceDescription(double totalPackagePriceDescription) {
-		this.totalPackagePriceDescription = totalPackagePriceDescription;
+	public void setTotalPackageRealPriceDescription(double totalPackageRealPriceDescription) {
+		this.totalPackageRealPriceDescription = totalPackageRealPriceDescription;
 	}
 
 
@@ -528,6 +519,16 @@ public class ContractDomain extends GenericDomain{
 
 	public void setContractModelDomain(ContractModelDomain contractModelDomain) {
 		this.contractModelDomain = contractModelDomain;
+	}
+
+
+	public double getTotalPackageProfessorPriceDescription() {
+		return totalPackageProfessorPriceDescription;
+	}
+
+
+	public void setTotalPackageProfessorPriceDescription(double totalPackageProfessorPriceDescription) {
+		this.totalPackageProfessorPriceDescription = totalPackageProfessorPriceDescription;
 	}
 
 }

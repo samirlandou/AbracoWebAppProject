@@ -79,7 +79,22 @@
 						<p:outputLabel value="Preço Professor: " for="inCompanyProfessorPricePerHourID"/>
 						<p:inputNumber id="inCompanyProfessorPricePerHourID" value="#{contractSettingController.contractSettingDomain.inCompanyProfessorPriceDescription}"
 							symbol="R$ "  maxlength="5" decimalSeparator="," thousandSeparator="." minValue="1"
-							required="true" requiredMessage="O campo 'Preço Prof. do InCompany' é obrigatório"/>							
+							required="true" requiredMessage="O campo 'Preço Prof. do InCompany' é obrigatório"/>
+							
+
+						
+						<h3 style="position: left;">Online</h3>
+						<p:separator/>	
+												
+						<p:outputLabel value="Preço Padrão: " for="onlineRealPricePerHourID"/>
+						<p:inputNumber id="onlineRealPricePerHourID" value="#{contractSettingController.contractSettingDomain.onlineRealPriceDescription}"
+							symbol="R$ "  maxlength="5" decimalSeparator="," thousandSeparator="." minValue="1"
+							required="true" requiredMessage="O campo 'Preço real do Online' é obrigatório"/>
+						
+						<p:outputLabel value="Preço Professor: " for="onlineProfessorPricePerHourID"/>
+						<p:inputNumber id="onlineProfessorPricePerHourID" value="#{contractSettingController.contractSettingDomain.onlineProfessorPriceDescription}"
+							symbol="R$ "  maxlength="5" decimalSeparator="," thousandSeparator="." minValue="1"
+							required="true" requiredMessage="O campo 'Preço Prof. do Online' é obrigatório"/>							
 					</h:panelGrid>
 					
 					<p:spacer height="10px"/>

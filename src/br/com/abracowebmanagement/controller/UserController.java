@@ -140,8 +140,8 @@ public class UserController implements Serializable {
 			UserDomain result2 = new UserDomain();
 			
 			if(usersDomain.size() >= 1){
-				result = userDAO.FindByUserName(userDomain.getUserName());
-				result2 = userDAO.FindByCompleteName(userDomain.getPersonDomain().getCompleteName());
+				result = userDAO.findByUserName(userDomain.getUserName());
+				result2 = userDAO.findByCompleteName(userDomain.getPersonDomain().getCompleteName());
 				
 				//Condition to save or not the information according to the userName
 				if(result == null){

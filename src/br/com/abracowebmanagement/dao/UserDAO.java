@@ -50,7 +50,7 @@ public class UserDAO extends GenericDAO<UserDomain> {
 		}
 	}
 	
-	public UserDomain FindByUserName(String userName){
+	public UserDomain findByUserName(String userName){
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		
 		try{
@@ -62,7 +62,7 @@ public class UserDAO extends GenericDAO<UserDomain> {
 			consult.add(Restrictions.eq("userName", userName));
 			
 			//Get result
-			UserDomain result = new UserDomain();;
+			UserDomain result = new UserDomain();
 			result = (UserDomain) consult.uniqueResult();
 			
 			return result;
@@ -75,7 +75,7 @@ public class UserDAO extends GenericDAO<UserDomain> {
 	}
 	
 	
-	public UserDomain FindByCompleteName(String completName){
+	public UserDomain findByCompleteName(String completName){
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		
 		try{
