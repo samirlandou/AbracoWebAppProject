@@ -5,6 +5,7 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
 	template="/pages/template/systemModel.xhtml">
 
 
@@ -38,7 +39,7 @@
 	
 	
 						<!-- NM_USER -->
-						<p:column headerText="Usuário:" sortBy="#{cursor.userName}" filterBy="#{cursor.userName}" style="text-align: center;">
+						<p:column headerText="Usuário:" sortBy="#{cursor.userName}" filterBy="#{cursor.userName}" style="width: 18%; text-align: center;">
 							<h:outputText value="#{cursor.userName}"/>
 						</p:column>
 						
@@ -47,36 +48,36 @@
 							<h:outputText value="#{cursor.personDomain.completeName}"/>
 						</p:column>
 	
-						<!-- DE_NATIONALITY -->
-						<p:column headerText="Nacionalidade" style="text-align: center;">
-							<h:outputText value="#{cursor.personDomain.nationality}"/>
+						<!-- DE_COUNTRY -->
+						<p:column headerText="País" style="width: 12%; text-align: center;">
+							<h:outputText value="#{cursor.personDomain.country.equals('República Democrática do Congo')? 'RDC' : cursor.personDomain.country}"/>
 						</p:column>
 	
 						<!-- DE_SEX -->
-						<p:column headerText="Sexo" sortBy="#{cursor.personDomain.sex}" style="text-align: center;">
+						<p:column headerText="Sexo" sortBy="#{cursor.personDomain.sex}" style="width: 5%; text-align: center;">
 							<h:outputText value="#{cursor.personDomain.sex}"/>					
 						</p:column>
 						
 						<!-- DE_LANGUAGE -->
-						<p:column headerText="Língua" sortBy="#{cursor.personDomain.language}" filterBy="#{cursor.personDomain.langue}" style="text-align: center;">
+						<p:column headerText="Língua" sortBy="#{cursor.personDomain.language}" filterBy="#{cursor.personDomain.langue}" style="width: 5%; text-align: center;">
 							<h:outputText value="#{cursor.personDomain.language}"/>
 						</p:column>
 	
 						<!-- DE_PROFILE -->
-						<p:column headerText="Perfil" sortBy="#{cursor.personDomain.profile}" style="text-align: center;">
+						<p:column headerText="Perfil" sortBy="#{cursor.personDomain.profile}" style="width: 11%; text-align: center;">
 							<h:outputText value="#{cursor.personDomain.profile}"/>
 						</p:column>
 	
 						<!-- DE_STATUS -->
-						<p:column headerText="Status" sortBy="#{cursor.personDomain.status}" style="text-align: center;">
-							<h:outputText value="#{cursor.personDomain.status}"/>				
+						<p:column headerText="Status" sortBy="#{cursor.personDomain.status}" style="width: 6%; text-align: center;">
+							<h:outputText value="#{cursor.personDomain.status == true? 'Ativo' : 'Inativo'}"/>				
 						</p:column>
 						
 						<!-- OPTIONS -->
-						<p:column headerText="Opções">
+						<p:column headerText="Opções" style="width: 8%; text-align: center;">
 	
 							<!-- BUTTON TO EDIT -->
-							<p:commandButton icon="ui-icon-pencil" actionListener="#{userController.doEdit}"
+							<p:commandButton icon="fa fa-edit" actionListener="#{userController.doEdit}"
 											oncomplete="PF('dlgNewUser').show();"
 											update=":idMsgGlobal :userRegisterFormId:userInputRegisterPnlId :userListFormId:userDataTableFormId">
 								<f:attribute name="selectedUserByCursor" value="#{cursor}"/>
@@ -84,7 +85,7 @@
 							</p:commandButton>
 						
 							<!-- BUTTON TO DELETE -->
-							<p:commandButton icon="ui-icon-trash" actionListener="#{userController.doDelete}"
+							<p:commandButton icon="fa fa-trash" actionListener="#{userController.doDelete}"
 											update=":idMsgGlobal :userListFormId:userDataTableFormId">
 								<p:confirm header="Confirmação" message="Deseja excluir #{cursor.personDomain.completeName}?" icon="ui-icon-alert"/>
 								<f:attribute name="selectedUserByCursor" value="#{cursor}"/>
@@ -96,12 +97,23 @@
 						<f:facet name="footer">
 	
 							<!-- NEW BUTTON -->
-							<p:commandButton value="Novo"
+							<p:commandButton value="Novo" icon="fa fa-plus"
 								actionListener="#{userController.doNewRegister}"
 								oncomplete="PF('dlgNewUser').show();"
 								update=":idMsgGlobal :userRegisterFormId:userInputRegisterPnlId">
 								<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener"/>
 							</p:commandButton>
+						
+							<!-- CHOOSE DATA TABLE COLOMNS  -->
+							<p:commandButton value="Colunas"
+							 				  type="button" 
+							 				  id="columnsDataTableID"
+							 				  icon="fa fa-edit"/>
+							 				  
+							<p:columnToggler datasource="userDataTableFormId"
+							 				  trigger="columnsDataTableID">						 
+							</p:columnToggler>
+						 							
 						</f:facet>
 	
 					</p:dataTable>
@@ -109,8 +121,8 @@
 					
 					<!-- CONFIRM DIALOG WHEN DELETING -->
 					<p:confirmDialog global="true" >
-						<p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>		
-						<p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+						<p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check"/>		
+						<p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-close"/>
 					</p:confirmDialog>
 					
 				</p:panel>
@@ -119,25 +131,38 @@
 	
 			<!-- DIALOG TO REGISTER NEW USER -->
 			<p:dialog header="Cadastrar Nova pessoa" widgetVar="dlgNewUser"
-				draggable="true" resizable="false" modal="true" closable="true"
-				appendTo="@(body)">
+				draggable="true" resizable="true" modal="true" closable="true"
+				appendTo="@(body)" position="top" maximizable="true" responsive="true">
 	
 				<!-- FORM FOR THE DIALOG -->
 				<h:form id="userRegisterFormId" enctype="multipart/form-data">
 				
 					<!-- PANEL GRID TO FILL FORMS -->
+					<p:scrollPanel mode="native">
+					
 					<h:panelGrid id="userInputRegisterPnlId" columns="2">			
 						<p:outputLabel value="Usuário: *" />
 						<p:inputText value="#{userController.userDomain.userName}" maxlength="30" size="27"
 									required="true" requiredMessage="O campo 'Usuário' é obrigatório"/>
+									
+						<p:outputLabel value="CNPJ: *" />
+						<p:inputMask value="#{userController.userDomain.cnpj}" maxlength="14" size="27" 
+									mask="99.999.999/9999-99"
+									required="true" requiredMessage="O campo 'CNPJ' é obrigatório">
+									<p:ajax event="change"
+											process="@this"
+											global="false"
+											listener="#{userController.doValidateCNPJ}" 
+											update=":idMsgGlobal" />								
+									
+						</p:inputMask>
 						
 						<p:outputLabel value="Senha: *" />
 						<p:password value="#{userController.userDomain.passwordWithoutCryptography}" maxlength="12" size="27"
 									promptLabel="Digite a senha" weakLabel="fraco" goodLabel="Intermediário" strongLabel="forte"
-									feedback="true" inline="true" 
-									required="true" requiredMessage="O campo 'Senha' é obrigatório"/>
+									feedback="true" inline="true" id="passwordID" />
 	
-						<p:outputLabel value="Lembre sua senha com uma frase: *" />
+						<p:outputLabel value="Lembre sua senha: *" />
 						<p:inputTextarea value="#{userController.userDomain.rememberPassword}" rows="2" cols="30" counter="display"
 							maxlength="100" counterTemplate="{0} caracteres restantes."
 							autoResize="true" required="true" requiredMessage="O campo 'Lembrar Senha' é obrigatório"/>
@@ -156,24 +181,36 @@
 						<br/>
 						<p:spacer width="10px"/>
 						<p:outputLabel value="Imagem:" />
-						<p:fileUpload  	fileUploadListener="#{userController.handleFileUpload}" mode="advanced" dragDropSupport="true"
+						<p:fileUpload  	mode="advanced"
+										fileUploadListener="#{userController.handleFileUpload}"
+										value="#{userController.file}"
+										dragDropSupport="true"
 						          		skinSimple="true" auto="true"
-						          		update=":idMsgGlobal" sizeLimit="512000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" 
+						          		update=":idMsgGlobal userRegisterFormId:photoID"
+						          		sizeLimit="20480000" 
+						          		allowTypes="/(\.|\/)(gif|jpg|jpeg|png)$/" 
 						          		invalidFileMessage="São permitidas somente imagens (gif, jpeg, jpg e png)"
-						          		invalidSizeMessage="O tamanho máximo permitido é de 500KB."
+						          		invalidSizeMessage="O tamanho máximo permitido é de 2MB."
 						          		onstart="console.log('Iniciando envio de arquivo')"
 										onerror="console.log('Erro na requisição de envio')"
 										oncomplete="console.log('Envio concluído')" />
 	   					<br/>
+	   					
+	   					<p:graphicImage id="photoID" cache="false" value="#{imageController.streamContent}" width="100px" height="auto"/>
 	
 					</h:panelGrid>
+					</p:scrollPanel>
 					
 					<br/>				
 					<!-- PANEL GRID FOR BUTTON SAVE AND CLOSE -->
 					<h:panelGrid columns="2">
 						<p:commandButton value="Salvar" icon="fa fa-floppy-o" actionListener="#{userController.doSave}"
-										update=":idMsgGlobal :userRegisterFormId:userInputRegisterPnlId :userListFormId:userDataTableFormId"/>					
-						<p:commandButton value="Fechar"  icon="fa fa-remove" oncomplete="PF('dlgNewUser').hide();" action="#{userController.doDeleteTempfiles}"/>
+										update=":idMsgGlobal userRegisterFormId:photoID
+										:userRegisterFormId:userInputRegisterPnlId 
+										:userListFormId:userDataTableFormId
+										:principalMenuFormID:photoID"
+										/>					
+						<p:commandButton immediate="true" value="Fechar"  icon="fa fa-remove" oncomplete="PF('dlgNewUser').hide();" action="#{userController.doDeleteTempfiles}"/>
 					</h:panelGrid>		
 					
 				</h:form>

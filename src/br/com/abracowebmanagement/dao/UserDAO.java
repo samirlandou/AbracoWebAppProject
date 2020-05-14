@@ -1,6 +1,6 @@
 package br.com.abracowebmanagement.dao;
 
-import org.apache.shiro.crypto.hash.SimpleHash;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -32,10 +32,10 @@ public class UserDAO extends GenericDAO<UserDomain> {
 			consult.add(Restrictions.eq("userName", userName));
 			
 			//Cryptography with MD5 HEX
-			SimpleHash hash = new SimpleHash("MD5", password);
+			//SimpleHash hash = new SimpleHash("MD5", password);
 			
 			//Add restriction for password
-			consult.add(Restrictions.eq("password", hash.toHex()));
+			consult.add(Restrictions.eq("password", new String(Base64.encodeBase64(password.getBytes()))));
 			
 			//Get result
 			UserDomain result = new UserDomain();
@@ -81,10 +81,34 @@ public class UserDAO extends GenericDAO<UserDomain> {
 		try{
 			Criteria consult = session.createCriteria(UserDomain.class);
 			
-			consult.createAlias("personDomain", "p");
+			consult.createAlias("pDomain", "p");
 			
 			//Add restriction for userName
 			consult.add(Restrictions.eq("p.completeName", completName));
+			
+			//Get result
+			UserDomain result = new UserDomain();
+			result = (UserDomain) consult.uniqueResult();
+			
+			return result;
+			
+		} catch (RuntimeException error) {
+			throw error;
+		}finally {
+			session.close();
+		}
+	}
+	
+	public UserDomain findByCNPJ(String cnpj){
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		
+		try{
+			Criteria consult = session.createCriteria(UserDomain.class);
+			
+			consult.createAlias("userDomain", "u");
+			
+			//Add restriction for userName
+			consult.add(Restrictions.eq("u.cnpj", cnpj));
 			
 			//Get result
 			UserDomain result = new UserDomain();

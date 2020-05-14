@@ -6,21 +6,41 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
+
+import br.com.abracowebmanagement.domain.UserDomain;
 
 @ManagedBean
 @RequestScoped
 public class ImageController {
 	
-	@ManagedProperty("#{param.imageUserPath}") //GetParameter from user.xhtml
+	UserDomain userDomain = new UserDomain();;
+	
+	//@ManagedProperty("#{param.imageUserPath}") //GetParameter from user.xhtml
+	/*@ManagedProperty("#{param.photo}") //GetParameter from user.xhtml*/
 	private String imageUserPath;
 	
 	private StreamedContent streamContent;
+	
+	
+	//Login Controller
+	LoginController loginController = new LoginController();
+	
+	@PostConstruct
+	public void init() {
+
+		//Face Context Login
+		FacesContext fcLogin = FacesContext.getCurrentInstance();
+		
+		//Get External Context from LoginController
+		loginController = (LoginController) fcLogin.getExternalContext().getSessionMap().get("loginController");
+	}
 	
 	
 	/*
@@ -41,36 +61,16 @@ public class ImageController {
 	
 	public StreamedContent getStreamContent() throws IOException {
 		
+		//Set Default Image User Path		
+		Path path = Paths.get("C:/Users/Samir Landou/Documents/Desenvolvimento/Uploads/Default/Login/defaultUserImage.png");
 		
-		if(imageUserPath.toString() == null || imageUserPath.toString().isEmpty()){
-			Path path = Paths.get("C:/Users/Samir Landou/Documents/Desenvolvimento/Uploads/Users/imagePattern/man.png");
-			InputStream is = Files.newInputStream(path);
-			streamContent = new DefaultStreamedContent(is);
-		} else{
-			Path path = Paths.get(imageUserPath);
-			InputStream is = Files.newInputStream(path);
-			streamContent = new DefaultStreamedContent(is);			
+		if(loginController.getLoggedUser().getImageUserFileName() != null){
+			path = Paths.get(loginController.getLoggedUser().getImageUserFileName());
 		}
 		
-		/*
-		Path path = Paths.get("C:/Users/Samir Landou/Documents/Desenvolvimento/Uploads/Users/imagePattern/man.png");
 		InputStream is = Files.newInputStream(path);
 		streamContent = new DefaultStreamedContent(is);
-		*/
-		/*try {
-			if(imageUserPath != null || !imageUserPath.isEmpty()){
-				Path path = Paths.get(imageUserPath);
-				InputStream is = Files.newInputStream(path);
-				imageUserStreamContent = new DefaultStreamedContent(is);
-			} else{
-				Path path = Paths.get("C:/Users/Samir Landou/Documents/Desenvolvimento/Uploads/Users/imagePattern/man.png");
-				InputStream is = Files.newInputStream(path);
-				imageUserStreamContent = new DefaultStreamedContent(is);			
-			}
-		} catch (IOException e) {
-			Messages.addGlobalError("Ocorreu um erro ao tentar carregar a imagem do usuário!!!");
-			e.printStackTrace();
-		}	*/	
+	
 		return streamContent;
 	}
 	

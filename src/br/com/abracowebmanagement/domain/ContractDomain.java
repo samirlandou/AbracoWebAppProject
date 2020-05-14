@@ -133,7 +133,12 @@ public class ContractDomain extends GenericDomain{
 	@Column(name = "HR_CLASS_TIME", nullable = false)
 	private int classTimeHour;	
 	
-	
+	/*
+	 * Class Time
+	 * Number of hour for each class
+	 */
+	@Column(name = "HR_WEEKLY_CLASS_TIME", nullable = false)
+	private int classWeeklyTimeHour;		
 	
 	/*
 	 * First Class Day
@@ -269,9 +274,9 @@ public class ContractDomain extends GenericDomain{
 	 * Insert Person Data Table into ContractDomain
 	 * Inform here the name of the student.
 	 */	
-	@ManyToOne
-	@JoinColumn(nullable = true)
-	private PersonDomain personDomain;
+	/*@ManyToOne
+	@JoinColumn(nullable = false)
+	private PersonDomain personDomain;*/
 	
 	
 	/*
@@ -280,7 +285,7 @@ public class ContractDomain extends GenericDomain{
 	 * Inform here the name of the student.
 	 */	
 	@ManyToOne
-	@JoinColumn(nullable = true)
+	@JoinColumn(nullable = false)
 	private ContractModelDomain contractModelDomain;
 
 	
@@ -502,14 +507,14 @@ public class ContractDomain extends GenericDomain{
 	}
 
 
-	public PersonDomain getPersonDomain() {
+	/*public PersonDomain getPersonDomain() {
 		return personDomain;
 	}
 
 
 	public void setPersonDomain(PersonDomain personDomain) {
 		this.personDomain = personDomain;
-	}
+	}*/
 
 
 	public ContractModelDomain getContractModelDomain() {
@@ -529,6 +534,16 @@ public class ContractDomain extends GenericDomain{
 
 	public void setTotalPackageProfessorPriceDescription(double totalPackageProfessorPriceDescription) {
 		this.totalPackageProfessorPriceDescription = totalPackageProfessorPriceDescription;
+	}
+
+
+	public int getClassWeeklyTimeHour() {
+		return classWeeklyTimeHour;
+	}
+
+
+	public void setClassWeeklyTimeHour(int classWeeklyTimeHour) {
+		this.classWeeklyTimeHour = classWeeklyTimeHour;
 	}
 
 }

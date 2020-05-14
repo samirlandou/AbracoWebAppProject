@@ -28,6 +28,15 @@ public class UserDomain extends GenericDomain{
 	@Column(name ="ID_LOGIN")
 	private Long id;*/
 	
+	
+
+
+	/*
+	 * Phone number
+	 */
+	@Column(name = "DE_CNPJ", length = 18, nullable = true)
+	private String cnpj;
+	
 	/*
 	 * User Name
 	 */
@@ -185,6 +194,16 @@ public class UserDomain extends GenericDomain{
 
 	public void setUserTheme(String userTheme) {
 		this.userTheme = userTheme;
+	}
+
+
+	public String getCnpj() {
+		return cnpj;
+	}
+
+
+	public void setCnpj(String cnpj) {
+		this.cnpj = cnpj;
 	}
 
 

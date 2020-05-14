@@ -327,8 +327,8 @@
 									</pe:clipboard>
 									
 									<p:outputLabel value="PRECO_PADRAO_CURSO "/>
-									<p:commandButton id="btnCopylClassPatternPriceID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
-									<pe:clipboard id="clipAjaxClassPatternPriceID" trigger="btnCopylClassPatternPriceID" action="copy" text="PRECO_PADRAO_CURSO">  
+									<p:commandButton id="btnCopylClassRealPriceID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
+									<pe:clipboard id="clipAjaxClassRealPriceID" trigger="btnCopylClassRealPriceID" action="copy" text="PRECO_PADRAO_CURSO">  
 							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
 							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
 									</pe:clipboard>
@@ -347,13 +347,20 @@
 							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
 									</pe:clipboard>
 									
-									<p:outputLabel value="PRECO_TOTAL_CURSO "/>
-									<p:commandButton id="btnCopylClassTotalPriceID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
-									<pe:clipboard id="clipAjaxClassProfessorTotalPriceID" trigger="btnCopylClassTotalPriceID" action="copy" text="PRECO_TOTAL_CURSO">  
+									<p:outputLabel value="PRECO_PADRAO_TOTAL_CURSO "/>
+									<p:commandButton id="btnCopylClassRealTotalPriceID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
+									<pe:clipboard id="clipAjaxClassRealTotalPriceID" trigger="btnCopylClassRealTotalPriceID" action="copy" text="PRECO_PADRAO_TOTAL_CURSO">  
 							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
 							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
 									</pe:clipboard>	
-																		
+									
+									<p:outputLabel value="PRECO_PROFESSOR_TOTAL_CURSO "/>
+									<p:commandButton id="btnCopylClassProfessorTotalPriceID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
+									<pe:clipboard id="clipAjaxClassProfessorTotalPriceID" trigger="btnCopylClassProfessorTotalPriceID" action="copy" text="PRECO_PROFESSOR_TOTAL_CURSO">  
+							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
+							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
+									</pe:clipboard>
+																											
 									<h3 style="position: left;"> PRAZO </h3>
 									<p:separator/>
 									<br/>									

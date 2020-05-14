@@ -5,6 +5,7 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
 	template="/pages/template/systemModel.xhtml">
 
 
@@ -45,48 +46,44 @@
 						<h:outputText value="#{cursor.completeName}"/>
 					</p:column>
 
-					<!-- DE_NATIONALITY -->
-					<p:column headerText="Nacionalidade">
-						<h:outputText value="#{cursor.nationality}"/>
+					<!-- DE_COUNTRY -->
+					<p:column headerText="País"  style="width: 12%; text-align: center;">
+						<h:outputText value="#{cursor.country.equals('República Democrática do Congo')? 'RDC' : cursor.country}"/>
 					</p:column>
 
 					<!-- DE_SEX -->
-					<p:column headerText="Sexo" sortBy="#{cursor.sex}" style="width: 5%">
+					<p:column headerText="Sexo" sortBy="#{cursor.sex}" style="width: 5%; text-align: center;">
 						<h:outputText value="#{cursor.sex}"/>					
 					</p:column>
 
 					<!-- DE_EMAIL -->
 					<p:column headerText="E-mail">
-						<h:outputText value="#{cursor.email}"/>
+						<h:outputText value="#{cursor.email}" style="width: 15%; text-align: center;"/>
 					</p:column>
 
 					<!-- DE_TELEPHONE -->
-					<p:column headerText="Telefone">
+					<p:column headerText="Telefone"  style="width: 9%; text-align: center;">
 						<h:outputText value="#{cursor.telephone}"/>
-					</p:column>
-
-					<!-- DE_ADDRESS -->
-					<p:column headerText="Endereço">
-						<h:outputText value="#{cursor.address}"/>
 					</p:column>
 					
 					<!-- DE_LANGUAGE -->
-					<p:column headerText="Língua" sortBy="#{cursor.language}" filterBy="#{cursor.language}">
+					<p:column headerText="Língua" sortBy="#{cursor.language}"
+							  filterBy="#{cursor.language}" style="width: 7%; text-align: center;">
 						<h:outputText value="#{cursor.language}"/>
 					</p:column>
 
 					<!-- DE_PROFILE -->
-					<p:column headerText="Perfil" sortBy="#{cursor.profile}">
+					<p:column headerText="Perfil" sortBy="#{cursor.profile}" style="width: 11%; text-align: center;" >
 						<h:outputText value="#{cursor.profile}"/>
 					</p:column>
 
 					<!-- DE_STATUS -->
-					<p:column headerText="Status" sortBy="#{cursor.status}" style="width: 8%">
-						<h:outputText value="#{cursor.status == true? 'Ativo' : 'Desativado'}"/>					
+					<p:column headerText="Status" sortBy="#{cursor.status}" style="width: 6%; text-align: center;">
+						<h:outputText value="#{cursor.status == true? 'Ativo' : 'Inativo'}"/>					
 					</p:column>
 					
 					<!-- OPTIONS -->
-					<p:column headerText="Opções" style="width: 8%">
+					<p:column headerText="Opções" style="width: 8%; text-align: center;">
 
 						<!-- BUTTON TO EDIT -->
 						<p:commandButton icon="fa fa-edit" actionListener="#{personController.doEdit}"
@@ -124,7 +121,18 @@
 										update=":personRegisterFormId:personInputRegisterFormId">
 							
 							<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener"/>
-							</p:commandButton>
+						</p:commandButton>
+						
+						<!-- CHOOSE DATA TABLE COLOMNS  -->
+						<p:commandButton value="Colunas"
+						 				  type="button" 
+						 				  id="columnsDataTableID"
+						 				  icon="fa fa-edit"/>
+						 				  
+						<p:columnToggler datasource="personDataTableFormId"
+						 				  trigger="columnsDataTableID">
+						</p:columnToggler>
+						 
 					</f:facet>
 
 				</p:dataTable>
@@ -136,12 +144,12 @@
 					<p:commandButton value="Sim" 
 									type="button" 
 									styleClass="ui-confirmdialog-yes" 
-									icon="ui-icon-check"/>
+									icon="fa fa-check"/>
 											
 					<p:commandButton value="Não" 
 									type="button" 
 									styleClass="ui-confirmdialog-no" 
-									icon="ui-icon-close"/>
+									icon="fa fa-close"/>
 				</p:confirmDialog>
 					
 			</h:form>
@@ -156,28 +164,60 @@
 				<h:form id="personRegisterFormId">
 				
 					<!-- PANEL GRID TO FILL FORMS -->
-					<h:panelGrid id="personInputRegisterFormId" columns="2">			
+					<h:panelGrid id="personInputRegisterFormId" columns="2">
+					
 						<p:outputLabel value="Nome Completo: *" />
 						<p:inputText value="#{personController.personDomain.completeName}" maxlength="40" size="27"
 									required="true" requiredMessage="O campo 'Nome Completo' é obrigatório"/>
+
+						<p:outputLabel value="CPF: *" />
+						<p:inputMask value="#{personController.personDomain.cpf}" maxlength="40" size="27"
+									mask="999.999.999-99"
+									required="true" requiredMessage="O campo 'CPF' é obrigatório">
+									<p:ajax event="change"
+											process="@this"
+											global="false"
+											listener="#{personController.doValidateCPF}" 
+											update=":idMsgGlobal" />									
 						
-						<p:outputLabel value="País: *" />
-						<p:inputText value="#{personController.personDomain.nationality}" maxlength="20" size="27"
-									required="true" requiredMessage="O campo 'Nacionalidade' é obrigatório" style="text-transform: uppercase"/>
+						</p:inputMask>
+						
+						<p:outputLabel value="País: *" />																					   
+						<p:selectOneMenu id="countryComboID"
+										 filter="true"
+										 value="#{personController.personDomain.country}"
+										 converter="omnifaces.SelectItemsConverter" 
+										 required="true" 
+										 requiredMessage="O campo 'País' é obrigatório">
+										 
+										 <f:selectItem noSelectionOption="true" itemLabel="Escolhe o país"/>
+										 <f:selectItems value="#{personController.country}"
+										 				var="countryVar"
+										 				itemValue="#{countryVar}"
+										 				itemLabel="#{countryVar}"/>								
+						</p:selectOneMenu>
 	
 						<p:outputLabel value="Sexo: *" />
-						<p:selectOneRadio value="#{personController.personDomain.sex}" required="true" requiredMessage="O campo 'Sexo' é obrigatório">
+						<p:selectOneRadio value="#{personController.personDomain.sex}" 
+										required="true" requiredMessage="O campo 'Sexo' é obrigatório">
 							<f:selectItem itemLabel="Masculino" itemValue="M" />
 							<f:selectItem itemLabel="Feminino" itemValue="F" />
 						</p:selectOneRadio>
 	
 						<p:outputLabel value="E-mail: *" />
 						<p:inputText value="#{personController.personDomain.email}" maxlength="60" size="27"
-									required="true" requiredMessage="O campo 'E-mail' é obrigatório"/>
+									required="true" requiredMessage="O campo 'E-mail' é obrigatório">
+									<p:ajax event="change"
+											process="@this"
+											global="false"
+											listener="#{personController.doValidateEmail}" 
+											update=":idMsgGlobal" />
+						</p:inputText>
 						
 						<p:outputLabel value="Telefone: *" />
-						<p:inputMask  value="#{personController.personDomain.telephone}" mask="(99) 99999-9999"
-									required="true" requiredMessage="O campo 'Telefone' é obrigatório"/>
+						<p:inputMask  value="#{personController.personDomain.telephone}" mask="(99)99999-9999"
+									required="true" requiredMessage="O campo 'Telefone' é obrigatório">
+						</p:inputMask>
 						
 						<p:outputLabel value="Endereço: " />
 						<p:inputTextarea value="#{personController.personDomain.address}" rows="2" cols="30" counter="display"
@@ -192,11 +232,11 @@
 						<p:selectOneMenu id="linguaComboId" filter="false" value="#{personController.personDomain.language}"
 							converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="O campo 'Língua' é obrigatório">
 							<f:selectItem noSelectionOption="true" itemLabel="Selecione uma Língua" />
-							<f:selectItem itemLabel="ARABE" itemValue="AR"/>
+							<f:selectItem itemLabel="ÁRABE" itemValue="AR"/>
 							<f:selectItem itemLabel="ESPANHOL" itemValue="ES"/>
-							<f:selectItem itemLabel="FRANCES" itemValue="FR"/>
-							<f:selectItem itemLabel="INGLES" itemValue="EN"/>
-							<f:selectItem itemLabel="PORTUGUES" itemValue="BR"/>
+							<f:selectItem itemLabel="FRANCÊS" itemValue="FR"/>
+							<f:selectItem itemLabel="INGLÊS" itemValue="EN"/>
+							<f:selectItem itemLabel="PORTUGUÊS" itemValue="BR"/>
 						</p:selectOneMenu>
 						
 						<p:outputLabel value="Perfil: *" />
@@ -209,7 +249,7 @@
 						</p:selectOneMenu>
 						
 						<p:outputLabel value="Status: *" />
-						<p:toggleSwitch value="#{personController.personDomain.status}" required="true" requiredMessage="O campo 'Status' é obrigatório">
+						<p:toggleSwitch value="#{personController.personDomain.status}">
 							<p:ajax listener="#{personController.addMessage}" update=":idMsgGlobal" />
 						</p:toggleSwitch>
 						<br/>			
@@ -217,7 +257,7 @@
 					
 					<br/>				
 					<!-- PANEL GRID FOR BUTTON SAVE AND CLOSE -->
-					<h:panelGrid columns="2">
+					<h:panelGrid columns="2" styleClass="panelGridCenter">
 						<p:commandButton value="Salvar" icon="fa fa-floppy-o" actionListener="#{personController.doSave}"
 										title="Salvar Registro"
 										update=":idMsgGlobal

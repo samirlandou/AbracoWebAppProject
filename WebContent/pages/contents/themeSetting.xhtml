@@ -37,12 +37,15 @@
 								
 					<!-- PANEL GRID FOR BUTTON SAVE AND CLOSE -->
 					<h:panelGrid columns="2">
-						<p:commandButton value="Salvar" icon="fa fa-floppy-o" action="#{themeSettingController.doSave}"
-										title="Salvar Tema"
-										update=":idMsgGlobal" />					
+					
 						<p:commandButton value="Voltar" icon="fa fa-reply" 
 										title="Voltar para a Tela 'Parâmetros'"
 										action="/pages/contents/setting.xhtml"/>
+										
+						<p:commandButton value="Salvar" icon="fa fa-floppy-o" action="#{themeSettingController.doSave}"
+										title="Salvar Tema"
+										update=":idMsgGlobal" />					
+
 					</h:panelGrid>
 				</f:view>				
 				

@@ -12,9 +12,10 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 
-import org.apache.shiro.crypto.hash.SimpleHash;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.omnifaces.util.Messages;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
@@ -27,6 +28,8 @@ import br.com.abracowebmanagement.dao.UserDAO;
 import br.com.abracowebmanagement.domain.PersonDomain;
 import br.com.abracowebmanagement.domain.UserDomain;
 import br.com.abracowebmanagement.util.FileUtil;
+import br.com.abracowebmanagement.util.MethodUtil;
+import br.com.abracowebmanagement.util.PersonUtil;
 
 @ManagedBean
 @ViewScoped
@@ -38,6 +41,8 @@ public class UserController implements Serializable {
 	private List<UserDomain> usersDomain;
 	private List<PersonDomain> personsDomain;
 
+	public PersonUtil persontUtil = new PersonUtil();
+	public MethodUtil methodUtil =  new MethodUtil();
 	
 	private StreamedContent sc;
 	private List <StreamedContent> userImages;
@@ -49,7 +54,19 @@ public class UserController implements Serializable {
 	Path tempFile;
 	boolean userNameFlag;
 	boolean completeNameFlag;
-	boolean upload = false;
+	boolean upload;
+	boolean editFlag;
+	
+	String userName, cnpj;
+	
+	UserDomain resultDomain;
+	
+	private UploadedFile file;
+	
+	String oldPassword;
+		
+	//Login Controller
+	LoginController loginController = new LoginController();
 
 	
 	public UserController(){
@@ -70,17 +87,51 @@ public class UserController implements Serializable {
 			UserDAO userDAO = new UserDAO();
 			usersDomain= userDAO.descendList("id");
 			
-			//String md5 = "5756ba3274a81093b0eae45beef96488";
-		    //Fazer o teste --> byte[] bytes = Base64.encodeBase64(new BigInteger(md5, 16 /*or 128bits*/).toByteArray());
-		    //String s = new String(bytes);
-		    //System.out.println(s);
-		    // V1a6MnSoEJOw6uRb7vlkiA==*/
+			//Clean Variables
+			doClean();
 		      
 		} catch (Exception e) {
 			Messages.addGlobalError("Ocorreu um erro ao listar as informações das pessoas !!!");
 			e.printStackTrace();			
 		}		
-	}	
+	}
+	
+
+	
+	public void doClean(){
+		
+		//Set Field
+		userName = "";
+		cnpj = "";
+		
+		//Set Flag
+		userNameFlag = false;
+		completeNameFlag = false;
+		upload = false;
+		editFlag = false;
+		
+	}
+	
+
+	/**
+	 * Validate a CNPJ
+	 */
+	public void doValidateCNPJ(){
+		
+		if(!methodUtil.validateCNPJ(userDomain.getCnpj())){
+			
+			//Error Message
+			Messages.addGlobalError("O CNPJ informado é invalido!");
+		}
+	}
+
+	
+	public String doDecodePassword(String password){
+		
+		
+		return password;
+		
+	}
 	
 	
 	/**
@@ -91,9 +142,6 @@ public class UserController implements Serializable {
 	 */
 	public void doNewRegister(){
 		
-		//Set upload image to false
-		upload = false;
-		
 		try {
 			//Instantiate new User
 			userDomain = new UserDomain();
@@ -101,13 +149,35 @@ public class UserController implements Serializable {
 			//Instantiate List of person
 			PersonDAO personDAO = new PersonDAO();
 			personsDomain = personDAO.list();
+			
+			//Clean Variables
+			doClean();
+			
 		} catch (Exception e) {
 			Messages.addGlobalError("Ocorreu um erro tentar gerar a lista de pessoas");
 			e.printStackTrace();
 		}
+	}	
+
+
+	/**
+	 * check field Method. <br/>
+	 * @author samirlandou <br/>
+	 * @since 27/04/2020
+	 * @return
+	 */
+	public String checkField(){
+		
+		if(!userName.equals(userDomain.getUserName())){
+			return "userName";
+		} else if(!cnpj.equals(userDomain.getCnpj())){
+			return "cnpj";
+		} else{
+			return "";
+		}
 	}
 	
-
+	
 	/**
 	 * Save Method. <br/>
 	 * @author samirlandou <br/>
@@ -123,25 +193,38 @@ public class UserController implements Serializable {
 		context.addMessage(null, message);*/		
 		
 		try {
+			
+			//Set Save Flag
+			 boolean saveFlag = true;
+			
 			//Save User with merge method
 			UserDAO userDAO = new UserDAO();
 			
-			
 			//Cryptography with MD5 HEX
-			SimpleHash hash = new SimpleHash("MD5", userDomain.getPasswordWithoutCryptography());
+			//SimpleHash hash = new SimpleHash("MD5", userDomain.getPasswordWithoutCryptography());
 			
-			//Set cryptography in the real password
-			userDomain.setPassword(hash.toHex());
+			//Set cryptography in the real firstPassword
+			//userDomain.setPassword(hash.toHex());
 			
 			//UserDomain result =  userDAO.merge(userDomain);
+			 
+			//Validate the CNPJ before Saving
+			/*if(!methodUtil.validateCNPJ(userDomain.getCnpj())){
+				
+				//Set Save Flag
+				saveFlag = false;
+				
+				//Error Message
+				Messages.addGlobalError("O CNPJ informado é invalido!");
+			}*/
 			
 			//verify if already exists userName
-			UserDomain result = new UserDomain();
+			/*UserDomain result = new UserDomain();
 			UserDomain result2 = new UserDomain();
 			
 			if(usersDomain.size() >= 1){
 				result = userDAO.findByUserName(userDomain.getUserName());
-				result2 = userDAO.findByCompleteName(userDomain.getPersonDomain().getCompleteName());
+				result2 = userDAO.findByCNPJ(userDomain.getCnpj());
 				
 				//Condition to save or not the information according to the userName
 				if(result == null){
@@ -159,20 +242,76 @@ public class UserController implements Serializable {
 					Messages.addGlobalError("Essa pessoa já foi cadastrada. Favor escolher outra pessoa.");
 					completeNameFlag = false;				
 				}				
-			} else{
-				userNameFlag = true;
-				completeNameFlag = true;
+			}*/
+			
+			//Set cryptography in the real firstPassword
+			if(userDomain.getPasswordWithoutCryptography().equals("") && oldPassword.equals("")){
+				
+				//Set Save Flag
+				saveFlag = false;
+				
+				//Error message
+				Messages.addGlobalError("O campo ' Senha' é obrigatório");
+				
+			}else{
+				
+				if(!userDomain.getPasswordWithoutCryptography().equals("") && !oldPassword.equals("")){
+					
+					//Encrypt password
+					userDomain.setPassword(new String(Base64.encodeBase64(userDomain.getPasswordWithoutCryptography().getBytes())));					
+				} else{
+					
+					//Encrypt password
+					userDomain.setPassword(new String(Base64.encodeBase64(oldPassword.getBytes())));
+				}
+				
+		
+			}			
+			
+			//Search duplicate person
+			if(!editFlag || (editFlag && usersDomain.size() >= 1  && !checkField().equals(""))){
+				
+				//Instantiate Result Domain
+				resultDomain = new UserDomain();
+				
+				if(checkField().equals("userName") && (resultDomain = userDAO.findByUserName(userDomain.getUserName())) != null){
+					
+					//Set Save Flag
+					saveFlag = false;
+					
+					//Error Message
+					Messages.addGlobalError("O Usuário '" + userDomain.getUserName() + "' já pertence a '" + resultDomain.getPersonDomain().getCompleteName() + "'.");
+					
+				} else if(checkField().equals("cnpj") && (resultDomain = userDAO.findByCNPJ(userDomain.getCnpj())) != null){
+					
+					//Set Save Flag
+					saveFlag = false;
+					
+					//Error Message
+					Messages.addGlobalError("O CNPJ '" + userDomain.getCnpj() + "' já pertence a '" + resultDomain.getPersonDomain().getCompleteName() + "'.");				
+				}
 			}
 			
 			
 			//Condition to save or not the information according to the userName
-			if(userNameFlag && completeNameFlag){
+			if(saveFlag){
 				
 				//Set Default Theme Value While Saving
 				if(userDomain.getUserTheme() == null){
 					userDomain.setUserTheme("ui-lightness");
 				}
-				result = userDAO.merge(userDomain);
+				
+				//Save User with merge method
+				//resultDomain = userDAO.merge(userDomain);
+				
+				//Set Path (result --> System.getProperty("user.home") = C:/Users/Samir Landou)
+				String userFolderPath = System.getProperty("user.home")
+						+"/Documents/Desenvolvimento/Uploads/Users/"
+						+ userDomain.getPersonDomain().getId()
+						+"/Login";
+				
+				//Create Folder according to the UserName
+				methodUtil.createFolder(userFolderPath);
 				
 				//verify if there was an upload file.
 				if(upload){
@@ -181,9 +320,8 @@ public class UserController implements Serializable {
 					Path originFile = Paths.get(userDomain.getImageUserPath());
 					
 					//Get destination file
-					Path destinationFile = Paths.get("C:/Users/Samir Landou/Documents/Desenvolvimento/Uploads/Users/"
-														+ result.getId()
-														+ "."
+					Path destinationFile = Paths.get(userFolderPath
+														+ "/userImage."
 														+ FilenameUtils.getExtension(userDomain.getImageUserFileName()));
 					
 					//Copy origin File do the destination path
@@ -192,22 +330,35 @@ public class UserController implements Serializable {
 					//Copy destination path
 					destinationUserImageFile = destinationFile.toString();
 					
+					//Set Image User Path
+					userDomain.setImageUserFileName(destinationUserImageFile);
 					
 					//Delete all temporary files
-					doDeleteTempfiles();				
+					doDeleteTempfiles();
+
+					//Face Context Login
+					FacesContext fcLogin = FacesContext.getCurrentInstance();
+					
+					//Get External Context from LoginController
+					loginController = (LoginController) fcLogin.getExternalContext().getSessionMap().get("loginController");
+					
+					//Update user Image Path in loginController
+					loginController.getLoggedUser().setImageUserFileName(destinationUserImageFile);
+					
+					upload = false;
 				}
+
+				//Save User with merge method
+				userDAO.merge(userDomain);
+				
+				//This code is used with OmniFaces and it is more practice than PrimeFaces implementation.
+				Messages.addGlobalInfo("Salvou com sucesso!");				
 				
 				//Clean informations in the panelGrid
-				doNewRegister();
+				//doNewRegister();
 				
 				//List again User (very import to update the list)
 				usersDomain = userDAO.list();
-				
-				//This code is used with OmniFaces and it is more practice than PrimeFaces implementation.
-				Messages.addGlobalInfo("Salvou com sucesso!");
-				
-				//Set upload image to false
-				upload = false;
 			}
 				
 		} catch (Exception e) {
@@ -228,29 +379,26 @@ public class UserController implements Serializable {
 			//Capture the event from the cursor in user.xhtml
 			userDomain = (UserDomain) event.getComponent().getAttributes()
 					.get("selectedUserByCursor");
-
+			
+			//Get user image file
+			//Path userFile = null;
+			//userFile = Paths.get(userDomain.getImageUserPath());
+			
 			//Delete User
 			UserDAO userDAO = new UserDAO();
 			userDAO.delete(userDomain);
 			
-			//Get user image file
-			Path userFile = null;
-			userFile = Paths.get("C:/Users/Samir Landou/Documents/Desenvolvimento/Uploads/Users/" 
-										+ userDomain.getId()
-										+ "."
-										+ FilenameUtils.getExtension(userDomain.getImageUserFileName()));
+			//Delete user image file
+			//Files.deleteIfExists(userFile);
 			
-			//Gelete user image file
-			Files.deleteIfExists(userFile);
+			methodUtil.deleteFolder(userDomain.getImageUserPath().substring(0, userDomain.getImageUserPath().indexOf("/Login")));
+					
 			
 			//List again User (very import to update the list)
 			usersDomain= userDAO.list();
 			
 			//This code is used with OmniFaces and it is more practice than PrimeFaces implementation.
 			Messages.addGlobalInfo(userDomain.getUserName() + " foi excluido com sucesso!!!");
-			
-			//Set upload image to false
-			upload = false;
 			
 		} catch (Exception e) {
 			Messages.addGlobalError("Ocorreu um erro ao excluir as informações de: " + userDomain.getUserName());
@@ -268,24 +416,31 @@ public class UserController implements Serializable {
 	public void doEdit(ActionEvent event){
 		
 		try {
+			
+			//Clean Variables
+			doClean();
+			
+			//Set edit flag
+			editFlag = true;
+			
 			//Capture the event from the cursor in user.xhtml
 			userDomain = (UserDomain) event.getComponent().getAttributes()
 					.get("selectedUserByCursor");
 			
+			//Decrypt Password
+			userDomain.setPasswordWithoutCryptography(new String(Base64.decodeBase64(userDomain.getPassword().getBytes())));
 			
-			if(userDomain.getImageUserPath() != null){
-				if(!userDomain.getImageUserFileName().isEmpty()){
-					userDomain.setImageUserPath("C:/Users/Samir Landou/Documents/Desenvolvimento/Uploads/Users/" 
-							+ userDomain.getId()
-							+ "."
-							+ FilenameUtils.getExtension(userDomain.getImageUserFileName()));				
-				}				
-			}
-
+			//Set Old Password
+			oldPassword = userDomain.getPasswordWithoutCryptography();
+			
+			//Set some old User Domain Values.
+			userName = userDomain.getUserName();
+			cnpj = userDomain.getCnpj();
 
 			//Instantiate List of person
 			PersonDAO personDAO = new PersonDAO();
 			personsDomain = personDAO.list();
+			
 		} catch (Exception e) {
 			Messages.addGlobalError("Ocorreu um erro ao tentar selecionar uma pessoas");
 			e.printStackTrace();
@@ -304,31 +459,34 @@ public class UserController implements Serializable {
     	   	
     	try {
     		//original file
-    		UploadedFile uploadFile  = event.getFile();
+    		UploadedFile uploadFile  =  event.getFile();
     		
-    		//get the original file name
-    		userDomain.setImageUserFileName(uploadFile.getFileName().toString());
-    		
-    		//Destination file in Temporary Directory (C:\Users\Samir Landou\AppData\Local\Temp)
-			tempFile = Files.createTempFile(null, null);
-			
-			//Add temporary file in a list
-			tempFiles.add(tempFile);
-			
-			//Copy original file into destination file
-			Files.copy(uploadFile.getInputstream(), tempFile, StandardCopyOption.REPLACE_EXISTING);
-			
-			//Get path through @Transcient
-			userDomain.setImageUserPath(tempFile.toString());
-			
-			Messages.addGlobalInfo("Upload realizado com sucesso!");
-			
-			//Set upload to true while tempFiles is not empty
-			if(!tempFiles.isEmpty()){
-				upload = true;
-			}
-						
-			System.out.println("Temporary File: " + userDomain.getImageUserPath());
+    		if(uploadFile != null ){
+        		//get the original file name
+        		userDomain.setImageUserFileName(uploadFile.getFileName().toString());
+        		
+        		//Destination file in Temporary Directory (C:\Users\Samir Landou\AppData\Local\Temp)
+    			tempFile = Files.createTempFile(null, null);
+    			
+    			//Add temporary file in a list
+    			tempFiles.add(tempFile);
+    			
+    			//Copy original file into destination file
+    			Files.copy(uploadFile.getInputstream(), tempFile, StandardCopyOption.REPLACE_EXISTING);
+    			
+    			//Get path through @Transcient
+    			userDomain.setImageUserPath(tempFile.toString());
+    			
+    			Messages.addGlobalInfo("Upload realizado com sucesso!");
+    			
+    			//Set upload to true while tempFiles is not empty
+    			if(!tempFiles.isEmpty()){
+    				upload = true;
+    			}
+    						
+    			System.out.println("Temporary File: " + userDomain.getImageUserPath());   			
+    		}
+
 		} catch (IOException e) {
 			Messages.addGlobalError("Ocorreu um erro ao tentar realizar o upload do arquivo.");
 			e.printStackTrace();
@@ -424,6 +582,16 @@ public class UserController implements Serializable {
 
 	public void setDestinationUserImageFile(String destinationUserImageFile) {
 		this.destinationUserImageFile = destinationUserImageFile;
+	}
+
+
+	public UploadedFile getFile() {
+		return file;
+	}
+
+
+	public void setFile(UploadedFile file) {
+		this.file = file;
 	}
 
 /*

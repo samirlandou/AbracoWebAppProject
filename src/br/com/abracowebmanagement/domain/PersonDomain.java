@@ -19,12 +19,21 @@ public class PersonDomain extends GenericDomain{
 	 * DT -> DATE
 	 * FG -> FLAG 
 	 */
+
+
+
+	/*
+	 * Phone number
+	 */
+	@Column(name = "DE_CPF", length = 14, nullable = false)
+	private String cpf;		
+	
 	
 	/*
 	 * Complete name
 	 * (Name + Surname)
 	 */
-	@Column(name = "NM_COMPLETE_NAME", length = 40, nullable = false)
+	@Column(name = "NM_COMPLETE_NAME", length = 60, nullable = false)
 	private String completeName;	
 	
 	
@@ -32,8 +41,8 @@ public class PersonDomain extends GenericDomain{
 	 * Nationality
 	 * Brazil as Default
 	 */
-	@Column(name = "DE_NATIONALITY", length = 20, nullable = false)
-	private String nationality;
+	@Column(name = "DE_COUNTRY", length = 100, nullable = false)
+	private String country;
 
 	
 	/*
@@ -96,6 +105,8 @@ public class PersonDomain extends GenericDomain{
 	@Column(name = "DE_LANGUAGE", length = 2, nullable = false)
 	private String language;
 	
+	
+	
 	/*
 	 * Getters and Setters
 	 */	
@@ -110,13 +121,13 @@ public class PersonDomain extends GenericDomain{
 	}
 
 
-	public String getNationality() {
-		return nationality;
+	public String getCountry() {
+		return country;
 	}
 
 
-	public void setNationality(String nationality) {
-		this.nationality = nationality;
+	public void setCountry(String country) {
+		this.country = country;
 	}
 
 
@@ -187,6 +198,16 @@ public class PersonDomain extends GenericDomain{
 
 	public void setLanguage(String language) {
 		this.language = language;
+	}
+
+
+	public String getCpf() {
+		return cpf;
+	}
+
+
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
 	}
 	
 }

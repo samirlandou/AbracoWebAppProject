@@ -49,6 +49,7 @@ public class LoginController implements Serializable{
 		rememberPassword.setPersonDomain(new PersonDomain());
 		
 		accessRightByProfile = false;
+		
 	}
 
 	

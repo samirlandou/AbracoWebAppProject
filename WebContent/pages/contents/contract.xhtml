@@ -39,6 +39,10 @@
 				
 				<p:dataTable id="contractDataTableFormID"
 							 emptyMessage="Nenhum registro encontrado."
+							 paginator="true"
+							 value="#{contractController.contractsDomain}"
+							 var="cursor"
+							 rows="10"							 
 							 resizableColumns="true" 
 							 resizeMode="fit" 
 							 reflow="true" 
@@ -49,36 +53,44 @@
 					
 					<!-- DE_CODE -->
 					<p:column headerText="Código contrato" 
-							  sortBy="#{cursor.codeDescription}" 
-							  filterBy="#{cursor.codeDescription}"
-							  style="width: 35%">
-							  
-							  <p:link value="#{cursor.codeDescription}"
-									  outcome="/pages/contents/themeSetting.xhtml"/>
+							  sortBy="#{cursor.contractCodeDescription}" 
+							  filterBy="#{cursor.contractCodeDescription}"
+							  style="width: 35%">							  
+							  <p:commandLink value="#{cursor.contractCodeDescription}"
+							  				 oncomplete="PF('contractDetailDlgWGV').show();"
+							  				 actionListener="#{contractController.doContractDetailEdit}"
+							  				 update=":idMsgGlobal
+							  				 		 :contractDetailFormID:contractDetailWzdID">
+							  				 <f:attribute name="selectedContractByCursor"
+				            			 				  value="#{cursor}"/>
+							  </p:commandLink>
+							  	
+
 					</p:column>
 
 
 					<!-- DE_LANGUAGE -->
 					<p:column headerText="Língua"
-							  sortBy="#{cursor.languageDescription}" 
-							  filterBy="#{cursor.languageDescription}"
+							  sortBy="#{cursor.classLanguageDescription}" 
+							  filterBy="#{cursor.classLanguageDescription}"
 							  style="width: 15%">
 							  
-							  <h:outputText value="#{cursor.languageDescription}"/>
+							  <h:outputText value="#{cursor.classLanguageDescription}"/>
 					</p:column>
 
 
 					<!-- DE_PROFESSOR -->
-					<p:column headerText="Professor"
-							  sortBy="#{cursor.personDomain.completeName}" 
-							  filterBy="#{cursor.personDomain.completeName}">
+					<p:column headerText="Nível"
+							  sortBy="#{cursor.classLevelDescription}" 
+							  filterBy="#{cursor.classLevelDescription}"
+							  style="width: 15%">
 							  
-						  	  <h:outputText value="#{cursor.personDomain.completeName}"/>					
+						  	  <h:outputText value="#{cursor.classLevelDescription}"/>					
 					</p:column>
 
 					<!-- FG_CLOSED
-					<p:column headerText="Status" sortBy="#{cursor.closedFlag}" filterBy="#{cursor.closedFlag}">
-						<h:outputText value="#{cursor.closedFlag}"/>
+					<p:column headerText="Status" sortBy="#{cursor.closedContractFlag}" filterBy="#{cursor.closedContractFlag}">
+						<h:outputText value="#{cursor.closedContractFlag}"/>
 					</p:column> -->
 
 					
@@ -88,15 +100,15 @@
 							  style="width: 20%">
 						
 						<!-- CONTRACT STATUS
-						<p:commandButton id="statusContractID" image="#{cursor.closedFlag == true? 'fa fa-lock' : 'fa fa-unlock-alt'}"
+						<p:commandButton id="statusContractID" image="#{cursor.closedContractFlag == true? 'fa fa-lock' : 'fa fa-unlock-alt'}"
 						 onclick="this.form.target='_blank'" disabled="false" title="yes">
 						 <f:attribute name="selectedContractByCursor" value="#{cursor}"/>
 						</p:commandButton> -->
 						
 						<!-- CONTRACT STATUS -->								
 						<i id="statusContractID" 
-						   class="#{cursor.closedFlag == true? 'fa fa-lock' : 'fa fa-unlock-alt'}"
-						   title="#{cursor.closedFlag == true? 'Contrato Finalizado' : 'Contrato Ativo'}">&nbsp;&nbsp;&nbsp;&nbsp;</i>
+						   class="#{cursor.closedContractFlag == true? 'fa fa-lock' : 'fa fa-unlock-alt'}"
+						   title="#{cursor.closedContractFlag == true? 'Contrato Finalizado' : 'Contrato Ativo'}">&nbsp;&nbsp;&nbsp;&nbsp;</i>
 
 						
 						<!-- COPY CONTRACT's CODE -->
@@ -108,7 +120,7 @@
 						<pe:clipboard id="clipAjax1"
 									  trigger="btnCopyContractCodeForProfessorID"
 									  action="copy"
-									  text="#{cursor.codeDescription}">
+									  text="#{cursor.contractCodeDescription}">
 									 
 				            <p:ajax event="success"
 				            		listener="#{contractController.successListener}"
@@ -187,7 +199,7 @@
 												:contractRegisterFormID:wizardFormID">
 												
 							<p:confirm header="Confirmação" 
-									   message="Deseja excluir #{cursor.codeDescription}?" icon="ui-icon-alert"/>
+									   message="Deseja excluir #{cursor.contractCodeDescription}?" icon="ui-icon-alert"/>
 							
 							<f:attribute name="selectedContractByCursor"
 										 value="#{cursor}"/>
@@ -199,11 +211,27 @@
 
 					<!-- FACET FOR THE FOOTER -->
 					<f:facet name="footer">
+						 				  
+						<!-- GO TO HELP -->
+						<p:commandButton value="Ajuda"
+						 				  onclick="PF('dlgHelp').show();"
+						 				  icon="fa fa-question"/>
+
 
 						<!-- PARAMETERS -->
-						 <p:commandButton value="Parâmetros"
+						<p:commandButton value="Parâmetros"
 						 				  action="client.contractSetting" 
 						 				  icon="fa fa-gear"/>
+						 
+						 						 				  						 
+						<!-- GO TO CONTRACT MODEL PAGE -->
+						<p:commandButton value="Modelo"
+						 				  action="client.contractModel" 
+						 				  icon="fa fa-edit"/>					
+
+						 
+						<p:spacer width="150px" height="0px"/>
+
 
 						<!-- NEW BUTTON -->
 						<p:commandButton value="Novo"
@@ -214,17 +242,25 @@
 										 update=":contractListFormID:contractDataTableFormID 
 												:contractRegisterFormID:wizardFormID">
 												
-							<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener"/>
+										 <f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener"/>
 						</p:commandButton>
+						
+						 <!-- CHOOSE DATA TABLE COLOMNS  -->
+						 <p:commandButton value="Colunas"
+						 				  type="button" 
+						 				  id="columnsDataTableID"
+						 				  icon="fa fa-edit"/>
+						 				  
+						 <p:columnToggler datasource="contractDataTableFormID"
+						 				  trigger="columnsDataTableID">
+
+						 
+						 </p:columnToggler>
 						
 						<!-- EDIT CONTRACT MODEL TEXT
 						<p:commandButton value="Modelo" oncomplete="PF('dlgTextEditContract').show();" icon="fa fa-edit"/>
 						 -->
-						 
-						 <!-- GO TO CONTRACT MODEL PAGE -->
-						 <p:commandButton value="Modelo"
-						 				  action="client.contractModel" 
-						 				  icon="fa fa-edit"/>
+					 
 						 
 					</f:facet>
 
@@ -246,880 +282,868 @@
 					
 			</h:form>
 
+
+
+		<!-- DIALOG TO HELP TO REGISTER NEW CONTRACT -->
+		<p:dialog header="Ajuda"
+							widgetVar="dlgHelp"
+							draggable="true" 
+							resizable="false" 
+							modal="true" 
+							closable="true"
+							appendTo="@(body)" 
+							height="150" 
+							width="350"
+							responsive="true" 
+							maximizable="false">
 			
-			<!-- DIALOG TO REGISTER NEW CONTRACT -->			
-			<p:dialog header="Cadastrar Novo Contrato"
-					widgetVar="dlgNewContract"
-					draggable="true" 
-					resizable="false" 
-					modal="true" 
-					closable="false"
-					appendTo="@(body)" 
-					height="570" 
-					width="600"
-					responsive="true" 
-					maximizable="true">
-				
-				<!-- FORM FOR THE DIALOG -->
-				<h:form id="contractRegisterFormID">
-				
-					<!-- WIZARD TO FILL FORMS -->
-					<p:wizard flowListener="#{contractController.doFlowProcess}" 
-							  id="wizardFormID" 
-							  widgetVar="wizardForm">								
+			<h:panelGrid columns="1">
+				<p:outputLabel value="1-/ Ir no 'Parâmetros' para configurar o 'Preço das aulas' caso não for ainda definido."/>
+				<p:outputLabel value="2-/ Ir no 'Modelo' para criar um 'Modelo de Contrato'."/>
+				<p:outputLabel value="3-/ Ir no 'Novo' para editar um 'Contrato'."/>			
+			</h:panelGrid>		
 
-						
-						<p:tab id="languageTabID"
-							   title="Língua">
-							
-							<p:panel header="Informações sobre a língua.">
-								
-								<p:messages/>
-								
-								<h:panelGrid id="languageInputRegisterFormID"
-								             columns="2">
-								             
-									<p:outputLabel value="Língua: "
-												   for="languageComboID"/>
-												   
-									<p:selectOneMenu id="languageComboID"
-													 filter="false" 
-													 value="#{contractController.contractDomain.classLanguageDescription}"
-													 converter="omnifaces.SelectItemsConverter" 
-													 required="true" 
-													 requiredMessage="O campo 'Língua' é obrigatório">
-																 
-													 <f:selectItem noSelectionOption="true" itemLabel="Selecione uma Língua" />
-													 <f:selectItem itemLabel="ARÁBE" itemValue="ARÁBE"/>
-													 <f:selectItem itemLabel="ESPANHOL" itemValue="ESPANHOL"/>
-													 <f:selectItem itemLabel="FRANCÊS" itemValue="FRANCÊS"/>
-													 <f:selectItem itemLabel="INGLÊS" itemValue="INGLÊS"/>
-													 <f:selectItem itemLabel="PORTUGUÊS" itemValue="PORTUGUÊS"/>
-									
-													 <p:ajax event="change"
-															 process="@this" 
-															 global="false"
-															 listener="#{contractController.doUpdateLevel}"
-															 update="contractRegisterFormID:levelComboID"/>								
-									</p:selectOneMenu>
-									
-									
-									<p:outputLabel value="Nível: "
-												   for="levelComboID"/>
-												   
-									<p:selectOneMenu id="levelComboID"
-													 filter="false"
-													 value="#{contractController.contractDomain.classLevelDescription}"
-													 converter="omnifaces.SelectItemsConverter" 
-													 required="true" 
-													 requiredMessage="O campo 'Nível' é obrigatório">
-													 
-													 <f:selectItem noSelectionOption="true" itemLabel="Escolhe um nível"/>
-													 <f:selectItems value="#{contractController.levels}"/>	
-									</p:selectOneMenu>
-									
-									
-									<p:outputLabel value="Pular para o resumo"
-												   rendered="#{contractController.skipRendered}"/>
-									<p:selectBooleanCheckbox value="#{contractController.skip}"
-															 rendered="#{contractController.skipRendered}"/>
-								</h:panelGrid>
-								
-								<p:spacer height="40px"/>
-								
-								<!-- PANEL GRID FOR BUTTON CLOSE -->
-								<h:panelGrid columns="1" 
-								    		 styleClass="panelGridCenter">
-								    		 
-									<p:commandButton value="Fechar"
-													 title="Sair do Registro"
-													 icon="fa fa-remove" 
-													 oncomplete="PF('dlgNewContract').hide();"/>
-								</h:panelGrid>
-
-							</p:panel>
-												
-						</p:tab>
-						
-						
-						
-						
-						<p:tab id="periodTabID"
-							   title="Periodo">
-						
-							<p:panel header="Informações sobre o periodo do contrato.">
-							
-								<p:messages/>
-								
-								<!-- PANEL GRID FOR REGISTER -->
-								<h:panelGrid id="periodInputRegisterFormID"
-											 columns="2" >
-												
-									<p:outputLabel for="beginPeriodDateID"
-												   value="Periodo-Data Início: "/>
-												   
-									<p:calendar id="beginPeriodDateID"
-												value="#{contractController.contractDomain.beginDate}"
-												locale="pt_BR" 
-												pattern="dd/MM/yyyy" 
-												timeZone="America/Sao_Paulo" 
-												mask="99/99/9999"
-												required="true" 
-												requiredMessage="O campo 'Periodo-Data Início' é obrigatório">
-										
-												<f:convertDateTime locale="pt_BR"
-														   		   pattern="dd/MM/yyyy"
-														   		   timeZone="America/Sao_Paulo"/>
-									</p:calendar>
-						
-						
-									<p:outputLabel for="endPeriodDateID"
-												   value="Periodo-Data Término: "/>
-												   
-									<p:calendar id="endPeriodDateID"
-												value="#{contractController.contractDomain.endDate}"
-												locale="pt_BR" pattern="dd/MM/yyyy" 
-												timeZone="America/Sao_Paulo" 
-												mask="99/99/9999"
-												required="true" 
-												requiredMessage="O campo 'Periodo-Data Término:' é obrigatório">
-												
-												<f:convertDateTime locale="pt_BR"
-														   		   pattern="dd/MM/yyyy" 
-														   		   timeZone="America/Sao_Paulo"/>
-									</p:calendar>
-																								
-								</h:panelGrid>
-
-								<p:spacer height="40px"/>
-								
-								
-								<!-- PANEL GRID FOR BUTTON CLOSE -->
-								<h:panelGrid columns="1"
-											 styleClass="panelGridCenter">
-											 		
-									<p:commandButton value="Fechar"
-													 title="Sair do Registro"
-													 icon="fa fa-remove"
-													 oncomplete="PF('dlgNewContract').hide();" />
-								</h:panelGrid>
-								
-							</p:panel>	
-									
-						</p:tab>
-						
-						
-						
-						
-						<p:tab id="placeTabID"
-							   title="Lugar">
-							   
-							<p:panel header="Informar o lugar.">
-							
-								<p:messages/>
-								
-								<h:panelGrid id="placeInputRegisterFormID"
-											 columns="2">
-											 
-									<p:outputLabel value="Lugar: "
-												   for="placeComboID"/>
-												   
-									<p:selectOneMenu id="placeComboID"
-													 filter="false"
-													 value="#{contractController.contractDomain.classPlaceDescription}"
-													 converter="omnifaces.SelectItemsConverter" 
-													 required="true" 
-													 requiredMessage="O campo 'Lugar' é obrigatório">
-													 
-													 <f:selectItem noSelectionOption="true" itemLabel="Selecione uma lugar" />
-													 <f:selectItem itemLabel="PINHEIROS" itemValue="PINHEIROS"/>
-													 <f:selectItem itemLabel="TATUAPÉ" itemValue="TATUAPÉ"/>
-													 <f:selectItem itemLabel="INCOMPANY" itemValue="INCOMPANY"/>
-													 <f:selectItem itemLabel="EXTERIOR" itemValue="EXTERIOR"/>
-													 <f:selectItem itemLabel="ONLINE" itemValue="ONLINE"/>						
-									</p:selectOneMenu>
-									
-								</h:panelGrid>
-								
-								<p:spacer height="40px"/>
-								
-								
-								<!-- PANEL GRID FOR BUTTON CLOSE -->
-								<h:panelGrid columns="1"
-											 styleClass="panelGridCenter">
-											 			
-									<p:commandButton value="Fechar" 
-													 title="Sair do Registro"
-													 icon="fa fa-remove"
-													 oncomplete="PF('dlgNewContract').hide();"/>
-								</h:panelGrid>
-															
-							</p:panel>
-							
-						</p:tab>
-						
-						
-						
-						
-						<p:tab id="otherTabID"
-							   title="Curso">
-							   
-							<p:panel header="Informar outro típo de informação.">
-							
-								<p:messages/>
-								
-								<h:panelGrid id="classRegisterFormID"
-											 columns="2">
-									
-									
-									<p:outputLabel value="Típo de Aula: "
-												   for="typeComboID"/>
-								   
-									<p:selectOneMenu id="typeComboID"
-													 filter="false"
-													 value="#{contractController.contractDomain.classModuleDescription}"
-													 converter="omnifaces.SelectItemsConverter" 
-													 required="true" 
-													 requiredMessage="O campo 'Típo de Aula' é obrigatório">
-																 
-													 <f:selectItem noSelectionOption="true" itemLabel="Escolhe um típo"/>
-													 <f:selectItem itemLabel="EXTENSIVO" itemValue="EXTENSIVO"/>
-													 <f:selectItem itemLabel="INTENSIVO" itemValue="INTENSIVO"/>
-													 <f:selectItem itemLabel="PARTICULAR" itemValue="PARTICULAR"/>
-													 <f:selectItem itemLabel="INCOMPANY" itemValue="INCOMPANY"/>
-													 <p:ajax event="change"
-															 process="@this"
-															 global="false"
-															 listener="#{contractController.doUpdatePrice}"
-															 update="contractRegisterFormID:realPriceID
-																	contractRegisterFormID:professorPriceID
-																	contractRegisterFormID:totalPackageRealPriceID
-																	contractRegisterFormID:totalPackageProfessorPriceID"/>																	
-									</p:selectOneMenu>
-									
-									
-									<p:outputLabel value="Pacote de Horas: "
-												   for="packageComboID"/>
-												   
-									<p:inputNumber id="packageComboID"
-												   value="#{contractController.contractDomain.classPackageHour}"
-												   required="true" 
-												   requiredMessage="O campo 'Pacote' é obrigatório">
-												   <p:ajax event="change"
-														   process="@this"
-														   global="false"
-														   listener="#{contractController.doUpdateTotalPrice}"
-														   update="contractRegisterFormID:totalPackageRealPriceID
-														   		   contractRegisterFormID:totalPackageProfessorPriceID"/>
-												   
-									</p:inputNumber>											 
-					
-									<p:outputLabel for="beginHourClassID"
-												   value="Aula-Hora Início: "/>
-												   
-									<p:calendar id="beginHourClassID"
-												value="#{contractController.contractDomain.beginClassHour}"
-												locale="pt_BR" 
-												pattern="HH:mm" 
-												timeZone="America/Sao_Paulo" 
-												mask="99:99"
-												timeOnly="true"
-												required="true" 
-												requiredMessage="O campo 'Aula-Hora Início' é obrigatório">
-												
-												<f:convertDateTime locale="pt_BR"
-																   pattern="HH:mm" 
-																   timeZone="America/Sao_Paulo"/>
-									</p:calendar>
+			<p/>
 											
-									<p:outputLabel for="endClassHourID"
-												   value="Aula-Hora Término: "/>
-												   
-									<p:calendar id="endClassHourID"
-												value="#{contractController.contractDomain.endClassHour}"
-												locale="pt_BR" 
-												pattern="HH:mm" 
-												timeZone="America/Sao_Paulo" 
-												mask="99:99"
-												timeOnly="true"
-												required="true" 
-												requiredMessage="O campo 'Aula-Hora Término' é obrigatório">
-												
-												<f:convertDateTime locale="pt_BR"
-																   pattern="HH:mm" 
-																   timeZone="America/Sao_Paulo"/>
-									</p:calendar>
-									
-									<p:outputLabel for="breakHourClassID"
-												   value="Aula-Minutos Pausa: "/>
-												   
-									<p:outputLabel id="breakHourOutputLabel"
-												   value="Aula-Minutos Pausa: "/>
-												   
-									<h:inputHidden id="breakHourClassID"
-												   value="#{contractController.contractDomain.breakClassHour}"/>
-												   
-	        						<p:slider for="breakHourClassID"
-	        								  step="15" 
-	        								  minValue="0"
-	        								  maxValue="30" 
-	        								  style="width: 150px"
-	        								  display="breakHourOutputLabel" 
-	        								  displayTemplate="{value}min"/>
-	        						
-	        						
-	        													
-									<p:outputLabel value="1° Dia Letivo: "
-												   for="firstDayClassComboID"/>
-												   
-									<p:selectOneMenu id="firstDayClassComboID"
-													 filter="false"
-													 value="#{contractController.contractDomain.firstClassDayDescription}"
-													 converter="omnifaces.SelectItemsConverter" 
-													 required="true" 
-													 requiredMessage="O campo '1° Dia Letivo' é obrigatório">
-													 
-													 <f:selectItem noSelectionOption="true" itemLabel="Escolhe o 1° dia letivo"/>
-													 <f:selectItems value="#{contractController.firstClassDay}"
-													 				var="firstDay"
-													 				itemValue="#{firstDay}"
-													 				itemLabel="#{firstDay}"/>
-													 <p:ajax event="change"
-													 		process="@this" 
-													 		global="false"
-													 		listener="#{contractController.doUpdateSecondClassDay}"
-													 		update="contractRegisterFormID:secondDayClassComboID"/>								
-									</p:selectOneMenu>
-									
-									
-									<p:outputLabel value="2° Dia Letivo: "/>
-									
-									<p:selectOneMenu id="secondDayClassComboID"
-													 filter="false"
-													 value="#{contractController.contractDomain.secondClassDayDescription}"
-													 converter="omnifaces.SelectItemsConverter">
-													 
-										<f:selectItem itemValue="" itemLabel="Escolhe o 2° dia letivo"/>
-										<f:selectItems value="#{contractController.secondClassDay}"
-													   var="secondDay"
-													   itemValue="#{secondDay}"
-													   itemLabel="#{secondDay}"/>									
-									</p:selectOneMenu>
-									
-									
-									<p:outputLabel value="Preço/Hora: "/>
-									
-									<p:outputLabel  id="realPriceID"
-													value="#{contractController.decimalRealPriceDescription}"
-													style="color: green;"/>
-									
-									
-									<p:outputLabel value="Preço Prof./Hora: "/>
-									
-									<p:outputLabel id="professorPriceID"
-												   value="#{contractController.decimalProfessorPriceDescription}"
-												   style="color: red;"/>
-												   
-																		
-									<p:outputLabel value="Preço Total/Hora: "/>
-									
-									<p:outputLabel id="totalPackageRealPriceID"
-												   value="#{contractController.decimalTotalPackageRealPriceDescription}"
-												   style="color: green;"/>
-									
-											
-									<p:outputLabel value="Preço Prof. Total/Hora: "/>
-									
-									<p:outputLabel id="totalPackageProfessorPriceID"
-												   value="#{contractController.decimalTotalPackageProfessorPriceDescription}"
-												   style="color: red;"/>												 	
+			<!-- PANEL GRID FOR BUTTON CLOSE -->
+			<h:panelGrid columns="1" 
+			    		 styleClass="panelGridLeft">
+			    		 
+				<p:commandButton value="Fechar"
+								 title="Sair da Ajuda"
+								 icon="fa fa-remove" 
+								 action="#{contractController.doClean}"
+								 oncomplete="PF('dlgHelp').hide();"/>
+			</h:panelGrid>	
+		</p:dialog>
 
+			
+		<!-- DIALOG TO REGISTER NEW CONTRACT -->			
+		<p:dialog header="Cadastrar Novo Contrato"
+				widgetVar="dlgNewContract"
+				draggable="true" 
+				resizable="false" 
+				modal="true" 
+				closable="false"
+				appendTo="@(body)" 
+				height="570" 
+				width="600"
+				responsive="true" 
+				maximizable="true">
+			
+			<!-- FORM FOR THE DIALOG -->
+			<h:form id="contractRegisterFormID">
+			
+				<!-- WIZARD TO FILL FORMS -->
+				<p:wizard flowListener="#{contractController.doContractFlowProcess}" 
+						  id="wizardFormID" 
+						  widgetVar="wizardForm">								
 
-									<p:outputLabel value="Comentário: "/>
-									
-									
-									<p:inputTextarea value="#{contractController.contractDomain.commentDescription}"
-													 rows="2"
-													 cols="30" 
-													 counter="display"
-													 maxlength="100"
-													 counterTemplate="{0} caracteres restantes."
-													 autoResize="true"/>
-													  
-									<br/>
-									
-									<h:outputText id="display"/>
-									
-									<br/>
-									
-									<p:spacer height="20px"/>
-																																			
-								</h:panelGrid>
-								
-								<p:spacer height="20px"/>															
 					
-															
-								<!-- PANEL GRID FOR BUTTON CLOSE -->
-								<h:panelGrid columns="1"
-											 styleClass="panelGridCenter">
-											 			
-									<p:commandButton value="Fechar" 
-													 title="Sair do Registro"
-													 icon="fa fa-remove"
-													 oncomplete="PF('dlgNewContract').hide();"/>
-								</h:panelGrid>
-																						
-							</p:panel>
-							
-						</p:tab>
-
-
+					<p:tab id="languageTabID"
+						   title="Língua">
 						
-						<!-- 
-						<p:tab id="professorTabID"
-							   title="Prof.">
-							   
-							<p:panel header="Informar o(a) Professor(a) contratado(a).">
+						<p:panel header="Informações sobre a língua.">
 							
-								<p:messages/>
-								
-								<h:panelGrid id="professorInputRegisterFormID"
-											 columns="2">
-											 	
-									<p:outputLabel value="Professor(a): "
-												   for="professorComboID"/>
-												   
-									<p:selectOneMenu id="professorComboID"
-													 filter="false"
-													 value="#{contractController.contractDomain.personDomain}"
-													 converter="omnifaces.SelectItemsConverter"
-													 required="true" 
-													 requiredMessage="O campo 'Professor(a)' é obrigatório">
-													 
-													 <f:selectItem noSelectionOption="true" itemLabel="Escolhe um professor"/>
-													 <f:selectItems value="#{contractController.professors}"
-																	var="professor"
-																	itemValue="#{professor}"
-																	itemLabel="#{professor.completeName}"/>
-									</p:selectOneMenu>
-									
-								</h:panelGrid>								
-								
-								<p:spacer height="40px"/>								
-								
-								
-								
-								<h:panelGrid columns="1"
-											 styleClass="panelGridCenter">
-											 			
-									<p:commandButton value="Fechar"
-													 title="Sair do Registro"
-													 icon="fa fa-remove"
-													 oncomplete="PF('dlgNewContract').hide();"/>
-								</h:panelGrid>
-															
-							</p:panel>
+							<p:messages/>
 							
-						</p:tab>
-						 -->
-
-						
-						
-									
-						<p:tab id="contractModelTabID"
-							   title="Modelo">
-							   
-							<p:panel header="Informar o estado do contrato.">
-							
-								<p:messages/>
+							<h:panelGrid id="languageInputRegisterFormID"
+							             columns="2">
+							             
+								<p:outputLabel value="Língua: "
+											   for="languageComboID"/>
+											   
+								<p:selectOneMenu id="languageComboID"
+												 filter="false" 
+												 value="#{contractController.contractDomain.classLanguageDescription}"
+												 converter="omnifaces.SelectItemsConverter" 
+												 required="true" 
+												 requiredMessage="O campo 'Língua' é obrigatório">
+															 
+												 <f:selectItem noSelectionOption="true" itemLabel="Selecione uma Língua" />
+												 <f:selectItem itemLabel="ARÁBE" itemValue="ARÁBE"/>
+												 <f:selectItem itemLabel="ESPANHOL" itemValue="ESPANHOL"/>
+												 <f:selectItem itemLabel="FRANCÊS" itemValue="FRANCÊS"/>
+												 <f:selectItem itemLabel="INGLÊS" itemValue="INGLÊS"/>
+												 <f:selectItem itemLabel="PORTUGUÊS" itemValue="PORTUGUÊS"/>
 								
-								<h:panelGrid id="statusInputRegisterFormID"
-											 columns="2">			
-											 								
-									<p:outputLabel for="contractModelComboID"
-												   value="Modelo Contrato:" />
-												   
-									<p:selectOneMenu id="contractModelComboID"
-													 converter="omnifaces.SelectItemsConverter"
-													 value="#{contractController.contractDomain.contractModelDomain}"
-													 required="true" 
-													 requiredMessage="O campo 'Modelo Contrato' é obrigatório">
-													 
-													 <f:selectItem noSelectionOption="true" itemLabel="Escolhe um modelo de contrato"/>
-													 <f:selectItems value="#{contractController.contractModelsDomain}"
-													 				var="contractModel"
-													 				itemValue="#{contractModel}"
-													 				itemLabel="#{contractModel.contractModelName}"/>
+												 <p:ajax event="change"
+														 process="@this" 
+														 global="false"
+														 listener="#{contractController.doUpdateLevel}"
+														 update="contractRegisterFormID:levelComboID"/>								
 								</p:selectOneMenu>
 								
 								
-								<p:outputLabel value="Code Descrição (Opcional):" />
-									
-								<p:inputText value="#{contractController.codeDescription}"
-											 size="6"
-											 maxlength="4"
-											 style="text-transform: uppercase"/>
+								<p:outputLabel value="Nível: "
+											   for="levelComboID"/>
+											   
+								<p:selectOneMenu id="levelComboID"
+												 filter="false"
+												 value="#{contractController.contractDomain.classLevelDescription}"
+												 converter="omnifaces.SelectItemsConverter" 
+												 required="true" 
+												 requiredMessage="O campo 'Nível' é obrigatório">
+												 
+												 <f:selectItem noSelectionOption="true" itemLabel="Escolhe um nível"/>
+												 <f:selectItems value="#{contractController.levels}"/>	
+								</p:selectOneMenu>
 								
+								
+								<p:outputLabel value="Pular para o resumo"
+											   rendered="#{contractController.skipRendered}"/>
+								<p:selectBooleanCheckbox value="#{contractController.skip}"
+														 rendered="#{contractController.skipRendered}"/>
+														 
+							</h:panelGrid>
+							
+							<p:spacer height="40px"/>
+							
+							<!-- PANEL GRID FOR BUTTON CLOSE -->
+							<h:panelGrid columns="1" 
+							    		 styleClass="panelGridCenter">
+							    		 
+								<p:commandButton value="Fechar"
+												 title="Sair do Registro"
+												 icon="fa fa-remove"
+												 oncomplete="PF('dlgNewContract').hide();"/>
+							</h:panelGrid>
+
+						</p:panel>
+											
+					</p:tab>
+					
+					
+					
+					
+					<p:tab id="periodTabID"
+						   title="Periodo">
+					
+						<p:panel header="Informações sobre o periodo do contrato.">
+						
+							<p:messages/>
+							
+							<!-- PANEL GRID FOR REGISTER -->
+							<h:panelGrid id="periodInputRegisterFormID"
+										 columns="2" >
+											
+								<p:outputLabel for="beginPeriodDateID"
+											   value="Periodo-Data Início: "/>
+											   
+								<p:calendar id="beginPeriodDateID"
+											value="#{contractController.contractDomain.beginDate}"
+											locale="pt_BR" 
+											pattern="dd/MM/yyyy" 
+											timeZone="America/Sao_Paulo" 
+											mask="99/99/9999"
+											required="true" 
+											requiredMessage="O campo 'Periodo-Data Início' é obrigatório">
+									
+											<f:convertDateTime locale="pt_BR"
+													   		   pattern="dd/MM/yyyy"
+													   		   timeZone="America/Sao_Paulo"/>
+								</p:calendar>
+					
+					
+								<p:outputLabel for="endPeriodDateID"
+											   value="Periodo-Data Término: "/>
+											   
+								<p:calendar id="endPeriodDateID"
+											value="#{contractController.contractDomain.endDate}"
+											locale="pt_BR" pattern="dd/MM/yyyy" 
+											timeZone="America/Sao_Paulo" 
+											mask="99/99/9999"
+											required="true" 
+											requiredMessage="O campo 'Periodo-Data Término:' é obrigatório">
+											
+											<f:convertDateTime locale="pt_BR"
+													   		   pattern="dd/MM/yyyy" 
+													   		   timeZone="America/Sao_Paulo"/>
+								</p:calendar>
+																							
+							</h:panelGrid>
+
+							<p:spacer height="40px"/>
+							
+							
+							<!-- PANEL GRID FOR BUTTON CLOSE -->
+							<h:panelGrid columns="1"
+										 styleClass="panelGridCenter">
+										 		
+								<p:commandButton value="Fechar"
+												 title="Sair do Registro"
+												 icon="fa fa-remove"
+												 action="#{contractController.doClean}"
+												 oncomplete="PF('dlgNewContract').hide();" />
+							</h:panelGrid>
+							
+						</p:panel>	
+								
+					</p:tab>
+					
+					
+					
+					
+					<p:tab id="placeTabID"
+						   title="Lugar">
+						   
+						<p:panel header="Informar o lugar.">
+						
+							<p:messages/>
+							
+							<h:panelGrid id="placeInputRegisterFormID"
+										 columns="2">
+										 
+								<p:outputLabel value="Lugar: "
+											   for="placeComboID"/>
+											   
+								<p:selectOneMenu id="placeComboID"
+												 filter="false"
+												 value="#{contractController.contractDomain.classPlaceDescription}"
+												 converter="omnifaces.SelectItemsConverter" 
+												 required="true" 
+												 requiredMessage="O campo 'Lugar' é obrigatório">
+												 
+												 <f:selectItem noSelectionOption="true" itemLabel="Selecione uma lugar" />
+												 <f:selectItem itemLabel="PINHEIROS" itemValue="PINHEIROS"/>
+												 <f:selectItem itemLabel="TATUAPÉ" itemValue="TATUAPÉ"/>
+												 <f:selectItem itemLabel="INCOMPANY" itemValue="INCOMPANY"/>
+												 <f:selectItem itemLabel="EXTERIOR" itemValue="EXTERIOR"/>
+												 <f:selectItem itemLabel="ONLINE" itemValue="ONLINE"/>						
+								</p:selectOneMenu>
+								
+							</h:panelGrid>
+							
+							<p:spacer height="40px"/>
+							
+							
+							<!-- PANEL GRID FOR BUTTON CLOSE -->
+							<h:panelGrid columns="1"
+										 styleClass="panelGridCenter">
+										 			
+								<p:commandButton value="Fechar" 
+												 title="Sair do Registro"
+												 icon="fa fa-remove"
+												 action="#{contractController.doClean}"
+												 oncomplete="PF('dlgNewContract').hide();"/>
+							</h:panelGrid>
+														
+						</p:panel>
+						
+					</p:tab>
+					
+					
+					
+					
+					<p:tab id="otherTabID"
+						   title="Curso">
+						   
+						<p:panel header="Informar outro típo de informação.">
+						
+							<p:messages/>
+							
+							<h:panelGrid id="classRegisterFormID"
+										 columns="2">
+								
+								
+								<p:outputLabel value="Típo de Aula: "
+											   for="typeComboID"/>
+							   
+								<p:selectOneMenu id="typeComboID"
+												 filter="false"
+												 value="#{contractController.contractDomain.classModuleDescription}"
+												 converter="omnifaces.SelectItemsConverter" 
+												 required="true" 
+												 requiredMessage="O campo 'Típo de Aula' é obrigatório">
+															 
+												 <f:selectItem noSelectionOption="true" itemLabel="Escolhe um típo"/>
+												 <f:selectItem itemLabel="EXTENSIVO" itemValue="EXTENSIVO"/>
+												 <f:selectItem itemLabel="INTENSIVO" itemValue="INTENSIVO"/>
+												 <f:selectItem itemLabel="PARTICULAR" itemValue="PARTICULAR"/>
+												 <f:selectItem itemLabel="INCOMPANY" itemValue="INCOMPANY"/>																	
+								</p:selectOneMenu>
+								
+								
+								<p:outputLabel value="Pacote de Horas: "
+											   for="packageComboID"/>
+											   
+								<p:inputNumber id="packageComboID"
+											   value="#{contractController.contractDomain.classPackageHour}"
+											   required="true" 
+											   requiredMessage="O campo 'Pacote' é obrigatório">
+											   
+								</p:inputNumber>											 
+				
+								<p:outputLabel for="beginHourClassID"
+											   value="Aula-Hora Início: "/>
+											   
+								<p:calendar id="beginHourClassID"
+											value="#{contractController.contractDomain.beginClassHour}"
+											locale="pt_BR" 
+											pattern="HH:mm" 
+											timeZone="America/Sao_Paulo" 
+											mask="99:99"
+											timeOnly="true"
+											required="true" 
+											requiredMessage="O campo 'Aula-Hora Início' é obrigatório">
+											
+											<f:convertDateTime locale="pt_BR"
+															   pattern="HH:mm" 
+															   timeZone="America/Sao_Paulo"/>
+								</p:calendar>
+										
+								<p:outputLabel for="endClassHourID"
+											   value="Aula-Hora Término: "/>
+											   
+								<p:calendar id="endClassHourID"
+											value="#{contractController.contractDomain.endClassHour}"
+											locale="pt_BR" 
+											pattern="HH:mm" 
+											timeZone="America/Sao_Paulo" 
+											mask="99:99"
+											timeOnly="true"
+											required="true" 
+											requiredMessage="O campo 'Aula-Hora Término' é obrigatório">
+											
+											<f:convertDateTime locale="pt_BR"
+															   pattern="HH:mm" 
+															   timeZone="America/Sao_Paulo"/>
+								</p:calendar>
+								
+								
+								<p:outputLabel id="breakHourClassID"
+											   value="Aula-Minutos Pausa: "/>
+
+								<p:selectBooleanCheckbox value="#{contractController.activeBreakClassHour}"
+														 itemLabel="15mn.">
+														<p:ajax update=":idMsgGlobal"
+																listener="#{contractController.addContractBreakClassHourMessage}" />
+								</p:selectBooleanCheckbox>
+
+
+
+								<p:outputLabel value="1° Dia Letivo: "
+											   for="firstDayClassComboID"/>
+											   
+								<p:selectOneMenu id="firstDayClassComboID"
+												 filter="false"
+												 value="#{contractController.contractDomain.firstClassDayDescription}"
+												 converter="omnifaces.SelectItemsConverter" 
+												 required="true" 
+												 requiredMessage="O campo '1° Dia Letivo' é obrigatório">
+												 
+												 <f:selectItem noSelectionOption="true" itemLabel="Escolhe o 1° dia letivo"/>
+												 <f:selectItems value="#{contractController.firstClassDay}"
+												 				var="firstDay"
+												 				itemValue="#{firstDay}"
+												 				itemLabel="#{firstDay}"/>
+												 <p:ajax event="change"
+												 		process="@this" 
+												 		global="false"
+												 		listener="#{contractController.doUpdateSecondClassDay}"
+												 		update="contractRegisterFormID:secondDayClassComboID"/>								
+								</p:selectOneMenu>
+								
+								
+								<p:outputLabel value="2° Dia Letivo: "/>
+								
+								<p:selectOneMenu id="secondDayClassComboID"
+												 filter="false"
+												 value="#{contractController.contractDomain.secondClassDayDescription}"
+												 converter="omnifaces.SelectItemsConverter">
+												 
+									<f:selectItem itemValue="" itemLabel="Escolhe o 2° dia letivo"/>
+									<f:selectItems value="#{contractController.secondClassDay}"
+												   var="secondDay"
+												   itemValue="#{secondDay}"
+												   itemLabel="#{secondDay}"/>									
+								</p:selectOneMenu>												 	
+
+
+								<p:outputLabel value="Comentário: "/>
+								
+								
+								<p:inputTextarea value="#{contractController.contractDomain.commentDescription}"
+												 rows="2"
+												 cols="30" 
+												 counter="display"
+												 maxlength="100"
+												 counterTemplate="{0} caracteres restantes."
+												 autoResize="true"/>
+												  
+								<br/>
+								
+								<h:outputText id="display"/>
+								
+								<br/>
+								
+								<p:spacer height="20px"/>
+																																		
+							</h:panelGrid>
+							
+							<p:spacer height="20px"/>															
+				
+														
+							<!-- PANEL GRID FOR BUTTON CLOSE -->
+							<h:panelGrid columns="1"
+										 styleClass="panelGridCenter">
+										 			
+								<p:commandButton value="Fechar" 
+												 title="Sair do Registro"
+												 icon="fa fa-remove"
+												 action="#{contractController.doClean}"
+												 oncomplete="PF('dlgNewContract').hide();"/>
+							</h:panelGrid>
+																					
+						</p:panel>
+						
+					</p:tab>
+
+
+					
+					<!-- 
+					<p:tab id="professorTabID"
+						   title="Prof.">
+						   
+						<p:panel header="Informar o(a) Professor(a) contratado(a).">
+						
+							<p:messages/>
+							
+							<h:panelGrid id="professorInputRegisterFormID"
+										 columns="2">
+										 	
+								<p:outputLabel value="Professor(a): "
+											   for="professorComboID"/>
+											   
+								<p:selectOneMenu id="professorComboID"
+												 filter="false"
+												 value="#{contractController.contractDomain.personDomain}"
+												 converter="omnifaces.SelectItemsConverter"
+												 required="true" 
+												 requiredMessage="O campo 'Professor(a)' é obrigatório">
+												 
+												 <f:selectItem noSelectionOption="true" itemLabel="Escolhe um professor"/>
+												 <f:selectItems value="#{contractController.professors}"
+																var="professor"
+																itemValue="#{professor}"
+																itemLabel="#{professor.completeName}"/>
+								</p:selectOneMenu>
+								
+							</h:panelGrid>								
+							
+							<p:spacer height="40px"/>								
+							
+							
+							
+							<h:panelGrid columns="1"
+										 styleClass="panelGridCenter">
+										 			
+								<p:commandButton value="Fechar"
+												 title="Sair do Registro"
+												 icon="fa fa-remove"
+												 oncomplete="PF('dlgNewContract').hide();"/>
+							</h:panelGrid>
+														
+						</p:panel>
+						
+					</p:tab>
+					 -->
+
+					
+					
+								
+					<p:tab id="contractModelTabID"
+						   title="Modelo">
+						   
+						<p:panel header="Informar o estado do contrato.">
+						
+							<p:messages/>
+							
+							<h:panelGrid id="statusInputRegisterFormID"
+										 columns="2">			
+										 								
+								<p:outputLabel for="contractModelComboID"
+											   value="Modelo Contrato:" />
+											   
+								<p:selectOneMenu id="contractModelComboID"
+												 converter="omnifaces.SelectItemsConverter"
+												 value="#{contractController.contractDomain.contractModelDomain}"
+												 required="true" 
+												 requiredMessage="O campo 'Modelo Contrato' é obrigatório">
+												 
+												 <f:selectItem noSelectionOption="true" itemLabel="Escolhe um modelo de contrato"/>
+												 <f:selectItems value="#{contractController.contractModelsDomain}"
+												 				var="contractModel"
+												 				itemValue="#{contractModel}"
+												 				itemLabel="#{contractModel.contractModelName}"/>
+							</p:selectOneMenu>
+							
+							
+							<p:outputLabel value="Code Descrição (Opcional):" />
+								
+							<p:inputText value="#{contractController.codeDescription}"
+										 size="6"
+										 maxlength="4"
+										 style="text-transform: uppercase"/>
+							
+																	
+							</h:panelGrid>
+							
+							<p:spacer height="40px"/>
+								
+							
+							<!-- PANEL GRID FOR BUTTON CLOSE -->
+							<h:panelGrid columns="1"
+										 styleClass="panelGridCenter">
+										 			
+								<p:commandButton value="Fechar"
+												 title="Sair do Registro"
+												 icon="fa fa-remove"
+												 action="#{contractController.doClean}"
+												 oncomplete="PF('dlgNewContract').hide();"/>
+							</h:panelGrid>
+															
+						</p:panel>
+												
+					</p:tab>
+
+			
+
+					
+					<p:tab id="resumeTabID"
+						   title="Resumo">
+						   						
+						<p:scrollPanel mode="native">
+						
+							<p:panel header="Resumo do Contrato.">
+							
+								<p:messages/>
+								
+								<h:panelGrid id="resumeInputRegisterFormID"
+											 columns="2">
+
+
+
+
+									<h3 style="position: left;">Código do Contrato</h3>
+									
+									<p:separator/>
+
+									<p:outputLabel value="Código: "/>
+									
+									<p:outputLabel id="contractCodeID" style="color:green;"
+												   value="#{contractController.contractDomain.contractCodeDescription}"/>									
+									
+									<p:outputLabel value="Copiar Código: "/>
+									
+									<p:commandButton id="btnCopyContractCodeID"
+													 title="Copiar Código"
+													 value="Copiar" 
+													 icon="fa fa-copy" 
+													 onclick="return false;"/>
+													 
+									<pe:clipboard id="clipAjax"
+												  trigger="btnCopyContractCodeID"
+												  action="copy" 
+												  text="#{contractController.contractDomain.contractCodeDescription}">
+												   
+							            		  <p:ajax event="success"
+							            		  		  listener="#{contractController.successListener}" 
+							            		  		  update=":idMsgGlobal"/>
+							            		  		  
+							           			  <p:ajax event="error"
+							           			  		  listener="#{contractController.errorListener}"
+							           			  		  update=":idMsgGlobal"/> 
+									</pe:clipboard>
+									
+									<p:spacer width="5px"/>
+											
 																		
-								</h:panelGrid>
-								
-								<p:spacer height="40px"/>
+																								
+									<h3 style="position: left;">Modelo do Contrato</h3>
 									
+									<p:separator/>
+															
+									<p:outputLabel value="Modelo Contrato: " />
+									
+									<p:outputLabel value="#{contractController.contractDomain.contractModelDomain.contractModelName}"/>								
+
+									
+									
+									<h3 style="position: left;">Período do Contrato</h3>
+									
+									<p:separator/>
+									
+									<p:outputLabel value="Data Início: "/>
+									
+									<p:outputLabel value="#{contractController.contractDomain.beginDate}"
+												   style="color: green;">
+												   
+												   <f:convertDateTime locale="pt_BR"
+												   					  pattern="dd/MM/yyyy"
+																	  timeZone="America/Sao_Paulo"/>
+									</p:outputLabel>
+									
+									<p:outputLabel value="Data Término: "/>
+									
+									<p:outputLabel value="#{contractController.contractDomain.endDate}"
+												   style="color: green;">
+									
+												   <f:convertDateTime locale="pt_BR"
+												   					  pattern="dd/MM/yyyy"
+												   					  timeZone="America/Sao_Paulo" />
+									</p:outputLabel>										
+
+
+
+									<h3 style="position: left;">Informação do Curso</h3>
+									
+									<p:separator/>
+									
+									<p:outputLabel value="Unidade: "/>
+									
+									<p:outputLabel value="#{contractController.contractDomain.classPlaceDescription}"/>
+
+									
+									<p:outputLabel value="Módulo: "/>
+									
+									<p:outputLabel value="#{contractController.contractDomain.classModuleDescription}"/>				
+
 								
-								<!-- PANEL GRID FOR BUTTON CLOSE -->
-								<h:panelGrid columns="1"
+									<p:outputLabel value="Língua: "/>
+									
+									<p:outputLabel value="#{contractController.contractDomain.classLanguageDescription}"/>
+
+									
+									<p:outputLabel value="Nível: "/>
+									
+									<p:outputLabel value="#{contractController.contractDomain.classLevelDescription}"/>										
+
+									
+									<p:outputLabel value="Hora Início: "/>
+									
+									<p:outputLabel value="#{contractController.contractDomain.beginClassHour}">
+										
+	    										   <f:convertDateTime locale="pt_BR"
+	    										   					  pattern="HH:mm"
+	    										   					  timeZone="America/Sao_Paulo"/>
+									</p:outputLabel>									
+									
+									<p:outputLabel value="Hora Término: "/>
+									
+									<p:outputLabel value="#{contractController.contractDomain.endClassHour}">
+									
+												   <f:convertDateTime locale="pt_BR"
+												   					  pattern="HH:mm"
+												   					  timeZone="America/Sao_Paulo"/>
+									</p:outputLabel>
+									
+									<p:outputLabel value="Pausa: " />
+									
+									<p:outputLabel value="#{contractController.contractDomain.breakClassHour}mn"/>
+
+
+									<p:outputLabel value="Hora Total Aula/Dia: " />
+									
+									<p:outputLabel value="#{contractController.total}"
+												   style="color: red;"/>
+
+
+									<p:outputLabel value="Hora Total Aula/Semana: " />
+																			
+									<p:outputLabel value="#{contractController.totalWeekly}"
+												   style="color: red;"/>
+												   
+									
+									<p:outputLabel value="Dia(s) letivo(s): "/>
+									
+									<p:outputLabel value="#{contractController.dayClassFullDescription}"/>
+
+													
+									<p:outputLabel value="Pacote de Horas: "/>
+									
+									<p:outputLabel value="#{contractController.contractDomain.classPackageHour}h"
+												   style="color: red;"/>
+
+	
+									<p:outputLabel value="Preço/Hora: "/>
+									
+									<p:outputLabel value="#{contractController.decimalRealPriceDescription}"/>
+
+
+									<p:outputLabel value="Preço Professor/Hora: "/>
+									
+									<p:outputLabel value="#{contractController.decimalProfessorPriceDescription}"/>
+
+
+									<p:outputLabel value="Preço Total/Hora: "/>
+									
+									<p:outputLabel value="#{contractController.decimalTotalPackageRealPriceDescription}"/>
+
+
+									<p:outputLabel value="Preço Prof. Total/Hora: "/>
+									
+									<p:outputLabel value="#{contractController.decimalTotalPackageProfessorPriceDescription}"/>
+																			
+									
+									<p:outputLabel value="Comentário: " />
+									
+									<p:outputLabel value="#{contractController.contractDomain.commentDescription}"/>																			
+																														
+								</h:panelGrid>									
+
+								<p:spacer height="40px"/>
+								
+								
+								<!-- PANEL GRID FOR BUTTON SAVE AND CLOSE -->
+								<h:panelGrid columns="2"
 											 styleClass="panelGridCenter">
-											 			
+											 
+									<p:commandButton value="Salvar"
+													 title="Salvar Registro"
+													 icon="fa fa-floppy-o" 
+													 actionListener="#{contractController.doSave}"
+													 update=":idMsgGlobal 
+													 		 :contractRegisterFormID:wizardFormID
+													 		 :contractListFormID:contractDataTableFormID"/>
+													 		 		
 									<p:commandButton value="Fechar"
 													 title="Sair do Registro"
 													 icon="fa fa-remove"
-													 oncomplete="PF('dlgNewContract').hide();"/>
+													 action="#{contractController.doClean}"
+													 oncomplete="PF('dlgNewContract').hide();" />
 								</h:panelGrid>
 																
+		
 							</p:panel>
-													
-						</p:tab>
-
-				
-	
-						
-						<p:tab id="resumeTabID"
-							   title="Resumo">
-							   						
-							<p:scrollPanel mode="native">
 							
-								<p:panel header="Resumo do Contrato.">
-								
-									<p:messages/>
-									
-									<h:panelGrid id="resumeInputRegisterFormID"
-												 columns="2">
-	
-	
-	
-	
-										<h3 style="position: left;">Código do Contrato</h3>
-										
-										<p:separator/>
-	
-										<p:outputLabel value="Código: "/>
-										
-										<p:outputLabel id="contractCodeID" style="color:green;"
-													   value="#{contractController.contractDomain.contractCodeDescription}"/>									
-										
-										<p:outputLabel value="Copiar Código: "/>
-										
-										<p:commandButton id="btnCopyContractCodeID"
-														 title="Copiar Código"
-														 value="Copiar" 
-														 icon="fa fa-copy" 
-														 onclick="return false;"/>
-														 
-										<pe:clipboard id="clipAjax"
-													  trigger="btnCopyContractCodeID"
-													  action="copy" 
-													  text="#{contractController.contractDomain.contractCodeDescription}">
-													   
-								            		  <p:ajax event="success"
-								            		  		  listener="#{contractController.successListener}" 
-								            		  		  update=":idMsgGlobal"/>
-								            		  		  
-								           			  <p:ajax event="error"
-								           			  		  listener="#{contractController.errorListener}"
-								           			  		  update=":idMsgGlobal"/> 
-										</pe:clipboard>
-										
-										<p:spacer width="5px"/>
-										
-										
-										
-										
-										<h3 style="position: left;">Língua e Nível do Curso</h3>
-										
-										<p:separator/>
-									
-										<p:outputLabel value="Língua: "/>
-										
-										<p:outputLabel value="#{contractController.contractDomain.classLanguageDescription}"/>
-										
-										<p:outputLabel value="Nível: "/>
-										
-										<p:outputLabel value="#{contractController.contractDomain.classLevelDescription}"/>
-										
-										
-										
-										<h3 style="position: left;">Período do Contrato</h3>
-										
-										<p:separator/>
-										
-										<p:outputLabel value="Data Início: "/>
-										
-										<p:outputLabel value="#{contractController.contractDomain.beginDate}"
-													   style="color: green;">
-													   
-													   <f:convertDateTime locale="pt_BR"
-													   					  pattern="dd/MM/yyyy"
-																		  timeZone="America/Sao_Paulo"/>
-										</p:outputLabel>
-										
-										<p:outputLabel value="Data Término: "/>
-										
-										<p:outputLabel value="#{contractController.contractDomain.endDate}"
-													   style="color: green;">
-										
-													   <f:convertDateTime locale="pt_BR"
-													   					  pattern="dd/MM/yyyy"
-													   					  timeZone="America/Sao_Paulo" />
-										</p:outputLabel>
-	
-	
-	
-	
-										<h3 style="position: left;">Lugar do Curso</h3>
-										
-										<p:separator/>
-										
-										<p:outputLabel value="Unidade: "/>
-										
-										<p:outputLabel value="#{contractController.contractDomain.classPlaceDescription}"/>
-	
-	
-	
-	
-										<h3 style="position: left;">Informações sobre o Curso</h3>
-										<p:separator/>
+						</p:scrollPanel>
+						
+					</p:tab>
+																								
+				</p:wizard>
+					
+			</h:form>
+						
+		</p:dialog>			
 
-										<p:outputLabel value="Módulo: "/>
-										
-										<p:outputLabel value="#{contractController.contractDomain.classModuleDescription}"/>
-												
-										<p:outputLabel value="Hora Início: "/>
-										
-										<p:outputLabel value="#{contractController.contractDomain.beginClassHour}">
+
+
+		<!-- DIALOG TO EDIT CONTRACT -->			
+		<p:dialog header="Cadastrar Novo Contrato"
+				  widgetVar="dlgEditContract"
+				  draggable="true" 
+				  modal="true" 
+				  closable="false"
+				  appendTo="@(body)" 
+				  closeOnEscape="true"
+				  responsive="true" 
+				  maximizable="true">
+			
+			<!-- FORM FOR THE DIALOG -->
+			<h:form id="contractEditFormID">
+				
+				<!-- PANEL GRID TO EDIT CONTRACT FORMS -->
+				<h:panelGrid id="statusEditRegisterFormID"
+							 columns="2">
+							 						
+					<p:outputLabel value="Finalizar Contrato:" />
+					
+					<p:toggleSwitch value="#{contractController.contractDomain.closedContractFlag}">
+						
+									<p:ajax listener="#{contractController.addContractMessage}"
+											update=":idMsgGlobal" />
+					</p:toggleSwitch>
+					
+					
+					<p:outputLabel value="Comentário: " />
+					
+					<p:inputTextarea value="#{contractController.contractDomain.commentDescription}"
+									 rows="2" 
+									 cols="30" 
+									 counter="display"
+									 maxlength="100" 
+									 counterTemplate="{0} caracteres restantes."
+									 autoResize="true"/>
+									 
+					<br/>
+					
+					<h:outputText id="display"/>
+					
+					<br/>
+					
+					<p:spacer height="20px"/>
+					
+						
+					<p:outputLabel value="Ultima atualização: "/>
+					
+					<p:outputLabel value="#{contractController.contractDomain.saveContractDate}">
+					
+								   <f:convertDateTime locale="pt_BR"
+								   					  pattern="dd/MM/yyyy HH:mm"
+								   					  timeZone="America/Sao_Paulo"/>
+					</p:outputLabel>
 											
-		    										   <f:convertDateTime locale="pt_BR"
-		    										   					  pattern="HH:mm"
-		    										   					  timeZone="America/Sao_Paulo"/>
-										</p:outputLabel>									
-										
-										<p:outputLabel value="Hora Término: "/>
-										
-										<p:outputLabel value="#{contractController.contractDomain.endClassHour}">
-										
-													   <f:convertDateTime locale="pt_BR"
-													   					  pattern="HH:mm"
-													   					  timeZone="America/Sao_Paulo"/>
-										</p:outputLabel>
-										
-										<p:outputLabel value="Pausa: " />
-										
-										<p:outputLabel value="#{contractController.contractDomain.breakClassHour}mn"/>
-	
-	
-										<p:outputLabel value="Hora total de Aula: " />
-										
-										<p:outputLabel value="#{contractController.total}"
-													   style="color: red;"/>
-	
-										
-										<p:outputLabel value="Dia(s) letivo(s): "/>
-										
-										<p:outputLabel value="#{contractController.dayClassFullDescription}"/>
-
-														
-										<p:outputLabel value="Pacote de Horas: "/>
-										
-										<p:outputLabel value="#{contractController.contractDomain.classPackageHour}h"
-													   style="color: red;"/>
-
-										
-										<p:outputLabel value="Preço/Hora: "/>
-										
-										<p:outputLabel value="#{contractController.decimalRealPriceDescription}"/>
-
-
-										<p:outputLabel value="Preço Professor/Hora: "/>
-										
-										<p:outputLabel value="#{contractController.decimalProfessorPriceDescription}"/>
-
-
-										<p:outputLabel value="Preço Total/Hora: "/>
-										
-										<p:outputLabel value="#{contractController.decimalTotalPackageRealPriceDescription}"/>
-
-
-										<p:outputLabel value="Preço Prof. Total/Hora: "/>
-										
-										<p:outputLabel value="#{contractController.decimalTotalPackageProfessorPriceDescription}"/>
-																				
-										
-										<p:outputLabel value="Comentário: " />
-										
-										<p:outputLabel value="#{contractController.contractDomain.commentDescription}"/>
-										
-																			
-										
-															
-										<h3 style="position: left;">Modelo do Contrato</h3>
-										
-										<p:separator/>
+					
+					<p:outputLabel value="Pelo usário:"/>
+					
+					<p:outputLabel value="#{contractController.contractDomain.contractSaveLoginUser}"
+								   style="color: orange;"/>
 																
-										<p:outputLabel value="Modelo Contrato: " />
+				</h:panelGrid>
+			
+				<br/>				
+				
+				
+				<!-- PANEL GRID FOR BUTTON SAVE AND CLOSE -->
+				<h:panelGrid columns="2">
+				
+					<p:commandButton value="Salvar"
+									 title="Salvar Registro"
+									 icon="fa fa-floppy-o" 
+									 actionListener="#{contractController.doSave}"
+									 oncomplete="PF('dlgEditContract').hide();"
+									 update=":idMsgGlobal
+											 :contractRegisterFormID:wizardFormID 
+											 :contractListFormID:contractDataTableFormID
+											 :contractEditFormID:statusEditRegisterFormID
+											 :contractListFormID:contractDataTableFormID"/>
+											 				
+					<p:commandButton value="Fechar"
+									 title="Sair do Registro"
+									 icon="fa fa-remove"
+									 action="#{contractController.doClean}"
+									 oncomplete="PF('dlgEditContract').hide();" />						
+				</h:panelGrid>
 										
-										<p:outputLabel value="#{contractController.contractDomain.contractModelDomain.contractModelName}"/>																			
-																															
-									</h:panelGrid>									
-
-									<p:spacer height="40px"/>
-									
-									
-									<!-- PANEL GRID FOR BUTTON SAVE AND CLOSE -->
-									<h:panelGrid columns="2"
-												 styleClass="panelGridCenter">
-												 
-										<p:commandButton value="Salvar"
-														 title="Salvar Registro"
-														 icon="fa fa-floppy-o" 
-														 actionListener="#{contractController.doSave}"
-														 update=":idMsgGlobal 
-														 		 :contractRegisterFormID:wizardFormID
-														 		 :contractListFormID:contractDataTableFormID"/>
-														 		 		
-										<p:commandButton value="Fechar"
-														 title="Sair do Registro"
-														 icon="fa fa-remove"
-														 oncomplete="PF('dlgNewContract').hide();" />
-									</h:panelGrid>
-																	
-			
-								</p:panel>
-								
-							</p:scrollPanel>
+			</h:form>
 							
-						</p:tab>
-																									
-					</p:wizard>
-						
-				</h:form>
-							
-			</p:dialog>			
-
-
-
-			<!-- DIALOG TO REGISTER NEW CONTRACT -->			
-			<p:dialog header="Cadastrar Novo Contrato"
-					  widgetVar="dlgEditContract"
-					  draggable="true" 
-					  modal="true" 
-					  closable="false"
-					  appendTo="@(body)" 
-					  closeOnEscape="true"
-					  responsive="true" 
-					  maximizable="true">
-				
-				<!-- FORM FOR THE DIALOG -->
-				<h:form id="contractEditFormID">
-					
-					<!-- PANEL GRID TO EDIT CONTRACT FORMS -->
-					<h:panelGrid id="statusEditRegisterFormID"
-								 columns="2">
-								 						
-						<p:outputLabel value="Finalizar Contrato:" />
-						
-						<p:toggleSwitch value="#{contractController.contractDomain.closedContractFlag}">
-							
-										<p:ajax listener="#{contractController.addContractMessage}"
-												update=":idMsgGlobal" />
-						</p:toggleSwitch>
-						
-						
-						<p:outputLabel value="Comentário: " />
-						
-						<p:inputTextarea value="#{contractController.contractDomain.commentDescription}"
-										 rows="2" 
-										 cols="30" 
-										 counter="display"
-										 maxlength="100" 
-										 counterTemplate="{0} caracteres restantes."
-										 autoResize="true"/>
-										 
-						<br/>
-						
-						<h:outputText id="display"/>
-						
-						<br/>
-						
-						<p:spacer height="20px"/>
-						
-							
-						<p:outputLabel value="Ultima atualização: "/>
-						
-						<p:outputLabel value="#{contractController.contractDomain.saveContractDate}">
-						
-									   <f:convertDateTime locale="pt_BR"
-									   					  pattern="dd/MM/yyyy HH:mm"
-									   					  timeZone="America/Sao_Paulo"/>
-						</p:outputLabel>
-												
-						
-						<p:outputLabel value="Pelo usário:"/>
-						
-						<p:outputLabel value="#{contractController.contractDomain.contractSaveLoginUser}"
-									   style="color: orange;"/>
-																	
-					</h:panelGrid>
-				
-					<br/>				
-					
-					
-					<!-- PANEL GRID FOR BUTTON SAVE AND CLOSE -->
-					<h:panelGrid columns="2">
-					
-						<p:commandButton value="Salvar"
-										 title="Salvar Registro"
-										 icon="fa fa-floppy-o" 
-										 actionListener="#{contractController.doSave}"
-										 oncomplete="PF('dlgEditContract').hide();"
-										 update=":idMsgGlobal
-												 :contractRegisterFormID:wizardFormID 
-												 :contractListFormID:contractDataTableFormID
-												 :contractEditFormID:statusEditRegisterFormID
-												 :contractListFormID:contractDataTableFormID"/>
-												 				
-						<p:commandButton value="Fechar"
-										 title="Sair do Registro"
-										 icon="fa fa-remove" 
-										 oncomplete="PF('dlgEditContract').hide();" />						
-					</h:panelGrid>
-											
-				</h:form>
-								
-			</p:dialog>
+		</p:dialog>
 			
 			
-			<!-- DIALOG TO REGISTER NEW CONTRACT BODY TEXT -->			
-			<p:dialog header="Editar Texto do Contrato"
-					  widgetVar="dlgTextEditContract"
-					  draggable="true"
-					  modal="true" 
-					  closable="true"
-					  appendTo="@(body)" 
-					  closeOnEscape="true"
-					  responsive="true" 
-					  maximizable="true" 
-					  position="top">
+		<!-- DIALOG TO REGISTER NEW CONTRACT -->			
+		<p:dialog header="Editar Texto do Contrato"
+				  widgetVar="dlgTextEditContract"
+				  draggable="true"
+				  modal="true" 
+				  closable="true"
+				  appendTo="@(body)" 
+				  closeOnEscape="true"
+				  responsive="true" 
+				  maximizable="true" 
+				  position="top">
+			
+			
+			<!-- FORM FOR THE DIALOG -->
+			<h:form id="contractTextEditFormID">    
+			     
+			    <h3 class="first">Editor de Contrato</h3>
+			    
+			    <p:editor id="editor"
+			    		  widgetVar="textEditor"
+			    		  value="#{contractController.contractBody}" 
+			    		  width="600"/>
 				
-				
-				<!-- FORM FOR THE DIALOG -->
-				<h:form id="contractTextEditFormID">    
-				     
-				    <h3 class="first">Editor de Contrato</h3>
-				    
-				    <p:editor id="editor"
-				    		  widgetVar="textEditor"
-				    		  value="#{contractController.contractBody}" 
-				    		  width="600"/>
-					
 					<!-- PANEL GRID FOR BUTTON VIEW, PDFVIEW, CLEAR, SAVE AND CLOSE -->
 					<h:panelGrid columns="6">
 					
@@ -1171,7 +1195,119 @@
 				       
 				</h:form>
 				
+			</p:dialog>
+			
+			
+			<!-- DIALOG TO REGISTER NEW CONTRACT -->			
+			<p:dialog header="Cadastrar Aluno(a)s e Professor(a) no Contrato "
+					  widgetVar="contractDetailDlgWGV"
+					  id="contractDetailDlgID"
+					  draggable="true" 
+					  resizable="false" 
+					  modal="true" 
+					  closable="false"
+					  appendTo="@(body)" 
+					  height="570" 
+					  width="600"
+					  responsive="true" 
+					  maximizable="true">
+				
+				<!-- FORM FOR THE DIALOG -->
+				<h:form id="contractDetailFormID"> 
+				
+					<!-- WIZARD TO FILL FORMS -->
+					<p:wizard flowListener="#{contractController.doContractDetailFlowProcess}" 
+							  id="contractDetailWzdID"
+							  widgetVar="contractDetailWzdWGV">								
+
+						
+						<p:tab id="contractDetailStudentTabID"
+							   title="Aluno(a)">
+							
+							<p:panel header="Informações sobre a língua.">
+								
+								<p:messages/>
+								<br/>
+								<p:outputLabel value="Contrato - #{contractController.contractDomain.contractCodeDescription}"/>
+								<br/>
+								
+								<h:panelGrid id="ContractDetailInsertUserPnlGridID"
+								             columns="3">
+								             
+									<p:outputLabel value="CPF Aluno(a): "/>
+									<p:inputText value=""/>
+									
+																							 
+								</h:panelGrid>
+								
+								<br/>
+								
+								<h:panelGrid id="ContractDetailSkipPnlGridID"
+											 columns="2">
+								
+									<p:outputLabel value="Pular para o resumo"/>
+																
+									<p:selectBooleanCheckbox value="#{contractController.skip}"/>								
+								
+								</h:panelGrid>
+								
+
+								
+								<p:spacer height="40px"/>														
+								
+								<!-- PANEL GRID FOR BUTTON CLOSE -->
+								<h:panelGrid columns="1" 
+								    		 styleClass="panelGridCenter">
+								    		 
+									<p:commandButton value="Fechar"
+													 title="Sair do Registro"
+													 icon="fa fa-remove"
+													 oncomplete="PF('contractDetailDlgWGV').hide();"/>
+								</h:panelGrid>
+
+							</p:panel>							
+												
+						</p:tab>
+
+
+						
+						<p:tab id="contractDetailProfessorTabID"
+							   title="Professor(a)">
+							
+							<p:panel header="Informações sobre a língua.">
+								
+								<p:messages/>
+								
+								<h:panelGrid 
+								             columns="2">
+								             
+									<p:outputLabel value="Contrato - #{contractController.contractDomain.contractCodeDescription}"/>																							 
+								</h:panelGrid>
+								
+
+								
+								<p:spacer height="40px"/>														
+								
+								<!-- PANEL GRID FOR BUTTON CLOSE -->
+								<h:panelGrid columns="1" 
+								    		 styleClass="panelGridCenter">
+								    		 
+									<p:commandButton value="Fechar"
+													 title="Sair do Registro"
+													 icon="fa fa-remove"
+													 oncomplete="PF('contractDetailDlgWGV').hide();"/>
+								</h:panelGrid>
+
+							</p:panel>							
+												
+						</p:tab>						
+						
+					</p:wizard>				
+				
+				</h:form>					  
+					  
 			</p:dialog>			
+					
 		
 		</div>
 		

@@ -8,8 +8,7 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
 
 
-
-	<h:form>
+	<h:form id="principalMenuFormID">
 		<div>
 			<div>
 				<!-- Left position -->
@@ -23,7 +22,7 @@
 								style="float:left;"
 								title="Ir na tela Principal"/>
 				
-				<!-- Right position -->
+				<!-- Right position -->				
 				<p:commandButton value="Sair" icon="fa fa-power-off"
 								action="#{loginController.doDisconnect}"
 								style="float:right;"
@@ -33,6 +32,7 @@
 				<p:spacer width="10px" style="float:right;" />
 				
 				<p:outputLabel value="Bem-vindo(a), #{loginController.loggedUser.userName}" style="float:right;"/>
+			
 			</div>
 			
 			<p:sidebar widgetVar="sidebarLeft" position="left" baseZIndex="10000" appendTo="@(body)">
@@ -42,7 +42,12 @@
 				<p:spacer height="5px"/> -->
 				
 				<!-- Abraço Cultural png logo -->
-				<h:graphicImage styleClass="logo-image" library="images" name="login/logo_abraco_cultura.png" width="80%"/>
+				<!-- <h:graphicImage styleClass="logo-image" library="images" name="login/logo_abraco_cultura.png" width="80%"/>
+				 
+				<br/>-->
+				<p:commandLink id="userId" action="user.xhtml">
+					<p:graphicImage id="photoID" cache="false" value="#{imageController.streamContent}" width="150px" height="auto" styleClass="imageCenter"/>
+				</p:commandLink>
 				<br/>
 				
 				<!-- Menu -->
@@ -101,57 +106,28 @@
 			    				title="Fechar o Menu"/>
 			</p:sidebar>
 
+
+
 			<!-- FAB Component from extended PrimeFace -->
-			<pe:fab id="fabMenu" icon="fa fa-plus" style="background: #FF671F;">
+			<pe:fab id="fabMenu" icon="fa fa-plus" iconActive="fa fa-times" style="background: #FF671F;">
 				<p:menuitem value="Configuração"
 							icon="fa fa-gears"
-							outcome="/pages/contents/setting.xhtml"/>
+							outcome="/pages/contents/setting.xhtml"
+							style="background: #FF671F;"/>
 							
-				<p:menuitem value="Galeria" icon="fa fa-photo"/>
+				<p:menuitem value="Galeria" icon="fa fa-photo" style="background: #FF9B13;"/>
 				
-				<p:menuitem value="Contatos" icon="fa fa-id-card-o"/>
+				<p:menuitem value="Contatos" icon="fa fa-id-card-o" style="background: #FF9B13;"/>
 				
-				<p:menuitem value="Sobre" icon="fa fa-info"/>
+				<p:menuitem value="Sobre" icon="fa fa-info" style="background: #FFB400;"/>
 				
-				<p:menuitem value="Sugestão" icon="fa fa-comments-o"/>
+				<p:menuitem value="Sugestão" icon="fa fa-comments-o" style="background: #FFB400;"/>
 							 
 			</pe:fab>
-			
+
 		</div>
 	
 		<br/>
-	
-	
-<!--
-		<p:menubar>
-					
-			<p:submenu label="File" outcome="/pages/contents/home.xhtml" />
-			
-
-			<p:submenu label="Cadastro">
-				<p:menuitem value="Pessoas" outcome="/pages/contents/person.xhtml"/>
-				<p:menuitem value="Perfil" outcome="/pages/contents/profile.xhtml"/>
-				<p:menuitem value="Usuarios" outcome="/pages/contents/user.xhtml"/>
-				<p:menuitem value="Aluno(a)s" outcome="/pages/contents/student.xhtml"/>
-			</p:submenu>
-
-		
-			<p:submenu label="Ajuda">
-				<p:menuitem value="Sobre" />
-			</p:submenu>
-			
-			
-			<f:facet name="options">
-				<p:commandButton value="Home" icon="ui-icon-home" action="/pages/contents/home.xhtml"/>
-			</f:facet>			
-			
-			
-			<f:facet name="options">
-				<p:commandButton value="Logoff" icon="ui-icon-power" action="/pages/login.xhtml"/>
-			</f:facet>
-			
-		</p:menubar>
--->
 
 	</h:form>
 
