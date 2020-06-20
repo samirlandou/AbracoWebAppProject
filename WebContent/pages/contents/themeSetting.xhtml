@@ -17,6 +17,7 @@
 		<!-- BODY -->		
 		<div align="center">
 			<br/>
+			<h3 align="center">Definir Tema</h3>
 			<br/>
 			<!-- FORM FOR THEME SWITCHER -->
 			<h:form>
@@ -36,9 +37,15 @@
 								
 					<!-- PANEL GRID FOR BUTTON SAVE AND CLOSE -->
 					<h:panelGrid columns="2">
-						<p:commandButton value="Salvar" icon="fa fa-floppy-o" action="#{settingController.doSave}"
+					
+						<p:commandButton value="Voltar" icon="fa fa-reply" 
+										title="Voltar para a Tela 'Parâmetros'"
+										action="/pages/contents/setting.xhtml"/>
+										
+						<p:commandButton value="Salvar" icon="fa fa-floppy-o" action="#{themeSettingController.doSave}"
+										title="Salvar Tema"
 										update=":idMsgGlobal" />					
-						<p:commandButton value="Fechar" icon="fa fa-remove" action="home"/>
+
 					</h:panelGrid>
 				</f:view>				
 				

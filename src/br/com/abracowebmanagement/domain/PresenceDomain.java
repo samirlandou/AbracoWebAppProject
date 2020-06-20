@@ -11,6 +11,10 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import br.com.abracowebmanagement.domain.contract.ContractStudentDomain;
+import br.com.abracowebmanagement.domain.generic.GenericDomain;
+import br.com.abracowebmanagement.domain.user.UserDomain;
+
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "TB_PRESENCE")
@@ -83,11 +87,11 @@ public class PresenceDomain extends GenericDomain{
 	
 	/*
 	 * StudentInMyClass
-	 * Choose information from "StudentInMyClassDomain" Data Table into PresenceDomain 
+	 * Choose information from "ContractStudentDomain" Data Table into PresenceDomain 
 	 */
 	@ManyToOne
 	@JoinColumn(nullable = false)
-	private StudentInMyClassDomain studentInMyClassDomain;
+	private ContractStudentDomain contractStudentDomain;
 
 
 	/*
@@ -170,16 +174,6 @@ public class PresenceDomain extends GenericDomain{
 
 	public void setPresenceLoginUser(String presenceLoginUser) {
 		this.presenceLoginUser = presenceLoginUser;
-	}
-
-
-	public StudentInMyClassDomain getStudentInMyClassDomain() {
-		return studentInMyClassDomain;
-	}
-
-
-	public void setStudentInMyClassDomain(StudentInMyClassDomain studentInMyClassDomain) {
-		this.studentInMyClassDomain = studentInMyClassDomain;
 	}
 
 

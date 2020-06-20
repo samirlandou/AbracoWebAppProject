@@ -34,6 +34,30 @@
 			<redirect />
 		</navigation-case>
 		
+		<navigation-case>
+			<from-outcome>client.contractModel</from-outcome>
+			<to-view-id>/pages/contents/contractModel.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>		
+		
+		<navigation-case>
+			<from-outcome>client.contractSetting</from-outcome>
+			<to-view-id>/pages/contents/contractSetting.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>		
+		
+		<navigation-case>
+			<from-outcome>client.contract</from-outcome>
+			<to-view-id>/pages/contents/contract.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>	
+		
+		<navigation-case>
+			<from-outcome>userImage</from-outcome>
+			<to-view-id>/pages/contents/userImage.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>		
+		
 	</navigation-rule>	
 
 </faces-config>

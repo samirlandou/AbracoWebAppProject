@@ -10,12 +10,12 @@
 
         <!-- Database connection settings -->
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="connection.url">jdbc:mysql://localhost:3306/db_abracocultural?useSSL=false&amp;serverTimezone=UTC</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/db_abracocultural?useSSL=false&amp;serverTimezone=America/Sao_Paulo</property>
         <property name="connection.username">root</property>
         <property name="connection.password">q1w2e3r4</property>
 
         <!-- JDBC connection pool (use the built-in) -->
-        <property name="connection.pool_size">2</property>
+        <property name="connection.pool_size">100</property>
 
         <!-- SQL dialect -->
         <property name="dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property>
@@ -32,13 +32,15 @@
         <!-- Drop and re-create the database schema on startup (can use update, create, validate) -->
         <property name="hbm2ddl.auto">update</property>
 
-		<mapping class="br.com.abracowebmanagement.domain.ContractDomain"/>
+		<mapping class="br.com.abracowebmanagement.domain.contract.ContractDomain"/>
+		<mapping class="br.com.abracowebmanagement.domain.contract.ContractModelDomain"/>
+		<mapping class="br.com.abracowebmanagement.domain.contract.ContractSettingDomain"/>
+		<mapping class="br.com.abracowebmanagement.domain.contract.ContractStudentDomain"/>
 		<mapping class="br.com.abracowebmanagement.domain.MyClassDomain"/>
-		<mapping class="br.com.abracowebmanagement.domain.PersonDomain"/>		
+		<mapping class="br.com.abracowebmanagement.domain.person.PersonDomain"/>		
 		<mapping class="br.com.abracowebmanagement.domain.PresenceDomain"/>
-        <mapping class="br.com.abracowebmanagement.domain.StudentInMyClassDomain"/>
-        <mapping class="br.com.abracowebmanagement.domain.ScheduleEventDomain"/>
-        <mapping class="br.com.abracowebmanagement.domain.UserDomain"/>
+		<mapping class="br.com.abracowebmanagement.domain.scheduleevent.ScheduleEventDomain"/>
+        <mapping class="br.com.abracowebmanagement.domain.user.UserDomain"/>
 
 		
     </session-factory>

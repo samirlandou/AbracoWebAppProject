@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.11.0.final using JasperReports Library version 6.11.0-0c4056ccaa4d25a5a8c45672d2f764ea3498bebb  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="contract_professor" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1f689308-e4b6-4cff-aca5-943d5c95cb95">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Abraco Cultural Data Adapter "/>
+	<parameter name="Parameter1" class="java.lang.String"/>
+	<parameter name="abracoLogo" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT db_abracocultural.tb_user.`NM_USER`
+FROM db_abracocultural.tb_user]]>
+	</queryString>
+	<field name="NM_USER" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="NM_USER"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="tb_user"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="15" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy HH:mm">
+				<reportElement x="0" y="0" width="90" height="15" uuid="e82c1633-410d-45d3-9d1f-f9642a247161"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="180" splitType="Stretch">
+			<staticText>
+				<reportElement x="216" y="104" width="129" height="15" uuid="59f13373-41e4-43ae-95c6-50d3fba72f91"/>
+				<textElement>
+					<font isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[CONTRATO - PROFESSOR]]></text>
+			</staticText>
+			<image>
+				<reportElement x="180" y="-15" width="180" height="180" uuid="2e5bf9f9-94e3-45c4-b6d7-c182599911bf"/>
+				<imageExpression><![CDATA[$P{abracoLogo}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="10" y="10" width="125" height="30" uuid="cfe74831-dc8a-4332-90b4-365a3f940afb"/>
+				<textFieldExpression><![CDATA[$P{Parameter1}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="13" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="560" height="13" uuid="171da689-042a-4e72-923a-e44dc15e9f9b">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9969e082-c243-4277-b919-cd44aece085b"/>
+				</reportElement>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOME:]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="180" height="13" uuid="a870a4d6-26b9-44c1-9681-4fb7db900871">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9969e082-c243-4277-b919-cd44aece085b"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{NM_USER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="52" splitType="Stretch">
+			<textField evaluationTime="Report">
+				<reportElement x="470" y="20" width="90" height="30" uuid="8444b499-7f8b-4290-86e1-bf98b2dd90a2"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA[" of " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

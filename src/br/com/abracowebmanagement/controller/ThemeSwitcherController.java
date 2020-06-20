@@ -12,7 +12,7 @@ import javax.faces.event.AjaxBehaviorEvent;
 
 import org.primefaces.component.themeswitcher.ThemeSwitcher;
 
-import br.com.abracowebmanagement.domain.UserDomain;
+import br.com.abracowebmanagement.domain.user.UserDomain;
 
 @ManagedBean
 @SessionScoped
@@ -54,8 +54,16 @@ public class ThemeSwitcherController {
 		themes.put("Hot-Sneaks", "hot-sneaks");
 		themes.put("Humanity", "humanity");
 		themes.put("Le-Frog", "le-frog");
+		themes.put("Luna-Amber", "luna-amber");
+		themes.put("Luna-Blue", "luna-blue");
+		themes.put("Luna-Green", "luna-green");
+		themes.put("Luna-Pink", "luna-pink");
 		themes.put("Midnight", "midnight");
 		themes.put("Mint-Choc", "mint-choc");
+		themes.put("Nova-Colored", "nova-colored");
+		themes.put("Nova-Dark", "nova-dark");
+		themes.put("Nova-Light", "nova-light");
+		themes.put("Omega", "omega");
 		themes.put("Overcast", "overcast");
 		themes.put("Pepper-Grinder", "pepper-grinder");
 		themes.put("Redmond", "redmond");

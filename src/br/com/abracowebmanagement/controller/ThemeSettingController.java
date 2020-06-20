@@ -8,11 +8,11 @@ import javax.faces.context.FacesContext;
 import org.omnifaces.util.Messages;
 
 import br.com.abracowebmanagement.dao.UserDAO;
-import br.com.abracowebmanagement.domain.UserDomain;
+import br.com.abracowebmanagement.domain.user.UserDomain;
 
 @ManagedBean
 @SessionScoped
-public class SettingController {
+public class ThemeSettingController {
 	
 	//Domain
 	UserDomain userDomain;
@@ -26,7 +26,7 @@ public class SettingController {
 	public void doInit() {
 		
 		//Instantiate UserDomain
-		userDomain= new UserDomain();
+		userDomain = new UserDomain();
 		
 		//FacesContext for Login
 		FacesContext fcLogin = FacesContext.getCurrentInstance();

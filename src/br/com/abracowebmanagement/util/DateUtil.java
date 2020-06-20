@@ -118,10 +118,29 @@ public class DateUtil {
 		return fillZero(hours) + ":" + fillZero(minutes);
 		
 	}
+
+	public static String returnDiffBetweenDatesWithQuantity(Date data1, Date data2, int date3, int quantity){
+		long difMilli = data2.getTime() - data1.getTime();
+		
+		int timeInSeconds = (int)(((difMilli / 1000) - (date3 * 60)) * quantity) ;  
+		int hours, minutes;
+		hours = timeInSeconds / 3600;  
+		timeInSeconds = timeInSeconds - (hours * 3600);  
+		minutes = timeInSeconds / 60;  
+		timeInSeconds = timeInSeconds - (minutes * 60);
+		return fillZero(hours) + ":" + fillZero(minutes);
+		
+	}	
 	
 	public static int returnDiffInMinutes(Date data1, Date data2, int date3){
 		long diffMilli = data2.getTime() - data1.getTime();
 		int diffMin = (int)(((diffMilli / 1000) - (date3 * 60))/60);
+		return diffMin;
+	}
+	
+	public static int returnDiffInMinutesWithQuantity(Date data1, Date data2, int date3, int quantity){
+		long diffMilli = data2.getTime() - data1.getTime();
+		int diffMin = (int)((((diffMilli / 1000) - (date3 * 60))/60) * quantity);
 		return diffMin;
 	}
 	
