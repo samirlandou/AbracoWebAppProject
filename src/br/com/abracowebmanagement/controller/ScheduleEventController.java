@@ -20,7 +20,7 @@ import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
 
 import br.com.abracowebmanagement.dao.ScheduleEventDAO;
-import br.com.abracowebmanagement.domain.ScheduleEventDomain;
+import br.com.abracowebmanagement.domain.scheduleevent.ScheduleEventDomain;
 import br.com.abracowebmanagement.util.DateUtil;
 
 @ManagedBean

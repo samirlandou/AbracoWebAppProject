@@ -3,6 +3,7 @@ package br.com.abracowebmanagement.util;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -22,8 +23,14 @@ import org.primefaces.model.StreamedContent;
 
 
 
-public class MethodUtil {
+public class MethodUtil implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3387912621818334653L;
+
+
 	/**
 	 * Validate a CPF
 	 * 
@@ -299,4 +306,33 @@ public class MethodUtil {
 
 	    return cookie;
 	}
+	
+	
+	public boolean deleteFile(String path){
+				
+		//Delete File
+		if(new File(path).exists()){
+			new File(path).delete();
+			return true;
+		}
+		return false;
+	}	
+	
+	
+	/*public String teachingLanguage(String language){
+		String teachingLanguage = "";
+		
+		if(language.equals("AR")){
+			teachingLanguage = "teachingArabLanguage";
+		} else if(language.equals("EN")){
+			teachingLanguage = "teachingEnglishLanguage";
+		} else if(language.equals("ES")){
+			teachingLanguage = "teachingSpanishLanguage";
+		} else if(language.equals("FR")){
+			teachingLanguage = "teachingFrenchLanguage";
+		} else{
+			teachingLanguage = "teachingPortugueseLanguage";
+		}		
+		return teachingLanguage;		
+	}*/
 }

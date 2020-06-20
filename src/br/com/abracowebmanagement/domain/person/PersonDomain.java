@@ -1,8 +1,10 @@
-package br.com.abracowebmanagement.domain;
+package br.com.abracowebmanagement.domain.person;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+
+import br.com.abracowebmanagement.domain.generic.GenericDomain;
 
 @SuppressWarnings("serial")
 @Entity
@@ -19,7 +21,6 @@ public class PersonDomain extends GenericDomain{
 	 * DT -> DATE
 	 * FG -> FLAG 
 	 */
-
 
 
 	/*
@@ -64,7 +65,7 @@ public class PersonDomain extends GenericDomain{
 	/*
 	 * Phone number
 	 */
-	@Column(name = "DE_TELEPHONE", length = 20, nullable = false)
+	@Column(name = "DE_TELEPHONE", length = 20, nullable = true)
 	private String telephone;
 	
 	
@@ -94,7 +95,7 @@ public class PersonDomain extends GenericDomain{
 
 	/*
 	 * Language
-	 * Description of teaching language
+	 * Description of teaching language3
 	 * 
 	 * AR --> Arab
 	 * FR --> French
@@ -102,9 +103,36 @@ public class PersonDomain extends GenericDomain{
 	 * ES --> Spanish
 	 * PT --> Portuguese
 	 */
-	@Column(name = "DE_LANGUAGE", length = 2, nullable = false)
-	private String language;
+	@Column(name = "DE_LANGUAGE1", length = 2, nullable = false)
+	private String language1;
 	
+
+	/*
+	 * Language
+	 * Description of teaching language3
+	 * 
+	 * AR --> Arab
+	 * FR --> French
+	 * EN --> English
+	 * ES --> Spanish
+	 * PT --> Portuguese
+	 */
+	@Column(name = "DE_LANGUAGE2", length = 2, nullable = true)
+	private String language2;	
+	
+
+	/*
+	 * Language
+	 * Description of teaching language3
+	 * 
+	 * AR --> Arab
+	 * FR --> French
+	 * EN --> English
+	 * ES --> Spanish
+	 * PT --> Portuguese
+	 */
+	@Column(name = "DE_LANGUAGE3", length = 2, nullable = true)
+	private String language3;
 	
 	
 	/*
@@ -185,19 +213,8 @@ public class PersonDomain extends GenericDomain{
 		return status;
 	}
 
-
 	public void setStatus(Boolean status) {
 		this.status = status;
-	}
-
-
-	public String getLanguage() {
-		return language;
-	}
-
-
-	public void setLanguage(String language) {
-		this.language = language;
 	}
 
 
@@ -209,5 +226,36 @@ public class PersonDomain extends GenericDomain{
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
+
+
+	public String getLanguage1() {
+		return language1;
+	}
+
+
+	public void setLanguage1(String language1) {
+		this.language1 = language1;
+	}
+
+
+	public String getLanguage2() {
+		return language2;
+	}
+
+
+	public void setLanguage2(String language2) {
+		this.language2 = language2;
+	}
+
+
+	public String getLanguage3() {
+		return language3;
+	}
+
+
+	public void setLanguage3(String language3) {
+		this.language3 = language3;
+	}
+
 	
 }

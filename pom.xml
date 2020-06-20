@@ -171,12 +171,12 @@
 
 			
 		<!-- https://mvnrepository.com/artifact/org.apache.shiro/shiro-core -->
-		<!-- Apache SHIRO for Password cryptography -->
+		<!-- Apache SHIRO for Password cryptography
 		<dependency>
 		    <groupId>org.apache.shiro</groupId>
 		    <artifactId>shiro-core</artifactId>
 		    <version>1.4.2</version>
-		</dependency>
+		</dependency> -->
 
 
 		<!-- https://mvnrepository.com/artifact/javax.enterprise/cdi-api -->

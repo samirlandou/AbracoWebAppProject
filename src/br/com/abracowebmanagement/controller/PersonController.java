@@ -12,9 +12,15 @@ import javax.faces.event.ActionEvent;
 import org.omnifaces.util.Messages;
 
 import br.com.abracowebmanagement.dao.PersonDAO;
-import br.com.abracowebmanagement.domain.PersonDomain;
+import br.com.abracowebmanagement.domain.person.PersonDomain;
 import br.com.abracowebmanagement.util.MethodUtil;
 import br.com.abracowebmanagement.util.PersonUtil;
+
+/**
+ * Person Class
+ * @author samirlandou
+ * @since 11/09/2019
+ */
 
 @ManagedBean
 @ViewScoped
@@ -35,18 +41,18 @@ public class PersonController implements Serializable {
 
 	PersonDomain resultDomain;
 
+	private boolean itemDisabledFlag;
+
 	
 	/**
-	 * List Method. <br/>
-	 * @author samirlandou <br/>
-	 * @since 11/09/2019
+	 * List Method
 	 */
 	@PostConstruct
 	public void doList(){
 		try {
 			//List Person
 			PersonDAO personDAO = new PersonDAO();
-			personsDomain = personDAO.list();
+			personsDomain = personDAO.descendList("id");
 			
 			//List Country
 			country = persontUtil.getFullCountryComboList();
@@ -62,13 +68,14 @@ public class PersonController implements Serializable {
 	
 	
 	/**
-	 * Clean Method. <br/>
-	 * @author samirlandou <br/>
-	 * @since 27/04/2020 
+	 * Clean Method.
 	 */
-	private void doClean(){
+	public void doClean(){
 		//Set Edit Flag
 		editFlag = false;
+		
+		//Set ItemDisabledFlag Flag
+		itemDisabledFlag = true;
 		
 		//Set Check Field Variables to Null
 		completeName = "";
@@ -117,8 +124,6 @@ public class PersonController implements Serializable {
 	/**
 	 * Method for New Registration. <br/>
 	 * Set here new instance of Domain. <br/>
-	 * @author samirlandou <br/>
-	 * @since 11/09/2019
 	 */
 	public void doNewRegister(){
 		
@@ -131,9 +136,7 @@ public class PersonController implements Serializable {
 		
 	
 	/**
-	 * Save Method. <br/>
-	 * @author samirlandou <br/>
-	 * @since 11/09/2019
+	 * Save Method.
 	 */
 	public void doSave(){
 		/* 
@@ -181,13 +184,17 @@ public class PersonController implements Serializable {
 				//Instantiate Result Domain
 				resultDomain = new PersonDomain();
 				
-				if(checkField().equals("completeName") && (resultDomain = personDAO.findByCompletename(personDomain.getCompleteName())) != null){
+				if(checkField().equals("completeName") && (resultDomain = personDAO.findByCompleteName(personDomain.getCompleteName())) != null){
 					
-					//Set Save Flag
-					saveFlag = false;
-					
-					//Error Message
-					Messages.addGlobalError("O Nome completo '" + personDomain.getCompleteName() + "' já pertence a '" + resultDomain.getCompleteName() + "'.");
+					if(completeName.equalsIgnoreCase(personDomain.getCompleteName())){
+						
+						//Set Save Flag
+						saveFlag = false;
+						
+						//Error Message
+						Messages.addGlobalError("O Nome completo \"" + personDomain.getCompleteName() + "\" já existe.");						
+					}
+
 					
 				} else if(checkField().equals("cpf") && (resultDomain = personDAO.findByCPF(personDomain.getCpf())) != null){
 					
@@ -195,7 +202,7 @@ public class PersonController implements Serializable {
 					saveFlag = false;
 					
 					//Error Message
-					Messages.addGlobalError("O CPF '" + personDomain.getCpf() + "' já pertence a '" + resultDomain.getCompleteName() + "'.");
+					Messages.addGlobalError("O CPF \"" + personDomain.getCpf() + "\" já pertence a \"" + resultDomain.getCompleteName() + "\".");
 					
 				} else if(checkField().equals("telephone") && (resultDomain = personDAO.findByTelephone(personDomain.getTelephone())) != null){
 					
@@ -203,7 +210,7 @@ public class PersonController implements Serializable {
 					saveFlag = false;
 					
 					//Error Message
-					Messages.addGlobalError("O Telefone '" + personDomain.getTelephone() + "' já pertence a '" + resultDomain.getCompleteName() + "'.");
+					Messages.addGlobalError("O Telefone \"" + personDomain.getTelephone() + "\" já pertence a \"" + resultDomain.getCompleteName() + "\".");
 					
 				} else if(checkField().equals("email") && (resultDomain = personDAO.findByEmail(personDomain.getEmail())) != null){
 					
@@ -211,7 +218,7 @@ public class PersonController implements Serializable {
 					saveFlag = false;
 					
 					//Error Message
-					Messages.addGlobalError("O E-mail '" + personDomain.getEmail() + "' já pertence a '" + resultDomain.getCompleteName() + "'.");
+					Messages.addGlobalError("O E-mail \"" + personDomain.getEmail() + "\" já pertence a \"" + resultDomain.getCompleteName() + "\".");
 					
 				}		
 			}
@@ -227,12 +234,16 @@ public class PersonController implements Serializable {
 				//Clean informations in the panelGrid
 				//doNewRegister();
 				
+				//Set again variables
+				completeName = personDomain.getCompleteName();
+				cpf = personDomain.getCpf();
+				email = personDomain.getEmail();
+				telephone = personDomain.getTelephone();
+								
 				//List again Person (very import to update the list)
-				personsDomain = personDAO.list();
+				personsDomain = personDAO.descendList("id");
 				
-			}
-
-			
+			}			
 		} catch (Exception e) {
 			Messages.addGlobalError("Ocorreu um erro ao salvar as informações de uma pessoa!");
 			e.printStackTrace();
@@ -241,10 +252,7 @@ public class PersonController implements Serializable {
 
 
 	/**
-	 * check field Method. <br/>
-	 * @author samirlandou <br/>
-	 * @since 27/04/2020
-	 * @return
+	 * check field Method
 	 */
 	public String checkField(){
 		
@@ -263,10 +271,8 @@ public class PersonController implements Serializable {
 	
 	
 	/**
-	 * Delete Method. <br/>
-	 * @author samirlandou <br/>
-	 * @param event <br/>
-	 * @since 11/09/2019
+	 * Delete Method
+	 * @param event
 	 */
 	public void doDelete(ActionEvent event){
 		try {
@@ -280,14 +286,14 @@ public class PersonController implements Serializable {
 			personDAO.delete(personDomain);
 						
 			//List again Person (very import to update the list)
-			personsDomain = personDAO.list();
+			personsDomain = personDAO.descendList("id");
 			
 			//This code is used with OmniFaces and it is more practice than PrimeFaces implementation.
 			Messages.addGlobalInfo(personDomain.getCompleteName() + " foi excluido com sucesso!!!");
 			
 		} catch (Exception e) {
 			if(e.equals("ConstraintViolationException")){
-				Messages.addGlobalError("Não pode deletar pois os dados de " + personDomain.getCompleteName() + " está sendo usado em outro processo!!!");
+				Messages.addGlobalError("Não pode deletar pois os dados de \"" + personDomain.getCompleteName() + "\" está sendo usado em outro processo!!!");
 			} else{
 				Messages.addGlobalError("Ocorreu um erro ao tentar excluir as informações de: " + personDomain.getCompleteName());
 			}
@@ -297,9 +303,7 @@ public class PersonController implements Serializable {
 
 	
 	/**
-	 * Message Method. <br/>
-	 * @author samirlandou <br/>
-	 * @since 11/09/2019
+	 * Message Method
 	 */
 	public void addMessage() {
 		//Add Message for toggleSwitch Component from person.xhtml
@@ -309,10 +313,8 @@ public class PersonController implements Serializable {
 
 	
 	/**
-	 * Edit Method. <br/>
-	 * @author samirlandou <br/>
-	 * @param event <br/>
-	 * @since 11/09/2019
+	 * Edit Method.
+	 * @param event
 	 */
 	public void doEdit(ActionEvent event){
 		try {
@@ -332,6 +334,11 @@ public class PersonController implements Serializable {
 			cpf = personDomain.getCpf();
 			email = personDomain.getEmail();
 			telephone = personDomain.getTelephone();
+			
+			//Condition do Set itemDisabled Flag to true for selectItem ADMINISTRADOR(A)
+			if(personDomain.getProfile().equals("ADMINISTRADOR(A)")){
+				itemDisabledFlag = false;
+			}
 			
 		} catch (Exception e) {
 			Messages.addGlobalError("Ocorreu um erro ao editar as informações de: " + personDomain.getCompleteName());
@@ -381,6 +388,16 @@ public class PersonController implements Serializable {
 
 	public void setOldPersonDomain(PersonDomain oldPersonDomain) {
 		this.oldPersonDomain = oldPersonDomain;
+	}
+
+
+	public boolean isItemDisabledFlag() {
+		return itemDisabledFlag;
+	}
+
+
+	public void setItemDisabledFlag(boolean itemDisabledFlag) {
+		this.itemDisabledFlag = itemDisabledFlag;
 	}	
 	
 }

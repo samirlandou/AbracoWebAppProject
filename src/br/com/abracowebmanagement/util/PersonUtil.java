@@ -78,7 +78,7 @@ public class PersonUtil {
 		countryList.put("Eslováquia", "Eslováquia");
 		countryList.put("Eslovênia", "Eslovênia");
 		countryList.put("Espanha", "Espanha");
-		countryList.put("Estados Federados da Micronésia", "Estados Federados da Micronésia");
+		/*countryList.put("Estados Federados da Micronésia", "Estados Federados da Micronésia");*/
 		countryList.put("Estados Unidos", "Estados Unidos");
 		countryList.put("Estônia", "Estônia");
 		countryList.put("Etiópia", "Etiópia");
@@ -110,16 +110,16 @@ public class PersonUtil {
 		countryList.put("Ilha Bouvet", "Ilha Bouvet");
 		countryList.put("Ilha de Man", "Ilha de Man");
 		countryList.put("Ilha do Natal", "Ilha do Natal");
-		countryList.put("Ilha Heard e Ilhas McDonald", "Ilha Heard e Ilhas McDonald");
+		/*countryList.put("Ilha Heard e Ilhas McDonald", "Ilha Heard e Ilhas McDonald");*/
 		countryList.put("Ilha Norfolk", "Ilha Norfolk");
 		countryList.put("Ilhas Cayman", "Ilhas Cayman");
 		countryList.put("Ilhas Cocos (Keeling)", "Ilhas Cocos (Keeling)");
 		countryList.put("Ilhas Cook", "Ilhas Cook");
 		countryList.put("Ilhas Feroé", "Ilhas Feroé");
-		countryList.put("Ilhas Geórgia do Sul e Sandwich do Sul", "Ilhas Geórgia do Sul e Sandwich do Sul");
+		/*countryList.put("Ilhas Geórgia do Sul e Sandwich do Sul", "Ilhas Geórgia do Sul e Sandwich do Sul");*/
 		countryList.put("Ilhas Malvinas", "Ilhas Malvinas");
 		countryList.put("Ilhas Marshall", "Ilhas Marshall");
-		countryList.put("Ilhas Menores Distantes dos Estados Unidos", "Ilhas Menores Distantes dos Estados Unidos");
+		/*countryList.put("Ilhas Menores Distantes dos Estados Unidos", "Ilhas Menores Distantes dos Estados Unidos");*/
 		countryList.put("Ilhas Salomão", "Ilhas Salomão");
 		countryList.put("Ilhas Virgens Americanas", "Ilhas Virgens Americanas");
 		countryList.put("Ilhas Virgens Britânicas", "Ilhas Virgens Britânicas");
@@ -215,7 +215,7 @@ public class PersonUtil {
 		countryList.put("Saint-Pierre e Miquelon", "Saint-Pierre e Miquelon");
 		countryList.put("Samoa Americana", "Samoa Americana");
 		countryList.put("Samoa", "Samoa");
-		countryList.put("Santa Helena, Ascensão e Tristão da Cunha", "Santa Helena, Ascensão e Tristão da Cunha");
+		/*countryList.put("Santa Helena, Ascensão e Tristão da Cunha", "Santa Helena, Ascensão e Tristão da Cunha");*/
 		countryList.put("Santa Lúcia", "Santa Lúcia");
 		countryList.put("Senegal", "Senegal");
 		countryList.put("Serra Leoa", "Serra Leoa");
@@ -239,8 +239,8 @@ public class PersonUtil {
 		countryList.put("Tailândia", "Tailândia");
 		countryList.put("Taiwan", "Taiwan");
 		countryList.put("Tanzânia", "Tanzânia");
-		countryList.put("Terras Austrais e Antárticas Francesas", "Terras Austrais e Antárticas Francesas");
-		countryList.put("Território Britânico do Oceano Índico", "Território Britânico do Oceano Índico");
+		/*countryList.put("Terras Austrais e Antárticas Francesas", "Terras Austrais e Antárticas Francesas");*/
+		/*countryList.put("Território Britânico do Oceano Índico", "Território Britânico do Oceano Índico");*/
 		countryList.put("Timor-Leste", "Timor-Leste");
 		countryList.put("Togo", "Togo");
 		countryList.put("Tonga", "Tonga");

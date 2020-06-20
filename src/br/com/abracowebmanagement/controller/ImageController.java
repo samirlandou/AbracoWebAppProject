@@ -1,7 +1,9 @@
 package br.com.abracowebmanagement.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,23 +16,25 @@ import javax.faces.context.FacesContext;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
-import br.com.abracowebmanagement.domain.UserDomain;
-
 @ManagedBean
 @RequestScoped
-public class ImageController {
-	
-	UserDomain userDomain = new UserDomain();;
-	
+public class ImageController implements Serializable{
+
 	//@ManagedProperty("#{param.imageUserPath}") //GetParameter from user.xhtml
 	/*@ManagedProperty("#{param.photo}") //GetParameter from user.xhtml*/
-	private String imageUserPath;
-	
-	private StreamedContent streamContent;
-	
-	
-	//Login Controller
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3961908747365220327L;
+		
+	//Instantiate Login Controller
 	LoginController loginController = new LoginController();
+	
+	//Instantiate Image Path an StreamContent
+	private String imageUserPath;	
+	private StreamedContent streamContent;
+		
 	
 	@PostConstruct
 	public void init() {
@@ -41,8 +45,8 @@ public class ImageController {
 		//Get External Context from LoginController
 		loginController = (LoginController) fcLogin.getExternalContext().getSessionMap().get("loginController");
 	}
-	
-	
+   
+
 	/*
 	 * Getters and Setters
 	 */
@@ -55,16 +59,13 @@ public class ImageController {
 		this.imageUserPath = imagePath;
 	}
 	
-	public void teste(){
-		System.out.println("TESTE DE IMAGEM");
-	}
-	
 	public StreamedContent getStreamContent() throws IOException {
 		
 		//Set Default Image User Path		
 		Path path = Paths.get("C:/Users/Samir Landou/Documents/Desenvolvimento/Uploads/Default/Login/defaultUserImage.png");
 		
-		if(loginController.getLoggedUser().getImageUserFileName() != null){
+		if(loginController.getLoggedUser().getImageUserFileName() != null
+				&& new File(loginController.getLoggedUser().getImageUserFileName()).exists()){
 			path = Paths.get(loginController.getLoggedUser().getImageUserFileName());
 		}
 		
@@ -76,8 +77,6 @@ public class ImageController {
 	
 	public void setStreamContent(StreamedContent imageUserStreamContent) {
 		this.streamContent = imageUserStreamContent;
-	}
-	
-	
+	}	
 
 }

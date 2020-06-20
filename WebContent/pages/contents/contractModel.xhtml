@@ -115,7 +115,7 @@
 					<!-- PANEL GRID FOR REGISTER CONTRACT MODEL NAME AND COMMENT -->
 					<h:panelGrid id="contractModelInputRegisterFormID" columns="2">									    
 						<p:outputLabel value="Nome do Modelo: *" />
-						<p:inputText value="#{contractModelController.contractModelDomain.contractModelName}" maxlength="40" size="27"
+						<p:inputText value="#{contractModelController.contractModelDomain.contractModelName}" maxlength="30" size="27"
 									required="true" requiredMessage="O campo 'Nome do Modelo' é obrigatório"/>
 												
 						<p:outputLabel value="Comentário: " />
@@ -143,8 +143,9 @@
 						<p:spacer width="5px"/>
 						<p:outputLabel value="Feita no dia: "/>
 						<p:outputLabel value="#{contractModelController.contractModelDomain.saveContractModelDate}">
-							<f:convertDateTime locale="pt_BR" pattern="dd/MM/yyyy HH:mm"
-												timeZone="America/Sao_Paulo"/>
+							<f:convertDateTime locale="pt_BR" 
+											   pattern="dd/MM/yyyy HH:mm"
+											   timeZone="America/Sao_Paulo"/>
 						</p:outputLabel>												
 						<p:outputLabel value="Pelo usário: "/>
 						<p:outputLabel value="#{contractModelController.contractModelDomain.contractModelSaveLoginUser}" style="color: orange;"/>						
@@ -157,13 +158,18 @@
 					    <p:commandButton value="Limpar" type="button" onclick="PF('textEditor').clear();" icon="fa fa-eraser" title="Limpar o Texto"/>
 						<p:commandButton value="Tags" type="button" onclick="PF('dlgViewTag').show();" icon="fa fa-tags" title="Consultar as Tags"/>				
 						<p:spacer width="150px"/>
-						<p:commandButton value="Fechar" icon="fa fa-close" oncomplete="PF('dlgTextEditContractModel').hide();" title="Fechar a Janela"/>
 						<p:commandButton value="Salvar" icon="fa fa-floppy-o" actionListener="#{contractModelController.doSave}"
 										title="Salvar os Dados"
 										update=":idMsgGlobal 
 												:contractModelRegisterFormID:contractModelInputRegisterFormID 
-												:contractModelRegisterFormID:contractModelInputRegisterUserFormID
-												:contractModelListFormID:contractModelDataTableFormID"/>																		
+												:contractModelRegisterFormID:contractModelInputRegisterUserFormID"/>							
+						<p:commandButton value="Fechar" 
+										 icon="fa fa-close" 
+										 immediate="true"
+										 oncomplete="PF('dlgTextEditContractModel').hide();" 
+										 title="Fechar a Janela"
+										 update=":contractModelListFormID:contractModelDataTableFormID"/>
+																						
 					</h:panelGrid>
 					
 					
@@ -203,37 +209,37 @@
 							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
 									</pe:clipboard>
 									
-									<p:outputLabel value="E-MAIL "/>
+									<p:outputLabel value="E-MAIL_PESSOA "/>
 									<p:commandButton id="btnCopylEmailID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
-									<pe:clipboard id="clipAjaxEmailID" trigger="btnCopylEmailID" action="copy" text="E-MAIL">  
+									<pe:clipboard id="clipAjaxEmailID" trigger="btnCopylEmailID" action="copy" text="E-MAIL_PESSOA">  
 							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
 							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
 									</pe:clipboard>										
 									
-									<p:outputLabel value="TELEFONE "/>
+									<p:outputLabel value="TELEFONE_PESSOA "/>
 									<p:commandButton id="btnCopylTelephoneID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
-									<pe:clipboard id="clipAjaxTelephoneID" trigger="btnCopylTelephoneID" action="copy" text="TELEFONE">  
+									<pe:clipboard id="clipAjaxTelephoneID" trigger="btnCopylTelephoneID" action="copy" text="TELEFONE_PESSOA">  
 							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
 							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
 									</pe:clipboard>																			        		
 									
-									<p:outputLabel value="CPF "/>
+									<p:outputLabel value="CPF_PESSOA "/>
 									<p:commandButton id="btnCopylCpfID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
-									<pe:clipboard id="clipAjaxCpfID" trigger="btnCopylCpfID" action="copy" text="CPF">  
+									<pe:clipboard id="clipAjaxCpfID" trigger="btnCopylCpfID" action="copy" text="CPF_PESSOA">  
 							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
 							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
 									</pe:clipboard>
 									
-									<p:outputLabel value="CNPJ "/>
+									<p:outputLabel value="CNPJ_PESSOA "/>
 									<p:commandButton id="btnCopylCnpjID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
-									<pe:clipboard id="clipAjaxCnpjID" trigger="btnCopylCnpjID" action="copy" text="CNPJ">  
+									<pe:clipboard id="clipAjaxCnpjID" trigger="btnCopylCnpjID" action="copy" text="CNPJ_PESSOA">  
 							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
 							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
 									</pe:clipboard>
 									
-									<p:outputLabel value="ENDERECO "/>
+									<p:outputLabel value="ENDERECO_PESSOA "/>
 									<p:commandButton id="btnCopylAddressID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
-									<pe:clipboard id="clipAjaxAddressID" trigger="btnCopylAddressID" action="copy" text="ENDERECO">  
+									<pe:clipboard id="clipAjaxAddressID" trigger="btnCopylAddressID" action="copy" text="ENDERECO_PESSOA">  
 							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
 							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
 									</pe:clipboard>
@@ -381,7 +387,7 @@
 																																																						
 									<h3 style="position: left;"> PAGAMENTO </h3>
 									<p:separator/>
-									<br/>		
+									<br/>
 									
 									<p:outputLabel value="PAGAMENTO "/>
 									<p:commandButton id="btnCopylPaymentID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  

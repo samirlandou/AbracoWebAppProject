@@ -1,23 +1,28 @@
 package br.com.abracowebmanagement.dao;
 
+import java.io.Serializable;
+import java.util.List;
+
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
-import br.com.abracowebmanagement.domain.UserDomain;
+import br.com.abracowebmanagement.domain.user.UserDomain;
 import br.com.abracowebmanagement.hibernate.HibernateUtil;
 
-public class UserDAO extends GenericDAO<UserDomain> {
+public class UserDAO extends GenericDAO<UserDomain> implements Serializable{
 	
-	
+	private static final long serialVersionUID = -6179707130291792232L;
+
 	/**
 	 * Authentication Method
 	 * 
 	 * @author samirlandou
 	 * @param userName
 	 * @param password
-	 * @return
+	 * @returns
 	 */
 	public UserDomain authenticate(String userName, String password){
 		Session session = HibernateUtil.getSessionFactory().openSession();
@@ -81,7 +86,7 @@ public class UserDAO extends GenericDAO<UserDomain> {
 		try{
 			Criteria consult = session.createCriteria(UserDomain.class);
 			
-			consult.createAlias("pDomain", "p");
+			consult.createAlias("personDomain", "p");
 			
 			//Add restriction for userName
 			consult.add(Restrictions.eq("p.completeName", completName));
@@ -98,6 +103,7 @@ public class UserDAO extends GenericDAO<UserDomain> {
 			session.close();
 		}
 	}
+	
 	
 	public UserDomain findByCNPJ(String cnpj){
 		Session session = HibernateUtil.getSessionFactory().openSession();
@@ -122,5 +128,79 @@ public class UserDAO extends GenericDAO<UserDomain> {
 			session.close();
 		}
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<UserDomain> findByActiveProfessorAndLanguage(String language){
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		
+		String[] profile = {"PROFESSOR(A)", "COORDENADOR(A)"};
+		
+		try{
+			Criteria consult = session.createCriteria(UserDomain.class);
+			
+			//Criterion student = Restrictions.eq(propertyName, value);
+			
+			consult.createAlias("personDomain", "p");
+			
+			//Add restriction for status
+			consult.add(Restrictions.eq("p.status", true));
+			
+			//Add restriction for profile
+			consult.add(Restrictions.in("p.profile", profile));
+			
+			//Add restriction for language
+			consult.add(Restrictions.eq("p.language1", language));
+			
+			consult.addOrder(Order.desc("p.completeName"));
+			
+			//Get result
+			List<UserDomain> result = consult.list();			
+			return result;
+			
+		} catch (RuntimeException error) {
+			throw error;
+		}finally {
+			session.close();
+		}
+	}
+	
+	
+	
+	@SuppressWarnings("unchecked")
+	public List<UserDomain> findByActiveProfessorAndTeachingLanguage(String language){
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		
+		String[] profile = {"PROFESSOR(A)", "COORDENADOR(A)"};
+		
+		try{
+			Criteria consult = session.createCriteria(UserDomain.class);
+			
+			//Criterion student = Restrictions.eq(propertyName, value);
+			
+			consult.createAlias("personDomain", "p");
+			
+			//Add restriction for status
+			consult.add(Restrictions.eq("p.status", true));
+			
+			//Add restriction for profile
+			consult.add(Restrictions.in("p.profile", profile));
+			
+			//Add restriction for language
+			//Add restriction for language
+			consult.add(Restrictions.or(Restrictions.eq("teachingLanguage1", language), 
+										Restrictions.eq("teachingLanguage2", language)));
+			
+			consult.addOrder(Order.desc("p.completeName"));
+			
+			//Get result
+			List<UserDomain> result = consult.list();			
+			return result;
+			
+		} catch (RuntimeException error) {
+			throw error;
+		}finally {
+			session.close();
+		}
+	}	
 	
 }

@@ -24,15 +24,26 @@ import org.primefaces.extensions.event.ClipboardSuccessEvent;
 import br.com.abracowebmanagement.dao.ContractDAO;
 import br.com.abracowebmanagement.dao.ContractModelDAO;
 import br.com.abracowebmanagement.dao.ContractSettingDAO;
-import br.com.abracowebmanagement.domain.ContractDomain;
-import br.com.abracowebmanagement.domain.ContractModelDomain;
-import br.com.abracowebmanagement.domain.ContractSettingDomain;
-import br.com.abracowebmanagement.domain.PersonDomain;
-import br.com.abracowebmanagement.domain.UserDomain;
+import br.com.abracowebmanagement.dao.ContractStudentDAO;
+import br.com.abracowebmanagement.dao.PersonDAO;
+import br.com.abracowebmanagement.dao.UserDAO;
+import br.com.abracowebmanagement.domain.contract.ContractDomain;
+import br.com.abracowebmanagement.domain.contract.ContractModelDomain;
+import br.com.abracowebmanagement.domain.contract.ContractSettingDomain;
+import br.com.abracowebmanagement.domain.contract.ContractStudentDomain;
+import br.com.abracowebmanagement.domain.person.PersonDomain;
+import br.com.abracowebmanagement.domain.user.UserDomain;
 import br.com.abracowebmanagement.util.ContractUtil;
 import br.com.abracowebmanagement.util.DateUtil;
+import br.com.abracowebmanagement.util.MethodUtil;
 import br.com.abracowebmanagement.util.NumberFormatUtil;
 
+
+/**
+ * Contract Class
+ * @author samirlandou
+ * @since 19/12/2019
+ */
 @ManagedBean
 @ViewScoped
 public class ContractController extends HttpServlet implements Serializable {
@@ -47,24 +58,31 @@ public class ContractController extends HttpServlet implements Serializable {
 	public DateUtil dateUtil = new DateUtil();
 	public ContractUtil contractUtil = new ContractUtil();
 	public NumberFormatUtil numberFormatUtil = new NumberFormatUtil();
+	public MethodUtil methodUtil =  new MethodUtil();
 	
+	//Domain
 	private ContractDomain contractDomain;
-	private List<ContractDomain> contractsDomain;
+	private PersonDomain newPersonDomain;
+	private ContractStudentDomain contractStudentDomain = new ContractStudentDomain();
 	private ContractSettingDomain contractSettingDomain = new ContractSettingDomain();
 	
-	//Login Controller
+	//list<Domain>
+	private List<ContractDomain> contractsDomain;
+	private List<ContractStudentDomain> contractStudentsDomain;
+	
+	//Controller
 	LoginController loginController = new LoginController();
 	
 	//Create Map to store levels values
 	private Map<String, String> levels;
 	private Map<String, String>	firstClassDay;
 	private Map<String, String>	secondClassDay;
+	private Map<String, String>	paymentType;
 	
 	//User and Person
 	private List<UserDomain> usersDomain;
 	private List<PersonDomain> students;
-	private List<PersonDomain> professors;
-	
+	private List<UserDomain> professors;	
 	
 	//Skip for wizard component
 	private boolean skip;
@@ -84,6 +102,7 @@ public class ContractController extends HttpServlet implements Serializable {
 	private String classPlace;
 	private String contractBody;
 	private String codeDescription;
+	private String personCPF;
 	private List<ContractModelDomain> contractModelsDomain;
 	
 	//To calculate total time
@@ -93,13 +112,16 @@ public class ContractController extends HttpServlet implements Serializable {
 	private String decimalTotalPackageProfessorPriceDescription;
 	private int classDayQuantity;
 	private boolean activeBreakClassHour;
+	private boolean saveStudentFlag;
+	
+	//Save Button in Contract Student Dialog
+	private boolean enableComponentOnContractStudent;
+	
 	String pathSeparator = System.getProperty("file.separator");
 
 	
 	/**
-	 * List Method. <br/>
-	 * @author samirlandou <br/>
-	 * @since 19/12/2019
+	 * Post Construct Method
 	 */
 	@PostConstruct
 	public void doList(){
@@ -107,7 +129,7 @@ public class ContractController extends HttpServlet implements Serializable {
 			
 			//List Contract
 			ContractDAO contractDAO = new ContractDAO();
-			contractsDomain = contractDAO.list();
+			contractsDomain = contractDAO.descendList("id");
 			
 			//Get Contract Setting Parameters
 			ContractSettingDAO contractSettingDAO = new ContractSettingDAO();
@@ -122,20 +144,16 @@ public class ContractController extends HttpServlet implements Serializable {
 			
 			//Get External Context from LoginController
 			loginController = (LoginController) fcLogin.getExternalContext().getSessionMap().get("loginController");
-			
-			
+					
 		} catch (Exception e) {
-			Messages.addGlobalError("Ocorreu um erro ao listar as informações das pessoas !!!");
+			Messages.addGlobalError("Ocorreu um erro ao listar as informações dos contratos !!!");
 			e.printStackTrace();			
 		}		
 	}	
 	
 	
 	/**
-	 * Method for New Registration. <br/>
-	 * Set here new instance of Domain. <br/>
-	 * @author samirlandou <br/>
-	 * @since 19/12/2019
+	 * New Contract
 	 */
 	public void doNewRegister(){		
 		//Instantiate new Contract
@@ -146,7 +164,7 @@ public class ContractController extends HttpServlet implements Serializable {
 		
 		//List Contract
 		ContractModelDAO contractModelDAO = new ContractModelDAO();
-		contractModelsDomain = contractModelDAO.list();
+		contractModelsDomain = contractModelDAO.descendList("id");
 		
 		if(contractModelsDomain.isEmpty()){
 			Messages.addGlobalWarn("Favor, criar um modelo de contrato antes de continuar!");
@@ -157,6 +175,9 @@ public class ContractController extends HttpServlet implements Serializable {
 	}
 
 
+	/**
+	 * Clean values
+	 */
 	public void doClean(){
 		
 		//Contract class
@@ -182,6 +203,9 @@ public class ContractController extends HttpServlet implements Serializable {
 		
 		//Set Break Class Hour
 		activeBreakClassHour = false;
+		
+		//Save Student
+		saveStudentFlag = false;
 	}
 	
 	
@@ -205,7 +229,9 @@ public class ContractController extends HttpServlet implements Serializable {
 	}
 	
 	
-	
+	/**
+	 * Update Price
+	 */
 	public void doUpdatePrice(){
 		
 		if(contractDomain.getClassModuleDescription()!= null){
@@ -267,6 +293,9 @@ public class ContractController extends HttpServlet implements Serializable {
 	}
 	
 	
+	/**
+	 * Update Total Price
+	 */
 	public void doUpdateTotalPrice(){
 		
 		//Total Real Package Price
@@ -372,8 +401,7 @@ public class ContractController extends HttpServlet implements Serializable {
 						+ " e "
 						+ contractDomain.getSecondClassDayDescription();
 				
-				classDayQuantity = 2;
-				
+				classDayQuantity = 2;				
 			}
 			
 			
@@ -424,9 +452,7 @@ public class ContractController extends HttpServlet implements Serializable {
 
 	
 	/**
-	 * Save Method. <br/>
-	 * @author samirlandou <br/>
-	 * @since 19/12/2019
+	 * Save Contract
 	 */
 	public void doSave(){
 		
@@ -463,13 +489,13 @@ public class ContractController extends HttpServlet implements Serializable {
 				doNewRegister();
 				
 				//List again Contract (very import to update the list)
-				contractsDomain = contractDAO.list();
+				contractsDomain = contractDAO.descendList("id");
 				
 				//This code is used with OmniFaces and it is more practice than PrimeFaces implementation.
 				Messages.addGlobalInfo("Salvou com sucesso!");
 				
 				//Reset Variables
-				doClean();
+				//doClean();
         	}
 		} catch (Exception e) {
 			Messages.addGlobalError("Ocorreu um erro ao salvar as informações do contrato!");
@@ -479,10 +505,51 @@ public class ContractController extends HttpServlet implements Serializable {
 
 	
 	/**
-	 * Delete Method. <br/>
-	 * @author samirlandou <br/>
-	 * @param event <br/>
-	 * @since 19/12/2019
+	 * Save Contract
+	 * @author samirlandou
+	 */
+/*	public void doSaveFromEdit(){
+		
+		//Save Contract with merge method
+		
+		ContractDAO contractDAO = new ContractDAO();
+		
+		try {
+		
+			//Save Actual Date
+			contractDomain.setSaveContractDate(new Date());
+			
+			//Set LoginUser
+			contractDomain.setContractSaveLoginUser(loginController.getLoggedUser().getUserName());
+			
+			//Set closed Flag
+			contractDomain.setClosedContractFlag(false);
+			
+			//Merge information
+			contractDAO.merge(contractDomain);
+			
+			//Clean informations in the panelGrid
+			//doNewRegister();
+			
+			//List again Contract (very import to update the list)
+			contractsDomain = contractDAO.list();
+			
+			//This code is used with OmniFaces and it is more practice than PrimeFaces implementation.
+			Messages.addGlobalInfo("Salvou com sucesso!");
+			
+			//Reset Variables
+			//doClean();
+		} catch (Exception e) {
+			Messages.addGlobalError("Ocorreu um erro ao salvar as informações do contrato!");
+			e.printStackTrace();
+		}		
+	}*/
+
+	
+	
+	/**
+	 * Delete Contract
+	 * @param event
 	 */
 	public void doDelete(ActionEvent event){
 		try {
@@ -496,10 +563,11 @@ public class ContractController extends HttpServlet implements Serializable {
 			contractDAO.delete(contractDomain);
 						
 			//List again Contract (very import to update the list)
-			contractsDomain= contractDAO.list();
+			contractsDomain = contractDAO.descendList("id");
 			
 			//This code is used with OmniFaces and it is more practice than PrimeFaces implementation.
 			Messages.addGlobalInfo(contractDomain.getContractCodeDescription() + " foi excluido com sucesso!!!");
+		
 		} catch (Exception e) {
 			if(e.equals("ConstraintViolationException")){
 				Messages.addGlobalError("Não pode deletar pois os dados de " + contractDomain.getContractCodeDescription() + " está sendo usado em outro processo!!!");
@@ -510,6 +578,39 @@ public class ContractController extends HttpServlet implements Serializable {
 		}
 	}
 
+	
+	
+	/**
+	 * DeleteStudent Contract
+	 * @param event
+	 */
+	public void doDeleteStudentContract(ActionEvent event){
+		try {
+			
+			//Capture the event from the cursor in contract.xhtml
+			contractStudentDomain = (ContractStudentDomain) event.getComponent().getAttributes()
+					.get("selectedContractByCursor");
+
+			//Delete Student
+			ContractStudentDAO contractStudentDAO = new ContractStudentDAO();
+			contractStudentDAO.delete(contractStudentDomain);
+						
+			//List again Contract Student (very import to update the list)
+			contractStudentsDomain = contractStudentDAO.listByContractCodeDescription(contractDomain.getContractCodeDescription());
+			
+			//This code is used with OmniFaces and it is more practice than PrimeFaces implementation.
+			Messages.addGlobalInfo(contractStudentDomain.getPersonDomain().getCompleteName() + " foi excluido com sucesso!!!");
+		
+		} catch (Exception e) {
+			if(e.equals("ConstraintViolationException")){
+				Messages.addGlobalError("Não pode deletar pois os dados de \"" + contractStudentDomain.getPersonDomain().getCompleteName() + "\" está sendo usado em outro processo!!!");
+			} else{
+				Messages.addGlobalError("Ocorreu um erro ao tentar excluir as informações de: \"" + contractStudentDomain.getPersonDomain().getCompleteName() + "\"");
+			}
+			e.printStackTrace();			
+		}
+	}	
+	
 	
 	/**
 	 * Message for Opened/Closed Contract
@@ -522,49 +623,82 @@ public class ContractController extends HttpServlet implements Serializable {
 
 	
 	/**
-	 * Edit Method. <br/>
-	 * @author samirlandou <br/>
-	 * @param event <br/>
-	 * @since 19/12/2019
+	 * Edit Student Contract
+	 * @param event
 	 */
-	public void doEdit(ActionEvent event){
+	public void doEditStudentContract(ActionEvent event){
 		
-		//Set skip
-		skip = false;
-		skipRendered = true;
-		
-		try {			
+		try {		
+			
+			//Set enable component Value
+			enableComponentOnContractStudent = true;			
+			
 			//Capture the event from the cursor in contract.xhtml
-			contractDomain = (ContractDomain) event.getComponent().getAttributes().get("selectedContractByCursor");
+			contractStudentDomain = (ContractStudentDomain) event.getComponent().getAttributes().get("selectedContractByCursor");
+			
+			//set personCPF
+			personCPF= contractStudentDomain.getPersonDomain().getCpf();
+			
+			//Set NewContract
+			newPersonDomain = contractStudentDomain.getPersonDomain();
+			
+			//List PaymentType
+			doDisableStudentPaymentTypeSelectItem();
+			
+			//list Student
+			//doListStudents(contractDomain);
+			
 		} catch (Exception e) {
-			Messages.addGlobalError("Ocorreu um erro ao editar as informações de: " + contractDomain.getContractCodeDescription());
-			e.printStackTrace();			
-		}		
-	}
-
-	
-	
-	/**
-	 * Edit Method. <br/>
-	 * @author samirlandou <br/>
-	 * @param event <br/>
-	 * @since 19/12/2019
-	 */
-	public void doContractDetailEdit(ActionEvent event){
-		
-		//Set skip
-		skip = false;
-		skipRendered = true;
-		
-		try {			
-			//Capture the event from the cursor in contract.xhtml
-			contractDomain = (ContractDomain) event.getComponent().getAttributes().get("selectedContractByCursor");
-		} catch (Exception e) {
-			Messages.addGlobalError("Ocorreu um erro ao editar as informações de: " + contractDomain.getContractCodeDescription());
+			Messages.addGlobalError("Ocorreu um erro ao editar as informações desse(a) Aluno(a).");
 			e.printStackTrace();			
 		}		
 	}	
 
+	
+	/**
+	 * Edit New Student Contract
+	 * @param event
+	 */
+	public void doEditNewStudentContract(ActionEvent event){
+		
+		try {
+			
+			//Set enable component Value
+			enableComponentOnContractStudent = false;
+			
+			//Capture the event from the cursor in contract.xhtml
+			contractDomain = (ContractDomain) event.getComponent().getAttributes().get("selectedContractByCursor");
+			
+			//Clean Student Info
+			doCleanStudentInfo();
+			
+			//list Student
+			doListStudents(contractDomain);
+			
+		} catch (Exception e) {
+			Messages.addGlobalError("Ocorreu um erro ao editar as informações de \"" + contractDomain.getContractCodeDescription() +"\"");
+			e.printStackTrace();			
+		}		
+	}
+	
+
+	/**
+	 * Clean Student Informations while trying
+	 * to do new Student register
+	 */
+	public void doCleanStudentInfo(){
+		
+		//Instantiate constractStudent
+		contractStudentDomain = new ContractStudentDomain();
+		
+		//Instantiate newPersonDomain
+		newPersonDomain = new PersonDomain();
+		
+		//Set personCPF
+		personCPF = "";		
+	}
+	
+	
 	
 	/**
 	 * Show Report using DataBase Connection</br>
@@ -757,9 +891,278 @@ public class ContractController extends HttpServlet implements Serializable {
             return event.getNewStep();
         }
     }    
+
     
     
+	/**
+	 * Validate a CPF
+	 */
+	public void doValidateCPF(){
+				
+		//Set Save Flag
+		saveStudentFlag = true;
+		
+		if(methodUtil.validateCPF(getPersonCPF())){ //put the negation to validate CPF
+
+			//Set Save Flag to False
+			saveStudentFlag = false;
+			
+			//Error Message
+			Messages.addGlobalError("O CPF informado é invalido!");
+			
+		} else{
+			
+			//Instantiate PersonDAO
+			PersonDAO personDAO = new PersonDAO();
+			
+			//Instantiate newPersonDomain
+			newPersonDomain = new PersonDomain();
+			
+			//find newPersonDomain
+			newPersonDomain = personDAO.findByCPF(getPersonCPF());
+			
+			if(newPersonDomain != null){
+				
+				if(newPersonDomain.getStatus()){
+					
+					//Set Short Language Description
+					String language = contractUtil.getShortLanguageDescription(contractDomain.getClassLanguageDescription());
+					
+					if(newPersonDomain.getLanguage1().equals(language)
+							|| newPersonDomain.getLanguage2().equals(language)
+							|| newPersonDomain.getLanguage3().equals(language)){
+						
+						//Verify if newPersonDomain already exist in the student contract list.
+						if(contractStudentsDomain.size() > 0){
+							
+							for(ContractStudentDomain c : contractStudentsDomain){
+								
+								//Check if the Student already exist in the list.
+								if(c.getPersonDomain().getCpf().equals(getPersonCPF())){
+									
+									//Set save to false
+									saveStudentFlag = false;
+									
+									//Advise Message
+									Messages.addGlobalFatal("\"" + newPersonDomain.getCompleteName() + "\" já consta na lista dos Alunos desse contrato.");
+								}
+							}						
+						}
+
+					} else{
+												
+						//Set save to false
+						saveStudentFlag = false;
+						
+						//Error Message
+						Messages.addGlobalWarn("\"" + newPersonDomain.getCompleteName() + "\" não tem ainda o interesse de estudar o " + language);
+					}					
+					
+				} else{
+					
+					//Set save to false
+					saveStudentFlag = false;
+					
+					//Advise Message
+					Messages.addGlobalFatal("\"" + newPersonDomain.getCompleteName() + "\" está inativo.");					
+				}
+				
+			} else{			
+
+				//Set Save Flag to False
+				saveStudentFlag = false;
+				
+				//Error Message
+				Messages.addGlobalError("O CPF informado não existe no cadastro de Pessoa!");				
+			}
+		}
+	}
+	
+
+	/**
+	 * List Students Contract
+	 * @param contractDomain
+	 */
+	public void doListStudents(ContractDomain contractDomain){
+		try {
+			
+			//List Contract Students
+			ContractStudentDAO contractStudentDAO = new ContractStudentDAO();
+			contractStudentsDomain = contractStudentDAO.listByContractCodeDescription(contractDomain.getContractCodeDescription());
+			
+		} catch (Exception e) {
+			Messages.addGlobalError("Ocorreu um erro ao listar as informações !!!");
+			e.printStackTrace();			
+		}
+	}
     
+
+	/**
+	 * Add Student Contract
+	 */
+	public void doAddStudent(){
+		
+		try {
+			
+			//List Contract Students
+			/*ContractStudentDAO contractStudentDAO = new ContractStudentDAO();
+			contractStudentsDomain = contractStudentDAO.findByContractCodeDescription(contractDomain.getContractCodeDescription());
+			*/
+			
+			if(saveStudentFlag){
+				
+				//Instantiate ContractStudentDAO
+				ContractStudentDAO contractStudentDAO = new ContractStudentDAO();
+				
+				//Set contractStudentDomain
+				//ContractStudentDomain contractStudentDomain = new ContractStudentDomain();
+				
+				contractStudentDomain.setContractDomain(contractDomain);						
+				contractStudentDomain.setPersonDomain(newPersonDomain);	
+				contractStudentDomain.setContractStudentSaveLoginUser(loginController.getLoggedUser().getUserName());
+				contractStudentDomain.setSaveContractStudentDate(new Date());
+				
+				//Save contractStudent
+				contractStudentDAO.merge(contractStudentDomain);
+				
+				//List Student Contract
+				contractStudentsDomain = contractStudentDAO.listByContractCodeDescription(contractDomain.getContractCodeDescription());
+				
+				Messages.addGlobalInfo("\""+ newPersonDomain.getCompleteName() + "\" foi adicionado(a) com sucesso!");
+			} else{
+				Messages.addGlobalInfo("Favor entrar o CPF valido de um(a) aluno(a).");
+			}
+			
+		} catch (Exception e) {
+			Messages.addGlobalError("Ocorreu um erro ao salvar as informações !!!");
+			e.printStackTrace();			
+		}
+	}
+  
+
+	/**
+	 * Add Student Contract
+	 */
+	public void doSaveStudent(){
+		
+		try {
+							
+			//Instantiate ContractStudentDAO
+			ContractStudentDAO contractStudentDAO = new ContractStudentDAO();
+
+			//Set Save Login User
+			contractStudentDomain.setContractStudentSaveLoginUser(loginController.getLoggedUser().getUserName());
+			
+			//Set Save new Date
+			contractStudentDomain.setSaveContractStudentDate(new Date());
+			
+			//Save contractStudent
+			contractStudentDAO.merge(contractStudentDomain);
+			
+			//List Student Contract
+			contractStudentsDomain = contractStudentDAO.listByContractCodeDescription(
+					contractStudentDomain.getContractDomain().getContractCodeDescription());
+			
+			Messages.addGlobalInfo("Salvou com sucesso!");
+		
+		} catch (Exception e) {
+			Messages.addGlobalError("Ocorreu um erro ao salvar as informações !!!");
+			e.printStackTrace();			
+		}
+	}
+	
+	
+	
+	/**
+	 * Disable Student payment Type in Select Item
+	 */
+	public void doDisableStudentPaymentTypeSelectItem(){
+				
+		//Set PaymentType
+		paymentType = contractUtil.getFullPaymentTypeComboList();
+		
+		if(contractStudentDomain.getStudentPaymentContractDescription().equals("Parcelamento(x4)")){
+			paymentType.remove("Cartão de Débito");
+			paymentType.remove("Depósito");
+			paymentType.remove("Dinheiro");
+			paymentType.remove("Gratuito");
+		} else if(contractStudentDomain.getStudentPaymentContractDescription().equals("Integral/a Vista")){
+			paymentType.remove("PagSeguro/Crédito");
+			paymentType.remove("Gratuito");			
+		} else{
+			paymentType.remove("PagSeguro/Crédito");
+			paymentType.remove("Cartão de Débito");
+			paymentType.remove("Boleto");
+			paymentType.remove("Depósito");
+			paymentType.remove("Dinheiro");
+			
+		}		
+	}
+
+	
+	/**
+	 * Edit Professor Contract
+	 */
+	public void doEditProfessorContract(ActionEvent event){
+		
+		try {			
+			//Capture the event from the cursor in contract.xhtml
+			contractDomain = (ContractDomain) event.getComponent().getAttributes().get("selectedContractByCursor");
+			
+			//Instantiate List of person
+			UserDAO userDAO = new UserDAO();
+			
+			//Find Professor with specific teach language
+			professors = userDAO.findByActiveProfessorAndTeachingLanguage(
+					contractUtil.getShortLanguageDescription(contractDomain.getClassLanguageDescription()));
+			
+		} catch (Exception e) {
+			Messages.addGlobalError("Ocorreu um erro ao editar as informações de \"" + contractDomain.getContractCodeDescription() +"\"");
+			e.printStackTrace();			
+		}		
+	}	
+	
+	
+	/**
+	 * Save After Editing Professor Contract
+	 */
+	public void doSaveEditContract(){		
+		
+		try {
+			//Set Principal Professor
+			contractDomain.setPrincipalProfesssorPersonDomain(contractDomain.getPrincipalProfesssorPersonDomain());
+			
+			//Set firstSubstituateProfessor
+			contractDomain.setFirstSubstituteProfesssorPersonDomain(contractDomain.getFirstSubstituteProfesssorPersonDomain());
+			
+			//Set secondSubstituateProfessor
+			contractDomain.setSecondSubstituteProfesssorPersonDomain(contractDomain.getSecondSubstituteProfesssorPersonDomain());
+			
+			//Set Date
+			contractDomain.setSaveContractDate(new Date());
+			
+			//Set LoginUser
+			contractDomain.setContractSaveLoginUser(loginController.getLoggedUser().getUserName());
+
+			//Instantiate ContracDAO
+			ContractDAO contractDAO = new ContractDAO();
+			
+			//Save ContractDomain
+			contractDAO.merge(contractDomain);
+			
+			//list Student
+			doListStudents(contractDomain);
+			
+			//Inform Save message
+			Messages.addGlobalInfo("Salvou com sucesso!");
+			
+		} catch (Exception e) {
+			Messages.addGlobalError("Ocorreu um erro ao tentar salvaro o contrato.");
+			e.printStackTrace();	
+		}
+	}
+	
+	
     /**
      * Contract Message
      */
@@ -778,6 +1181,23 @@ public class ContractController extends HttpServlet implements Serializable {
 		Messages.addGlobalInfo(activeBreakClassHour ? "Aula com Pausa de 15mn" : "Aula sem Pausa!");
 	}
 
+
+    /**
+     * Contract Break Class Hour Message
+     */
+	public void addContractStudentSignedMessage() {
+		//Add Message for selectBooleanCheckBox Component
+		Messages.addGlobalInfo(contractStudentDomain.getSignContractStudentFlag() ? "Aluno(a) assinou o contrato." : "Aluno(a) não assinou ainda o contrato.");
+	}
+
+
+    /**
+     * Contract Break Class Hour Message
+     */
+	public void addContractStudentReceiveBookMessage() {
+		//Add Message for selectBooleanCheckBox Component
+		Messages.addGlobalInfo(contractStudentDomain.getStudentReceiveBookFlag() ? "Ativou recebimento da apostila." : "Aluno(a) sem a apostila.");
+	}	
 	
 	/**
 	 * Success Message
@@ -916,16 +1336,6 @@ public class ContractController extends HttpServlet implements Serializable {
 
 	public void setStudents(List<PersonDomain> students) {
 		this.students = students;
-	}
-
-
-	public List<PersonDomain> getProfessors() {
-		return professors;
-	}
-
-
-	public void setProfessors(List<PersonDomain> professors) {
-		this.professors = professors;
 	}
 
 
@@ -1176,6 +1586,87 @@ public class ContractController extends HttpServlet implements Serializable {
 
 	public void setActiveBreakClassHour(boolean activeBreakClassHour) {
 		this.activeBreakClassHour = activeBreakClassHour;
-	}	
+	}
+
+
+	public ContractStudentDomain getContractStudentDomain() {
+		return contractStudentDomain;
+	}
+
+
+	public void setContractStudentDomain(ContractStudentDomain contractStudentDomain) {
+		this.contractStudentDomain = contractStudentDomain;
+	}
+
+
+	public List<ContractStudentDomain> getContractStudentsDomain() {
+		return contractStudentsDomain;
+	}
+
+
+	public void setContractStudentsDomain(List<ContractStudentDomain> contractStudentsDomain) {
+		this.contractStudentsDomain = contractStudentsDomain;
+	}
+
+
+	public String getPersonCPF() {
+		return personCPF;
+	}
+
+
+	public void setPersonCPF(String personCPF) {
+		this.personCPF = personCPF;
+	}
+
+
+	public PersonDomain getNewPersonDomain() {
+		return newPersonDomain;
+	}
+
+
+	public void setNewPersonDomain(PersonDomain newPersonDomain) {
+		this.newPersonDomain = newPersonDomain;
+	}
+
+
+	public List<UserDomain> getProfessors() {
+		return professors;
+	}
+
+
+	public void setProfessors(List<UserDomain> professors) {
+		this.professors = professors;
+	}
+
+
+	public boolean isSaveStudentFlag() {
+		return saveStudentFlag;
+	}
+
+
+	public void setSaveStudentFlag(boolean saveStudentFlag) {
+		this.saveStudentFlag = saveStudentFlag;
+	}
+
+
+	public Map<String, String> getPaymentType() {
+		return paymentType;
+	}
+
+
+	public void setPaymentType(Map<String, String> paymentType) {
+		this.paymentType = paymentType;
+	}
+
+
+	public boolean isEnableComponentOnContractStudent() {
+		return enableComponentOnContractStudent;
+	}
+
+
+	public void setEnableComponentOnContractStudent(boolean enableComponentOnContractStudent) {
+		this.enableComponentOnContractStudent = enableComponentOnContractStudent;
+	}
+	
 	
 }

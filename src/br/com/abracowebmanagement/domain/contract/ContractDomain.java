@@ -1,4 +1,4 @@
-package br.com.abracowebmanagement.domain;
+package br.com.abracowebmanagement.domain.contract;
 
 import java.util.Date;
 
@@ -9,6 +9,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import br.com.abracowebmanagement.domain.generic.GenericDomain;
+import br.com.abracowebmanagement.domain.user.UserDomain;
 
 @SuppressWarnings("serial")
 @Entity
@@ -270,23 +273,52 @@ public class ContractDomain extends GenericDomain{
 		
 	
 	/*
-	 * Person
+	 * Principal Professor Person
 	 * Insert Person Data Table into ContractDomain
 	 * Inform here the name of the student.
 	 */	
-	/*@ManyToOne
-	@JoinColumn(nullable = false)
-	private PersonDomain personDomain;*/
-	
+	@ManyToOne
+	@JoinColumn(nullable = true)
+	private UserDomain principalProfesssorPersonDomain;
+
 	
 	/*
-	 * Person
-	 * Insert Contract Model Data Table into ContractDomain
+	 * First Substitute Professor Person
+	 * Insert Person Data Table into ContractDomain
 	 * Inform here the name of the student.
 	 */	
 	@ManyToOne
+	@JoinColumn(nullable = true)
+	private UserDomain firstSubstituteProfesssorPersonDomain;
+	
+
+	/*
+	 * Second Substitute Professor Person
+	 * Insert Person Data Table into ContractDomain
+	 * Inform here the name of the student.
+	 */	
+	@ManyToOne
+	@JoinColumn(nullable = true)
+	private UserDomain SecondSubstituteProfesssorPersonDomain;
+	
+	/*
+	 * Student Contract Model
+	 * Insert Contract Model Data Table into ContractDomain
+	 * Inform here the ContractModel.
+	 */	
+	@ManyToOne
 	@JoinColumn(nullable = false)
-	private ContractModelDomain contractModelDomain;
+	private ContractModelDomain studentContractModelDomain;
+	
+	
+	/*
+	 * Professor Contract Model
+	 * Insert Contract Model Data Table into ContractDomain
+	 * Inform here the ContractModel.
+	 */	
+	@ManyToOne
+	@JoinColumn(nullable = false)
+	private ContractModelDomain professorContractModelDomain;
 
 	
 	
@@ -517,13 +549,13 @@ public class ContractDomain extends GenericDomain{
 	}*/
 
 
-	public ContractModelDomain getContractModelDomain() {
-		return contractModelDomain;
+	public ContractModelDomain getStudentContractModelDomain() {
+		return studentContractModelDomain;
 	}
 
 
-	public void setContractModelDomain(ContractModelDomain contractModelDomain) {
-		this.contractModelDomain = contractModelDomain;
+	public void setStudentContractModelDomain(ContractModelDomain contractModelDomain) {
+		this.studentContractModelDomain = contractModelDomain;
 	}
 
 
@@ -544,6 +576,46 @@ public class ContractDomain extends GenericDomain{
 
 	public void setClassWeeklyTimeHour(int classWeeklyTimeHour) {
 		this.classWeeklyTimeHour = classWeeklyTimeHour;
+	}
+
+
+	public ContractModelDomain getProfessorContractModelDomain() {
+		return professorContractModelDomain;
+	}
+
+
+	public void setProfessorContractModelDomain(ContractModelDomain professorContractModelDomain) {
+		this.professorContractModelDomain = professorContractModelDomain;
+	}
+
+
+	public UserDomain getPrincipalProfesssorPersonDomain() {
+		return principalProfesssorPersonDomain;
+	}
+
+
+	public void setPrincipalProfesssorPersonDomain(UserDomain principalProfesssorPersonDomain) {
+		this.principalProfesssorPersonDomain = principalProfesssorPersonDomain;
+	}
+
+
+	public UserDomain getFirstSubstituteProfesssorPersonDomain() {
+		return firstSubstituteProfesssorPersonDomain;
+	}
+
+
+	public void setFirstSubstituteProfesssorPersonDomain(UserDomain firstSubstituteProfesssorPersonDomain) {
+		this.firstSubstituteProfesssorPersonDomain = firstSubstituteProfesssorPersonDomain;
+	}
+
+
+	public UserDomain getSecondSubstituteProfesssorPersonDomain() {
+		return SecondSubstituteProfesssorPersonDomain;
+	}
+
+
+	public void setSecondSubstituteProfesssorPersonDomain(UserDomain secondSubstituteProfesssorPersonDomain) {
+		SecondSubstituteProfesssorPersonDomain = secondSubstituteProfesssorPersonDomain;
 	}
 
 }

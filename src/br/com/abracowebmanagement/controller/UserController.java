@@ -25,8 +25,8 @@ import org.primefaces.shaded.commons.io.FilenameUtils;
 
 import br.com.abracowebmanagement.dao.PersonDAO;
 import br.com.abracowebmanagement.dao.UserDAO;
-import br.com.abracowebmanagement.domain.PersonDomain;
-import br.com.abracowebmanagement.domain.UserDomain;
+import br.com.abracowebmanagement.domain.person.PersonDomain;
+import br.com.abracowebmanagement.domain.user.UserDomain;
 import br.com.abracowebmanagement.util.FileUtil;
 import br.com.abracowebmanagement.util.MethodUtil;
 import br.com.abracowebmanagement.util.PersonUtil;
@@ -44,7 +44,6 @@ public class UserController implements Serializable {
 	public PersonUtil persontUtil = new PersonUtil();
 	public MethodUtil methodUtil =  new MethodUtil();
 	
-	private StreamedContent sc;
 	private List <StreamedContent> userImages;
 	public FileUtil fileUtil;
 	private DefaultStreamedContent myImage;
@@ -56,6 +55,7 @@ public class UserController implements Serializable {
 	boolean completeNameFlag;
 	boolean upload;
 	boolean editFlag;
+	boolean disableDeleteImageButton;
 	
 	String userName, cnpj;
 	
@@ -63,7 +63,7 @@ public class UserController implements Serializable {
 	
 	private UploadedFile file;
 	
-	String oldPassword;
+	private String oldPassword;
 		
 	//Login Controller
 	LoginController loginController = new LoginController();
@@ -109,6 +109,7 @@ public class UserController implements Serializable {
 		completeNameFlag = false;
 		upload = false;
 		editFlag = false;
+		disableDeleteImageButton = true;
 		
 	}
 	
@@ -146,9 +147,20 @@ public class UserController implements Serializable {
 			//Instantiate new User
 			userDomain = new UserDomain();
 			
+			//List of Users name
+			List<String> users = new ArrayList<>();
+			
+			//Get all User's Name
+			for(UserDomain user : usersDomain){				
+				users.add(user.getPersonDomain().getCompleteName());
+			}
+			
 			//Instantiate List of person
 			PersonDAO personDAO = new PersonDAO();
-			personsDomain = personDAO.list();
+			personsDomain = personDAO.findByActiveUserNotRegistered(users);
+			
+			//Set Old Password
+			oldPassword = "";
 			
 			//Clean Variables
 			doClean();
@@ -244,29 +256,20 @@ public class UserController implements Serializable {
 				}				
 			}*/
 			
-			//Set cryptography in the real firstPassword
-			if(userDomain.getPasswordWithoutCryptography().equals("") && oldPassword.equals("")){
+			//Set cryptography in the real firstPassword				
+			if(userDomain.getPasswordWithoutCryptography() != null && oldPassword != null
+					&& userDomain.getPasswordWithoutCryptography().equals(oldPassword)){
 				
-				//Set Save Flag
+				//Encrypt password
+				userDomain.setPassword(new String(Base64.encodeBase64(userDomain.getPasswordWithoutCryptography().getBytes())));					
+			} else{
+				
+				//Set Save Flag to False
 				saveFlag = false;
 				
-				//Error message
-				Messages.addGlobalError("O campo ' Senha' é obrigatório");
-				
-			}else{
-				
-				if(!userDomain.getPasswordWithoutCryptography().equals("") && !oldPassword.equals("")){
-					
-					//Encrypt password
-					userDomain.setPassword(new String(Base64.encodeBase64(userDomain.getPasswordWithoutCryptography().getBytes())));					
-				} else{
-					
-					//Encrypt password
-					userDomain.setPassword(new String(Base64.encodeBase64(oldPassword.getBytes())));
-				}
-				
-		
-			}			
+				//Password Error Message.
+				Messages.addGlobalError("Senha não conforme. Favor verificar de novo!");
+			}				
 			
 			//Search duplicate person
 			if(!editFlag || (editFlag && usersDomain.size() >= 1  && !checkField().equals(""))){
@@ -276,11 +279,15 @@ public class UserController implements Serializable {
 				
 				if(checkField().equals("userName") && (resultDomain = userDAO.findByUserName(userDomain.getUserName())) != null){
 					
-					//Set Save Flag
-					saveFlag = false;
-					
-					//Error Message
-					Messages.addGlobalError("O Usuário '" + userDomain.getUserName() + "' já pertence a '" + resultDomain.getPersonDomain().getCompleteName() + "'.");
+					if(userName.equalsIgnoreCase(userDomain.getUserName())){
+						
+						//Set Save Flag
+						saveFlag = false;
+						
+						//Error Message
+						Messages.addGlobalError("O Usuário \"" + userDomain.getUserName() + "\" já existe.");
+						
+					}
 					
 				} else if(checkField().equals("cnpj") && (resultDomain = userDAO.findByCNPJ(userDomain.getCnpj())) != null){
 					
@@ -288,7 +295,7 @@ public class UserController implements Serializable {
 					saveFlag = false;
 					
 					//Error Message
-					Messages.addGlobalError("O CNPJ '" + userDomain.getCnpj() + "' já pertence a '" + resultDomain.getPersonDomain().getCompleteName() + "'.");				
+					Messages.addGlobalError("O CNPJ \"" + userDomain.getCnpj() + "\" já pertence a \"" + resultDomain.getPersonDomain().getCompleteName() + "\".");				
 				}
 			}
 			
@@ -358,7 +365,7 @@ public class UserController implements Serializable {
 				//doNewRegister();
 				
 				//List again User (very import to update the list)
-				usersDomain = userDAO.list();
+				usersDomain = userDAO.descendList("id");
 			}
 				
 		} catch (Exception e) {
@@ -391,14 +398,19 @@ public class UserController implements Serializable {
 			//Delete user image file
 			//Files.deleteIfExists(userFile);
 			
-			methodUtil.deleteFolder(userDomain.getImageUserPath().substring(0, userDomain.getImageUserPath().indexOf("/Login")));
+			//Set Path (result --> System.getProperty("user.home") = C:/Users/Samir Landou)
+			String userFolderPath = System.getProperty("user.home")
+					+"/Documents/Desenvolvimento/Uploads/Users/"
+					+ userDomain.getPersonDomain().getId();
+			
+			methodUtil.deleteFolder(userFolderPath);
 					
 			
 			//List again User (very import to update the list)
-			usersDomain= userDAO.list();
+			usersDomain = userDAO.descendList("id");
 			
 			//This code is used with OmniFaces and it is more practice than PrimeFaces implementation.
-			Messages.addGlobalInfo(userDomain.getUserName() + " foi excluido com sucesso!!!");
+			Messages.addGlobalInfo("O usuário '" + userDomain.getUserName() + "' foi excluido com sucesso!!!");
 			
 		} catch (Exception e) {
 			Messages.addGlobalError("Ocorreu um erro ao excluir as informações de: " + userDomain.getUserName());
@@ -439,7 +451,7 @@ public class UserController implements Serializable {
 
 			//Instantiate List of person
 			PersonDAO personDAO = new PersonDAO();
-			personsDomain = personDAO.list();
+			personsDomain = personDAO.descendList("id");
 			
 		} catch (Exception e) {
 			Messages.addGlobalError("Ocorreu um erro ao tentar selecionar uma pessoas");
@@ -454,7 +466,7 @@ public class UserController implements Serializable {
 	 * @author samirlandou
 	 * @param event
 	 */
-    public void handleFileUpload(FileUploadEvent event) {
+    public void doHandleFileUpload(FileUploadEvent event) {
     	//userDomain.setImageUser(event.getFile().getContents());
     	   	
     	try {
@@ -462,10 +474,10 @@ public class UserController implements Serializable {
     		UploadedFile uploadFile  =  event.getFile();
     		
     		if(uploadFile != null ){
-        		//get the original file name
+        		//Set the original file name
         		userDomain.setImageUserFileName(uploadFile.getFileName().toString());
         		
-        		//Destination file in Temporary Directory (C:\Users\Samir Landou\AppData\Local\Temp)
+        		//Create Destination file in Temporary Directory (C:\Users\Samir Landou\AppData\Local\Temp)
     			tempFile = Files.createTempFile(null, null);
     			
     			//Add temporary file in a list
@@ -510,6 +522,44 @@ public class UserController implements Serializable {
 	    	}    		
     	}
     }
+    
+    
+    /**
+     * Delete User Image file
+     */
+    public void doDeleteFile(){
+
+		//Face Context Login
+		FacesContext fcLogin = FacesContext.getCurrentInstance();
+		
+		//Get External Context from LoginController
+		loginController = (LoginController) fcLogin.getExternalContext().getSessionMap().get("loginController");
+		
+		//Delete File
+    	if (methodUtil.deleteFile(loginController.getLoggedUser().getImageUserFileName())) {
+    		
+    		//Delete all temporary files
+    		doDeleteTempfiles();
+    		
+			//Set Image User Path
+			userDomain.setImageUserFileName("");
+			
+			//Update user Image Path in loginController
+			loginController.getLoggedUser().setImageUserFileName("");
+    		
+    		//Informs delete successfully
+    		Messages.addGlobalInfo("A imagem foi deletada com sucesso!");			
+		} else{
+			
+			//Set Image User Path
+			userDomain.setImageUserFileName("");
+			
+			//Informs image can not be deleted.
+			Messages.addGlobalWarn("Essa imagem não pode ser deletada.");
+		}
+    }
+    
+	
 	
 	/*
 	 * Getters and Setters
@@ -542,16 +592,6 @@ public class UserController implements Serializable {
 
 	public void setPersonsDomain(List<PersonDomain> personsDomain) {
 		this.personsDomain = personsDomain;
-	}
-
-
-	public StreamedContent getSc() {
-		return sc;
-	}
-
-
-	public void setSc(StreamedContent sc) {
-		this.sc = sc;
 	}
 
 
@@ -592,6 +632,26 @@ public class UserController implements Serializable {
 
 	public void setFile(UploadedFile file) {
 		this.file = file;
+	}
+
+
+	public boolean isDisableDeleteImageButton() {
+		return disableDeleteImageButton;
+	}
+
+
+	public void setDisableDeleteImageButton(boolean disableDeleteImageButton) {
+		this.disableDeleteImageButton = disableDeleteImageButton;
+	}
+
+
+	public String getOldPassword() {
+		return oldPassword;
+	}
+
+
+	public void setOldPassword(String oldPassword) {
+		this.oldPassword = oldPassword;
 	}
 
 /*

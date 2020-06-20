@@ -1,4 +1,4 @@
-package br.com.abracowebmanagement.domain;
+package br.com.abracowebmanagement.domain.contract;
 
 import java.util.Date;
 
@@ -8,6 +8,8 @@ import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import br.com.abracowebmanagement.domain.generic.GenericDomain;
 
 @SuppressWarnings("serial")
 @Entity

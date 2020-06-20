@@ -35,14 +35,12 @@
 				
 				<h3 align="center">Lista de Contrato</h3>
 				
-				<br/>
-				
 				<p:dataTable id="contractDataTableFormID"
 							 emptyMessage="Nenhum registro encontrado."
 							 paginator="true"
 							 value="#{contractController.contractsDomain}"
 							 var="cursor"
-							 rows="10"							 
+							 rows="5"							 
 							 resizableColumns="true" 
 							 resizeMode="fit" 
 							 reflow="true" 
@@ -55,12 +53,10 @@
 					<p:column headerText="Código contrato" 
 							  sortBy="#{cursor.contractCodeDescription}" 
 							  filterBy="#{cursor.contractCodeDescription}"
-							  style="width: 35%">							  
+							  style="width: 28%">							  
 							  <p:commandLink value="#{cursor.contractCodeDescription}"
-							  				 oncomplete="PF('contractDetailDlgWGV').show();"
-							  				 actionListener="#{contractController.doContractDetailEdit}"
-							  				 update=":idMsgGlobal
-							  				 		 :contractDetailFormID:contractDetailWzdID">
+							  				 actionListener="#{contractController.doEditNewStudentContract}"
+							  				 update="contractStudentListFormID:contractStudentDataTableID">
 							  				 <f:attribute name="selectedContractByCursor"
 				            			 				  value="#{cursor}"/>
 							  </p:commandLink>
@@ -73,37 +69,36 @@
 					<p:column headerText="Língua"
 							  sortBy="#{cursor.classLanguageDescription}" 
 							  filterBy="#{cursor.classLanguageDescription}"
-							  style="width: 15%">
+							  style="width: 12%">
 							  
 							  <h:outputText value="#{cursor.classLanguageDescription}"/>
 					</p:column>
 
 
-					<!-- DE_PROFESSOR -->
+					<!-- DE_LEVEL -->
 					<p:column headerText="Nível"
 							  sortBy="#{cursor.classLevelDescription}" 
 							  filterBy="#{cursor.classLevelDescription}"
-							  style="width: 15%">
+							  style="width: 12%">
 							  
 						  	  <h:outputText value="#{cursor.classLevelDescription}"/>					
 					</p:column>
 
-					<!-- FG_CLOSED
-					<p:column headerText="Status" sortBy="#{cursor.closedContractFlag}" filterBy="#{cursor.closedContractFlag}">
-						<h:outputText value="#{cursor.closedContractFlag}"/>
-					</p:column> -->
-
+					<!-- DE_PROFESSOR -->
+					<p:column headerText="Professor"
+							  sortBy="#{cursor.principalProfesssorPersonDomain.userName}" 
+							  filterBy="#{cursor.principalProfesssorPersonDomain.userName}"
+							  style="width: 12%">
+							  
+						  	  <h:outputText value="#{cursor.principalProfesssorPersonDomain.userName}"/>					
+					</p:column>
 					
 					<!-- OPTIONS -->
 					<p:column headerText="Opções"
 							  id="optionID"
-							  style="width: 20%">
+							  style="width: 22%">
 						
-						<!-- CONTRACT STATUS
-						<p:commandButton id="statusContractID" image="#{cursor.closedContractFlag == true? 'fa fa-lock' : 'fa fa-unlock-alt'}"
-						 onclick="this.form.target='_blank'" disabled="false" title="yes">
-						 <f:attribute name="selectedContractByCursor" value="#{cursor}"/>
-						</p:commandButton> -->
+
 						
 						<!-- CONTRACT STATUS -->								
 						<i id="statusContractID" 
@@ -173,15 +168,30 @@
 							 			  value="#{cursor}"/>
 						</p:commandButton>
 
-																						
-						<!-- BUTTON TO EDIT -->
-						<p:commandButton icon="fa fa-edit"
-										 title="Editar Registro"
-										 actionListener="#{contractController.doEdit}"
-										 oncomplete="PF('dlgEditContract').show();"
+
+						<!-- BUTTON TO ADD PROFESSOR -->
+						<p:commandButton icon="fa fa-user-plus"
+										 title="Adicionar Professor(a)/Fechar contrato"
+										 actionListener="#{contractController.doEditProfessorContract}"
+										 oncomplete="PF('professorContractDetailDlgWGV').show();"
 										 update=":idMsgGlobal
-												:contractEditFormID:statusEditRegisterFormID
-												:contractListFormID:contractDataTableFormID">
+										 		 :professorContractDetailFormID:contractFindProfessorPnlGridID
+										 		 :professorContractDetailFormID:contractStatusPnlGridID">
+												
+							<f:attribute name="selectedContractByCursor"
+										 value="#{cursor}"/>
+										 
+							<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+						</p:commandButton>
+
+																						
+						<!-- BUTTON TO ADD STUDENTS -->
+						<p:commandButton icon="fa fa-users"
+										 title="Adicionar Aluno(a)s"
+										 actionListener="#{contractController.doEditNewStudentContract}"
+										 oncomplete="PF('contractDetailDlgWGV').show();"
+										 update=":idMsgGlobal
+										 		 :contractDetailFormID:contractFindStudentPnlGridID">
 												
 							<f:attribute name="selectedContractByCursor"
 										 value="#{cursor}"/>
@@ -195,7 +205,7 @@
 										 title="Deletar Registro"
 										 actionListener="#{contractController.doDelete}"
 										 update=":idMsgGlobal 
-												:contractListFormID:contractDataTableFormID 
+												 contractListFormID:contractDataTableFormID 
 												:contractRegisterFormID:wizardFormID">
 												
 							<p:confirm header="Confirmação" 
@@ -265,9 +275,13 @@
 					</f:facet>
 
 				</p:dataTable>	
+								
 				
+							
 				<!-- CONFIRM DIALOG WHEN DELETING -->
-				<p:confirmDialog global="true" >
+				<p:confirmDialog global="true" id="contract">
+				
+					<h:panelGrid columns="2" styleClass="panelGridCenter">
 				
 					<p:commandButton value="Sim"
 									 type="button"
@@ -278,24 +292,222 @@
 									 type="button"
 									 styleClass="ui-confirmdialog-no"
 									 icon="ui-icon-close"/>
+									 
+					</h:panelGrid>
+					
 				</p:confirmDialog>
 					
 			</h:form>
+			
+			
+			
+			
+			<p:spacer width="0px" height="20px" />
+			
+			
+			
+			
+			<h:form id="contractStudentListFormID">
+				
+				<h3 align="center">Lista dos Alunos do Contrato</h3>		
+			
+				<p:dataTable id="contractStudentDataTableID"
+							 emptyMessage="Nenhum registro encontrado."
+							 paginator="true"
+							 value="#{contractController.contractStudentsDomain}"
+							 var="cursor"
+							 rows="5"							 
+							 resizableColumns="true" 
+							 resizeMode="fit" 
+							 reflow="true" 
+							 rowHover="true"
+							 draggableColumns="true" 
+							 style="text-align: center; width: 90%; margin: 0 auto;">
+					
+					<!-- DE_STUDENT_NAME -->
+					<p:column headerText="Nome do Estudante" 
+							  sortBy="#{cursor.personDomain.completeName}" 
+							  filterBy="#{cursor.personDomain.completeName}"
+							  style="width: 28%">
+							  <h:outputText value="#{cursor.personDomain.completeName}"/>
+					</p:column>
+
+					<!-- DE_STUDENT_PAYMENT_CONTRACT_STUDENT -->
+					<p:column headerText="Pagamento"
+							  sortBy="#{cursor.studentPaymentContractDescription}" 
+							  filterBy="#{cursor.studentPaymentContractDescription}"
+							  style="width: 11%">
+							  
+							  <h:outputText value="#{cursor.studentPaymentContractDescription}"/>
+					</p:column>										
+					
+					<!-- TP_STUDENT_PAYMENT_CONTRACT_STUDENT -->
+					<p:column headerText="Forma de Pagamento"
+							  sortBy="#{cursor.studentPaymentContractType}" 
+							  filterBy="#{cursor.studentPaymentContractType}"
+							  style="width: 13%">
+							  	
+							  <h:outputText value="#{cursor.studentPaymentContractType}"/>
+					</p:column>
+
+					<!-- DE_DISCOUNT_PRICE_CONTRACT_STUDENT -->
+					<p:column headerText="Desconto"
+							  sortBy="#{cursor.studentPaymentContractDescription}" 
+							  filterBy="#{cursor.studentPaymentContractDescription}"
+							  style="width: 9%">
+							  
+							  <h:outputText value="#{cursor.studentDiscountPriceDescription}">
+							  				<f:convertNumber currencySymbol="R$"
+							  								 locale="pt_BR"
+							  								 type="currency"/>
+							  </h:outputText>
+							  
+					</p:column>
+					
+					<!-- FG_RECEIVE_BOOK_CONTRACT_STUDENT -->
+					<p:column headerText="Apostila"
+							  sortBy="#{cursor.studentReceiveBookFlag}" 
+							  filterBy="#{cursor.studentReceiveBookFlag}"
+							  style="width: 7%">
+							  
+							  <h:outputText value="#{cursor.studentReceiveBookFlag == true? 'Sim' : 'Não'}"/>
+							  
+					</p:column>
+					
+					<!-- FG_RECEIVE_BOOK_CONTRACT_STUDENT -->
+					<p:column headerText="Assinou"
+							  sortBy="#{cursor.signContractStudentFlag}" 
+							  filterBy="#{cursor.signContractStudentFlag}"
+							  style="width: 7%">
+							  
+							  <h:outputText value="#{cursor.signContractStudentFlag == true? 'Sim' : 'Não'}"/>
+							  
+					</p:column>
+							
+					<!-- FG_RECEIVE_BOOK_CONTRACT_STUDENT -->
+					<p:column headerText="Data Registro"
+							  sortBy="#{cursor.saveContractStudentDate}" 
+							  filterBy="#{cursor.saveContractStudentDate}"
+							  style="width: 9%">							  
+							  <h:outputText value="#{cursor.saveContractStudentDate}">
+							  <f:convertDateTime locale="pt_BR"
+							  					 pattern="dd/MM/yyyy"
+												 timeZone="America/Sao_Paulo"/>							  							  
+							  </h:outputText>
+					</p:column>
+					
+					<!-- BUTTON TO DELETE -->
+					<p:column headerText="Opções"												  
+							  style="width: 16%" >
+							  	  
+						<!-- SHOW CONTRACT BUTTON -->
+						<p:commandButton id="showContractID"
+										title="Visualizar Registro em PDF"
+										icon="fa fa-file-pdf-o"
+										actionListener="#{contractController.doContractReportByProfessor}"
+						 				ajax="false" 
+						 				onclick="this.form.target='_blank'">
+						 				
+							 <f:attribute name="selectedContractByCursor"
+							 			value="#{cursor}"/>
+						</p:commandButton>
+						
+						<!-- DOWNLOAD CONTRACT BUTTON -->
+						<p:commandButton id="downloadContractID"
+										title="Baixar Registro"
+										icon="fa fa-download"
+										actionListener="#{contractController.doContractReportByProfessor}"
+						 				ajax="false"
+						 				onclick="this.form.target='_blank'">
+						 				
+							 <f:attribute name="selectedContractByCursor"
+							 			  value="#{cursor}"/>
+						</p:commandButton>
+						
+						<!-- PRINT CONTRACT BUTTON -->
+						<p:commandButton id="printContractID"
+										title="Imprimir Registro"
+										icon="fa fa-print"
+										actionListener="#{contractController.doContractReportByProfessor}"
+						 				ajax="false"
+						 				onclick="this.form.target='_blank'">
+						 				
+							 <f:attribute name="selectedContractByCursor"
+							 			  value="#{cursor}"/>
+						</p:commandButton>
+						
+						<!-- BUTTON TO EDIT STUDENT CONTRACT-->
+						<p:commandButton icon="fa fa-edit"
+										 title="Editar Aluno(a)"
+										 actionListener="#{contractController.doEditStudentContract}"
+										 oncomplete="PF('contractDetailDlgWGV').show();"
+										 update=":idMsgGlobal
+										 		 :contractDetailFormID:contractFindStudentPnlGridID
+										 		 :contractDetailFormID:saveStudentPnlGridID">
+												
+							<f:attribute name="selectedContractByCursor"
+										 value="#{cursor}"/>
+										 
+							<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+						</p:commandButton>
+						
+						<!-- BUTTON TO DELETE -->	  
+						<p:commandButton icon="fa fa-trash"
+										 title="Deletar Registro"
+										 actionListener="#{contractController.doDeleteStudentContract}"
+										 update=":idMsgGlobal
+										 		 contractStudentListFormID:contractStudentDataTableID" >
+												
+							<p:confirm header="Confirmação" 
+									   message="Deseja excluir o aluno #{cursor.personDomain.completeName}?"
+									   icon="ui-icon-alert"/>
+							
+							<f:attribute name="selectedContractByCursor"
+										 value="#{cursor}"/>
+										 
+						</p:commandButton>
+							
+					</p:column>
+					
+				</p:dataTable>
+
+				
+				<!-- CONFIRM DIALOG WHEN DELETING -->
+				<p:confirmDialog global="true" id="studentContract">
+				
+					<h:panelGrid columns="2" styleClass="panelGridCenter">
+				
+					<p:commandButton value="Sim"
+									 type="button"
+									 styleClass="ui-confirmdialog-yes" 
+									 icon="ui-icon-check"/>
+									
+					<p:commandButton value="Não" 
+									 type="button"
+									 styleClass="ui-confirmdialog-no"
+									 icon="ui-icon-close"/>
+									 
+					</h:panelGrid>
+					
+				</p:confirmDialog>				
+
+			</h:form>
+			
 
 
 
 		<!-- DIALOG TO HELP TO REGISTER NEW CONTRACT -->
 		<p:dialog header="Ajuda"
-							widgetVar="dlgHelp"
-							draggable="true" 
-							resizable="false" 
-							modal="true" 
-							closable="true"
-							appendTo="@(body)" 
-							height="150" 
-							width="350"
-							responsive="true" 
-							maximizable="false">
+				 widgetVar="dlgHelp"
+				 draggable="true" 
+				 resizable="false" 
+				 modal="true" 
+				 closable="true"
+				 appendTo="@(body)" 
+				 height="150" 
+				 width="350"
+				 responsive="true" 
+				 maximizable="false">
 			
 			<h:panelGrid columns="1">
 				<p:outputLabel value="1-/ Ir no 'Parâmetros' para configurar o 'Preço das aulas' caso não for ainda definido."/>
@@ -316,6 +528,8 @@
 								 oncomplete="PF('dlgHelp').hide();"/>
 			</h:panelGrid>	
 		</p:dialog>
+
+
 
 			
 		<!-- DIALOG TO REGISTER NEW CONTRACT -->			
@@ -358,8 +572,9 @@
 												 value="#{contractController.contractDomain.classLanguageDescription}"
 												 converter="omnifaces.SelectItemsConverter" 
 												 required="true" 
-												 requiredMessage="O campo 'Língua' é obrigatório">
-															 
+												 requiredMessage="O campo 'Língua' é obrigatório"
+												 autoWidth="false"
+												 style="width: 150px">															 
 												 <f:selectItem noSelectionOption="true" itemLabel="Selecione uma Língua" />
 												 <f:selectItem itemLabel="ARÁBE" itemValue="ARÁBE"/>
 												 <f:selectItem itemLabel="ESPANHOL" itemValue="ESPANHOL"/>
@@ -383,8 +598,9 @@
 												 value="#{contractController.contractDomain.classLevelDescription}"
 												 converter="omnifaces.SelectItemsConverter" 
 												 required="true" 
-												 requiredMessage="O campo 'Nível' é obrigatório">
-												 
+												 requiredMessage="O campo 'Nível' é obrigatório"
+												 autoWidth="false"
+												 style="width: 150px">												 
 												 <f:selectItem noSelectionOption="true" itemLabel="Escolhe um nível"/>
 												 <f:selectItems value="#{contractController.levels}"/>	
 								</p:selectOneMenu>
@@ -572,7 +788,7 @@
 											   required="true" 
 											   requiredMessage="O campo 'Pacote' é obrigatório">
 											   
-								</p:inputNumber>											 
+								</p:inputNumber>
 				
 								<p:outputLabel for="beginHourClassID"
 											   value="Aula-Hora Início: "/>
@@ -652,7 +868,7 @@
 												 value="#{contractController.contractDomain.secondClassDayDescription}"
 												 converter="omnifaces.SelectItemsConverter">
 												 
-									<f:selectItem itemValue="" itemLabel="Escolhe o 2° dia letivo"/>
+									<f:selectItem noSelectionOption="true" itemLabel="Escolhe o 2° dia letivo"/>
 									<f:selectItems value="#{contractController.secondClassDay}"
 												   var="secondDay"
 												   itemValue="#{secondDay}"
@@ -699,75 +915,33 @@
 						
 					</p:tab>
 
-
-					
-					<!-- 
-					<p:tab id="professorTabID"
-						   title="Prof.">
-						   
-						<p:panel header="Informar o(a) Professor(a) contratado(a).">
-						
-							<p:messages/>
-							
-							<h:panelGrid id="professorInputRegisterFormID"
-										 columns="2">
-										 	
-								<p:outputLabel value="Professor(a): "
-											   for="professorComboID"/>
-											   
-								<p:selectOneMenu id="professorComboID"
-												 filter="false"
-												 value="#{contractController.contractDomain.personDomain}"
-												 converter="omnifaces.SelectItemsConverter"
-												 required="true" 
-												 requiredMessage="O campo 'Professor(a)' é obrigatório">
-												 
-												 <f:selectItem noSelectionOption="true" itemLabel="Escolhe um professor"/>
-												 <f:selectItems value="#{contractController.professors}"
-																var="professor"
-																itemValue="#{professor}"
-																itemLabel="#{professor.completeName}"/>
-								</p:selectOneMenu>
-								
-							</h:panelGrid>								
-							
-							<p:spacer height="40px"/>								
-							
-							
-							
-							<h:panelGrid columns="1"
-										 styleClass="panelGridCenter">
-										 			
-								<p:commandButton value="Fechar"
-												 title="Sair do Registro"
-												 icon="fa fa-remove"
-												 oncomplete="PF('dlgNewContract').hide();"/>
-							</h:panelGrid>
-														
-						</p:panel>
-						
-					</p:tab>
-					 -->
-
-					
 					
 								
 					<p:tab id="contractModelTabID"
 						   title="Modelo">
 						   
-						<p:panel header="Informar o estado do contrato.">
+						<p:panel header="Informar os modelos de contrato.">
 						
 							<p:messages/>
 							
 							<h:panelGrid id="statusInputRegisterFormID"
-										 columns="2">			
+										 columns="2">
+								
+								
+								<p:outputLabel value="Descrição (Opcional):" />
+									
+								<p:inputText value="#{contractController.codeDescription}"
+											 size="6"
+											 maxlength="4"
+											 style="text-transform: uppercase"/>			
 										 								
-								<p:outputLabel for="contractModelComboID"
-											   value="Modelo Contrato:" />
+										 								
+								<p:outputLabel for="studentContractModelComboID"
+											   value="Aluno - Modelo Contrato: " />
 											   
-								<p:selectOneMenu id="contractModelComboID"
+								<p:selectOneMenu id="studentContractModelComboID"
 												 converter="omnifaces.SelectItemsConverter"
-												 value="#{contractController.contractDomain.contractModelDomain}"
+												 value="#{contractController.contractDomain.studentContractModelDomain}"
 												 required="true" 
 												 requiredMessage="O campo 'Modelo Contrato' é obrigatório">
 												 
@@ -776,16 +950,24 @@
 												 				var="contractModel"
 												 				itemValue="#{contractModel}"
 												 				itemLabel="#{contractModel.contractModelName}"/>
-							</p:selectOneMenu>
-							
-							
-							<p:outputLabel value="Code Descrição (Opcional):" />
+								</p:selectOneMenu>
 								
-							<p:inputText value="#{contractController.codeDescription}"
-										 size="6"
-										 maxlength="4"
-										 style="text-transform: uppercase"/>
-							
+								
+								<p:outputLabel for="professorContractModelComboID"
+											   value="Professor - Modelo Contrato:" />
+											   
+								<p:selectOneMenu id="professorContractModelComboID"
+												 converter="omnifaces.SelectItemsConverter"
+												 value="#{contractController.contractDomain.professorContractModelDomain}"
+												 required="true" 
+												 requiredMessage="O campo 'Modelo Contrato' é obrigatório">
+												 
+												 <f:selectItem noSelectionOption="true" itemLabel="Escolhe um modelo de contrato"/>
+												 <f:selectItems value="#{contractController.contractModelsDomain}"
+												 				var="contractModel"
+												 				itemValue="#{contractModel}"
+												 				itemLabel="#{contractModel.contractModelName}"/>
+								</p:selectOneMenu>				
 																	
 							</h:panelGrid>
 							
@@ -821,7 +1003,6 @@
 								
 								<h:panelGrid id="resumeInputRegisterFormID"
 											 columns="2">
-
 
 
 
@@ -864,9 +1045,14 @@
 									
 									<p:separator/>
 															
-									<p:outputLabel value="Modelo Contrato: " />
+									<p:outputLabel value="Auluno - Modelo Contrato: " />
 									
-									<p:outputLabel value="#{contractController.contractDomain.contractModelDomain.contractModelName}"/>								
+									<p:outputLabel value="#{contractController.contractDomain.studentContractModelDomain.contractModelName}"/>
+									
+									
+									<p:outputLabel value="Professor - Modelo Contrato: " />
+									
+									<p:outputLabel value="#{contractController.contractDomain.professorContractModelDomain.contractModelName}"/>							
 
 									
 									
@@ -1003,15 +1189,15 @@
 													 title="Salvar Registro"
 													 icon="fa fa-floppy-o" 
 													 actionListener="#{contractController.doSave}"
-													 update=":idMsgGlobal 
-													 		 :contractRegisterFormID:wizardFormID
-													 		 :contractListFormID:contractDataTableFormID"/>
+													 update=":idMsgGlobal"/>
 													 		 		
 									<p:commandButton value="Fechar"
 													 title="Sair do Registro"
 													 icon="fa fa-remove"
+													 immediate="true"
 													 action="#{contractController.doClean}"
-													 oncomplete="PF('dlgNewContract').hide();" />
+													 oncomplete="PF('dlgNewContract').hide();"
+													 update=":contractListFormID:contractDataTableFormID"/>
 								</h:panelGrid>
 																
 		
@@ -1025,27 +1211,227 @@
 					
 			</h:form>
 						
-		</p:dialog>			
+		</p:dialog>
 
 
-
-		<!-- DIALOG TO EDIT CONTRACT -->			
-		<p:dialog header="Cadastrar Novo Contrato"
-				  widgetVar="dlgEditContract"
+			
+			
+		<!-- DIALOG TO COMPLETE THE REGISTER OF STUDENT OF A CONTRACT -->			
+		<p:dialog header="Cadastrar Aluno(a)s no Contrato "
+				  widgetVar="contractDetailDlgWGV"
+				  id="contractDetailDlgID"
 				  draggable="true" 
+				  resizable="false" 
 				  modal="true" 
 				  closable="false"
-				  appendTo="@(body)" 
-				  closeOnEscape="true"
+				  appendTo="@(body)"
 				  responsive="true" 
 				  maximizable="true">
 			
 			<!-- FORM FOR THE DIALOG -->
-			<h:form id="contractEditFormID">
+			<h:form id="contractDetailFormID">
+							
+				<h3 style="text-align: center;">Contrato - Aluno(a)s</h3>								
+		
+				<h:panelGrid id="contractFindStudentPnlGridID" columns="2" styleClass="panelGridCenter">
 				
-				<!-- PANEL GRID TO EDIT CONTRACT FORMS -->
-				<h:panelGrid id="statusEditRegisterFormID"
-							 columns="2">
+				            
+					<p:outputLabel value="CPF Aluno(a): *"/>
+					<p:inputMask id="findStudentID" 
+								 value="#{contractController.personCPF}" 
+								 maxlength="30" 
+								 size="19"
+								 mask="999.999.999-99"
+								 disabled="#{contractController.enableComponentOnContractStudent}">
+								<p:ajax event="change"
+										process="@this"
+										global="false"
+										listener="#{contractController.doValidateCPF}" 
+										update=":idMsgGlobal newPersonID" />									
+		
+					</p:inputMask>
+					
+					<p:spacer width="25px" height="0px"/>
+					<p:outputLabel id="newPersonID" 
+								   value="#{contractController.newPersonDomain.completeName}"
+								   style="color: orange"/>						 
+				             
+					<p:outputLabel value="Pagamento: *"/>
+					<p:selectOneMenu id="studentPaymentDescriptionID"
+								 converter="omnifaces.SelectItemsConverter"
+								 value="#{contractController.contractStudentDomain.studentPaymentContractDescription}"
+								 required="true" requiredMessage="O Campo 'Pagamento' é obrigatório!"
+								 disabled="#{contractController.enableComponentOnContractStudent}">
+								 <f:selectItem noSelectionOption="true" itemLabel="Escolhe uma opção"/>												 
+								 <f:selectItem itemValue="Parcelamento(x4)" itemLabel="Parcelamento(x4)"/>
+								 <f:selectItem itemValue="Integral/a Vista" itemLabel="Integral/a Vista"/>
+								 <f:selectItem itemValue="Gratuito" itemLabel="Gratuito"/>
+								 <p:ajax event="change"
+										 process="@this"
+										 global="false"
+										 listener="#{contractController.doDisableStudentPaymentTypeSelectItem}" 
+										 update="studentPaymentTypeID" />
+					</p:selectOneMenu>
+					
+					<p:outputLabel value="Forma de Pagamento: *"/>
+					<p:selectOneMenu id="studentPaymentTypeID"
+									 converter="omnifaces.SelectItemsConverter"
+									 value="#{contractController.contractStudentDomain.studentPaymentContractType}"
+									 required="true" requiredMessage="O Campo 'Forma de Pagamento' é obrigatório!"
+									 disabled="#{contractController.enableComponentOnContractStudent}">
+									 <f:selectItem noSelectionOption="true" itemLabel="Escolhe uma opção"/>
+									 <f:selectItems value="#{contractController.paymentType}"
+									 				var="payment"
+									 				itemValue="#{payment}"
+									 				itemLabel="#{payment}"/>								 
+					</p:selectOneMenu>
+					
+					<p:outputLabel value="Desconto: "/>
+					<p:inputNumber id="discountStudentContractID"
+								   value="#{contractController.contractStudentDomain.studentDiscountPriceDescription}"
+								   disabled="#{contractController.enableComponentOnContractStudent}"
+								   size="19"/>
+					
+					<p:outputLabel value="Apostila: "/>
+					<p:toggleSwitch id="studentReceiveBookID"
+									value="#{contractController.contractStudentDomain.studentReceiveBookFlag}">							
+									<p:ajax listener="#{contractController.addContractStudentReceiveBookMessage}"
+											update=":idMsgGlobal" />
+					</p:toggleSwitch>
+					
+					
+					<p:outputLabel value="Assinou Contrato: "/>
+					<p:toggleSwitch id="studentSignedContractID"
+									value="#{contractController.contractStudentDomain.signContractStudentFlag}">							
+									<p:ajax listener="#{contractController.addContractStudentSignedMessage}"
+											update=":idMsgGlobal" />
+					</p:toggleSwitch>					
+					
+				</h:panelGrid>				
+
+
+				<br/>
+				<p:spacer width="25px" height="0px"/>
+				
+				<!-- PANEL GRID FOR BUTTON ADD, CLEAN AND CLOSE -->
+				<h:panelGrid id="saveStudentPnlGridID" columns="4">			 
+					<p:commandButton value="Adicionar"												 
+									 id="addStudentID"
+									 title="Adicionar um(a) Aluno(a)"
+									 icon="fa fa-plus" 
+									 rendered="#{!contractController.enableComponentOnContractStudent}"
+									 actionListener="#{contractController.doAddStudent}"
+									 update=":idMsgGlobal :contractDetailFormID:contractFindStudentPnlGridID"/>
+
+					<p:commandButton value="Salvar"												 
+									 id="saveStudentID"
+									 title="Adicionar um(a) Aluno(a)"
+									 icon="fa fa-floppy-o" 
+									 rendered="#{contractController.enableComponentOnContractStudent}"
+									 actionListener="#{contractController.doSaveStudent}"
+									 update=":idMsgGlobal :contractDetailFormID:contractFindStudentPnlGridID"/>
+					
+					<p:commandButton value="Limpar"
+									 id="cleanDataID"
+									 title="Limpar dados"
+									 icon="fa fa-eraser"
+									 process="@this"
+									 rendered="#{!contractController.enableComponentOnContractStudent}"
+									 actionListener="#{contractController.doCleanStudentInfo}"
+									 update=":contractDetailFormID:contractFindStudentPnlGridID">
+					
+					</p:commandButton>
+					
+					<p:spacer width="25px" height="0px"/>	 								    		 
+					
+					<p:commandButton value="Fechar"
+										 title="Sair do Registro"
+										 icon="fa fa-remove"
+										 immediate="true"
+										 oncomplete="PF('contractDetailDlgWGV').hide();"
+										 update=":contractStudentListFormID:contractStudentDataTableID"/>
+				
+				</h:panelGrid>
+
+			</h:form>					  
+				  
+		</p:dialog>	
+		
+		
+		
+		
+		<!-- DIALOG TO COMPLETE THE REGISTER OF PROFESSOR OF A CONTRACT -->			
+		<p:dialog header="Cadastrar Professor no Contrato "
+				  widgetVar="professorContractDetailDlgWGV"
+				  id="professorContractDetailDlgID"
+				  draggable="true" 
+				  resizable="false" 
+				  modal="true" 
+				  closable="false"
+				  appendTo="@(body)"
+				  responsive="true" 
+				  maximizable="true">
+			
+			<!-- FORM FOR THE DIALOG -->
+			<h:form id="professorContractDetailFormID">			
+							
+				<h3 style="text-align: center;">Contrato - Professor(a)</h3>								
+		
+				<h:panelGrid id="contractFindProfessorPnlGridID" columns="2" styleClass="panelGridCenter">
+					
+					<p:outputLabel value="Professor principal: "/>
+					<p:selectOneMenu id="principalProfessorID" filter="true" value="#{contractController.contractDomain.principalProfesssorPersonDomain}"
+						converter="omnifaces.SelectItemsConverter">
+						<f:selectItem noSelectionOption="true" itemLabel="Selecione uma pessoa" />
+						<f:selectItems value="#{contractController.professors}" 
+									   var="user"
+									   itemValue="#{user}"
+									   itemLabel="#{user.personDomain.completeName}"/>
+					</p:selectOneMenu>
+					
+					<p:outputLabel value="Professor Substituante 1: "/>
+					<p:selectOneMenu id="firstSubstituteProfessorID" filter="true" value="#{contractController.contractDomain.firstSubstituteProfesssorPersonDomain}"
+						converter="omnifaces.SelectItemsConverter">
+						<f:selectItem noSelectionOption="true" itemLabel="Selecione uma pessoa" />
+						<f:selectItems value="#{contractController.professors}" 
+									   var="user"
+									   itemValue="#{user}"
+									   itemLabel="#{user.personDomain.completeName}"/>
+					</p:selectOneMenu>
+					
+					<p:outputLabel value="Professor Substituante 2: *"/>
+					<p:selectOneMenu id="secondSubstituteProfessorID" filter="true" value="#{contractController.contractDomain.secondSubstituteProfesssorPersonDomain}"
+						converter="omnifaces.SelectItemsConverter">
+						<f:selectItem noSelectionOption="true" itemLabel="Selecione uma pessoa" />
+						<f:selectItems value="#{contractController.professors}" 
+									   var="user"
+									   itemValue="#{user}"
+									   itemLabel="#{user.personDomain.completeName}"/>
+					</p:selectOneMenu>					
+					
+				</h:panelGrid>
+
+
+				<br/>
+				<p:spacer width="25px" height="0px"/>
+				
+				
+				<h3 style="text-align: center;">Contrato - Outros</h3>
+				
+				<h:panelGrid id="contractStatusPnlGridID"
+							 columns="2">		
+					
+					<p:outputLabel value="Comentário: " />								
+					<p:inputTextarea value="#{contractController.contractDomain.commentDescription}"
+									 rows="2" 
+									 cols="30" 
+									 counter="display"
+									 maxlength="100" 
+									 counterTemplate="{0} caracteres restantes."
+									 autoResize="true"/>												 
+					<br/>								
+					<h:outputText id="display"/>
+
 							 						
 					<p:outputLabel value="Finalizar Contrato:" />
 					
@@ -1056,27 +1442,12 @@
 					</p:toggleSwitch>
 					
 					
-					<p:outputLabel value="Comentário: " />
-					
-					<p:inputTextarea value="#{contractController.contractDomain.commentDescription}"
-									 rows="2" 
-									 cols="30" 
-									 counter="display"
-									 maxlength="100" 
-									 counterTemplate="{0} caracteres restantes."
-									 autoResize="true"/>
-									 
-					<br/>
-					
-					<h:outputText id="display"/>
-					
 					<br/>
 					
 					<p:spacer height="20px"/>
 					
 						
-					<p:outputLabel value="Ultima atualização: "/>
-					
+					<p:outputLabel value="Ultima atualização: "/>								
 					<p:outputLabel value="#{contractController.contractDomain.saveContractDate}">
 					
 								   <f:convertDateTime locale="pt_BR"
@@ -1085,229 +1456,43 @@
 					</p:outputLabel>
 											
 					
-					<p:outputLabel value="Pelo usário:"/>
-					
+					<p:outputLabel value="Pelo usário:"/>								
 					<p:outputLabel value="#{contractController.contractDomain.contractSaveLoginUser}"
 								   style="color: orange;"/>
 																
-				</h:panelGrid>
-			
-				<br/>				
+				</h:panelGrid>							
+
+
+				<br/>
+				<p:spacer width="25px" height="0px"/>
 				
 				
 				<!-- PANEL GRID FOR BUTTON SAVE AND CLOSE -->
-				<h:panelGrid columns="2">
-				
-					<p:commandButton value="Salvar"
+				<h:panelGrid id="saveStudentPnlGridID" 
+							 columns="2"
+							 styleClass="panelGridCenter">					 
+					
+					<p:commandButton value="Salvar"												 
+									 id="saveProfesssorID"
 									 title="Salvar Registro"
 									 icon="fa fa-floppy-o" 
-									 actionListener="#{contractController.doSave}"
-									 oncomplete="PF('dlgEditContract').hide();"
-									 update=":idMsgGlobal
-											 :contractRegisterFormID:wizardFormID 
-											 :contractListFormID:contractDataTableFormID
-											 :contractEditFormID:statusEditRegisterFormID
-											 :contractListFormID:contractDataTableFormID"/>
-											 				
+									 actionListener="#{contractController.doSaveEditContract}"
+									 update=":idMsgGlobal"/>	 								    		 
+					
 					<p:commandButton value="Fechar"
-									 title="Sair do Registro"
-									 icon="fa fa-remove"
-									 action="#{contractController.doClean}"
-									 oncomplete="PF('dlgEditContract').hide();" />						
-				</h:panelGrid>
-										
-			</h:form>
-							
-		</p:dialog>
-			
-			
-		<!-- DIALOG TO REGISTER NEW CONTRACT -->			
-		<p:dialog header="Editar Texto do Contrato"
-				  widgetVar="dlgTextEditContract"
-				  draggable="true"
-				  modal="true" 
-				  closable="true"
-				  appendTo="@(body)" 
-				  closeOnEscape="true"
-				  responsive="true" 
-				  maximizable="true" 
-				  position="top">
-			
-			
-			<!-- FORM FOR THE DIALOG -->
-			<h:form id="contractTextEditFormID">    
-			     
-			    <h3 class="first">Editor de Contrato</h3>
-			    
-			    <p:editor id="editor"
-			    		  widgetVar="textEditor"
-			    		  value="#{contractController.contractBody}" 
-			    		  width="600"/>
-				
-					<!-- PANEL GRID FOR BUTTON VIEW, PDFVIEW, CLEAR, SAVE AND CLOSE -->
-					<h:panelGrid columns="6">
-					
-					    <p:commandButton value="Visualizar"
-					    				 title="Visualizar Registro"
-					    				 icon="fa fa-eye"
-					    				 update="displayContractID"
-					    				 oncomplete="PF('dlgView').show()"/>
-					    				 
-						<p:commandButton value="Contrato"
-										 title="Ver Registro em PDF"
-										 icon="fa fa-file-pdf-o" 
-										 action="#{contractController.doShowContractReport}"
-										 ajax="false" 
-										 onclick="this.form.target='_blank'"/>
-										 
-					    <p:commandButton value="Limpar"
-					    				 title="Limpar Texto do Editor"
-					    				 icon="fa fa-eraser"
-					    				 type="button"
-					    				 oncomplete="PF('textEditor').clear();"/>
-					    				 
-						<p:spacer height="100px"/>
-										
-						<p:commandButton value="Fechar"
 										 title="Sair do Registro"
-										 icon="fa fa-close"
-										 oncomplete="PF('dlgTextEditContract').hide();" />
-						
-					</h:panelGrid>
-					
-					
-					<!-- DIALOG TO SHOW TEXTEDITOR RESULT -->
-				    <p:dialog header="Conteúdo do Corpo do Contrato"
-				    		  widgetVar="dlgView"
-				    		  showEffect="fade"
-				    		  hideEffect="fade"
-				    		  appendTo="@(body)" 
-				    		  closeOnEscape="true" 
-				    		  closable="true">
-				    		
-				        <p:outputPanel id="displayContractID">
-				            
-				            <h:outputText value="#{contractController.contractBody}"
-				            			  escape="false" />
-				        </p:outputPanel>
-				        
-				    </p:dialog>  
-				       
-				</h:form>
+										 icon="fa fa-remove"
+										 immediate="true"
+										 oncomplete="PF('professorContractDetailDlgWGV').hide();"
+										 update=":contractStudentListFormID:contractStudentDataTableID
+										         :contractListFormID:contractDataTableFormID"/>
 				
-			</p:dialog>
-			
-			
-			<!-- DIALOG TO REGISTER NEW CONTRACT -->			
-			<p:dialog header="Cadastrar Aluno(a)s e Professor(a) no Contrato "
-					  widgetVar="contractDetailDlgWGV"
-					  id="contractDetailDlgID"
-					  draggable="true" 
-					  resizable="false" 
-					  modal="true" 
-					  closable="false"
-					  appendTo="@(body)" 
-					  height="570" 
-					  width="600"
-					  responsive="true" 
-					  maximizable="true">
-				
-				<!-- FORM FOR THE DIALOG -->
-				<h:form id="contractDetailFormID"> 
-				
-					<!-- WIZARD TO FILL FORMS -->
-					<p:wizard flowListener="#{contractController.doContractDetailFlowProcess}" 
-							  id="contractDetailWzdID"
-							  widgetVar="contractDetailWzdWGV">								
+				</h:panelGrid>
 
-						
-						<p:tab id="contractDetailStudentTabID"
-							   title="Aluno(a)">
-							
-							<p:panel header="Informações sobre a língua.">
-								
-								<p:messages/>
-								<br/>
-								<p:outputLabel value="Contrato - #{contractController.contractDomain.contractCodeDescription}"/>
-								<br/>
-								
-								<h:panelGrid id="ContractDetailInsertUserPnlGridID"
-								             columns="3">
-								             
-									<p:outputLabel value="CPF Aluno(a): "/>
-									<p:inputText value=""/>
-									
-																							 
-								</h:panelGrid>
-								
-								<br/>
-								
-								<h:panelGrid id="ContractDetailSkipPnlGridID"
-											 columns="2">
-								
-									<p:outputLabel value="Pular para o resumo"/>
-																
-									<p:selectBooleanCheckbox value="#{contractController.skip}"/>								
-								
-								</h:panelGrid>
-								
-
-								
-								<p:spacer height="40px"/>														
-								
-								<!-- PANEL GRID FOR BUTTON CLOSE -->
-								<h:panelGrid columns="1" 
-								    		 styleClass="panelGridCenter">
-								    		 
-									<p:commandButton value="Fechar"
-													 title="Sair do Registro"
-													 icon="fa fa-remove"
-													 oncomplete="PF('contractDetailDlgWGV').hide();"/>
-								</h:panelGrid>
-
-							</p:panel>							
-												
-						</p:tab>
-
-
-						
-						<p:tab id="contractDetailProfessorTabID"
-							   title="Professor(a)">
-							
-							<p:panel header="Informações sobre a língua.">
-								
-								<p:messages/>
-								
-								<h:panelGrid 
-								             columns="2">
-								             
-									<p:outputLabel value="Contrato - #{contractController.contractDomain.contractCodeDescription}"/>																							 
-								</h:panelGrid>
-								
-
-								
-								<p:spacer height="40px"/>														
-								
-								<!-- PANEL GRID FOR BUTTON CLOSE -->
-								<h:panelGrid columns="1" 
-								    		 styleClass="panelGridCenter">
-								    		 
-									<p:commandButton value="Fechar"
-													 title="Sair do Registro"
-													 icon="fa fa-remove"
-													 oncomplete="PF('contractDetailDlgWGV').hide();"/>
-								</h:panelGrid>
-
-							</p:panel>							
-												
-						</p:tab>						
-						
-					</p:wizard>				
-				
-				</h:form>					  
-					  
-			</p:dialog>			
-					
+			</h:form>					  
+				  
+		</p:dialog>			
+		
 		
 		</div>
 		

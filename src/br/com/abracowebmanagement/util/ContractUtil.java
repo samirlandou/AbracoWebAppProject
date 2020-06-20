@@ -24,9 +24,24 @@ public class ContractUtil {
 	 * Arab:	Arábe 1 (AR1); Arábe 2 (AR2); Arábe 3 (AR3); Arábe 4 (AR4);
 	 */	
 
-	
-	
 	public String getShortLanguageDescription(String description){
+		String languageValue = "";
+		if(description.equals("ARÁBE")){
+			languageValue = "AR";
+		} else if(description.equals("ESPANHOL")){
+			languageValue = "ES";
+		} else if(description.equals("FRANCÊS")){
+			languageValue = "FR";
+		} else if(description.equals("INGLÊS")){
+			languageValue = "EN";
+		} else if(description.equals("PORTUGUÊS")){
+			languageValue = "PT";
+		}
+		return languageValue;
+	}
+	
+	
+	public String getFullLanguageDescription(String description){
 		String languageValue = "";
 		if(description.equals("AR")){
 			languageValue = "ARÁBE";
@@ -36,7 +51,7 @@ public class ContractUtil {
 			languageValue = "FRANCÊS";
 		} else if(description.equals("EN")){
 			languageValue = "INGLÊS";
-		} else if(description.equals("BR")){
+		} else if(description.equals("PT")){
 			languageValue = "PORTUGUÊS";
 		}
 		return languageValue;
@@ -72,7 +87,7 @@ public class ContractUtil {
 				levelDescription = "ES4";
 			} else if(description.equals("Espanhol 5 (B1.3)")){
 				levelDescription = "ES5";
-			} else if(description.equals("Espanhol Conv.(B1/B2")){
+			} else if(description.equals("Espanhol Conv.(B1/B2)")){
 				levelDescription = "ESconv";
 			}	
 		} else if(languageDescription.equals("FRANCÊS")){
@@ -87,11 +102,11 @@ public class ContractUtil {
 				levelDescription = "FR4";
 			} else if(description.equals("Francês 5 (B1.1)")){
 				levelDescription = "FR5";
-			} else if(description.equals("Francês 6 (B1.2")){
+			} else if(description.equals("Francês 6 (B1.2)")){
 				levelDescription = "FR6";
-			} else if(description.equals("Francês 7 (B1.3")){
+			} else if(description.equals("Francês 7 (B1.3)")){
 				levelDescription = "FR7";
-			} else if(description.equals("Francês Conv.(B1/B2")){
+			} else if(description.equals("Francês Conv.(B1/B2)")){
 				levelDescription = "FRconv";
 			}
 		} else if(languageDescription.equals("INGLÊS")){
@@ -106,15 +121,15 @@ public class ContractUtil {
 				levelDescription = "EN4";
 			} else if(description.equals("Inglês 5 (B1.1)")){
 				levelDescription = "EN5";
-			} else if(description.equals("Inglês 6 (B1.2")){
+			} else if(description.equals("Inglês 6 (B1.2)")){
 				levelDescription = "EN6";
-			} else if(description.equals("Inglês Conv.(B1/B2")){
+			} else if(description.equals("Inglês Conv.(B1/B2)")){
 				levelDescription = "ENconv";
 			}
 		} else if(languageDescription.equals("PORTUGUÊS")){
 			
-			if(description.equals("Português(BR)")){
-				levelDescription = "PT-br";
+			if(description.equals("Português")){
+				levelDescription = "PT";
 			}
 		}
 
@@ -157,7 +172,7 @@ public class ContractUtil {
 			languageList.put("Inglês 6 (B1.2)", "Inglês 6 (B1.2)");
 			languageList.put("Inglês Conv.(B1/B2)", "Inglês Conv.(B1/B2)");
 		} else if(description.equals("PORTUGUÊS")){
-			languageList.put("Português(BR)", "Português(BR)");
+			languageList.put("Português", "Português");
 
 		}
 
@@ -275,4 +290,17 @@ public class ContractUtil {
 		return classDayValue;
 	}
 
+	
+	public TreeMap<String, String> getFullPaymentTypeComboList(){
+		TreeMap<String, String> paymentTypeList = new TreeMap<String, String>();
+		
+		paymentTypeList.put("PagSeguro/Crédito", "PagSeguro/Crédito");
+		paymentTypeList.put("Cartão de Débito", "Cartão de Débito");
+		paymentTypeList.put("Boleto", "Boleto");
+		paymentTypeList.put("Depósito", "Depósito");
+		paymentTypeList.put("Dinheiro", "Dinheiro");
+		paymentTypeList.put("Gratuito", "Gratuito");
+		
+		return paymentTypeList;
+	}
 }

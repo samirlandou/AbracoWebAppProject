@@ -16,7 +16,7 @@ import org.primefaces.extensions.event.ClipboardErrorEvent;
 import org.primefaces.extensions.event.ClipboardSuccessEvent;
 
 import br.com.abracowebmanagement.dao.ContractModelDAO;
-import br.com.abracowebmanagement.domain.ContractModelDomain;
+import br.com.abracowebmanagement.domain.contract.ContractModelDomain;
 
 @ManagedBean
 @ViewScoped
@@ -26,12 +26,15 @@ public class ContractModelController implements Serializable {
 	
 	private ContractModelDomain contractModelDomain;
 	private List<ContractModelDomain> contractModelsDomain;
+	ContractModelDomain resultDomain;
 	
 	private String textFromEditor;
-	
+	String oldDescription;
 	
 	//Login Controller
 	LoginController loginController = new LoginController();
+
+	
 	
 	/**
 	 * List Method. <br/>
@@ -49,6 +52,8 @@ public class ContractModelController implements Serializable {
 			FacesContext fc = FacesContext.getCurrentInstance();
 			loginController = (LoginController) fc.getExternalContext().getSessionMap().get("loginController");
 			
+			//Set old Description
+			oldDescription = "";
 		} catch (Exception e) {
 			Messages.addGlobalError("Ocorreu um erro ao listar as informações dos modelos de contrato !!!");
 			e.printStackTrace();			
@@ -68,6 +73,9 @@ public class ContractModelController implements Serializable {
 		
 		//Reset textFromEditor value
 		textFromEditor = new String();
+		
+		//Set Old Description
+		oldDescription = getContractModelDomain().getContractModelName();
 	}
 	
 
@@ -86,29 +94,55 @@ public class ContractModelController implements Serializable {
 		context.addMessage(null, message);*/		
 		
 		try {
+			
+			//Set Save Flag
+			 boolean saveFlag = true;
+			 
 			//Save Person with merge method
 			ContractModelDAO contractModelDAO = new ContractModelDAO();
 			
-			//get byte from String
-			contractModelDomain.setContractModelDescription(textFromEditor.getBytes());
+			//Instantiate Result Domain
+			resultDomain = new ContractModelDomain();
 			
-			//Save Actual Date
-			contractModelDomain.setSaveContractModelDate(new Date());
-			
-			//Set LoginUser
-			contractModelDomain.setContractModelSaveLoginUser(loginController.getLoggedUser().getUserName());
-			
-			//Do Merge
-			contractModelDAO.merge(contractModelDomain);
-			
-			//Clean informations in the panelGrid
-			//doNewRegister();
-			
-			//List again Person (very import to update the list)
-			contractModelsDomain = contractModelDAO.list();
-			
-			//This code is used with OmniFaces and it is more practice than PrimeFaces implementation.
-			Messages.addGlobalInfo("Salvou com sucesso!");
+			if (oldDescription != null && (resultDomain = contractModelDAO
+					.findByContractModelName(contractModelDomain.getContractModelName())) != null) {
+
+				if (oldDescription.equalsIgnoreCase(contractModelDomain.getContractModelName())) {
+
+					// Set Save Flag
+					saveFlag = false;
+
+					// Error Message
+					Messages.addGlobalError("O Modelo de Contrato \"" + contractModelDomain.getContractModelName() + "\" já existe.");
+
+				}
+			}
+
+			//Condition to save or not the information according to the ContractModelName
+			if(saveFlag){
+				
+				//get byte from String
+				contractModelDomain.setContractModelDescription(textFromEditor.getBytes());
+				
+				//Save Actual Date
+				contractModelDomain.setSaveContractModelDate(new Date());
+				
+				//Set LoginUser
+				contractModelDomain.setContractModelSaveLoginUser(loginController.getLoggedUser().getUserName());
+				
+				//Do Merge
+				contractModelDAO.merge(contractModelDomain);
+				
+				//Clean informations in the panelGrid
+				//doNewRegister();
+				
+				//List again Person (very import to update the list)
+				contractModelsDomain = contractModelDAO.list();
+				
+				//This code is used with OmniFaces and it is more practice than PrimeFaces implementation.
+				Messages.addGlobalInfo("Salvou com sucesso!");				
+			}
+
 		} catch (Exception e) {
 			Messages.addGlobalError("Ocorreu um erro ao salvar as informações do modelo do contrato!");
 			e.printStackTrace();
@@ -161,6 +195,8 @@ public class ContractModelController implements Serializable {
 					.get("selectedPersonByCursor");
 			textFromEditor = new String(contractModelDomain.getContractModelDescription(), Charset.defaultCharset());
 			
+			//Set Old Description
+			oldDescription = "";
 		} catch (Exception e) {
 			Messages.addGlobalError("Ocorreu um erro ao editar as informações de: " + contractModelDomain.getContractModelName());
 			e.printStackTrace();			
@@ -173,7 +209,7 @@ public class ContractModelController implements Serializable {
 	 * @param successEvent
 	 */
 	public void successListener(final ClipboardSuccessEvent successEvent){
-		Messages.addGlobalInfo("O código foi copiado com sucesso!");
+		Messages.addGlobalInfo("A Tag foi copiada com sucesso!");
 	}
 	
 	
@@ -182,7 +218,7 @@ public class ContractModelController implements Serializable {
 	 * @param errorEvent
 	 */
 	public void errorListener(final ClipboardErrorEvent errorEvent){
-		Messages.addGlobalError("Erro ao copiar o código do contrato!");
+		Messages.addGlobalError("Erro ao copiar a Tag do contrato!");
 	}
 
 
