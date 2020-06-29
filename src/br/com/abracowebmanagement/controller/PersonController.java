@@ -292,12 +292,13 @@ public class PersonController implements Serializable {
 			Messages.addGlobalInfo(personDomain.getCompleteName() + " foi excluido com sucesso!!!");
 			
 		} catch (Exception e) {
-			if(e.equals("ConstraintViolationException")){
-				Messages.addGlobalError("Não pode deletar pois os dados de \"" + personDomain.getCompleteName() + "\" está sendo usado em outro processo!!!");
+			/*ConstraintViolationException*/
+			if(e.getCause().toString().contains("SQLIntegrityConstraintViolationException")){
+				Messages.addGlobalError("Não pode deletar pois o dado \"" + personDomain.getCompleteName() + "\" está sendo usado em outro processo!!!");
 			} else{
 				Messages.addGlobalError("Ocorreu um erro ao tentar excluir as informações de: " + personDomain.getCompleteName());
 			}
-			e.printStackTrace();			
+			e.printStackTrace();
 		}
 	}
 

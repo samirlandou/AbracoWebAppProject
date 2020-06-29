@@ -63,7 +63,7 @@
 										title="Deletar Modelo Contrato"
 										update=":idMsgGlobal 
 												:contractModelListFormID:contractModelDataTableFormID">
-							<p:confirm header="Confirmação" message="Deseja excluir #{cursor.contractModelName}?" icon="ui-icon-alert"/>
+							<p:confirm header="Confirmação" message="Deseja excluir #{cursor.contractModelName}?" icon="fa fa-exclamation-triangle"/>
 							<f:attribute name="selectedPersonByCursor" value="#{cursor}"/>
 						</p:commandButton>
 					</p:column>
@@ -257,7 +257,7 @@
 									
 									<p:outputLabel value="UNIDADE_CURSO "/>
 									<p:commandButton id="btnCopyClassPlaceID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
-									<pe:clipboard id="clipAjaxClassPlaceID" trigger="btnCopyClassPlaceID" action="copy" text="LUGAR_CURSO">  
+									<pe:clipboard id="clipAjaxClassPlaceID" trigger="btnCopyClassPlaceID" action="copy" text="UNIDADE_CURSO">  
 							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
 							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
 									</pe:clipboard>
@@ -389,9 +389,9 @@
 									<p:separator/>
 									<br/>
 									
-									<p:outputLabel value="PAGAMENTO "/>
+									<p:outputLabel value="TIPO_PAGAMENTO "/>
 									<p:commandButton id="btnCopylPaymentID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
-									<pe:clipboard id="clipAjaxClassPaymentID" trigger="btnCopylPaymentID" action="copy" text="PRECO_PROFESSOR_CURSO">  
+									<pe:clipboard id="clipAjaxClassPaymentID" trigger="btnCopylPaymentID" action="copy" text="TIPO_PAGAMENTO">  
 							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
 							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
 									</pe:clipboard>

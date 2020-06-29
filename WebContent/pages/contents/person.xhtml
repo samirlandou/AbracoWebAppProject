@@ -110,7 +110,7 @@
 										update=":idMsgGlobal
 												:personListFormID:personDataTableFormID">
 												
-							<p:confirm header="Confirmação" message="Deseja excluir #{cursor.completeName}?" icon="ui-icon-alert"/>
+							<p:confirm header="Confirmação" message="Deseja excluir #{cursor.completeName}?" icon="fa fa-exclamation-triangle"/>
 							<f:attribute name="selectedPersonByCursor" value="#{cursor}"/>
 						</p:commandButton>
 					</p:column>
@@ -164,8 +164,8 @@
 	
 			<!-- DIALOG TO REGISTER NEW USER-->
 			<p:dialog header="Cadastrar Pessoa" widgetVar="dlgNewPerson"
-				draggable="false" resizable="false" modal="true" closable="false"
-				appendTo="@(body)" maximizable="true">
+				draggable="false" resizable="true" modal="true" closable="false"
+				appendTo="@(body)" maximizable="true" responsive="true">
 	
 				<!-- FORM FOR THE DIALOG -->
 				<h:form id="personRegisterFormID">
@@ -237,8 +237,8 @@
 						<p:spacer height="10px"/>
 						
 						<p:outputLabel value="Perfil: *" />
-						<p:selectOneMenu id="perfilComboID" filter="false" value="#{personController.personDomain.profile}" autoWidth="false"
-							style="width: 150px"
+						<p:selectOneMenu id="perfilComboID" filter="false" value="#{personController.personDomain.profile}"
+							autoWidth="false" style="width: 215px"
 							converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="O campo 'Perfil' é obrigatório">
 							<f:selectItem noSelectionOption="true" itemLabel="Selecione um perfil" />
 							<f:selectItem itemLabel="ESTUDANTE" itemValue="ESTUDANTE" itemDisabled="#{!personController.itemDisabledFlag}"/>
@@ -252,6 +252,7 @@
 											
 						<p:outputLabel value="Língua1: *" />
 						<p:selectOneMenu id="language1ComboID" filter="false" value="#{personController.personDomain.language1}"
+							autoWidth="false" style="width: 215px"
 							converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="O campo 'Língua1' é obrigatório">
 							<f:selectItem noSelectionOption="true" itemLabel="Selecione uma Língua" />
 							<f:selectItem itemLabel="ÁRABE" itemValue="AR"/>
@@ -263,6 +264,7 @@
 
 						<p:outputLabel value="Língua2: " />
 						<p:selectOneMenu id="language2ComboID" filter="false" value="#{personController.personDomain.language2}"
+							autoWidth="false" style="width: 215px"
 							converter="omnifaces.SelectItemsConverter">
 							<f:selectItem noSelectionOption="true" itemLabel="Selecione uma Língua" />
 							<f:selectItem itemLabel="ÁRABE" itemValue="AR"/>
@@ -274,6 +276,7 @@
 
 						<p:outputLabel value="Língua3: " />
 						<p:selectOneMenu id="language3ComboID" filter="false" value="#{personController.personDomain.language3}"
+							autoWidth="false" style="width: 215px"
 							converter="omnifaces.SelectItemsConverter">
 							<f:selectItem noSelectionOption="true" itemLabel="Selecione uma Língua" />
 							<f:selectItem itemLabel="ÁRABE" itemValue="AR"/>
@@ -286,7 +289,7 @@
 						<br/>
 						<p:spacer height="2px" width="0px"/>
 																	
-						<p:outputLabel value="Status: " />
+						<p:outputLabel value="Status: "/>
 						<p:toggleSwitch value="#{personController.personDomain.status}" disabled="#{!personController.itemDisabledFlag}">
 							<p:ajax listener="#{personController.addMessage}" update=":idMsgGlobal" />
 						</p:toggleSwitch>

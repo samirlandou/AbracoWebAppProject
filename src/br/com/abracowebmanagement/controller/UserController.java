@@ -20,7 +20,7 @@ import org.omnifaces.util.Messages;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
-import org.primefaces.model.UploadedFile;
+import org.primefaces.model.file.UploadedFile;
 import org.primefaces.shaded.commons.io.FilenameUtils;
 
 import br.com.abracowebmanagement.dao.PersonDAO;
@@ -61,7 +61,7 @@ public class UserController implements Serializable {
 	
 	UserDomain resultDomain;
 	
-	private UploadedFile file;
+	private UploadedFile File;
 	
 	private String oldPassword;
 		
@@ -484,7 +484,7 @@ public class UserController implements Serializable {
     			tempFiles.add(tempFile);
     			
     			//Copy original file into destination file
-    			Files.copy(uploadFile.getInputstream(), tempFile, StandardCopyOption.REPLACE_EXISTING);
+    			Files.copy(uploadFile.getInputStream(), tempFile, StandardCopyOption.REPLACE_EXISTING);
     			
     			//Get path through @Transcient
     			userDomain.setImageUserPath(tempFile.toString());
@@ -625,16 +625,6 @@ public class UserController implements Serializable {
 	}
 
 
-	public UploadedFile getFile() {
-		return file;
-	}
-
-
-	public void setFile(UploadedFile file) {
-		this.file = file;
-	}
-
-
 	public boolean isDisableDeleteImageButton() {
 		return disableDeleteImageButton;
 	}
@@ -652,6 +642,16 @@ public class UserController implements Serializable {
 
 	public void setOldPassword(String oldPassword) {
 		this.oldPassword = oldPassword;
+	}
+
+
+	public UploadedFile getFile() {
+		return File;
+	}
+
+
+	public void setFile(UploadedFile file) {
+		File = file;
 	}
 
 /*

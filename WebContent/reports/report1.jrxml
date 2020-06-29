@@ -12,8 +12,11 @@
 	<title>
 		<band height="30" splitType="Stretch">
 			<staticText>
-				<reportElement x="250" y="0" width="60" height="30" uuid="0acb769b-69ee-4313-aae2-645e3a7d650b"/>
-				<text><![CDATA[the first title]]></text>
+				<reportElement x="200" y="0" width="130" height="30" uuid="0acb769b-69ee-4313-aae2-645e3a7d650b"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Contrato do Professor]]></text>
 			</staticText>
 		</band>
 	</title>

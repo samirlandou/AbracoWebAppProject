@@ -97,7 +97,7 @@
 							<p:commandButton icon="fa fa-trash" actionListener="#{userController.doDelete}"
 											update=":idMsgGlobal :userListFormId:userDataTableFormId"
 											disabled="#{cursor.id == 1 ? true : false}">
-								<p:confirm header="Confirmação" message="Deseja excluir #{cursor.personDomain.completeName}?" icon="ui-icon-alert"/>
+								<p:confirm header="Confirmação" message="Deseja excluir #{cursor.personDomain.completeName}?" icon="fa fa-exclamation-triangle"/>
 								<f:attribute name="selectedUserByCursor" value="#{cursor}"/>
 							</p:commandButton>
 						</p:column>
@@ -141,23 +141,23 @@
 	
 	
 			<!-- DIALOG TO REGISTER NEW USER -->
-			<p:dialog header="Cadastrar/Editar Novo Usuário" widgetVar="dlgNewUser"
+			<p:dialog header="Cadastrar Usuário" widgetVar="dlgNewUser"
 				draggable="true" resizable="true" modal="true" closable="false"
-				appendTo="@(body)" position="top" maximizable="true" responsive="true">
+				appendTo="@(body)" position="center" maximizable="true" responsive="true">
 	
 				<!-- FORM FOR THE DIALOG -->
 				<h:form id="userRegisterFormId" enctype="multipart/form-data">
 				
 					<!-- PANEL GRID TO FILL FORMS -->
-					<p:scrollPanel mode="native">
+					<p:scrollPanel mode="native" style="width: 400px; heigh: 300px; margin: 0 auto;">
 					
 					<h:panelGrid id="userInputRegisterPnlId" columns="2" styleClass="panelGridCenter">			
 						<p:outputLabel value="Usuário: *" />
-						<p:inputText value="#{userController.userDomain.userName}" maxlength="30" size="27"
+						<p:inputText value="#{userController.userDomain.userName}" maxlength="30" size="30"
 									required="true" requiredMessage="O campo 'Usuário' é obrigatório"/>
 									
 						<p:outputLabel value="CNPJ: *" />
-						<p:inputMask value="#{userController.userDomain.cnpj}" maxlength="14" size="27" 
+						<p:inputMask value="#{userController.userDomain.cnpj}" maxlength="14" size="30" 
 									mask="99.999.999/9999-99"
 									required="true" requiredMessage="O campo 'CNPJ' é obrigatório">
 									<p:ajax event="change"
@@ -169,13 +169,13 @@
 						</p:inputMask>
 						
 						<p:outputLabel value="Senha: *" />
-						<p:password value="#{userController.userDomain.passwordWithoutCryptography}" maxlength="12" size="27"
+						<p:password value="#{userController.userDomain.passwordWithoutCryptography}" maxlength="12" size="30"
 									promptLabel="Digite a senha" weakLabel="fraco" goodLabel="Intermediário" strongLabel="forte"
 									feedback="true" inline="true" redisplay="true" id="passwordID"
 									required="true" requiredMessage="O campo 'Senha' é obrigatório"/>
 									
 						<p:outputLabel value="Confirmar Senha: *" />
-						<p:password value="#{userController.oldPassword}" maxlength="12" size="27"
+						<p:password value="#{userController.oldPassword}" maxlength="12" size="30"
 									promptLabel="Digite a senha" weakLabel="fraco" goodLabel="Intermediário" strongLabel="forte"
 									feedback="true" inline="true" redisplay="true" id="oldPasswordID"
 									required="true" requiredMessage="O campo 'Confirmar Senha' é obrigatório"/>									
@@ -188,8 +188,9 @@
 						<h:outputText id="display"/>
 						
 						<p:outputLabel value="Nome da Pessoa: *" />
-						<p:selectOneMenu id="userId" filter="true" value="#{userController.userDomain.personDomain}"
-							converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="O campo 'Pessao' é obrigatório">
+						<p:selectOneMenu id="userId" filter="true" value="#{userController.userDomain.personDomain}" autoWidth="false"
+							converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="O campo 'Pessao' é obrigatório"
+							style="width:215px">
 							<f:selectItem noSelectionOption="true" itemLabel="Selecione uma pessoa" />
 							<f:selectItems value="#{userController.personsDomain}" var="person"
 							itemValue="#{person}"
@@ -228,11 +229,12 @@
 					
 					
 					
-					<h:panelGrid id="userInputRegisterLanguagePnlId" columns="2">
+					<h:panelGrid id="userInputRegisterLanguagePnlId" columns="2" styleClass="panelGridCenter">
 						
-						<p:outputLabel value="Língua1: *"/>
-						<p:selectOneMenu id="teachingLanguage1ComboID" filter="false" value="#{userController.userDomain.teachinglanguage1}"
-							converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="O campo 'Língua1' é obrigatório">
+						<p:outputLabel value="1a língua de ensino: *"/>
+						<p:selectOneMenu id="teachingLanguage1ComboID" filter="false" value="#{userController.userDomain.teachingLanguage1}"
+							autoWidth="false" style="width: 210px"
+							converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="O campo '1a língua de ensino' é obrigatório">
 							<f:selectItem noSelectionOption="true" itemLabel="Selecione uma Língua"/>
 							<f:selectItem itemLabel="ÁRABE" itemValue="AR"/>
 							<f:selectItem itemLabel="ESPANHOL" itemValue="ES"/>
@@ -241,9 +243,10 @@
 							<f:selectItem itemLabel="PORTUGUÊS" itemValue="PT"/>
 						</p:selectOneMenu>	
 						
-						<p:outputLabel value="Língua2: "/>
-						<p:selectOneMenu id="teachingLanguage2ComboID" filter="false" value="#{userController.userDomain.teachinglanguage2}"
-							converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="O campo 'Língua1' é obrigatório">
+						<p:outputLabel value="2a língua de ensino: "/>
+						<p:selectOneMenu id="teachingLanguage2ComboID" filter="false" value="#{userController.userDomain.teachingLanguage2}"
+							autoWidth="false" style="width: 210px"
+							converter="omnifaces.SelectItemsConverter">
 							<f:selectItem noSelectionOption="true" itemLabel="Selecione uma Língua"/>
 							<f:selectItem itemLabel="ÁRABE" itemValue="AR"/>
 							<f:selectItem itemLabel="ESPANHOL" itemValue="ES"/>

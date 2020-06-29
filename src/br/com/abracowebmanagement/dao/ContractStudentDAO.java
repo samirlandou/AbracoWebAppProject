@@ -14,7 +14,7 @@ public class ContractStudentDAO extends GenericDAO<ContractStudentDomain> {
 
 	
 	/**
-	 * Find constract code
+	 * Find contract code
 	 * @param contractName
 	 * @return
 	 */

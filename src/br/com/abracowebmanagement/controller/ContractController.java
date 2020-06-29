@@ -1,6 +1,7 @@
 package br.com.abracowebmanagement.controller;
 
 import java.io.Serializable;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -67,8 +68,8 @@ public class ContractController extends HttpServlet implements Serializable {
 	private ContractSettingDomain contractSettingDomain = new ContractSettingDomain();
 	
 	//list<Domain>
-	private List<ContractDomain> contractsDomain;
-	private List<ContractStudentDomain> contractStudentsDomain;
+	private List<ContractDomain> contractsDomain = 	new ArrayList<ContractDomain>();
+	private List<ContractStudentDomain> contractStudentsDomain = new ArrayList<ContractStudentDomain>();;
 	
 	//Controller
 	LoginController loginController = new LoginController();
@@ -86,7 +87,6 @@ public class ContractController extends HttpServlet implements Serializable {
 	
 	//Skip for wizard component
 	private boolean skip;
-	private boolean skipRendered;
 	private boolean	secondClassDayRendered;
 	private boolean	saveRendered;
 	
@@ -155,7 +155,8 @@ public class ContractController extends HttpServlet implements Serializable {
 	/**
 	 * New Contract
 	 */
-	public void doNewRegister(){		
+	public void doNewRegister(){	
+		
 		//Instantiate new Contract
 		contractDomain = new ContractDomain();
 		
@@ -180,6 +181,9 @@ public class ContractController extends HttpServlet implements Serializable {
 	 */
 	public void doClean(){
 		
+		//Instantiate new Contract
+		contractDomain = new ContractDomain();
+		
 		//Contract class
 		total = "";
 		totalWeekly = "";
@@ -195,7 +199,6 @@ public class ContractController extends HttpServlet implements Serializable {
 		classDayQuantity = 1;
 				
 		//set skip
-		skipRendered = false;
 		skip = false;
 		
 		//Set Save
@@ -206,6 +209,9 @@ public class ContractController extends HttpServlet implements Serializable {
 		
 		//Save Student
 		saveStudentFlag = false;
+		
+		//Set Day Class Full Description
+		dayClassFullDescription ="";		
 	}
 	
 	
@@ -473,6 +479,9 @@ public class ContractController extends HttpServlet implements Serializable {
         		
         	} else{
 			
+        		//Set Contract Code Description to UpperCase
+        		contractDomain.setContractCodeDescription(contractDomain.getContractCodeDescription().toUpperCase());
+        		
 				//Save Actual Date
 				contractDomain.setSaveContractDate(new Date());
 				
@@ -487,6 +496,9 @@ public class ContractController extends HttpServlet implements Serializable {
 				
 				//Clean informations in the panelGrid
 				doNewRegister();
+				
+				//Instantiate Contracts
+				contractsDomain = new ArrayList<ContractDomain>();
 				
 				//List again Contract (very import to update the list)
 				contractsDomain = contractDAO.descendList("id");
@@ -557,11 +569,26 @@ public class ContractController extends HttpServlet implements Serializable {
 			//Capture the event from the cursor in contract.xhtml
 			contractDomain = (ContractDomain) event.getComponent().getAttributes()
 					.get("selectedContractByCursor");
+			
+			//Search for ContractStudent with contract as Foreign Key
+			List<ContractStudentDomain> searchContractStudentToBeDeleted = new ArrayList<ContractStudentDomain>();
+			
+			//Delete Student
+			ContractStudentDAO contractStudentDAO = new ContractStudentDAO();
+			
+			//List contractStudent
+			searchContractStudentToBeDeleted = contractStudentDAO.listByContractCodeDescription(contractDomain.getContractCodeDescription());
+			
+			//Delete all data form contracStudentDomain which contain contractDomain as Foreign Key
+			contractStudentDAO.deleteListOfEntities(searchContractStudentToBeDeleted);
 
 			//Delete Contract
 			ContractDAO contractDAO = new ContractDAO();
-			contractDAO.delete(contractDomain);
-						
+			contractDAO.delete(contractDomain);			
+			
+			//Instantiate Contracts
+			contractsDomain = new ArrayList<ContractDomain>();
+			
 			//List again Contract (very import to update the list)
 			contractsDomain = contractDAO.descendList("id");
 			
@@ -594,7 +621,10 @@ public class ContractController extends HttpServlet implements Serializable {
 			//Delete Student
 			ContractStudentDAO contractStudentDAO = new ContractStudentDAO();
 			contractStudentDAO.delete(contractStudentDomain);
-						
+			
+			//Instantiate ContractStudent
+			contractStudentsDomain = new ArrayList<ContractStudentDomain>();
+			
 			//List again Contract Student (very import to update the list)
 			contractStudentsDomain = contractStudentDAO.listByContractCodeDescription(contractDomain.getContractCodeDescription());
 			
@@ -695,7 +725,10 @@ public class ContractController extends HttpServlet implements Serializable {
 		newPersonDomain = new PersonDomain();
 		
 		//Set personCPF
-		personCPF = "";		
+		personCPF = "";
+		
+		//Set enable component Value
+		enableComponentOnContractStudent = false;
 	}
 	
 	
@@ -771,8 +804,11 @@ public class ContractController extends HttpServlet implements Serializable {
 		//Create Map to store parameters
 		Map<String, Object> parameters = new HashMap<>();
 		
+		//Get contract Model Professor Contract Body and Convert Bytes into String
+		contractBody = new String(contractDomain.getProfessorContractModelDomain().getContractModelDescription(), Charset.defaultCharset());
+		
 		//Define Map's Parameters
-		parameters.put("ContractBody", getContractBody());
+		parameters.put("ContractBody", doGetRealContractBody(contractBody));
 		//parameters.put("AbracoLogo", imagePath);
     	
 
@@ -843,12 +879,21 @@ public class ContractController extends HttpServlet implements Serializable {
     public String doContractFlowProcess(FlowEvent event) {
         if(skip) {
             skip = false; //reset in case user goes back
-            return "confirm";
+            return "languageTabID";
         } else {
         	
         	if(event.getNewStep().equals("contractModelTabID")){       		
         		if(contractModelsDomain.isEmpty()){
         			Messages.addGlobalWarn("Favor, criar um modelo de contrato antes de continuar!");
+        			return event.getOldStep();
+        		}
+        	}
+        	
+        	if(event.getNewStep().equals("placeTabID")){
+        		
+        		if(contractDomain.getBeginDate().after(contractDomain.getEndDate())){
+        			Messages.addGlobalWarn("A data do início informado é superior à data de término.");
+        			return event.getOldStep();
         		}
         	}
         	
@@ -865,6 +910,141 @@ public class ContractController extends HttpServlet implements Serializable {
     }
    
  
+    public String doGetRealContractBody(String body){
+		
+    	String replaceContractBody = body.toString();
+ 
+    	  	
+    	/**
+    	 * Person who is contracting TAG
+    	 */
+    	if(body.contains("PROFESSOR_CURSO")){
+    		replaceContractBody = replaceContractBody.replaceAll("PROFESSOR_CURSO", contractDomain.getPrincipalProfesssorPersonDomain().getPersonDomain().getCompleteName());
+    	}
+    	
+    	if(body.contains("E-MAIL_PESSOA")){
+    		replaceContractBody = replaceContractBody.replaceAll("E-MAIL_PESSOA", contractDomain.getPrincipalProfesssorPersonDomain().getPersonDomain().getEmail());
+    	}   	
+ 
+    	if(body.contains("TELEFONE_PESSOA")){
+    		replaceContractBody = replaceContractBody.replaceAll("TELEFONE_PESSOA", contractDomain.getPrincipalProfesssorPersonDomain().getPersonDomain().getTelephone());
+    	} 
+    	 
+    	if(body.contains("CPF_PESSOA")){
+    		replaceContractBody = replaceContractBody.replaceAll("CPF_PESSOA", contractDomain.getPrincipalProfesssorPersonDomain().getPersonDomain().getCpf());
+    	}     	
+	   	 
+	   	if(body.contains("CNPJ_PESSOA")){
+	   		replaceContractBody = replaceContractBody.replaceAll("CNPJ_PESSOA", contractDomain.getPrincipalProfesssorPersonDomain().getCnpj());
+	   	}
+	   	   	 
+	   	if(body.contains("ENDERECO_PESSOA")){
+	   		replaceContractBody = replaceContractBody.replaceAll("ENDERECO_PESSOA", contractDomain.getPrincipalProfesssorPersonDomain().getPersonDomain().getAddress());
+	   	}	   	
+
+	   	
+    	/**
+    	 * Course TAG
+    	 */	   	 
+	   	if(body.contains("CODIGO_CONTRATO")){
+	   		replaceContractBody = replaceContractBody.replaceAll("CODIGO_CONTRATO", contractDomain.getContractCodeDescription());
+	   	}	   	
+	   	 
+	   	if(body.contains("UNIDADE_CURSO")){
+	   		replaceContractBody = replaceContractBody.replaceAll("UNIDADE_CURSO", methodUtil.toCamelCase(contractDomain.getClassPlaceDescription()));
+	   	}
+	   	 
+	   	if(body.contains("MODULO_CURSO")){
+	   		replaceContractBody = replaceContractBody.replaceAll("MODULO_CURSO", contractDomain.getClassModuleDescription().toLowerCase());
+	   	}	   	
+	   	 
+	   	if(body.contains("LINGUA_CURSO")){	   		
+	   		replaceContractBody = replaceContractBody.replaceAll("LINGUA_CURSO", methodUtil.toCamelCase(contractDomain.getClassLanguageDescription()));
+	   	}	   	
+	   	 
+	   	if(body.contains("NIVEL_CURSO")){
+	   		replaceContractBody = replaceContractBody.replaceAll("NIVEL_CURSO", contractDomain.getClassLevelDescription());
+	   	} 	
+	   	 
+	   	if(body.contains("HORA_INICIO_CURSO")){
+	   		replaceContractBody = replaceContractBody.replaceAll("HORA_INICIO_CURSO", dateUtil.convertIntoHHmm(contractDomain.getBeginClassHour()));
+	   	} 	   	
+	   	 
+	   	if(body.contains("HORA_TERMINO_CURSO")){
+	   		replaceContractBody = replaceContractBody.replaceAll("HORA_TERMINO_CURSO", dateUtil.convertIntoHHmm(contractDomain.getEndClassHour()));
+	   	} 	   	
+	   	 
+	   	if(body.contains("PAUSA_CURSO")){
+	   		replaceContractBody = replaceContractBody.replaceAll("PAUSA_CURSO", 
+	   				contractDomain.getBreakClassHour() == 0? "sem pausa" : "com uma pausa de " + dateUtil.formatDurationTime(contractDomain.getBreakClassHour()));
+	   	}	   	
+	   	 
+	   	if(body.contains("TEMPO_CURSO")){
+	   		replaceContractBody = replaceContractBody.replaceAll("TEMPO_CURSO", dateUtil.formatDurationTime(contractDomain.getClassTimeHour()));
+	   	}	   	
+	   	 
+	   	if(body.contains("HORA_SEMANAL_CURSO")){
+	   		replaceContractBody = replaceContractBody.replaceAll("HORA_SEMANAL_CURSO", dateUtil.formatDurationTime(contractDomain.getClassWeeklyTimeHour()));
+	   	}	   	
+	   	 
+	   	if(body.contains("PRIMEIRO_DIA_LETIVO")){
+	   		replaceContractBody = replaceContractBody.replaceAll("PRIMEIRO_DIA_LETIVO", methodUtil.toCamelCase(contractDomain.getFirstClassDayDescription()));
+	   	}	   	
+	   	 
+	   	if(body.contains("SEGUNDO_DIA_LETIVO")){
+	   		replaceContractBody = replaceContractBody.replaceAll("SEGUNDO_DIA_LETIVO", methodUtil.toCamelCase(contractDomain.getSecondClassDayDescription()));
+	   	}	   	
+	   	
+	   	//Change after this value
+	   	if(body.contains("PRECO_PADRAO_CURSO")){
+	   		replaceContractBody = replaceContractBody.replaceAll("PRECO_PADRAO_CURSO", methodUtil.currencyFormat(contractDomain.getRealPriceDescription()));
+	   	}   	
+	   	
+	   	//Change after this value
+	   	if(body.contains("PRECO_PROFESSOR_CURSO")){
+	   		replaceContractBody = replaceContractBody.replaceAll("PRECO_PROFESSOR_CURSO", methodUtil.currencyFormat(contractDomain.getProfessorPriceDescription()));
+	   	}   	
+	   	 
+	   	if(body.contains("PACOTE_HORA_CURSO")){
+	   		replaceContractBody = replaceContractBody.replaceAll("PACOTE_HORA_CURSO", String.valueOf(contractDomain.getClassPackageHour())+"h");
+	   	}	
+	   		   	
+	   	//Change after this value
+	   	if(body.contains("PRECO_PROFESSOR_TOTAL_CURSO")){
+	   		replaceContractBody = replaceContractBody.replaceAll("PRECO_PROFESSOR_TOTAL_CURSO", methodUtil.currencyFormat(contractDomain.getTotalPackageProfessorPriceDescription()));
+	   	}
+	   	
+	   	
+	   	/**
+	   	 * DeadLine
+	   	 */
+	   	 
+	   	if(body.contains("DATA_INICIO_CURSO")){	   		
+	   		replaceContractBody = replaceContractBody.replaceAll("DATA_INICIO_CURSO", dateUtil.convertIntoddMMyyyy(contractDomain.getBeginDate()));
+	   	}
+	   	
+	   	if(body.contains("DATA_TERMINO_CURSO")){	   		
+	   		replaceContractBody = replaceContractBody.replaceAll("DATA_TERMINO_CURSO", dateUtil.convertIntoddMMyyyy(contractDomain.getEndDate()));
+	   	}	   	
+	   	
+	   	
+	   	/**
+	   	 * Payment
+	   	 */ 	   	 
+	  	/*if(body.contains("TIPO_PAGAMENTO")){
+	  		replaceContractBody = replaceContractBody.replaceAll("TIPO_PAGAMENTO", "");
+	  	}*/	
+	   	
+	  	/*if(body.contains("FORMA_PAGAMENTO")){
+  		replaceContractBody = replaceContractBody.replaceAll("TIPO_PAGAMENTO", "");
+  		}*/
+	   	
+	   	
+    	return replaceContractBody;   	
+    }
+    
+    
+    
 	/**
 	 * Flow Process to fill forms
 	 * @author samirlandou <br/>
@@ -986,6 +1166,9 @@ public class ContractController extends HttpServlet implements Serializable {
 	public void doListStudents(ContractDomain contractDomain){
 		try {
 			
+			//Instantiate contractStudentsDomain
+			contractStudentsDomain = new ArrayList<ContractStudentDomain>();
+			
 			//List Contract Students
 			ContractStudentDAO contractStudentDAO = new ContractStudentDAO();
 			contractStudentsDomain = contractStudentDAO.listByContractCodeDescription(contractDomain.getContractCodeDescription());
@@ -1025,6 +1208,9 @@ public class ContractController extends HttpServlet implements Serializable {
 				//Save contractStudent
 				contractStudentDAO.merge(contractStudentDomain);
 				
+				//Instantiate contractStudentsDomain
+				contractStudentsDomain = new ArrayList<ContractStudentDomain>();
+				
 				//List Student Contract
 				contractStudentsDomain = contractStudentDAO.listByContractCodeDescription(contractDomain.getContractCodeDescription());
 				
@@ -1058,6 +1244,9 @@ public class ContractController extends HttpServlet implements Serializable {
 			
 			//Save contractStudent
 			contractStudentDAO.merge(contractStudentDomain);
+			
+			//Instantiate ContractStudentDomain
+			contractStudentsDomain = new ArrayList<ContractStudentDomain>();
 			
 			//List Student Contract
 			contractStudentsDomain = contractStudentDAO.listByContractCodeDescription(
@@ -1181,6 +1370,14 @@ public class ContractController extends HttpServlet implements Serializable {
 		Messages.addGlobalInfo(activeBreakClassHour ? "Aula com Pausa de 15mn" : "Aula sem Pausa!");
 	}
 
+
+    /**
+     * Contract Received Certificate Message
+     */
+	public void addContractReceivedCertificateMessage() {
+		//Add Message for selectBooleanCheckBox Component
+		Messages.addGlobalInfo(contractStudentDomain.getReceivedCertificateFlag() ? "Certificado recebido." : "Certificado não recebido.");
+	}
 
     /**
      * Contract Break Class Hour Message
@@ -1346,16 +1543,6 @@ public class ContractController extends HttpServlet implements Serializable {
 
 	public void setTotal(String total) {
 		this.total = total;
-	}
-
-
-	public boolean isSkipRendered() {
-		return skipRendered;
-	}
-
-
-	public void setSkipRendered(boolean skipRendered) {
-		this.skipRendered = skipRendered;
 	}
 
 

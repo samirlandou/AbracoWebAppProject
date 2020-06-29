@@ -59,7 +59,7 @@
 		<dependency>
 			<groupId>org.primefaces</groupId>
 			<artifactId>primefaces</artifactId>
-			<version>7.0</version>
+			<version>8.0</version>
 		</dependency>
 
 		<!-- All-theme PrimeFaces -->
@@ -74,7 +74,7 @@
 		<dependency>
 			<groupId>org.primefaces.extensions</groupId>
 			<artifactId>primefaces-extensions</artifactId>
-			<version>7.0.2</version>
+			<version>8.0</version>
 		</dependency>
 
 		<!-- PrimeFaces Extension - CKEditor (see also the PDF exporter dependencies) 
@@ -137,12 +137,20 @@
 		  <type>pom</type>
 		</dependency> -->
 		
-		<!-- Hibernate  -->
+		<!-- Hibernate old 
 		<dependency>
 		   <groupId>org.hibernate</groupId>
 		   <artifactId>hibernate-core</artifactId>
 		   <version>4.3.6.Final</version>
+		</dependency> -->
+		
+		<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
+		<dependency>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-core</artifactId>
+		    <version>4.3.11.Final</version>
 		</dependency>
+		
 		
 		<!-- https://mvnrepository.com/artifact/javax.servlet/jstl -->
 		<dependency>

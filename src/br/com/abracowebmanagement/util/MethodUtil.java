@@ -7,7 +7,9 @@ import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
 import java.util.InputMismatchException;
+import java.util.StringTokenizer;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -248,7 +250,7 @@ public class MethodUtil implements Serializable {
 	
 	
 	
-	public StreamedContent doStreamContent(String imagePath){
+	public StreamedContent doStreamContent(String imagePath) throws IOException{
 		
 		StreamedContent streamContent = null;
 
@@ -259,15 +261,9 @@ public class MethodUtil implements Serializable {
 			path = Paths.get(imagePath);
 		}
 			
-			InputStream is = null;
-			try {
-				is = Files.newInputStream(path);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			InputStream is = Files.newInputStream(path);
 			
-			streamContent = new DefaultStreamedContent(is);
+			streamContent = DefaultStreamedContent.builder().stream(() -> is).build();
 			
 		
 		return streamContent;
@@ -335,4 +331,26 @@ public class MethodUtil implements Serializable {
 		}		
 		return teachingLanguage;		
 	}*/
+	
+	
+	public String toCamelCase(String strData) {
+		StringBuilder sb = new StringBuilder();
+		StringTokenizer st = new StringTokenizer(strData, " ", true);
+		while (st.hasMoreTokens()) {
+			String strWord = st.nextToken();
+			sb.append(Character.toUpperCase(strWord.charAt(0)));
+			sb.append(strWord.substring(1).toLowerCase());
+		}
+		return sb.toString();
+	}
+	
+	
+	public String currencyFormat(Double number){
+	    
+		DecimalFormat df = new DecimalFormat();
+	    
+	    df.applyPattern("#,##0.00");
+
+		return df.format(number);		
+	}
 }

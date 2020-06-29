@@ -21,7 +21,7 @@ import org.omnifaces.util.Messages;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
-import org.primefaces.model.UploadedFile;
+import org.primefaces.model.file.UploadedFile;
 import org.primefaces.shaded.commons.io.FilenameUtils;
 
 import br.com.abracowebmanagement.dao.UserDAO;
@@ -107,7 +107,7 @@ public class ImageUserController implements Serializable{
     			tempFiles.add(tempFile);
     			
     			//Copy original file into destination file
-    			Files.copy(uploadFile.getInputstream(), tempFile, StandardCopyOption.REPLACE_EXISTING);
+    			Files.copy(uploadFile.getInputStream(), tempFile, StandardCopyOption.REPLACE_EXISTING);
     			
     			//Get path through @Transcient
     			userDomain.setImageUserPath(tempFile.toString());
@@ -320,8 +320,20 @@ public class ImageUserController implements Serializable{
 		}
 		
 		InputStream is = Files.newInputStream(path);
-		streamContent = new DefaultStreamedContent(is);
-	
+		//streamContent = new DefaultStreamedContent(is);
+		/**
+		 * Ref:https://stackoverflow.com/questions/59576891/primefaces-8-0-defaultstreamedcontent-builder-stream-asks-for-serializablesu
+		 * 
+		 * Create 2 times 
+		 * DefaultStreamedContent.builder().contentType(contentType).name(name).stream(() -> is).build();
+		 * 
+		 * Create 1 time with fileOutputStream
+		 * DefaultStreamedContent.builder().contentType(contentType).name(name).stream(() -> new FileInputStream(....)).build();
+		 * 
+		 */
+		streamContent = DefaultStreamedContent.builder().stream(() -> is).build();
+		
+		
 		return streamContent;
 	}
 	

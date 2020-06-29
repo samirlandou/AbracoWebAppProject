@@ -36,7 +36,7 @@
 					<!-- PANEL GRID TO FILL FORMS -->
 					<p:scrollPanel mode="native" style="width: 500px; heigh: 200px; margin: 0 auto;">
 					
-					<h2 style="position: center;">Editar Usuário</h2>
+					<h2 style="position: center;">Editar - Usuário</h2>
 					
 					<h:panelGrid id="userInputRegisterPnlID" columns="2">			
 						<p:outputLabel value="Usuário: *" />
@@ -77,6 +77,7 @@
 						
 						<p:outputLabel value="Nome da Pessoa: *" />
 						<p:selectOneMenu id="userId" filter="true" value="#{imageUserController.userDomain.personDomain}" disabled="true"
+							autoWidth="false" style="width: 212px"
 							converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="O campo 'Pessao' é obrigatório">
 							<f:selectItem itemValue="#{imageUserController.userDomain.personDomain}"
 											itemLabel="#{imageUserController.userDomain.personDomain.completeName}" />

@@ -80,6 +80,16 @@ public class ContractStudentDomain extends GenericDomain{
 	@Column(name = "FG_SIGN_CONTRACT_STUDENT", nullable = false)
 	private Boolean signContractStudentFlag;
 	
+
+	/*
+	 * Sign Contract Student
+	 * Inform if the student received the certificate.
+	 * Example:
+	 * True ---> Signed
+	 * False --> not signed
+	 */
+	@Column(name = "FG_RECEIVED_CERTIFICATE_CONTRACT_STUDENT", nullable = false)
+	private Boolean receivedCertificateFlag;
 	
 	//----------- Date when the Contract has been saved ------------------
 	
@@ -201,6 +211,14 @@ public class ContractStudentDomain extends GenericDomain{
 
 	public void setSignContractStudentFlag(Boolean signContractStudentFlag) {
 		this.signContractStudentFlag = signContractStudentFlag;
+	}
+
+	public Boolean getReceivedCertificateFlag() {
+		return receivedCertificateFlag;
+	}
+
+	public void setReceivedCertificateFlag(Boolean receiveCertificateFlag) {
+		this.receivedCertificateFlag = receiveCertificateFlag;
 	}
 
 

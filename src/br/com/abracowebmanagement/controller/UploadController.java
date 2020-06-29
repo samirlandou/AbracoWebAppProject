@@ -1,12 +1,11 @@
 package br.com.abracowebmanagement.controller;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -16,7 +15,7 @@ import javax.faces.bean.RequestScoped;
 import org.omnifaces.util.Messages;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
-import org.primefaces.model.UploadedFile;
+import org.primefaces.model.file.UploadedFile;
 
 
 @ManagedBean
@@ -50,7 +49,7 @@ public class UploadController {
 
 	    fileName = uploadedFile.getFileName();
 	    contentType = uploadedFile.getContentType();
-	    contents = uploadedFile.getContents();
+	    contents = uploadedFile.getContent();
 		
 	    System.out.println(fileName);
 	    System.out.println(contentType);
@@ -64,7 +63,7 @@ public class UploadController {
 		    File file = new File(path.toString(), fileName);
 		    
 		    OutputStream out = new FileOutputStream(file);
-		    out.write(uploadedFile.getContents());
+		    out.write(uploadedFile.getContent());
 		    out.close();
 			
 			//Info Message
@@ -119,17 +118,30 @@ public class UploadController {
 		this.contents = contents;
 	}
 
-	public StreamedContent getStreamContent() {
+	public StreamedContent getStreamContent() throws IOException {
 
-
-		InputStream is = null;
-		try {
-			is = Files.newInputStream(path);
-			streamContent = new DefaultStreamedContent(is);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		//streamContent = new DefaultStreamedContent(is);
+		/**
+		 * Ref:https://stackoverflow.com/questions/59576891/primefaces-8-0-defaultstreamedcontent-builder-stream-asks-for-serializablesu
+		 * 
+		 * Create 2 times 
+		 * DefaultStreamedContent.builder().contentType(contentType).name(name).stream(() -> is).build();
+		 * 
+		 * Create 1 time with fileOutputStream
+		 * DefaultStreamedContent.builder().contentType(contentType).name(name).stream(() -> new FileInputStream(....)).build();
+		 * 
+		 */
+		
+		
+		
+		/*//Works with inputstream.
+		InputStream is = Files.newInputStream(path);
+		
+		streamContent = DefaultStreamedContent.builder().stream(() -> is).build();
+		*/
+		
+		//Testing with content
+		streamContent = DefaultStreamedContent.builder().stream(() -> new ByteArrayInputStream(contents)).build();
 		
 		//InputStream is = new ByteArrayInputStream(contents);
 		//streamContent = new DefaultStreamedContent(new ByteArrayInputStream(contents), contentType, fileName);

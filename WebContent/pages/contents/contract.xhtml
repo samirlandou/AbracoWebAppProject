@@ -21,6 +21,20 @@
 	<!-- CONTENT -->
 	<ui:define name="content">
 		
+		<script type="text/javascript">
+		
+			function resetWizard(args, wizard)
+			{
+			    if (!args.validationFailed)
+			    {
+			        var firstStep = wizard.cfg.steps[0];
+			        if (wizard.currentStep != firstStep)
+			            wizard.loadStep(firstStep, true);
+			    }
+			}
+		
+		</script>
+		
 		<!-- MENU -->
 		<ui:include src="/pages/includes/menuPrincipal.xhtml"/>
 		
@@ -40,7 +54,7 @@
 							 paginator="true"
 							 value="#{contractController.contractsDomain}"
 							 var="cursor"
-							 rows="5"							 
+							 rows="4"							 
 							 resizableColumns="true" 
 							 resizeMode="fit" 
 							 reflow="true" 
@@ -53,10 +67,11 @@
 					<p:column headerText="Código contrato" 
 							  sortBy="#{cursor.contractCodeDescription}" 
 							  filterBy="#{cursor.contractCodeDescription}"
+							  filterMatchMode="contains"
 							  style="width: 28%">							  
 							  <p:commandLink value="#{cursor.contractCodeDescription}"
 							  				 actionListener="#{contractController.doEditNewStudentContract}"
-							  				 update="contractStudentListFormID:contractStudentDataTableID">
+							  				 update=":contractStudentListFormID:contractStudentDataTableID">
 							  				 <f:attribute name="selectedContractByCursor"
 				            			 				  value="#{cursor}"/>
 							  </p:commandLink>
@@ -69,6 +84,7 @@
 					<p:column headerText="Língua"
 							  sortBy="#{cursor.classLanguageDescription}" 
 							  filterBy="#{cursor.classLanguageDescription}"
+							  filterMatchMode="contains"
 							  style="width: 12%">
 							  
 							  <h:outputText value="#{cursor.classLanguageDescription}"/>
@@ -79,6 +95,7 @@
 					<p:column headerText="Nível"
 							  sortBy="#{cursor.classLevelDescription}" 
 							  filterBy="#{cursor.classLevelDescription}"
+							  filterMatchMode="contains"
 							  style="width: 12%">
 							  
 						  	  <h:outputText value="#{cursor.classLevelDescription}"/>					
@@ -88,6 +105,7 @@
 					<p:column headerText="Professor"
 							  sortBy="#{cursor.principalProfesssorPersonDomain.userName}" 
 							  filterBy="#{cursor.principalProfesssorPersonDomain.userName}"
+							  filterMatchMode="contains"
 							  style="width: 12%">
 							  
 						  	  <h:outputText value="#{cursor.principalProfesssorPersonDomain.userName}"/>					
@@ -205,11 +223,11 @@
 										 title="Deletar Registro"
 										 actionListener="#{contractController.doDelete}"
 										 update=":idMsgGlobal 
-												 contractListFormID:contractDataTableFormID 
-												:contractRegisterFormID:wizardFormID">
+												 contractListFormID:contractDataTableFormID">
 												
 							<p:confirm header="Confirmação" 
-									   message="Deseja excluir #{cursor.contractCodeDescription}?" icon="ui-icon-alert"/>
+									   message="Deseja excluir #{cursor.contractCodeDescription}?" 
+									   icon="fa fa-exclamation-triangle"/>
 							
 							<f:attribute name="selectedContractByCursor"
 										 value="#{cursor}"/>
@@ -247,10 +265,12 @@
 						<p:commandButton value="Novo"
 										 title="Novo Registro"
 										 icon="fa fa-plus"
+										 immediate="true"
 										 actionListener="#{contractController.doNewRegister}"
 										 oncomplete="PF('dlgNewContract').show();"
 										 update=":contractListFormID:contractDataTableFormID 
-												:contractRegisterFormID:wizardFormID">
+												:contractRegisterFormID:wizardFormID
+												:contractRegisterFormID:languageInputRegisterFormID">
 												
 										 <f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener"/>
 						</p:commandButton>
@@ -316,7 +336,7 @@
 							 paginator="true"
 							 value="#{contractController.contractStudentsDomain}"
 							 var="cursor"
-							 rows="5"							 
+							 rows="3"							 
 							 resizableColumns="true" 
 							 resizeMode="fit" 
 							 reflow="true" 
@@ -328,7 +348,8 @@
 					<p:column headerText="Nome do Estudante" 
 							  sortBy="#{cursor.personDomain.completeName}" 
 							  filterBy="#{cursor.personDomain.completeName}"
-							  style="width: 28%">
+							  filterMatchMode="contains"
+							  >
 							  <h:outputText value="#{cursor.personDomain.completeName}"/>
 					</p:column>
 
@@ -336,16 +357,18 @@
 					<p:column headerText="Pagamento"
 							  sortBy="#{cursor.studentPaymentContractDescription}" 
 							  filterBy="#{cursor.studentPaymentContractDescription}"
-							  style="width: 11%">
+							  filterMatchMode="contains"
+							  style="width: 10%">
 							  
 							  <h:outputText value="#{cursor.studentPaymentContractDescription}"/>
 					</p:column>										
 					
 					<!-- TP_STUDENT_PAYMENT_CONTRACT_STUDENT -->
-					<p:column headerText="Forma de Pagamento"
+					<p:column headerText="Forma de Pag."
 							  sortBy="#{cursor.studentPaymentContractType}" 
 							  filterBy="#{cursor.studentPaymentContractType}"
-							  style="width: 13%">
+							  filterMatchMode="contains"
+							  style="width: 11%">
 							  	
 							  <h:outputText value="#{cursor.studentPaymentContractType}"/>
 					</p:column>
@@ -354,7 +377,8 @@
 					<p:column headerText="Desconto"
 							  sortBy="#{cursor.studentPaymentContractDescription}" 
 							  filterBy="#{cursor.studentPaymentContractDescription}"
-							  style="width: 9%">
+							  filterMatchMode="contains"
+							  style="width: 8%">
 							  
 							  <h:outputText value="#{cursor.studentDiscountPriceDescription}">
 							  				<f:convertNumber currencySymbol="R$"
@@ -363,31 +387,47 @@
 							  </h:outputText>
 							  
 					</p:column>
-					
+
+					<!-- FG_SIGN_CONTRACT_STUDENT -->
+					<p:column headerText="Assinou"
+							  sortBy="#{cursor.signContractStudentFlag}" 
+							  filterBy="#{cursor.signContractStudentFlag}"
+							  filterMatchMode="contains"
+							  style="width: 7%">
+							  
+							  <h:outputText value="#{cursor.signContractStudentFlag == true? 'Sim' : 'Não'}"/>
+							  
+					</p:column>
+										
 					<!-- FG_RECEIVE_BOOK_CONTRACT_STUDENT -->
 					<p:column headerText="Apostila"
 							  sortBy="#{cursor.studentReceiveBookFlag}" 
 							  filterBy="#{cursor.studentReceiveBookFlag}"
+							  filterMatchMode="contains"
 							  style="width: 7%">
 							  
 							  <h:outputText value="#{cursor.studentReceiveBookFlag == true? 'Sim' : 'Não'}"/>
 							  
 					</p:column>
 					
-					<!-- FG_RECEIVE_BOOK_CONTRACT_STUDENT -->
-					<p:column headerText="Assinou"
-							  sortBy="#{cursor.signContractStudentFlag}" 
-							  filterBy="#{cursor.signContractStudentFlag}"
-							  style="width: 7%">
+					<!-- FG_RECEIVED_CERTIFICATE_CONTRACT_STUDENT -->
+					<p:column headerText="Certificado"
+							  sortBy="#{cursor.receivedCertificateFlag}" 
+							  filterBy="#{cursor.receivedCertificateFlag}"
+							  filterMatchMode="contains"
+							  style="width: 8%">
 							  
-							  <h:outputText value="#{cursor.signContractStudentFlag == true? 'Sim' : 'Não'}"/>
+							  <h:outputText value="#{cursor.receivedCertificateFlag == true? 'Sim' : 'Não'}"/>
 							  
 					</p:column>
+
+
 							
 					<!-- FG_RECEIVE_BOOK_CONTRACT_STUDENT -->
-					<p:column headerText="Data Registro"
+					<p:column headerText="Data Reg."
 							  sortBy="#{cursor.saveContractStudentDate}" 
 							  filterBy="#{cursor.saveContractStudentDate}"
+							  filterMatchMode="contains"
 							  style="width: 9%">							  
 							  <h:outputText value="#{cursor.saveContractStudentDate}">
 							  <f:convertDateTime locale="pt_BR"
@@ -398,7 +438,7 @@
 					
 					<!-- BUTTON TO DELETE -->
 					<p:column headerText="Opções"												  
-							  style="width: 16%" >
+							  style="width: 17%" >
 							  	  
 						<!-- SHOW CONTRACT BUTTON -->
 						<p:commandButton id="showContractID"
@@ -455,12 +495,12 @@
 						<p:commandButton icon="fa fa-trash"
 										 title="Deletar Registro"
 										 actionListener="#{contractController.doDeleteStudentContract}"
-										 update=":idMsgGlobal
+										 update=":idMsgGlobal 
 										 		 contractStudentListFormID:contractStudentDataTableID" >
 												
 							<p:confirm header="Confirmação" 
-									   message="Deseja excluir o aluno #{cursor.personDomain.completeName}?"
-									   icon="ui-icon-alert"/>
+									   message="Deseja excluir o(a) aluno(a) #{cursor.personDomain.completeName}?"
+									   icon="fa fa-exclamation-triangle"/>
 							
 							<f:attribute name="selectedContractByCursor"
 										 value="#{cursor}"/>
@@ -606,11 +646,6 @@
 								</p:selectOneMenu>
 								
 								
-								<p:outputLabel value="Pular para o resumo"
-											   rendered="#{contractController.skipRendered}"/>
-								<p:selectBooleanCheckbox value="#{contractController.skip}"
-														 rendered="#{contractController.skipRendered}"/>
-														 
 							</h:panelGrid>
 							
 							<p:spacer height="40px"/>
@@ -622,6 +657,9 @@
 								<p:commandButton value="Fechar"
 												 title="Sair do Registro"
 												 icon="fa fa-remove"
+												 process="@this"
+												 immediate="true"												 
+												 action="#{contractController.doClean}"												 
 												 oncomplete="PF('dlgNewContract').hide();"/>
 							</h:panelGrid>
 
@@ -689,8 +727,11 @@
 								<p:commandButton value="Fechar"
 												 title="Sair do Registro"
 												 icon="fa fa-remove"
+												 process="@this"
+												 immediate="true"												 
 												 action="#{contractController.doClean}"
-												 oncomplete="PF('dlgNewContract').hide();" />
+												 oncomplete="resetWizard(args, PF('wizardForm'));
+												 			PF('dlgNewContract').hide();" />
 							</h:panelGrid>
 							
 						</p:panel>	
@@ -726,7 +767,7 @@
 												 <f:selectItem itemLabel="INCOMPANY" itemValue="INCOMPANY"/>
 												 <f:selectItem itemLabel="EXTERIOR" itemValue="EXTERIOR"/>
 												 <f:selectItem itemLabel="ONLINE" itemValue="ONLINE"/>						
-								</p:selectOneMenu>
+								</p:selectOneMenu>								
 								
 							</h:panelGrid>
 							
@@ -740,8 +781,11 @@
 								<p:commandButton value="Fechar" 
 												 title="Sair do Registro"
 												 icon="fa fa-remove"
+												 process="@this"
+												 immediate="true"												 
 												 action="#{contractController.doClean}"
-												 oncomplete="PF('dlgNewContract').hide();"/>
+												 oncomplete="resetWizard(args, PF('wizardForm'));
+												 			PF('dlgNewContract').hide();"/>
 							</h:panelGrid>
 														
 						</p:panel>
@@ -770,7 +814,9 @@
 												 value="#{contractController.contractDomain.classModuleDescription}"
 												 converter="omnifaces.SelectItemsConverter" 
 												 required="true" 
-												 requiredMessage="O campo 'Típo de Aula' é obrigatório">
+												 requiredMessage="O campo 'Típo de Aula' é obrigatório"
+												 autoWidth="flase"
+												 style="width: 215px">
 															 
 												 <f:selectItem noSelectionOption="true" itemLabel="Escolhe um típo"/>
 												 <f:selectItem itemLabel="EXTENSIVO" itemValue="EXTENSIVO"/>
@@ -786,7 +832,8 @@
 								<p:inputNumber id="packageComboID"
 											   value="#{contractController.contractDomain.classPackageHour}"
 											   required="true" 
-											   requiredMessage="O campo 'Pacote' é obrigatório">
+											   requiredMessage="O campo 'Pacote' é obrigatório"
+											   size="30">
 											   
 								</p:inputNumber>
 				
@@ -801,7 +848,8 @@
 											mask="99:99"
 											timeOnly="true"
 											required="true" 
-											requiredMessage="O campo 'Aula-Hora Início' é obrigatório">
+											requiredMessage="O campo 'Aula-Hora Início' é obrigatório"
+											size="30">
 											
 											<f:convertDateTime locale="pt_BR"
 															   pattern="HH:mm" 
@@ -819,7 +867,8 @@
 											mask="99:99"
 											timeOnly="true"
 											required="true" 
-											requiredMessage="O campo 'Aula-Hora Término' é obrigatório">
+											requiredMessage="O campo 'Aula-Hora Término' é obrigatório"
+											size="30">
 											
 											<f:convertDateTime locale="pt_BR"
 															   pattern="HH:mm" 
@@ -846,7 +895,9 @@
 												 value="#{contractController.contractDomain.firstClassDayDescription}"
 												 converter="omnifaces.SelectItemsConverter" 
 												 required="true" 
-												 requiredMessage="O campo '1° Dia Letivo' é obrigatório">
+												 requiredMessage="O campo '1° Dia Letivo' é obrigatório"
+												 autoWidth="flase"
+												 style="width: 215px">
 												 
 												 <f:selectItem noSelectionOption="true" itemLabel="Escolhe o 1° dia letivo"/>
 												 <f:selectItems value="#{contractController.firstClassDay}"
@@ -866,7 +917,9 @@
 								<p:selectOneMenu id="secondDayClassComboID"
 												 filter="false"
 												 value="#{contractController.contractDomain.secondClassDayDescription}"
-												 converter="omnifaces.SelectItemsConverter">
+												 converter="omnifaces.SelectItemsConverter"
+												 autoWidth="flase"
+												 style="width: 215px">
 												 
 									<f:selectItem noSelectionOption="true" itemLabel="Escolhe o 2° dia letivo"/>
 									<f:selectItems value="#{contractController.secondClassDay}"
@@ -893,7 +946,7 @@
 								
 								<br/>
 								
-								<p:spacer height="20px"/>
+								<p:spacer height="20px"/>								
 																																		
 							</h:panelGrid>
 							
@@ -907,8 +960,11 @@
 								<p:commandButton value="Fechar" 
 												 title="Sair do Registro"
 												 icon="fa fa-remove"
+												 process="@this"
+												 immediate="true"												 
 												 action="#{contractController.doClean}"
-												 oncomplete="PF('dlgNewContract').hide();"/>
+												 oncomplete="resetWizard(args, PF('wizardForm'));
+												 			PF('dlgNewContract').hide();"/>
 							</h:panelGrid>
 																					
 						</p:panel>
@@ -931,7 +987,7 @@
 								<p:outputLabel value="Descrição (Opcional):" />
 									
 								<p:inputText value="#{contractController.codeDescription}"
-											 size="6"
+											 size="30"
 											 maxlength="4"
 											 style="text-transform: uppercase"/>			
 										 								
@@ -943,7 +999,9 @@
 												 converter="omnifaces.SelectItemsConverter"
 												 value="#{contractController.contractDomain.studentContractModelDomain}"
 												 required="true" 
-												 requiredMessage="O campo 'Modelo Contrato' é obrigatório">
+												 requiredMessage="O campo 'Modelo Contrato' é obrigatório"
+												 autoWidth="flase"
+												 style="width: 215px">
 												 
 												 <f:selectItem noSelectionOption="true" itemLabel="Escolhe um modelo de contrato"/>
 												 <f:selectItems value="#{contractController.contractModelsDomain}"
@@ -960,14 +1018,16 @@
 												 converter="omnifaces.SelectItemsConverter"
 												 value="#{contractController.contractDomain.professorContractModelDomain}"
 												 required="true" 
-												 requiredMessage="O campo 'Modelo Contrato' é obrigatório">
+												 requiredMessage="O campo 'Modelo Contrato' é obrigatório"
+												 autoWidth="false"
+												 style="width: 215px">
 												 
 												 <f:selectItem noSelectionOption="true" itemLabel="Escolhe um modelo de contrato"/>
 												 <f:selectItems value="#{contractController.contractModelsDomain}"
 												 				var="contractModel"
 												 				itemValue="#{contractModel}"
 												 				itemLabel="#{contractModel.contractModelName}"/>
-								</p:selectOneMenu>				
+								</p:selectOneMenu>					
 																	
 							</h:panelGrid>
 							
@@ -981,8 +1041,11 @@
 								<p:commandButton value="Fechar"
 												 title="Sair do Registro"
 												 icon="fa fa-remove"
+												 process="@this"
+												 immediate="true"												 
 												 action="#{contractController.doClean}"
-												 oncomplete="PF('dlgNewContract').hide();"/>
+												 oncomplete="resetWizard(args, PF('wizardForm'));
+												 			PF('dlgNewContract').hide();"/>
 							</h:panelGrid>
 															
 						</p:panel>
@@ -1003,7 +1066,6 @@
 								
 								<h:panelGrid id="resumeInputRegisterFormID"
 											 columns="2">
-
 
 
 									<h3 style="position: left;">Código do Contrato</h3>
@@ -1126,7 +1188,7 @@
 									
 									<p:outputLabel value="Pausa: " />
 									
-									<p:outputLabel value="#{contractController.contractDomain.breakClassHour}mn"/>
+									<p:outputLabel value="#{contractController.contractDomain.breakClassHour != 0? contractController.contractDomain.breakClassHour : ''}#{contractController.contractDomain.breakClassHour != 0? 'mn':''}"/>
 
 
 									<p:outputLabel value="Hora Total Aula/Dia: " />
@@ -1148,7 +1210,7 @@
 													
 									<p:outputLabel value="Pacote de Horas: "/>
 									
-									<p:outputLabel value="#{contractController.contractDomain.classPackageHour}h"
+									<p:outputLabel value="#{contractController.contractDomain.classPackageHour != 0? contractController.contractDomain.classPackageHour : ''}#{contractController.contractDomain.classPackageHour != 0? 'h':''}"
 												   style="color: red;"/>
 
 	
@@ -1175,7 +1237,7 @@
 									<p:outputLabel value="Comentário: " />
 									
 									<p:outputLabel value="#{contractController.contractDomain.commentDescription}"/>																			
-																														
+																																						
 								</h:panelGrid>									
 
 								<p:spacer height="40px"/>
@@ -1196,7 +1258,8 @@
 													 icon="fa fa-remove"
 													 immediate="true"
 													 action="#{contractController.doClean}"
-													 oncomplete="PF('dlgNewContract').hide();"
+													 oncomplete="resetWizard(args, PF('wizardForm'));
+													 			PF('dlgNewContract').hide();"
 													 update=":contractListFormID:contractDataTableFormID"/>
 								</h:panelGrid>
 																
@@ -1291,7 +1354,16 @@
 								   value="#{contractController.contractStudentDomain.studentDiscountPriceDescription}"
 								   disabled="#{contractController.enableComponentOnContractStudent}"
 								   size="19"/>
+
 					
+					<p:outputLabel value="Assinou Contrato: "/>
+					<p:toggleSwitch id="studentSignedContractID"
+									value="#{contractController.contractStudentDomain.signContractStudentFlag}">							
+									<p:ajax listener="#{contractController.addContractStudentSignedMessage}"
+											update=":idMsgGlobal" />
+					</p:toggleSwitch>
+					
+										
 					<p:outputLabel value="Apostila: "/>
 					<p:toggleSwitch id="studentReceiveBookID"
 									value="#{contractController.contractStudentDomain.studentReceiveBookFlag}">							
@@ -1300,12 +1372,12 @@
 					</p:toggleSwitch>
 					
 					
-					<p:outputLabel value="Assinou Contrato: "/>
-					<p:toggleSwitch id="studentSignedContractID"
-									value="#{contractController.contractStudentDomain.signContractStudentFlag}">							
-									<p:ajax listener="#{contractController.addContractStudentSignedMessage}"
+					<p:outputLabel value="Recebeu Certificado: "/>
+					<p:toggleSwitch id="receivedCertificateContractID"
+									value="#{contractController.contractStudentDomain.receivedCertificateFlag}">							
+									<p:ajax listener="#{contractController.addContractReceivedCertificateMessage}"
 											update=":idMsgGlobal" />
-					</p:toggleSwitch>					
+					</p:toggleSwitch>				
 					
 				</h:panelGrid>				
 
@@ -1315,13 +1387,7 @@
 				
 				<!-- PANEL GRID FOR BUTTON ADD, CLEAN AND CLOSE -->
 				<h:panelGrid id="saveStudentPnlGridID" columns="4">			 
-					<p:commandButton value="Adicionar"												 
-									 id="addStudentID"
-									 title="Adicionar um(a) Aluno(a)"
-									 icon="fa fa-plus" 
-									 rendered="#{!contractController.enableComponentOnContractStudent}"
-									 actionListener="#{contractController.doAddStudent}"
-									 update=":idMsgGlobal :contractDetailFormID:contractFindStudentPnlGridID"/>
+
 
 					<p:commandButton value="Salvar"												 
 									 id="saveStudentID"
@@ -1338,16 +1404,22 @@
 									 process="@this"
 									 rendered="#{!contractController.enableComponentOnContractStudent}"
 									 actionListener="#{contractController.doCleanStudentInfo}"
-									 update=":contractDetailFormID:contractFindStudentPnlGridID">
-					
-					</p:commandButton>
-					
+									 update=":contractDetailFormID:contractFindStudentPnlGridID"/>
+
+					<p:commandButton value="Adicionar"												 
+									 id="addStudentID"
+									 title="Adicionar um(a) Aluno(a)"
+									 icon="fa fa-plus" 
+									 rendered="#{!contractController.enableComponentOnContractStudent}"
+									 actionListener="#{contractController.doAddStudent}"
+									 update=":idMsgGlobal :contractDetailFormID:contractFindStudentPnlGridID"/>
+									 					
 					<p:spacer width="25px" height="0px"/>	 								    		 
 					
 					<p:commandButton value="Fechar"
 										 title="Sair do Registro"
 										 icon="fa fa-remove"
-										 immediate="true"
+										 immediate="false"
 										 oncomplete="PF('contractDetailDlgWGV').hide();"
 										 update=":contractStudentListFormID:contractStudentDataTableID"/>
 				
@@ -1432,9 +1504,10 @@
 					<br/>								
 					<h:outputText id="display"/>
 
+					<br/>					
+					<p:spacer height="20px"/>
 							 						
-					<p:outputLabel value="Finalizar Contrato:" />
-					
+					<p:outputLabel value="Finalizar Contrato:" />					
 					<p:toggleSwitch value="#{contractController.contractDomain.closedContractFlag}">
 						
 									<p:ajax listener="#{contractController.addContractMessage}"
@@ -1442,8 +1515,7 @@
 					</p:toggleSwitch>
 					
 					
-					<br/>
-					
+					<br/>					
 					<p:spacer height="20px"/>
 					
 						
@@ -1468,7 +1540,7 @@
 				
 				
 				<!-- PANEL GRID FOR BUTTON SAVE AND CLOSE -->
-				<h:panelGrid id="saveStudentPnlGridID" 
+				<h:panelGrid id="saveProfessorPnlGridID" 
 							 columns="2"
 							 styleClass="panelGridCenter">					 
 					

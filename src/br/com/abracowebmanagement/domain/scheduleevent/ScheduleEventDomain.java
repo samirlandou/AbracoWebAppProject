@@ -4,11 +4,14 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import br.com.abracowebmanagement.domain.generic.GenericDomain;
+import br.com.abracowebmanagement.domain.user.UserDomain;
 
 @SuppressWarnings("serial")
 @Entity
@@ -39,22 +42,26 @@ public class ScheduleEventDomain extends GenericDomain {
 	 */
 	@Column(name = "TP_SCHEDULE_EVENT", length = 20, nullable = false)
 	private String scheduleEventType;
-	
+
 	
 	/*
 	 * Schedule Event begin date and Hour
 	 * Inform the begin event date
 	 */
-	@Column(name = "DT_BEGIN_SCHEDULE_EVENT", nullable = false)
+	//@Column(name = "DT_BEGIN_SCHEDULE_EVENT", columnDefinition = "TIMESTAMP", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "DT_BEGIN_SCHEDULE_EVENT", nullable = false)
 	private Date scheduleEventBeginDate;
 	
+	
+	
 	/*
-	 * Schedule Event begin date and Hour
+	 * Schedule Event end date and Hour
 	 * Inform the end of the event
 	 */
-	@Column(name = "DT_END_SCHEDULE_EVENT", nullable = false)
+	//@Column(name = "DT_END_SCHEDULE_EVENT", columnDefinition = "TIMESTAMP", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "DT_END_SCHEDULE_EVENT", nullable = false)
 	private Date scheduleEventEndDate;
 	
 	
@@ -78,18 +85,60 @@ public class ScheduleEventDomain extends GenericDomain {
 	 * UserName
 	 * Get the name (through login user) of the user who created the Schedule event.
 	 * from UserDomain class.
-	 * */
+	 * 
 	@Column(name = "DE_LOGIN_USER_SCHEDULE_EVENT", length = 30)
-	private String scheduleEventLoginUser;
+	private String scheduleEventLoginUser;*/
+
+		
+	/*
+	 * Status
+	 * Example: ENABLED or DISABLED
+	 */
+	@Column(name = "FG_PUBLIC", nullable = false)
+	private Boolean publicFlag;
+
+	
+	/*
+	 * Status
+	 * Example: ENABLED or DISABLED
+	 */
+	@Column(name = "FG_EDIT", nullable = false)
+	private Boolean editFlag;
+
+	
+	/*
+	 * Status
+	 * Example: ENABLED or DISABLED
+	 */
+	@Column(name = "FG_ALLDAY", nullable = false)
+	private Boolean allDayFlag;	
+
+	
+	/*
+	 * Schedule Event comment
+	 * Comment specific notification about the event
+	 */		
+	@Column(name = "NM_STYLECLASS", length = 60, nullable = true)
+	private String styleclassName;
+	
+
+	
+	/*
+	 * Status
+	 * Example: ENABLED or DISABLED
+	 
+	@Column(name = "FG_OVERLAP", nullable = false)
+	private Boolean overLapFlag;*/	
 	
 	
 	/*
 	 * User
 	 * Insert User Data Table into ScheduleDomain 
-	 
-	@OneToOne
+	 */
+	@ManyToOne
 	@JoinColumn(nullable = false)
-	private UserDomain userDomain;*/
+	private UserDomain userDomain;
+
 
 
 	public String getScheduleEventDescription() {
@@ -97,9 +146,11 @@ public class ScheduleEventDomain extends GenericDomain {
 	}
 
 
+
 	public void setScheduleEventDescription(String scheduleEventDescription) {
 		this.scheduleEventDescription = scheduleEventDescription;
 	}
+
 
 
 	public String getScheduleEventType() {
@@ -107,9 +158,11 @@ public class ScheduleEventDomain extends GenericDomain {
 	}
 
 
+
 	public void setScheduleEventType(String scheduleEventType) {
 		this.scheduleEventType = scheduleEventType;
 	}
+
 
 
 	public Date getScheduleEventBeginDate() {
@@ -117,9 +170,11 @@ public class ScheduleEventDomain extends GenericDomain {
 	}
 
 
+
 	public void setScheduleEventBeginDate(Date scheduleEventBeginDate) {
 		this.scheduleEventBeginDate = scheduleEventBeginDate;
 	}
+
 
 
 	public Date getScheduleEventEndDate() {
@@ -127,19 +182,11 @@ public class ScheduleEventDomain extends GenericDomain {
 	}
 
 
+
 	public void setScheduleEventEndDate(Date scheduleEventEndDate) {
 		this.scheduleEventEndDate = scheduleEventEndDate;
 	}
 
-
-	/*public Long getScheduleEventTime() {
-		return scheduleEventTime;
-	}
-
-
-	public void setScheduleEventTime(Long scheduleEventTime) {
-		this.scheduleEventTime = scheduleEventTime;
-	}*/
 
 
 	public String getScheduleEventComment() {
@@ -147,18 +194,69 @@ public class ScheduleEventDomain extends GenericDomain {
 	}
 
 
+
 	public void setScheduleEventComment(String scheduleEventComment) {
 		this.scheduleEventComment = scheduleEventComment;
 	}
 
 
-	public String getScheduleEventLoginUser() {
-		return scheduleEventLoginUser;
+
+	public Boolean getPublicFlag() {
+		return publicFlag;
 	}
 
 
-	public void setScheduleEventLoginUser(String scheduleEventLoginUser) {
-		this.scheduleEventLoginUser = scheduleEventLoginUser;
+
+	public void setPublicFlag(Boolean publicFlag) {
+		this.publicFlag = publicFlag;
+	}
+
+
+
+	public Boolean getEditFlag() {
+		return editFlag;
+	}
+
+
+
+	public void setEditFlag(Boolean editFlag) {
+		this.editFlag = editFlag;
+	}
+
+
+
+	public Boolean getAllDayFlag() {
+		return allDayFlag;
+	}
+
+
+
+	public void setAllDayFlag(Boolean allDayFlag) {
+		this.allDayFlag = allDayFlag;
+	}
+
+
+
+	public String getStyleclassName() {
+		return styleclassName;
+	}
+
+
+
+	public void setStyleclassName(String styleclassName) {
+		this.styleclassName = styleclassName;
+	}
+
+
+
+	public UserDomain getUserDomain() {
+		return userDomain;
+	}
+
+
+
+	public void setUserDomain(UserDomain userDomain) {
+		this.userDomain = userDomain;
 	}
 	
 	

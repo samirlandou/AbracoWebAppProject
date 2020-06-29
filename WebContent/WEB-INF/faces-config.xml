@@ -45,7 +45,13 @@
 			<to-view-id>/pages/contents/contractSetting.xhtml</to-view-id>
 			<redirect />
 		</navigation-case>		
-		
+
+		<navigation-case>
+			<from-outcome>client.themeSetting</from-outcome>
+			<to-view-id>/pages/contents/themeSetting.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+				
 		<navigation-case>
 			<from-outcome>client.contract</from-outcome>
 			<to-view-id>/pages/contents/contract.xhtml</to-view-id>
@@ -53,8 +59,14 @@
 		</navigation-case>	
 		
 		<navigation-case>
-			<from-outcome>userImage</from-outcome>
+			<from-outcome>client.userImage</from-outcome>
 			<to-view-id>/pages/contents/userImage.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+			
+		<navigation-case>
+			<from-outcome>client.setting</from-outcome>
+			<to-view-id>/pages/contents/setting.xhtml</to-view-id>
 			<redirect />
 		</navigation-case>		
 		

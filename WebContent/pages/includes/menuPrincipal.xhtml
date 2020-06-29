@@ -35,7 +35,7 @@
 				
 				<p:spacer width="10px" style="float:right;" />
 				
-				<p:commandLink id="userLinkOnTopID" action="userImage" style="float:right;">
+				<p:commandLink id="userLinkOnTopID" action="client.userImage" style="float:right;">
 					<p:graphicImage id="userImageOnTopID" cache="false" value="#{imageController.streamContent}" width="auto" height="20px" styleClass="imageCenter"/>
 				</p:commandLink>
 			
@@ -51,9 +51,9 @@
 				
 				<!-- Menu -->
 				<p:panelMenu >					
-					<p:submenu label="File" outcome="/pages/contents/home.xhtml">
-						<p:menuitem value="Relatorios" icon="fa fa-file-text"/>
-						<p:menuitem value="Note" icon="fa fa-pencil-square-o"/>
+					<p:submenu label="Relatório" outcome="/pages/contents/home.xhtml">
+						<p:menuitem value="Dashbord" icon="fa fa-bar-chart"/>
+						<p:menuitem value="Relatórios" icon="fa fa-file-pdf-o"/>						
 					</p:submenu>
 					
 		

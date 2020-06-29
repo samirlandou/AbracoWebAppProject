@@ -56,7 +56,7 @@
 						<!-- BUTTON TO DELETE -->
 						<p:commandButton icon="ui-icon-trash" actionListener="#{profileController.doDelete}"
 										update=":idMsgGlobal :profileListFormId:profileDataTableFormId">
-							<p:confirm header="Confirmação" message="Deseja excluir esse perfil?" icon="ui-icon-alert"/>
+							<p:confirm header="Confirmação" message="Deseja excluir esse perfil?" icon="fa fa-exclamation-triangle"/>
 							<f:attribute name="selectedProfileByCursor" value="#{cursor}"/>
 						</p:commandButton>
 					</p:column>

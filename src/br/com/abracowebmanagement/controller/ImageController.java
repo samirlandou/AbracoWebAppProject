@@ -70,7 +70,7 @@ public class ImageController implements Serializable{
 		}
 		
 		InputStream is = Files.newInputStream(path);
-		streamContent = new DefaultStreamedContent(is);
+		streamContent = DefaultStreamedContent.builder().stream(() -> is).build();
 	
 		return streamContent;
 	}

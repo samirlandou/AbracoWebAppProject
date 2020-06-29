@@ -1,8 +1,8 @@
 package br.com.abracowebmanagement.controller;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -27,24 +27,18 @@ import br.com.abracowebmanagement.util.DateUtil;
 @ViewScoped
 //@ApplicationScoped
 public class ScheduleEventController implements Serializable {
- 
-	private static final long serialVersionUID = 1065769617077195953L;
 
-	//DateUtil
-	DateUtil dateUtil = new DateUtil();
-	
-	//Login Controller
-	LoginController loginController = new LoginController();
-	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7599927276668462475L;
+
 	//Domain
 	private ScheduleEventDomain scheduleEventDomain;
 	private List<ScheduleEventDomain> scheduleEventsDomain;
 	
 	//Default Schedule Model for Calendar
 	private ScheduleModel lazyScheduleModel;
-	
-	//Default Schedule Event for Calendar
-	private ScheduleEvent scheduleEvent;
 	
 	//Default Schedule Entry  Move Event
 	private ScheduleEntryMoveEvent entryMoveEvent;
@@ -61,29 +55,38 @@ public class ScheduleEventController implements Serializable {
 	//On Event Resize
 	boolean onEventResizeFlag = false;
 	
+	//DateUtil
+	DateUtil dateUtil = new DateUtil();
+	
+	//Login Controller
+	LoginController loginController = new LoginController();
+	
+	//Schedule Event
+	@SuppressWarnings("rawtypes")
+	private ScheduleEvent scheduleEvent;
+	
 	//Begin Period
-	private Date loadEventsBeginPeriod;
+	private LocalDateTime loadEventsBeginPeriod;
 	
 	//End Period
-	private Date loadEventsEndPeriod;
-	
+	private LocalDateTime loadEventsEndPeriod;	
+		
 	//Begin Date
-	private Date beginDate;
+	private LocalDateTime beginDate;
 	
 	//End Date
-	private Date endDate;
+	private LocalDateTime endDate;	
 	
-		
 	//Constructor
 	public ScheduleEventController(){
 		
 	}
-	
-	
+
+
+	@SuppressWarnings("rawtypes")
 	@PostConstruct
 	public void doList(){
 		
-		//Instantiate Calendar Event
 		scheduleEvent = new DefaultScheduleEvent();
 		
 		//Instantiate Domain List
@@ -92,16 +95,15 @@ public class ScheduleEventController implements Serializable {
 		//Login
 		FacesContext fc = FacesContext.getCurrentInstance();
 		loginController = (LoginController) fc.getExternalContext().getSessionMap().get("loginController");
+				
+		//Lazy Event Model - Search data  in database
+		lazyScheduleModel = new LazyScheduleModel() {
 
-		
-		//Instantiate Lazy Schedule Model
-		//lazyScheduleModel = new DefaultScheduleModel();
-		lazyScheduleModel = new LazyScheduleModel(){
-
-			private static final long serialVersionUID = -6109817173734864738L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
-           public void loadEvents(Date start, Date end) {
+            public void loadEvents(LocalDateTime start, LocalDateTime end) {
+				
 				
 				//Initialize start and end dates
 				loadEventsBeginPeriod = start;
@@ -109,29 +111,50 @@ public class ScheduleEventController implements Serializable {
 				
 				//Populate ScheduleEventDomain List
 				ScheduleEventDAO scheduleEventDAO = new ScheduleEventDAO();
-				scheduleEventsDomain = scheduleEventDAO.searchByBeginDateAndEndDate(start,end);
+				scheduleEventsDomain = scheduleEventDAO.searchByBeginDateAndEndDate(
+						dateUtil.convertLocalDateTimeToDate(start),
+						dateUtil.convertLocalDateTimeToDate(end),
+						loginController.getLoggedUser().getUserName());		
+				
 				
 				//Populate Schedule Event Model List
 				for(ScheduleEventDomain scheduleEventDomain: scheduleEventsDomain){
-					lazyScheduleModel.addEvent(new DefaultScheduleEvent(scheduleEventDomain.getScheduleEventDescription(),
-							scheduleEventDomain.getScheduleEventBeginDate(),
-							scheduleEventDomain.getScheduleEventEndDate()));
-				}
-			}
-		};
-	}
+					
+					//AddEvent
+					lazyScheduleModel.addEvent(DefaultScheduleEvent.builder().
+							title(scheduleEventDomain.getScheduleEventDescription()).
+							description(scheduleEventDomain.getScheduleEventType()).
+							startDate(dateUtil.convertDateToLocalDateTime(scheduleEventDomain.getScheduleEventBeginDate())).
+							endDate(dateUtil.convertDateToLocalDateTime(scheduleEventDomain.getScheduleEventEndDate())).
+							editable(scheduleEventDomain.getEditFlag()).
+							allDay(scheduleEventDomain.getAllDayFlag()).
+							styleClass(scheduleEventDomain.getStyleclassName()).
+							build());					
+				}				
+            }
+        };				
+	}	
+
 	
-	
+	//Clean Boolean's Flag
 	public void doClean(){
+		
 		//scheduleEventDomain = new ScheduleEventDomain();
 		newRegisterFlag = false;
 		onEventSelectFlag = false;
 		onEventMoveFlag = false;
 		onEventResizeFlag = false;
 	}
-
 	
-	public void doSelect(SelectEvent selectEvent){
+	
+	/**
+	 * Select an event
+	 * @param selectEvent
+	 */
+	@SuppressWarnings("rawtypes")
+	public void doSelect(SelectEvent<ScheduleEvent> selectEvent){
+		
+		//Set event Select Flag to true.
 		onEventSelectFlag = true;
 		
 		//Cast selected object to Event
@@ -139,14 +162,31 @@ public class ScheduleEventController implements Serializable {
 		
 		//Instantiate Domain
 		scheduleEventDomain = new ScheduleEventDomain();
+		
+		for(ScheduleEventDomain schedule : scheduleEventsDomain){
+			
+			//find the object
+			if(schedule.getScheduleEventDescription().equals(scheduleEvent.getTitle())
+				&& schedule.getScheduleEventBeginDate().compareTo(dateUtil.convertLocalDateTimeToDate(scheduleEvent.getStartDate())) == 0
+				&& schedule.getScheduleEventEndDate().compareTo(dateUtil.convertLocalDateTimeToDate(scheduleEvent.getEndDate())) == 0){
+				
+				scheduleEventDomain = schedule;
+				break;
+			}
+		}
 
 		//Find Object in data base
-		ScheduleEventDAO scheduleEventDAO = new ScheduleEventDAO();
+		/*ScheduleEventDAO scheduleEventDAO = new ScheduleEventDAO();
 		scheduleEventDomain = scheduleEventDAO.searchByDescriptionAndBeginDateAndEndDate(scheduleEvent.getTitle(), 
-				scheduleEvent.getStartDate(), scheduleEvent.getEndDate());
+				dateUtil.convertLocalDateTimeToDate(scheduleEvent.getStartDate()), 
+				dateUtil.convertLocalDateTimeToDate(scheduleEvent.getEndDate()));*/
 	}
 	
-	
+	/**
+	 * Do New Register
+	 * @param selectEvent
+	 */
+	@SuppressWarnings("rawtypes")
 	public void doNewRegister(SelectEvent selectEvent){
 		newRegisterFlag = true;
 		onEventSelectFlag = false;
@@ -155,16 +195,20 @@ public class ScheduleEventController implements Serializable {
 		scheduleEventDomain = new ScheduleEventDomain();
 		
 		//Set Begin Date
-		scheduleEventDomain.setScheduleEventBeginDate((Date) selectEvent.getObject());
+		scheduleEventDomain.setScheduleEventBeginDate(dateUtil.convertLocalDateTimeToDate((LocalDateTime) selectEvent.getObject()));
 		
 		//Set End Date
-		scheduleEventDomain.setScheduleEventEndDate((Date) selectEvent.getObject());
+		scheduleEventDomain.setScheduleEventEndDate(dateUtil.convertLocalDateTimeToDate((LocalDateTime) selectEvent.getObject()));
+		
+		//Set Editable Value
+		scheduleEventDomain.setEditFlag(false);
 		
 		//Set LoginUser
-		scheduleEventDomain.setScheduleEventLoginUser(loginController.getLoggedUser().getUserName());
-		
-		
+		scheduleEventDomain.setUserDomain(loginController.getLoggedUser());
+				
 	}
+	
+
 	
 	
 	public void doSave(){
@@ -179,8 +223,8 @@ public class ScheduleEventController implements Serializable {
 			//Search event by Description in the current loadEvents
 			uniqueScheduleEventDomain = scheduleEventDAO.searchByDescriptionAndLoadEventsPeriod(
 					scheduleEventDomain.getScheduleEventDescription(),
-					loadEventsBeginPeriod,
-					loadEventsEndPeriod);
+					dateUtil.convertLocalDateTimeToDate(loadEventsBeginPeriod),
+					dateUtil.convertLocalDateTimeToDate(loadEventsEndPeriod));
 			
 			//Verify if the description already exist in the current loadEvents period
 			if(uniqueScheduleEventDomain != null){
@@ -191,10 +235,10 @@ public class ScheduleEventController implements Serializable {
 					scheduleEventDomain = uniqueScheduleEventDomain;
 			    	
 			    	//Set New Begin Date
-			    	scheduleEventDomain.setScheduleEventBeginDate(beginDate);
+			    	scheduleEventDomain.setScheduleEventBeginDate(dateUtil.convertLocalDateTimeToDate(beginDate));
 			    	
 					//Set new End Date
-					scheduleEventDomain.setScheduleEventEndDate(endDate);
+					scheduleEventDomain.setScheduleEventEndDate(dateUtil.convertLocalDateTimeToDate(endDate));					
 					
 				} else if(onEventSelectFlag){
 					
@@ -211,19 +255,25 @@ public class ScheduleEventController implements Serializable {
 			
 			//Set LogginUser
 			if(!newRegisterFlag || onEventMoveFlag || onEventResizeFlag){
-				scheduleEventDomain.setScheduleEventLoginUser(loginController.getLoggedUser().getUserName());				
+				scheduleEventDomain.setUserDomain(loginController.getLoggedUser());
 			}
 			
-			//Check if End Date is after Begin before Saving
+			//Check if EndDate comes after BeginDate before Saving
 			if(scheduleEventDomain.getScheduleEventEndDate().
 				after(scheduleEventDomain.getScheduleEventBeginDate())){
+				
+				//Set StyleClass 
+				scheduleEventDomain.setStyleclassName(scheduleEventDomain.getPublicFlag() ? "" : "eventColor");
 				
 				//Merge informations in database
 				scheduleEventDAO.merge(scheduleEventDomain);
 				
 				//Populate ScheduleEventDomain List
 				//If not executed yet, search all events Domain between begin and end Date period					
-				scheduleEventsDomain = scheduleEventDAO.searchByBeginDateAndEndDate(loadEventsBeginPeriod, loadEventsEndPeriod);
+				scheduleEventsDomain = scheduleEventDAO.searchByBeginDateAndEndDate(
+						dateUtil.convertLocalDateTimeToDate(loadEventsBeginPeriod),
+						dateUtil.convertLocalDateTimeToDate(loadEventsEndPeriod),
+						loginController.getLoggedUser().getUserName());
 				
 				//Populate Schedule Event Model according to the event
 				if (onEventMoveFlag || onEventResizeFlag) {
@@ -233,9 +283,16 @@ public class ScheduleEventController implements Serializable {
 					
 					//Populate Schedule Event Model List
 					for (ScheduleEventDomain scheduleEventDomain : scheduleEventsDomain) {
-						lazyScheduleModel.addEvent(new DefaultScheduleEvent(scheduleEventDomain.getScheduleEventDescription(),
-							scheduleEventDomain.getScheduleEventBeginDate(),
-							scheduleEventDomain.getScheduleEventEndDate()));
+						//AddEvent
+						lazyScheduleModel.addEvent(DefaultScheduleEvent.builder().
+								title(scheduleEventDomain.getScheduleEventDescription()).
+								description(scheduleEventDomain.getScheduleEventType()).
+								startDate(dateUtil.convertDateToLocalDateTime(scheduleEventDomain.getScheduleEventBeginDate())).
+								endDate(dateUtil.convertDateToLocalDateTime(scheduleEventDomain.getScheduleEventEndDate())).
+								editable(scheduleEventDomain.getEditFlag()).
+								allDay(scheduleEventDomain.getAllDayFlag()).
+								styleClass(scheduleEventDomain.getStyleclassName()).
+								build());
 					}
 					
 				} else{
@@ -252,7 +309,7 @@ public class ScheduleEventController implements Serializable {
 			    	
 				} else if(onEventResizeFlag){			    	
 			    	//Inform the new Hour
-					Messages.addGlobalInfo("Horário do Evento ajustado com sucesso.");					
+					Messages.addGlobalInfo("Data do evento ajustado com sucesso.");					
 				
 				} else{					
 					//Inform generic message
@@ -269,9 +326,12 @@ public class ScheduleEventController implements Serializable {
 			e.printStackTrace();
 			doList();
 		}
-	}
+	}	
 	
-	
+
+	/**
+	 * Delete Event
+	 */
 	public void doDelete(){
 		try {
 			//Deleting
@@ -292,8 +352,12 @@ public class ScheduleEventController implements Serializable {
 			doList();
 		}
 	}
+
 	
-	
+	/**
+	 * Event Move
+	 * @param event
+	 */
     public void doEventMove(ScheduleEntryMoveEvent event) {
         //FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event moved", "Day delta:" + event.getDayDelta() + ", Minute delta:" + event.getMinuteDelta());
     	
@@ -301,10 +365,10 @@ public class ScheduleEventController implements Serializable {
     	onEventMoveFlag = true;
     	
     	//Set Begin Date
-    	beginDate = (Date) event.getScheduleEvent().getStartDate();
+    	beginDate = (LocalDateTime) event.getScheduleEvent().getStartDate();
     	
     	//Set End Date
-    	endDate = (Date) event.getScheduleEvent().getEndDate();
+    	endDate = (LocalDateTime) event.getScheduleEvent().getEndDate();
     	
 		//Instantiate Domain object
 		scheduleEventDomain = new ScheduleEventDomain();
@@ -318,7 +382,12 @@ public class ScheduleEventController implements Serializable {
 		//Clean Flags
 		doClean();
     }
-     
+ 
+    
+    /**
+     * Event Resize
+     * @param event
+     */
     public void doEventResize(ScheduleEntryResizeEvent event) {
         //FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event resized", "Day delta:" + event.getDayDelta() + ", Minute delta:" + event.getMinuteDelta());
     	
@@ -326,15 +395,15 @@ public class ScheduleEventController implements Serializable {
     	onEventResizeFlag = true;
     	
     	//Set Begin Date
-    	beginDate = (Date) event.getScheduleEvent().getStartDate();
+    	beginDate = (LocalDateTime) event.getScheduleEvent().getStartDate();
     	
     	//Set End Date
-    	endDate = (Date) event.getScheduleEvent().getEndDate();
+    	endDate = (LocalDateTime) event.getScheduleEvent().getEndDate();
     	
-		//Instantiate Domain object
+		//Instantiate scheduleEventDomain
 		scheduleEventDomain = new ScheduleEventDomain();
 				
-		//Set Description of Domain object
+		//Set Description of scheduleEventDomain
 		scheduleEventDomain.setScheduleEventDescription((String) event.getScheduleEvent().getTitle());
 		
 		//Save the change
@@ -343,43 +412,91 @@ public class ScheduleEventController implements Serializable {
 		//Clean Flags
 		doClean();
     }
-
 	
-    /*
-     * Getters and Setters
-     */
+	
+	/**
+	 * 
+	 * Getters and Setters
+	 */
 	public ScheduleEventDomain getScheduleEventDomain() {
 		return scheduleEventDomain;
 	}
+
 
 	public void setScheduleEventDomain(ScheduleEventDomain scheduleEventDomain) {
 		this.scheduleEventDomain = scheduleEventDomain;
 	}
 
-	public ScheduleModel getLazyScheduleModel() {
-		return lazyScheduleModel;
+
+	public List<ScheduleEventDomain> getScheduleEventsDomain() {
+		return scheduleEventsDomain;
 	}
 
-	public void setEvent(ScheduleModel event) {
-		this.lazyScheduleModel = event;
+
+	public void setScheduleEventsDomain(List<ScheduleEventDomain> scheduleEventsDomain) {
+		this.scheduleEventsDomain = scheduleEventsDomain;
 	}
 
+
+	public LocalDateTime getLoadEventsBeginPeriod() {
+		return loadEventsBeginPeriod;
+	}
+
+
+	public void setLoadEventsBeginPeriod(LocalDateTime loadEventsBeginPeriod) {
+		this.loadEventsBeginPeriod = loadEventsBeginPeriod;
+	}
+
+
+	public LocalDateTime getLoadEventsEndPeriod() {
+		return loadEventsEndPeriod;
+	}
+
+
+	public void setLoadEventsEndPeriod(LocalDateTime loadEventsEndPeriod) {
+		this.loadEventsEndPeriod = loadEventsEndPeriod;
+	}
+
+
+	@SuppressWarnings("rawtypes")
 	public ScheduleEvent getScheduleEvent() {
 		return scheduleEvent;
 	}
 
+
+	@SuppressWarnings("rawtypes")
 	public void setScheduleEvent(ScheduleEvent scheduleEvent) {
 		this.scheduleEvent = scheduleEvent;
 	}
 
 
-	public boolean isOnEventSelectFlag() {
-		return onEventSelectFlag;
+	public ScheduleModel getLazyScheduleModel() {
+		return lazyScheduleModel;
 	}
 
 
-	public void setOnEventSelectFlag(boolean onEventSelectFlag) {
-		this.onEventSelectFlag = onEventSelectFlag;
+	public void setLazyScheduleModel(ScheduleModel lazyScheduleModel) {
+		this.lazyScheduleModel = lazyScheduleModel;
+	}
+
+
+	public LocalDateTime getBeginDate() {
+		return beginDate;
+	}
+
+
+	public void setBeginDate(LocalDateTime beginDate) {
+		this.beginDate = beginDate;
+	}
+
+
+	public LocalDateTime getEndDate() {
+		return endDate;
+	}
+
+
+	public void setEndDate(LocalDateTime endDate) {
+		this.endDate = endDate;
 	}
 
 
@@ -392,44 +509,5 @@ public class ScheduleEventController implements Serializable {
 		this.entryMoveEvent = entryMoveEvent;
 	}
 
-
-	public Date getLoadEventsBeginPeriod() {
-		return loadEventsBeginPeriod;
-	}
-
-
-	public void setLoadEventsBeginPeriod(Date startDate) {
-		this.loadEventsBeginPeriod = startDate;
-	}
-
-
-	public Date getLoadEventsEndPeriod() {
-		return loadEventsEndPeriod;
-	}
-
-
-	public void setLoadEventsEndPeriod(Date endDate) {
-		this.loadEventsEndPeriod = endDate;
-	}
-
-
-	public Date getBeginDate() {
-		return beginDate;
-	}
-
-
-	public void setBeginDate(Date beginDate) {
-		this.beginDate = beginDate;
-	}
-
-
-	public Date getEndDate() {
-		return endDate;
-	}
-
-
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
 
 }
