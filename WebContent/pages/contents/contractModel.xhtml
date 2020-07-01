@@ -209,9 +209,9 @@
 							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
 									</pe:clipboard>
 									
-									<p:outputLabel value="E-MAIL_PESSOA "/>
+									<p:outputLabel value="EMAIL_PESSOA "/>
 									<p:commandButton id="btnCopylEmailID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
-									<pe:clipboard id="clipAjaxEmailID" trigger="btnCopylEmailID" action="copy" text="E-MAIL_PESSOA">  
+									<pe:clipboard id="clipAjaxEmailID" trigger="btnCopylEmailID" action="copy" text="EMAIL_PESSOA">  
 							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
 							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
 									</pe:clipboard>										

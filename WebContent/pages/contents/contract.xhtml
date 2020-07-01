@@ -60,6 +60,8 @@
 							 reflow="true" 
 							 rowHover="true"
 							 draggableColumns="true" 
+							 liveResize="true"
+							 liveScroll="true"
 							 style="text-align: center; width: 90%; margin: 0 auto;">
 
 					
@@ -242,20 +244,23 @@
 						 				  
 						<!-- GO TO HELP -->
 						<p:commandButton value="Ajuda"
-						 				  onclick="PF('dlgHelp').show();"
-						 				  icon="fa fa-question"/>
+										 title="Ajuda para criar um Contrato"
+						 				 onclick="PF('dlgHelp').show();"
+						 				 icon="fa fa-question"/>
 
 
 						<!-- PARAMETERS -->
 						<p:commandButton value="Parâmetros"
-						 				  action="client.contractSetting" 
-						 				  icon="fa fa-gear"/>
+										 title="Parâmetros do Contrato"
+						 				 action="client.contractSetting" 
+						 				 icon="fa fa-gear"/>
 						 
 						 						 				  						 
 						<!-- GO TO CONTRACT MODEL PAGE -->
 						<p:commandButton value="Modelo"
-						 				  action="client.contractModel" 
-						 				  icon="fa fa-edit"/>					
+										 title="Modelo de Contrato"
+						 				 action="client.contractModel" 
+						 				 icon="fa fa-edit"/>					
 
 						 
 						<p:spacer width="150px" height="0px"/>
@@ -278,6 +283,7 @@
 						 <!-- CHOOSE DATA TABLE COLOMNS  -->
 						 <p:commandButton value="Colunas"
 						 				  type="button" 
+						 				  title="Mostrar/Esconder Colunas"
 						 				  id="columnsDataTableID"
 						 				  icon="fa fa-edit"/>
 						 				  

@@ -1,6 +1,7 @@
 package br.com.abracowebmanagement.controller;
 
 import java.io.Serializable;
+import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Date;
@@ -8,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -16,6 +19,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.servlet.http.HttpServlet;
 
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.Velocity;
 import org.omnifaces.util.Faces;
 import org.omnifaces.util.Messages;
 import org.primefaces.event.FlowEvent;
@@ -116,6 +121,9 @@ public class ContractController extends HttpServlet implements Serializable {
 	
 	//Save Button in Contract Student Dialog
 	private boolean enableComponentOnContractStudent;
+	
+	//Hash Map
+	Map<String, String> map = new HashMap<String, String>();
 	
 	String pathSeparator = System.getProperty("file.separator");
 
@@ -796,10 +804,10 @@ public class ContractController extends HttpServlet implements Serializable {
 		String reportPath =  Faces.getRealPath("reports/report1.jasper");    	
     	  	
 		//Get Report's Image (LOGO) Path 
-		//String imagePath = Faces.getRealPath("reports/logo_abraco_cultura.png");
+		String imagePath = Faces.getRealPath("reports/logo_abraco_cultura.png");
 				
 		//Set Report Name
-		String reportName = "Contrato_" /*+ contractDomain.getPersonDomain().getCompleteName()*/;
+		String reportName = "Contrato_" + contractDomain.getFirstSubstituteProfesssorPersonDomain().getUserName().replaceAll(".", "");
 		
 		//Create Map to store parameters
 		Map<String, Object> parameters = new HashMap<>();
@@ -807,9 +815,15 @@ public class ContractController extends HttpServlet implements Serializable {
 		//Get contract Model Professor Contract Body and Convert Bytes into String
 		contractBody = new String(contractDomain.getProfessorContractModelDomain().getContractModelDescription(), Charset.defaultCharset());
 		
+		//Load replace Map
+    	mapParameters(parameters);
+    	
+    	//replaceMultiple(String target, Map<String, String> replacements, boolean caseSensitive)
+    	
+		
 		//Define Map's Parameters
-		parameters.put("ContractBody", doGetRealContractBody(contractBody));
-		//parameters.put("AbracoLogo", imagePath);
+		//parameters.put("ContractBody", /*doGetRealContractBody(contractBody)*/contractDomain.getContractCodeDescription());
+		parameters.put("abracoLogo", imagePath);
     	
 
 		
@@ -858,7 +872,7 @@ public class ContractController extends HttpServlet implements Serializable {
 		
 		//Define Map's Parameters
 		parameters.put("Parameter1", "texto do Paramêtro");
-		parameters.put("abracoLogo", imagePath);    	
+		parameters.put("abracoLogo", imagePath);
     	
     	//Instantiate  the Report Controller
         ReportController relatorio = new ReportController();
@@ -912,138 +926,335 @@ public class ContractController extends HttpServlet implements Serializable {
  
     public String doGetRealContractBody(String body){
 		
-    	String replaceContractBody = body.toString();
- 
-    	  	
-    	/**
-    	 * Person who is contracting TAG
-    	 */
-    	if(body.contains("PROFESSOR_CURSO")){
-    		replaceContractBody = replaceContractBody.replaceAll("PROFESSOR_CURSO", contractDomain.getPrincipalProfesssorPersonDomain().getPersonDomain().getCompleteName());
-    	}
     	
-    	if(body.contains("E-MAIL_PESSOA")){
-    		replaceContractBody = replaceContractBody.replaceAll("E-MAIL_PESSOA", contractDomain.getPrincipalProfesssorPersonDomain().getPersonDomain().getEmail());
-    	}   	
- 
-    	if(body.contains("TELEFONE_PESSOA")){
-    		replaceContractBody = replaceContractBody.replaceAll("TELEFONE_PESSOA", contractDomain.getPrincipalProfesssorPersonDomain().getPersonDomain().getTelephone());
-    	} 
-    	 
-    	if(body.contains("CPF_PESSOA")){
-    		replaceContractBody = replaceContractBody.replaceAll("CPF_PESSOA", contractDomain.getPrincipalProfesssorPersonDomain().getPersonDomain().getCpf());
-    	}     	
-	   	 
-	   	if(body.contains("CNPJ_PESSOA")){
-	   		replaceContractBody = replaceContractBody.replaceAll("CNPJ_PESSOA", contractDomain.getPrincipalProfesssorPersonDomain().getCnpj());
-	   	}
-	   	   	 
-	   	if(body.contains("ENDERECO_PESSOA")){
-	   		replaceContractBody = replaceContractBody.replaceAll("ENDERECO_PESSOA", contractDomain.getPrincipalProfesssorPersonDomain().getPersonDomain().getAddress());
-	   	}	   	
+        Velocity.init();
 
-	   	
+        VelocityContext context = new VelocityContext();
+        /*context.put("name", "Mark");
+        context.put("invoiceNumber", "42123");
+        context.put("dueDate", "June 6, 2009");*/
+
+        /**
+         * Person who is contracting TAG
+         */
+        context.put("PROFESSOR_CURSO", contractDomain.getPrincipalProfesssorPersonDomain().getPersonDomain().getCompleteName());
+        context.put("E-MAIL_PESSOA", contractDomain.getPrincipalProfesssorPersonDomain().getPersonDomain().getEmail());
+        context.put("TELEFONE_PESSOA", contractDomain.getPrincipalProfesssorPersonDomain().getPersonDomain().getTelephone());
+        context.put("CPF_PESSOA", contractDomain.getPrincipalProfesssorPersonDomain().getPersonDomain().getCpf());
+        context.put("CNPJ_PESSOA", contractDomain.getPrincipalProfesssorPersonDomain().getCnpj());
+        context.put("ENDERECO_PESSOA", contractDomain.getPrincipalProfesssorPersonDomain().getPersonDomain().getAddress());
+        
     	/**
     	 * Course TAG
-    	 */	   	 
-	   	if(body.contains("CODIGO_CONTRATO")){
-	   		replaceContractBody = replaceContractBody.replaceAll("CODIGO_CONTRATO", contractDomain.getContractCodeDescription());
-	   	}	   	
-	   	 
-	   	if(body.contains("UNIDADE_CURSO")){
-	   		replaceContractBody = replaceContractBody.replaceAll("UNIDADE_CURSO", methodUtil.toCamelCase(contractDomain.getClassPlaceDescription()));
-	   	}
-	   	 
-	   	if(body.contains("MODULO_CURSO")){
-	   		replaceContractBody = replaceContractBody.replaceAll("MODULO_CURSO", contractDomain.getClassModuleDescription().toLowerCase());
-	   	}	   	
-	   	 
-	   	if(body.contains("LINGUA_CURSO")){	   		
-	   		replaceContractBody = replaceContractBody.replaceAll("LINGUA_CURSO", methodUtil.toCamelCase(contractDomain.getClassLanguageDescription()));
-	   	}	   	
-	   	 
-	   	if(body.contains("NIVEL_CURSO")){
-	   		replaceContractBody = replaceContractBody.replaceAll("NIVEL_CURSO", contractDomain.getClassLevelDescription());
-	   	} 	
-	   	 
-	   	if(body.contains("HORA_INICIO_CURSO")){
-	   		replaceContractBody = replaceContractBody.replaceAll("HORA_INICIO_CURSO", dateUtil.convertIntoHHmm(contractDomain.getBeginClassHour()));
-	   	} 	   	
-	   	 
-	   	if(body.contains("HORA_TERMINO_CURSO")){
-	   		replaceContractBody = replaceContractBody.replaceAll("HORA_TERMINO_CURSO", dateUtil.convertIntoHHmm(contractDomain.getEndClassHour()));
-	   	} 	   	
-	   	 
-	   	if(body.contains("PAUSA_CURSO")){
-	   		replaceContractBody = replaceContractBody.replaceAll("PAUSA_CURSO", 
+    	 */	
+        context.put("CODIGO_CONTRATO", contractDomain.getContractCodeDescription());
+	   	context.put("CODIGO_CONTRATO", contractDomain.getContractCodeDescription());	   	 
+	   	context.put("UNIDADE_CURSO", methodUtil.toCamelCase(contractDomain.getClassPlaceDescription()));
+	   	context.put("MODULO_CURSO", contractDomain.getClassModuleDescription().toLowerCase());	   		
+	   	context.put("LINGUA_CURSO", methodUtil.toCamelCase(contractDomain.getClassLanguageDescription()));
+	   	context.put("NIVEL_CURSO", contractDomain.getClassLevelDescription());
+	   	context.put("HORA_INICIO_CURSO", dateUtil.convertIntoHHmm(contractDomain.getBeginClassHour()));
+	   	context.put("HORA_TERMINO_CURSO", dateUtil.convertIntoHHmm(contractDomain.getEndClassHour()));
+	   	context.put("PAUSA_CURSO", 
 	   				contractDomain.getBreakClassHour() == 0? "sem pausa" : "com uma pausa de " + dateUtil.formatDurationTime(contractDomain.getBreakClassHour()));
-	   	}	   	
-	   	 
-	   	if(body.contains("TEMPO_CURSO")){
-	   		replaceContractBody = replaceContractBody.replaceAll("TEMPO_CURSO", dateUtil.formatDurationTime(contractDomain.getClassTimeHour()));
-	   	}	   	
-	   	 
-	   	if(body.contains("HORA_SEMANAL_CURSO")){
-	   		replaceContractBody = replaceContractBody.replaceAll("HORA_SEMANAL_CURSO", dateUtil.formatDurationTime(contractDomain.getClassWeeklyTimeHour()));
-	   	}	   	
-	   	 
-	   	if(body.contains("PRIMEIRO_DIA_LETIVO")){
-	   		replaceContractBody = replaceContractBody.replaceAll("PRIMEIRO_DIA_LETIVO", methodUtil.toCamelCase(contractDomain.getFirstClassDayDescription()));
-	   	}	   	
-	   	 
-	   	if(body.contains("SEGUNDO_DIA_LETIVO")){
-	   		replaceContractBody = replaceContractBody.replaceAll("SEGUNDO_DIA_LETIVO", methodUtil.toCamelCase(contractDomain.getSecondClassDayDescription()));
-	   	}	   	
+	   	context.put("TEMPO_CURSO", dateUtil.formatDurationTime(contractDomain.getClassTimeHour()));
+	   	context.put("HORA_SEMANAL_CURSO", dateUtil.formatDurationTime(contractDomain.getClassWeeklyTimeHour()));
+	   	context.put("PRIMEIRO_DIA_LETIVO", methodUtil.toCamelCase(contractDomain.getFirstClassDayDescription()));
+	   	context.put("SEGUNDO_DIA_LETIVO", methodUtil.toCamelCase(contractDomain.getSecondClassDayDescription()));	   	
 	   	
 	   	//Change after this value
-	   	if(body.contains("PRECO_PADRAO_CURSO")){
-	   		replaceContractBody = replaceContractBody.replaceAll("PRECO_PADRAO_CURSO", methodUtil.currencyFormat(contractDomain.getRealPriceDescription()));
-	   	}   	
+	   	context.put("PRECO_PADRAO_CURSO", methodUtil.currencyFormat(contractDomain.getRealPriceDescription()));  	
 	   	
 	   	//Change after this value
-	   	if(body.contains("PRECO_PROFESSOR_CURSO")){
-	   		replaceContractBody = replaceContractBody.replaceAll("PRECO_PROFESSOR_CURSO", methodUtil.currencyFormat(contractDomain.getProfessorPriceDescription()));
-	   	}   	
-	   	 
-	   	if(body.contains("PACOTE_HORA_CURSO")){
-	   		replaceContractBody = replaceContractBody.replaceAll("PACOTE_HORA_CURSO", String.valueOf(contractDomain.getClassPackageHour())+"h");
-	   	}	
+	   	context.put("PRECO_PROFESSOR_CURSO", methodUtil.currencyFormat(contractDomain.getProfessorPriceDescription()));
+	   	context.put("PACOTE_HORA_CURSO", String.valueOf(contractDomain.getClassPackageHour())+"h");	
 	   		   	
 	   	//Change after this value
-	   	if(body.contains("PRECO_PROFESSOR_TOTAL_CURSO")){
-	   		replaceContractBody = replaceContractBody.replaceAll("PRECO_PROFESSOR_TOTAL_CURSO", methodUtil.currencyFormat(contractDomain.getTotalPackageProfessorPriceDescription()));
-	   	}
+	   	context.put("PRECO_PROFESSOR_TOTAL_CURSO", methodUtil.currencyFormat(contractDomain.getTotalPackageProfessorPriceDescription()));
 	   	
 	   	
 	   	/**
 	   	 * DeadLine
 	   	 */
-	   	 
-	   	if(body.contains("DATA_INICIO_CURSO")){	   		
-	   		replaceContractBody = replaceContractBody.replaceAll("DATA_INICIO_CURSO", dateUtil.convertIntoddMMyyyy(contractDomain.getBeginDate()));
-	   	}
-	   	
-	   	if(body.contains("DATA_TERMINO_CURSO")){	   		
-	   		replaceContractBody = replaceContractBody.replaceAll("DATA_TERMINO_CURSO", dateUtil.convertIntoddMMyyyy(contractDomain.getEndDate()));
-	   	}	   	
+	   	 	   		
+	   	context.put("DATA_INICIO_CURSO", dateUtil.convertIntoddMMyyyy(contractDomain.getBeginDate()));	  		
+	   	context.put("DATA_TERMINO_CURSO", dateUtil.convertIntoddMMyyyy(contractDomain.getEndDate()));   	
 	   	
 	   	
 	   	/**
 	   	 * Payment
 	   	 */ 	   	 
-	  	/*if(body.contains("TIPO_PAGAMENTO")){
-	  		replaceContractBody = replaceContractBody.replaceAll("TIPO_PAGAMENTO", "");
+	  	/*if(replaceContractBody.contains("TIPO_PAGAMENTO")){
+	  		context.put("TIPO_PAGAMENTO", "");
 	  	}*/	
 	   	
-	  	/*if(body.contains("FORMA_PAGAMENTO")){
-  		replaceContractBody = replaceContractBody.replaceAll("TIPO_PAGAMENTO", "");
+	  	/*if(replaceContractBody.contains("FORMA_PAGAMENTO")){
+  		context.put("TIPO_PAGAMENTO", "");
   		}*/
+        
+	   	
+        String template = body;
+        
+        /*String template = "Hello $name. Please find attached invoice" +
+                          " $invoiceNumber which is due on $dueDate.";*/
+        StringWriter writer = new StringWriter();
+        Velocity.evaluate(context, writer, "testeTemplateName", template);
+
+        return writer.toString();
+    	
+    	
+    	
+	    	/**
+	    	 * Person who is contracting TAG
+	    	 */	
+	    	/*if(replaceContractBody.contains("PROFESSOR_CURSO")){
+	    		replaceContractBody = replaceContractBody.replaceAll("PROFESSOR_CURSO", contractDomain.getPrincipalProfesssorPersonDomain().getPersonDomain().getCompleteName());
+	    	}
+	    	
+	    	if(replaceContractBody.contains("E-MAIL_PESSOA")){
+	    		replaceContractBody = replaceContractBody.replaceAll("E-MAIL_PESSOA", contractDomain.getPrincipalProfesssorPersonDomain().getPersonDomain().getEmail());
+	    	}   	
+	 
+	    	if(replaceContractBody.contains("TELEFONE_PESSOA")){
+	    		replaceContractBody = replaceContractBody.replaceAll("TELEFONE_PESSOA", contractDomain.getPrincipalProfesssorPersonDomain().getPersonDomain().getTelephone());
+	    	} 
+	    	 
+	    	if(replaceContractBody.contains("CPF_PESSOA")){
+	    		replaceContractBody = replaceContractBody.replaceAll("CPF_PESSOA", contractDomain.getPrincipalProfesssorPersonDomain().getPersonDomain().getCpf());
+	    	}     	
+		   	 
+		   	if(replaceContractBody.contains("CNPJ_PESSOA")){
+		   		replaceContractBody = replaceContractBody.replaceAll("CNPJ_PESSOA", contractDomain.getPrincipalProfesssorPersonDomain().getCnpj());
+		   	}
+		   	   	 
+		   	if(replaceContractBody.contains("ENDERECO_PESSOA")){
+		   		replaceContractBody = replaceContractBody.replaceAll("ENDERECO_PESSOA", contractDomain.getPrincipalProfesssorPersonDomain().getPersonDomain().getAddress());
+		   	}  	*/
+	
+		   	
+	    	/**
+	    	 * Course TAG
+	    	 */	   	 
+		   /*	if(replaceContractBody.contains("CODIGO_CONTRATO")){
+		   		replaceContractBody = replaceContractBody.replaceAll("CODIGO_CONTRATO", contractDomain.getContractCodeDescription());
+		   	}	   	
+		   	 
+		   	if(replaceContractBody.contains("UNIDADE_CURSO")){
+		   		replaceContractBody = replaceContractBody.replaceAll("UNIDADE_CURSO", methodUtil.toCamelCase(contractDomain.getClassPlaceDescription()));
+		   	}
+		   	 
+		   	if(replaceContractBody.contains("MODULO_CURSO")){
+		   		replaceContractBody = replaceContractBody.replaceAll("MODULO_CURSO", contractDomain.getClassModuleDescription().toLowerCase());
+		   	}	   	
+		   	 
+		   	if(replaceContractBody.contains("LINGUA_CURSO")){	   		
+		   		replaceContractBody = replaceContractBody.replaceAll("LINGUA_CURSO", methodUtil.toCamelCase(contractDomain.getClassLanguageDescription()));
+		   	}	   	
+		   	 
+		   	if(replaceContractBody.contains("NIVEL_CURSO")){
+		   		replaceContractBody = replaceContractBody.replaceAll("NIVEL_CURSO", contractDomain.getClassLevelDescription());
+		   	} 	
+		   	 
+		   	if(replaceContractBody.contains("HORA_INICIO_CURSO")){
+		   		replaceContractBody = replaceContractBody.replaceAll("HORA_INICIO_CURSO", dateUtil.convertIntoHHmm(contractDomain.getBeginClassHour()));
+		   	} 	   	
+		   	 
+		   	if(replaceContractBody.contains("HORA_TERMINO_CURSO")){
+		   		replaceContractBody = replaceContractBody.replaceAll("HORA_TERMINO_CURSO", dateUtil.convertIntoHHmm(contractDomain.getEndClassHour()));
+		   	} 	   	
+		   	 
+		   	if(replaceContractBody.contains("PAUSA_CURSO")){
+		   		replaceContractBody = replaceContractBody.replaceAll("PAUSA_CURSO", 
+		   				contractDomain.getBreakClassHour() == 0? "sem pausa" : "com uma pausa de " + dateUtil.formatDurationTime(contractDomain.getBreakClassHour()));
+		   	}	   	
+		   	 
+		   	if(replaceContractBody.contains("TEMPO_CURSO")){
+		   		replaceContractBody = replaceContractBody.replaceAll("TEMPO_CURSO", dateUtil.formatDurationTime(contractDomain.getClassTimeHour()));
+		   	}	   	
+		   	 
+		   	if(replaceContractBody.contains("HORA_SEMANAL_CURSO")){
+		   		replaceContractBody = replaceContractBody.replaceAll("HORA_SEMANAL_CURSO", dateUtil.formatDurationTime(contractDomain.getClassWeeklyTimeHour()));
+		   	}	   	
+		   	 
+		   	if(replaceContractBody.contains("PRIMEIRO_DIA_LETIVO")){
+		   		replaceContractBody = replaceContractBody.replaceAll("PRIMEIRO_DIA_LETIVO", methodUtil.toCamelCase(contractDomain.getFirstClassDayDescription()));
+		   	}	   	
+		   	 
+		   	if(replaceContractBody.contains("SEGUNDO_DIA_LETIVO")){
+		   		replaceContractBody = replaceContractBody.replaceAll("SEGUNDO_DIA_LETIVO", methodUtil.toCamelCase(contractDomain.getSecondClassDayDescription()));
+		   	}	   	
+		   	
+		   	//Change after this value
+		   	if(replaceContractBody.contains("PRECO_PADRAO_CURSO")){
+		   		replaceContractBody = replaceContractBody.replaceAll("PRECO_PADRAO_CURSO", methodUtil.currencyFormat(contractDomain.getRealPriceDescription()));
+		   	}   	
+		   	
+		   	//Change after this value
+		   	if(replaceContractBody.contains("PRECO_PROFESSOR_CURSO")){
+		   		replaceContractBody = replaceContractBody.replaceAll("PRECO_PROFESSOR_CURSO", methodUtil.currencyFormat(contractDomain.getProfessorPriceDescription()));
+		   	}   	
+		   	 
+		   	if(replaceContractBody.contains("PACOTE_HORA_CURSO")){
+		   		replaceContractBody = replaceContractBody.replaceAll("PACOTE_HORA_CURSO", String.valueOf(contractDomain.getClassPackageHour())+"h");
+		   	}	
+		   		   	
+		   	//Change after this value
+		   	if(replaceContractBody.contains("PRECO_PROFESSOR_TOTAL_CURSO")){
+		   		replaceContractBody = replaceContractBody.replaceAll("PRECO_PROFESSOR_TOTAL_CURSO", methodUtil.currencyFormat(contractDomain.getTotalPackageProfessorPriceDescription()));
+		   	}*/
+		   	
+		   	
+		   	/**
+		   	 * DeadLine
+		   	 */
+		   	 
+		   	/*if(replaceContractBody.contains("DATA_INICIO_CURSO")){	   		
+		   		replaceContractBody = replaceContractBody.replaceAll("DATA_INICIO_CURSO", dateUtil.convertIntoddMMyyyy(contractDomain.getBeginDate()));
+		   	}
+		   	
+		   	if(replaceContractBody.contains("DATA_TERMINO_CURSO")){	   		
+		   		replaceContractBody = replaceContractBody.replaceAll("DATA_TERMINO_CURSO", dateUtil.convertIntoddMMyyyy(contractDomain.getEndDate()));
+		   	}*/	   	
+		   	
+		   	
+		   	/**
+		   	 * Payment
+		   	 */ 	   	 
+		  	/*if(replaceContractBody.contains("TIPO_PAGAMENTO")){
+		  		replaceContractBody = replaceContractBody.replaceAll("TIPO_PAGAMENTO", "");
+		  	}*/	
+		   	
+		  	/*if(replaceContractBody.contains("FORMA_PAGAMENTO")){
+	  		replaceContractBody = replaceContractBody.replaceAll("TIPO_PAGAMENTO", "");
+	  		}*/
+
 	   	
 	   	
-    	return replaceContractBody;   	
+    	//return replaceContractBody;   	
     }
     
+ 
     
+    /**
+     * Performs simultaneous search/replace of multiple strings. Case Sensitive!
+     */
+    /*public String replaceMultiple(String target, Map<String, String> replacements) {   	
+      return replaceMultiple(target, replacements, true);
+    }*/
+
+    /**
+     * Performs simultaneous search/replace of multiple strings.
+     * 
+     * @param target        string to perform replacements on.
+     * @param replacements  map where key represents value to search for, and value represents replacem
+     * @param caseSensitive whether or not the search is case-sensitive.
+     * @return replaced string
+     */
+	public String replaceMultiple(String target, Map<String, String> replacements, boolean caseSensitive) {
+		if (target == null || "".equals(target) || replacements == null || replacements.size() == 0)
+			return target;
+
+		// if we are doing case-insensitive replacements, we need to make the
+		// map case-insensitive--make a new map with all-lower-case keys
+		if (!caseSensitive) {
+			Map<String, String> altReplacements = new HashMap<String, String>(replacements.size());
+			for (String key : replacements.keySet())
+				altReplacements.put(key.toLowerCase(), replacements.get(key));
+
+			replacements = altReplacements;
+		}
+
+		StringBuilder patternString = new StringBuilder();
+		if (!caseSensitive)
+			patternString.append("(?i)");
+
+		patternString.append('(');
+		boolean first = true;
+		for (String key : replacements.keySet()) {
+			if (first)
+				first = false;
+			else
+				patternString.append('|');
+
+			patternString.append(Pattern.quote(key));
+		}
+		patternString.append(')');
+
+		Pattern pattern = Pattern.compile(patternString.toString());
+		Matcher matcher = pattern.matcher(target);
+
+		StringBuffer res = new StringBuffer();
+		while (matcher.find()) {
+			String match = matcher.group(1);
+			if (!caseSensitive)
+				match = match.toLowerCase();
+			matcher.appendReplacement(res, replacements.get(match));
+		}
+		matcher.appendTail(res);
+
+		return res.toString();
+	}    
+    
+    
+    public void mapParameters(Map<String, Object> parameters){
+   	
+        /**
+         * Person who is contracting TAG
+         */
+    	parameters.put("PROFESSOR_CURSO", contractDomain.getPrincipalProfesssorPersonDomain().getPersonDomain().getCompleteName());
+    	parameters.put("E-MAIL_PESSOA", contractDomain.getPrincipalProfesssorPersonDomain().getPersonDomain().getEmail());
+    	parameters.put("TELEFONE_PESSOA", contractDomain.getPrincipalProfesssorPersonDomain().getPersonDomain().getTelephone());
+    	parameters.put("CPF_PESSOA", contractDomain.getPrincipalProfesssorPersonDomain().getPersonDomain().getCpf());
+    	parameters.put("CNPJ_PESSOA", contractDomain.getPrincipalProfesssorPersonDomain().getCnpj());
+    	parameters.put("ENDERECO_PESSOA", contractDomain.getPrincipalProfesssorPersonDomain().getPersonDomain().getAddress());
+        
+    	/**
+    	 * Course TAG
+    	 */	
+    	parameters.put("CODIGO_CONTRATO", contractDomain.getContractCodeDescription());	 
+    	parameters.put("UNIDADE_CURSO", methodUtil.toCamelCase(contractDomain.getClassPlaceDescription()));
+    	parameters.put("MODULO_CURSO", contractDomain.getClassModuleDescription().toLowerCase());	   		
+    	parameters.put("LINGUA_CURSO", methodUtil.toCamelCase(contractDomain.getClassLanguageDescription()));
+    	parameters.put("NIVEL_CURSO", contractDomain.getClassLevelDescription());
+    	parameters.put("HORA_INICIO_CURSO", dateUtil.convertIntoHHmm(contractDomain.getBeginClassHour()));
+    	parameters.put("HORA_TERMINO_CURSO", dateUtil.convertIntoHHmm(contractDomain.getEndClassHour()));
+    	parameters.put("PAUSA_CURSO", 
+	   				contractDomain.getBreakClassHour() == 0? "sem pausa" : "com uma pausa de " + dateUtil.formatDurationTime(contractDomain.getBreakClassHour()));
+    	parameters.put("TEMPO_CURSO", dateUtil.formatDurationTime(contractDomain.getClassTimeHour()));
+    	parameters.put("HORA_SEMANAL_CURSO", dateUtil.formatDurationTime(contractDomain.getClassWeeklyTimeHour()));
+    	parameters.put("PRIMEIRO_DIA_LETIVO", methodUtil.toCamelCase(contractDomain.getFirstClassDayDescription()));
+    	parameters.put("SEGUNDO_DIA_LETIVO", methodUtil.toCamelCase(contractDomain.getSecondClassDayDescription()));	   	
+	   	
+	   	//Change after this value
+    	parameters.put("PRECO_PADRAO_CURSO", methodUtil.currencyFormat(contractDomain.getRealPriceDescription()));  	
+	   	
+	   	//Change after this value
+    	parameters.put("PRECO_PROFESSOR_CURSO", methodUtil.currencyFormat(contractDomain.getProfessorPriceDescription()));
+    	parameters.put("PACOTE_HORA_CURSO", String.valueOf(contractDomain.getClassPackageHour())+"h");	
+	   		   	
+	   	//Change after this value
+    	parameters.put("PRECO_PROFESSOR_TOTAL_CURSO", methodUtil.currencyFormat(contractDomain.getTotalPackageProfessorPriceDescription()));
+	   	
+	   	
+	   	/**
+	   	 * DeadLine
+	   	 */
+	   	 	   		
+    	parameters.put("DATA_INICIO_CURSO", dateUtil.convertIntoddMMyyyy(contractDomain.getBeginDate()));	  		
+    	parameters.put("DATA_TERMINO_CURSO", dateUtil.convertIntoddMMyyyy(contractDomain.getEndDate()));   	
+	   	
+	   	
+	   	/**
+	   	 * Payment
+	   	 */
+	  	/*if(replaceContractBody.contains("TIPO_PAGAMENTO")){
+	  		map.put("TIPO_PAGAMENTO", "");
+	  	}*/	
+	   	
+	  	/*if(replaceContractBody.contains("FORMA_PAGAMENTO")){
+  		map.put("TIPO_PAGAMENTO", "");
+  		}*/
+    }
     
 	/**
 	 * Flow Process to fill forms
