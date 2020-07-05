@@ -20,20 +20,26 @@
 			<br/>
 			<!-- FORM FOR THEME SWITCHER -->
 			<h:form>
-				<h3>DEFINIR PARAMETROS</h3>
+				<h3>DEFINIR OS PARÂMETROS</h3>
 				<br/>
-				<p:link id="themeParametersID"
+				<p:link id="themeSettingID"
 						value="Tema"					
 						outcome="client.themeSetting"/> 
-				<p:tooltip for="themeParametersID" value="Define o Visual do Sistema"/>
+				<p:tooltip for="themeSettingID" value="Escolher o Visual do Sistema"/>
 				
 				<br/>
 				<br/>				
-				<p:link id="contractParametersID"
-						value="Contrato"					
+				<p:link id="contractSettingID"
+						value="Preços"					
 						outcome="client.contractSetting"/>
-				<p:tooltip for="contractParametersID" value="Define os Parâmetros do Contrato"/>
-						
+				<p:tooltip for="contractSettingID" value="Define os Preços do Contrato"/>
+				
+				<br/>
+				<br/>				
+				<p:link id="languageSettingID"
+						value="Língua"					
+						outcome="client.languageSetting"/>
+				<p:tooltip for="languageSettingID" value="Cadastrar uma língua"/>						
 				
 			</h:form>
 			

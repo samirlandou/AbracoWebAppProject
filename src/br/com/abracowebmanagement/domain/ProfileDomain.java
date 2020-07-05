@@ -4,8 +4,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-import br.com.abracowebmanagement.domain.generic.GenericDomain;
-
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "TB_PROFILE")

@@ -25,8 +25,8 @@ import org.primefaces.shaded.commons.io.FilenameUtils;
 
 import br.com.abracowebmanagement.dao.PersonDAO;
 import br.com.abracowebmanagement.dao.UserDAO;
-import br.com.abracowebmanagement.domain.person.PersonDomain;
-import br.com.abracowebmanagement.domain.user.UserDomain;
+import br.com.abracowebmanagement.domain.PersonDomain;
+import br.com.abracowebmanagement.domain.UserDomain;
 import br.com.abracowebmanagement.util.FileUtil;
 import br.com.abracowebmanagement.util.MethodUtil;
 import br.com.abracowebmanagement.util.PersonUtil;

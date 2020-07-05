@@ -11,7 +11,7 @@ import javax.faces.event.ActionEvent;
 import org.omnifaces.util.Messages;
 
 import br.com.abracowebmanagement.dao.ContractModelDAO;
-import br.com.abracowebmanagement.domain.contract.ContractModelDomain;
+import br.com.abracowebmanagement.domain.ContractModelDomain;
 
 @ManagedBean
 @ViewScoped

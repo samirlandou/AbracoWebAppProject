@@ -1,4 +1,4 @@
-package br.com.abracowebmanagement.domain.generic;
+package br.com.abracowebmanagement.domain;
 
 import java.io.Serializable;
 

@@ -9,7 +9,7 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
-import br.com.abracowebmanagement.domain.user.UserDomain;
+import br.com.abracowebmanagement.domain.UserDomain;
 import br.com.abracowebmanagement.hibernate.HibernateUtil;
 
 public class UserDAO extends GenericDAO<UserDomain> implements Serializable{

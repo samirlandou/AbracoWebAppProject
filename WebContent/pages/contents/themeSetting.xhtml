@@ -33,13 +33,16 @@
 						</p:themeSwitcher>
 
 					
-						<p:commandButton value="Voltar" icon="fa fa-reply" 
-										title="Voltar para a Tela 'Parâmetros'"
-										action="client.setting"/>
+						<p:commandButton value="Voltar" 
+										 icon="fa fa-reply" 
+										 title="Voltar para a Tela de Configuração"
+										 action="client.setting"/>
 										
-						<p:commandButton value="Salvar" icon="fa fa-floppy-o" action="#{themeSettingController.doSave}"
-										title="Salvar Tema"
-										update=":idMsgGlobal" />						
+						<p:commandButton value="Salvar"
+										 icon="fa fa-floppy-o" 
+										 action="#{themeSettingController.doSave}"
+										 title="Salvar o Tema"
+										 update=":idMsgGlobal" />						
 					</h:panelGrid>
 				</f:view>				
 				

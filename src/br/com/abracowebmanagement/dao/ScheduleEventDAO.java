@@ -8,7 +8,7 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
-import br.com.abracowebmanagement.domain.scheduleevent.ScheduleEventDomain;
+import br.com.abracowebmanagement.domain.ScheduleEventDomain;
 import br.com.abracowebmanagement.hibernate.HibernateUtil;
 
 public class ScheduleEventDAO extends GenericDAO<ScheduleEventDomain>{

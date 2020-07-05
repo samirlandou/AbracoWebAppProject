@@ -1,6 +1,7 @@
 package br.com.abracowebmanagement.controller;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +13,7 @@ import javax.faces.event.ActionEvent;
 import org.omnifaces.util.Messages;
 
 import br.com.abracowebmanagement.dao.PersonDAO;
-import br.com.abracowebmanagement.domain.person.PersonDomain;
+import br.com.abracowebmanagement.domain.PersonDomain;
 import br.com.abracowebmanagement.util.MethodUtil;
 import br.com.abracowebmanagement.util.PersonUtil;
 
@@ -239,11 +240,21 @@ public class PersonController implements Serializable {
 				cpf = personDomain.getCpf();
 				email = personDomain.getEmail();
 				telephone = personDomain.getTelephone();
-								
+				
+				//Instantiate personsDomain
+				personsDomain = new ArrayList<PersonDomain>();
+				
 				//List again Person (very import to update the list)
 				personsDomain = personDAO.descendList("id");
 				
-			}			
+			}else{
+				
+				//Instantiate personsDomain
+				personsDomain = new ArrayList<PersonDomain>();
+				
+				//List again Person (very import to update the list)
+				personsDomain = personDAO.descendList("id");
+			}
 		} catch (Exception e) {
 			Messages.addGlobalError("Ocorreu um erro ao salvar as informações de uma pessoa!");
 			e.printStackTrace();
@@ -294,9 +305,9 @@ public class PersonController implements Serializable {
 		} catch (Exception e) {
 			/*ConstraintViolationException*/
 			if(e.getCause().toString().contains("SQLIntegrityConstraintViolationException")){
-				Messages.addGlobalError("Não pode deletar pois o dado \"" + personDomain.getCompleteName() + "\" está sendo usado em outro processo!!!");
+				Messages.addGlobalError("Não pode deletar \"" + personDomain.getCompleteName() + "\" pois está sendo usado em outro processo!!!");
 			} else{
-				Messages.addGlobalError("Ocorreu um erro ao tentar excluir as informações de: " + personDomain.getCompleteName());
+				Messages.addGlobalError("Ocorreu um erro ao tentar excluir as informações de: \"" + personDomain.getCompleteName() + "\"");
 			}
 			e.printStackTrace();
 		}
@@ -342,7 +353,7 @@ public class PersonController implements Serializable {
 			}
 			
 		} catch (Exception e) {
-			Messages.addGlobalError("Ocorreu um erro ao editar as informações de: " + personDomain.getCompleteName());
+			Messages.addGlobalError("Ocorreu um erro ao editar as informações de: \"" + personDomain.getCompleteName() + "\"");
 			e.printStackTrace();			
 		}		
 	}
