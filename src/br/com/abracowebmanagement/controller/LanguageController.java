@@ -22,6 +22,7 @@ public class LanguageController implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
+	//Domain
 	private LanguageDomain languageDomain;
 	private List<LanguageDomain> languagesDomain;
 	LanguageDomain resultDomain;
@@ -44,9 +45,9 @@ public class LanguageController implements Serializable {
 	@PostConstruct
 	public void doList(){
 		try {
-			//List Person
+			//List Language
 			LanguageDAO languageDAO = new LanguageDAO();
-			languagesDomain = languageDAO.descendList("id");
+			languagesDomain = languageDAO.ascendList("languageName");
 						
 			//Login
 			FacesContext fc = FacesContext.getCurrentInstance();
@@ -63,7 +64,7 @@ public class LanguageController implements Serializable {
 
 	public void doClean(){
 		
-		//Instantiate new Person
+		//Instantiate new Language
 		languageDomain = new LanguageDomain();
 		
 		//Set old Name
@@ -80,7 +81,8 @@ public class LanguageController implements Serializable {
 	 * @since 04/02/2020
 	 */
 	public void doNewRegister(){		
-		//Instantiate new Person
+		
+		//Instantiate new Language
 		languageDomain = new LanguageDomain();
 		
 		//Set Old Description
@@ -97,21 +99,14 @@ public class LanguageController implements Serializable {
 	 * @author samirlandou <br/>
 	 * @since 04/02/2020
 	 */
-	public void doSave(){
-		/* 
-		//This code is used with PrimeFaces
-		String messageText = "Programação Web com java";
-		
-		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, messageText, messageText);
-		FacesContext context = FacesContext.getCurrentInstance();
-		context.addMessage(null, message);*/		
+	public void doSave(){		
 		
 		try {
 			
 			//Set Save Flag
 			 boolean saveFlag = true;
 			 
-			//Save Person with merge method
+			//Save Language with merge method
 			LanguageDAO languageDAO = new LanguageDAO();
 			
 			//Instantiate Result List Domain
@@ -121,40 +116,72 @@ public class LanguageController implements Serializable {
 			
 			for(LanguageDomain result : resultListDomain){
 				
-				if (oldName != null && oldDescription != null && languagesDomain != null) {
+				//Check if languguesDomain size is not null
+				if (languagesDomain.size() >= 1) {
 
-					if (!oldName.equalsIgnoreCase(languageDomain.getLanguageName())
-							&& result.getLanguageName().equalsIgnoreCase(languageDomain.getLanguageName())) {
-
-						// Set Save Flag
-						saveFlag = false;
-
-						// Error Message
-						Messages.addGlobalFatal("A língua \"" + languageDomain.getLanguageName() + "\" já existe.");
+					//Check duplicated Name
+					if(oldName != null){
 						
-						break;
+						if (!oldName.equalsIgnoreCase(languageDomain.getLanguageName())
+								&& result.getLanguageName().equalsIgnoreCase(languageDomain.getLanguageName())) {
 
+							// Set Save Flag
+							saveFlag = false;
+
+							// Error Message
+							Messages.addGlobalFatal("A língua \"" + languageDomain.getLanguageName() + "\" já existe.");
+							
+							break;
+						}					
+					} else{
+						
+						if (result.getLanguageName().equalsIgnoreCase(languageDomain.getLanguageName())) {
+
+							// Set Save Flag
+							saveFlag = false;
+
+							// Error Message
+							Messages.addGlobalFatal("A língua \"" + languageDomain.getLanguageName() + "\" já existe.");
+							
+							break;
+						}						
 					}
+
 					
-					if (!oldDescription.equalsIgnoreCase(languageDomain.getLanguageDescription()) 
-							&& result.getLanguageDescription().equalsIgnoreCase(languageDomain.getLanguageDescription())) {
+					//Check duplicated Description
+					if(oldDescription != null){
+						
+						if (!oldDescription.equalsIgnoreCase(languageDomain.getLanguageDescription()) 
+								&& result.getLanguageDescription().equalsIgnoreCase(languageDomain.getLanguageDescription())) {
 
-						// Set Save Flag
-						saveFlag = false;
+							// Set Save Flag
+							saveFlag = false;
 
-						// Error Message
-						Messages.addGlobalFatal("A descrição \"" + languageDomain.getLanguageDescription() + "\" já existe.");
+							// Error Message
+							Messages.addGlobalFatal("A descrição \"" + languageDomain.getLanguageDescription() + "\" já existe.");
 
-						break;
+							break;
+						}
+					} else{
+						
+						if (result.getLanguageDescription().equalsIgnoreCase(languageDomain.getLanguageDescription())) {
+
+							// Set Save Flag
+							saveFlag = false;
+
+							// Error Message
+							Messages.addGlobalFatal("A descrição \"" + languageDomain.getLanguageDescription() + "\" já existe.");
+
+							break;
+						}						
 					}
 				}				
-				
 			}
 						
 			
 			//Condition to save or not the information according to the LanguageName/LanguageDescription
 			if(saveFlag){
-				//Save Person with merge method
+				//Save Language with merge method
 				//LanguageDAO languageDAO = new LanguageDAO();
 				
 				//Save Actual Date
@@ -175,8 +202,8 @@ public class LanguageController implements Serializable {
 				//Instantiate languagesDomain
 				languagesDomain = new ArrayList<LanguageDomain>();
 				
-				//List again Person (very import to update the list)
-				languagesDomain = languageDAO.descendList("id");
+				//List again Language (very import to update the list)
+				languagesDomain = languageDAO.descendList("languageName");
 				
 				//This code is uses OmniFaces and it looks more practice than PrimeFaces implementation.
 				Messages.addGlobalInfo("Salvou com sucesso.");		
@@ -185,8 +212,8 @@ public class LanguageController implements Serializable {
 				//Instantiate languagesDomain
 				languagesDomain = new ArrayList<LanguageDomain>();
 				
-				//List again Person (very import to update the list)
-				languagesDomain = languageDAO.descendList("id");
+				//List again Language (very import to update the list)
+				languagesDomain = languageDAO.ascendList("languageName");
 			}
 
 		} catch (Exception e) {
@@ -205,19 +232,19 @@ public class LanguageController implements Serializable {
 	public void doDelete(ActionEvent event){
 		try {
 			
-			//Capture the event from the cursor in person.xhtml
+			//Capture the event from the cursor in language.xhtml
 			languageDomain = (LanguageDomain) event.getComponent().getAttributes()
 					.get("selectedLanguageByCursor");
 
-			//Delete Person
+			//Delete Language
 			LanguageDAO languageDAO = new LanguageDAO();
 			languageDAO.delete(languageDomain);
 			
 			//Instantiate LanguesDomain
 			languagesDomain = new ArrayList<LanguageDomain>();
 			
-			//List again Person (very import to update the list)
-			languagesDomain = languageDAO.list();
+			//List again Language (very import to update the list)
+			languagesDomain = languageDAO.ascendList("languageName");
 			
 			//This code is used with OmniFaces and it is more practice than PrimeFaces implementation.
 			Messages.addGlobalInfo(languageDomain.getLanguageName() + " foi excluido com sucesso!!!");
@@ -240,7 +267,7 @@ public class LanguageController implements Serializable {
 	 */
 	public void doEdit(ActionEvent event){
 		try {			
-			//Capture the event from the cursor in person.xhtml
+			//Capture the event from the cursor in language.xhtml
 			languageDomain = (LanguageDomain) event.getComponent().getAttributes()
 					.get("selectedLanguageByCursor");
 			

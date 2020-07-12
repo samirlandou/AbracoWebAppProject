@@ -38,6 +38,7 @@
 		<mapping class="br.com.abracowebmanagement.domain.ContractSettingDomain"/>
 		<mapping class="br.com.abracowebmanagement.domain.ContractStudentDomain"/>
 		<mapping class="br.com.abracowebmanagement.domain.LanguageDomain"/>
+		<mapping class="br.com.abracowebmanagement.domain.LevelDomain"/>
 		<mapping class="br.com.abracowebmanagement.domain.MyClassDomain"/>
 		<mapping class="br.com.abracowebmanagement.domain.PersonDomain"/>		
 		<mapping class="br.com.abracowebmanagement.domain.PresenceDomain"/>

@@ -28,13 +28,13 @@
 		<!-- LISTING PANEL FORM -->
 		<div>
 			<br/>
-			<h:form id="languageListFormID">
-				<h3 align="center">Lista de Língua</h3>
+			<h:form id="levelListFormID">
+				<h3 align="center">Lista de Nível</h3>
 				<br/>
-				<p:dataTable id="languageDataTableFormID"
+				<p:dataTable id="levelDataTableFormID"
 							 emptyMessage="Nenhum registro encontrado."
 							 paginator="true" 
-							 value="#{languageController.languagesDomain}" 
+							 value="#{levelController.levelsDomain}" 
 							 var="cursor" 
 							 rows="10"
 							 resizableColumns="true" 
@@ -42,24 +42,32 @@
 							 reflow="true" 
 							 rowHover="true" 
 							 draggableColumns="true" 
-							 style="text-align: center; width: 50%; margin: 0 auto;">
+							 style="text-align: center; width: 70%; margin: 0 auto;">
 
-					
-					<!-- NM_LANGUAGE -->
+					<!-- LANGUAGEDOMAIN -->
 					<p:column headerText="Nome da Língua" 
-							  sortBy="#{cursor.languageName}" 
-							  filterBy="#{cursor.languageName}"
+							  sortBy="#{cursor.languageDomain.languageName}" 
+							  filterBy="#{cursor.languageDomain.languageName}"
 							  filterMatchMode="contains">
-						<h:outputText value="#{cursor.languageName}"/>
+						<h:outputText value="#{cursor.languageDomain.languageName}"/>
 					</p:column>
 					
-					<!-- DE_LANGUAGE -->
-					<p:column headerText="Descrição da Língua" 
-							  sortBy="#{cursor.languageDescription}" 
-							  filterBy="#{cursor.languageDescription}"
+					<!-- NM_LEVEL -->
+					<p:column headerText="Nome do Nível" 
+							  sortBy="#{cursor.levelName}" 
+							  filterBy="#{cursor.levelName}"
+							  filterMatchMode="contains"
+							  style="width: 30%">
+						<h:outputText value="#{cursor.levelName}"/>
+					</p:column>
+					
+					<!-- DE_LEVEL -->
+					<p:column headerText="Descrição do Nível" 
+							  sortBy="#{cursor.levelDescription}" 
+							  filterBy="#{cursor.levelDescription}"
 							  filterMatchMode="contains"
 							  style="width: 20%">
-						<h:outputText value="#{cursor.languageDescription}"/>
+						<h:outputText value="#{cursor.levelDescription}"/>
 					</p:column>					
 
 					<!-- OPTIONS -->
@@ -68,25 +76,25 @@
 						<!-- BUTTON TO EDIT -->
 						<p:commandButton icon="fa fa-edit" 
 										 title="Editar o Registro"
-										 actionListener="#{languageController.doEdit}"
-										 oncomplete="PF('dlgEditLanguage').show();"
+										 actionListener="#{levelController.doEdit}"
+										 oncomplete="PF('dlgEditLevel').show();"
 										 update=":idMsgGlobal
-										 		 :languageRegisterFormID:languageInputRegisterFormID 
-												 :languageRegisterFormID:languageInputRegisterUserFormID">
-							<f:attribute name="selectedLanguageByCursor" value="#{cursor}"/>
+										 		 :levelRegisterFormID:levelInputRegisterFormID 
+												 :levelRegisterFormID:levelInputRegisterUserFormID">
+							<f:attribute name="selectedLevelByCursor" value="#{cursor}"/>
 							<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
 						</p:commandButton>
 					
 						<!-- BUTTON TO DELETE -->
 						<p:commandButton icon="fa fa-trash" 
 										 title="Deletar o Registro"
-										 actionListener="#{languageController.doDelete}"
+										 actionListener="#{levelController.doDelete}"
 										 update=":idMsgGlobal 
-												:languageListFormID:languageDataTableFormID">
+												:levelListFormID:levelDataTableFormID">
 							<p:confirm header="Confirmação"
-									   message="Deseja excluir #{cursor.languageName}?" 
+									   message="Deseja excluir #{cursor.levelName}?" 
 									   icon="fa fa-exclamation-triangle"/>
-							<f:attribute name="selectedLanguageByCursor" value="#{cursor}"/>
+							<f:attribute name="selectedLevelByCursor" value="#{cursor}"/>
 						</p:commandButton>
 					</p:column>
 
@@ -97,11 +105,11 @@
 						<!-- NEW BUTTON -->
 						<p:commandButton value="Novo" 
 										 icon="fa fa-plus"
-										 title="Criar uma nova Língua"
-										 actionListener="#{languageController.doNewRegister}"
-										 oncomplete="PF('dlgEditLanguage').show();"
-										 update=":languageRegisterFormID:languageInputRegisterFormID 
-												:languageRegisterFormID:languageInputRegisterUserFormID">
+										 title="Criar um novo Nível"
+										 actionListener="#{levelController.doNewRegister}"
+										 oncomplete="PF('dlgEditLevel').show();"
+										 update=":levelRegisterFormID:levelInputRegisterFormID 
+												:levelRegisterFormID:levelInputRegisterUserFormID">
 							<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener"/>
 						</p:commandButton>
 						
@@ -131,9 +139,9 @@
 
 
 
-			<!-- DIALOG TO REGISTER NEW LANGUAGE -->			
-			<p:dialog header="Editar a Língua"
-					  widgetVar="dlgEditLanguage"
+			<!-- DIALOG TO REGISTER NEW LEVEL -->			
+			<p:dialog header="Editar o Nível"
+					  widgetVar="dlgEditLevel"
 					  draggable="true" 
 					  modal="true" 
 					  closable="true"
@@ -145,45 +153,61 @@
 				
 				
 				<!-- FORM FOR THE DIALOG -->
-				<h:form id="languageRegisterFormID">
+				<h:form id="levelRegisterFormID">
 					
-					<!-- PANEL GRID FOR REGISTER LANGUAGE NAME AND LANGUAGE DESCRIPTION -->
-					<h:panelGrid id="languageInputRegisterFormID" columns="2">
+					<!-- PANEL GRID FOR REGISTER LEVEL NAME AND LEVEL DESCRIPTION -->
+					<h:panelGrid id="levelInputRegisterFormID" columns="2">
 														    
-						<p:outputLabel value="Nome da Língua: *" />
-						<p:inputText id="languageNameID"
-									 value="#{languageController.languageDomain.languageName}"
+						<p:outputLabel value="Nome do Nível: *" />
+						<p:inputText id="levelNameID"
+									 value="#{levelController.levelDomain.levelName}"
 									 maxlength="12"
 									 size="20"
 									 required="true" 
-									 requiredMessage="O campo 'Nome da Língua' é obrigatório"/>
+									 requiredMessage="O campo 'Nome do Nível' é obrigatório"/>
 									
-						<p:outputLabel value="Descrição da Língua: *" />
-						<p:inputText id="languageDescriptionID"
-									 value="#{languageController.languageDomain.languageDescription}" 
-									 maxlength="2" 
+						<p:outputLabel value="Descrição do Nível: *" />
+						<p:inputText id="levelDescriptionID"
+									 value="#{levelController.levelDomain.levelDescription}" 
+									 maxlength="6" 
 									 size="20"
 									 required="true" 
-									 requiredMessage="O campo 'Descrição da Língua' é obrigatório"/>
+									 requiredMessage="O campo 'Descrição do Nível' é obrigatório"/>
+												
+						<p:outputLabel value="Nome da Língua: *" />
+						<p:selectOneMenu id="languageId" 
+										 filter="true"
+										 filterMatchMode="contains"
+										 value="#{levelController.levelDomain.languageDomain}" 
+										 autoWidth="false"
+										 converter="omnifaces.SelectItemsConverter" 
+										 required="true" 
+										 requiredMessage="O campo 'Nome da Língua' é obrigatório"
+										 style="width:145px">
+										 <f:selectItem noSelectionOption="true" itemLabel="Selecione uma língua" />
+										 <f:selectItems value="#{levelController.languagesDomain}" var="language"
+													    itemValue="#{language}"
+													    itemLabel="#{language.languageName}"/>
+						</p:selectOneMenu>
 														
-					</h:panelGrid>					
+					</h:panelGrid>
 					
 					<p:spacer height="10px"/>
 					
 					<!-- PANEL GRID FOR USER AND SAVING DATE -->
-					<h:panelGrid id="languageInputRegisterUserFormID" columns="2">
+					<h:panelGrid id="levelInputRegisterUserFormID" columns="2">
 						<p:outputLabel value="Ultima atualização: "/>						
 						<p:spacer width="5px"/>
 						
 						<p:outputLabel value="Feita no dia: "/>
-						<p:outputLabel value="#{languageController.languageDomain.saveLanguageDate}">
-							<f:convertDateTime locale="pt_BR" 
-											   pattern="dd/MM/yyyy HH:mm"
-											   timeZone="America/Sao_Paulo"/>
+						<p:outputLabel value="#{levelController.levelDomain.saveLevelDate}">
+									   <f:convertDateTime locale="pt_BR" 
+													   	  pattern="dd/MM/yyyy HH:mm"
+													   	  timeZone="America/Sao_Paulo"/>
 						</p:outputLabel>												
 						
 						<p:outputLabel value="Pelo usário: "/>
-						<p:outputLabel value="#{languageController.languageDomain.languageSaveLoginUser}" style="color: orange;"/>						
+						<p:outputLabel value="#{levelController.levelDomain.levelSaveLoginUser}" style="color: orange;"/>						
 					</h:panelGrid>
 
 					<p:spacer width="20px"/>
@@ -193,17 +217,17 @@
 
 						<p:commandButton value="Salvar" 
 										 icon="fa fa-floppy-o" 
-										 actionListener="#{languageController.doSave}"
+										 actionListener="#{levelController.doSave}"
 										 title="Salvar os Dados"
 										 update=":idMsgGlobal
-												 languageRegisterFormID:languageInputRegisterUserFormID"/>						
+												 levelRegisterFormID:levelInputRegisterUserFormID"/>						
 						<p:commandButton value="Fechar" 
 										 icon="fa fa-close" 
 										 immediate="true"
-										 oncomplete="PF('dlgEditLanguage').hide();" 
+										 oncomplete="PF('dlgEditLevel').hide();" 
 										 title="Fechar a Janela"
-										 actionListener="#{languageController.doClean}"
-										 update=":languageListFormID:languageDataTableFormID"/>
+										 actionListener="#{levelController.doClean}"
+										 update=":levelListFormID:levelDataTableFormID"/>
 																						
 					</h:panelGrid>					
 				</h:form>
