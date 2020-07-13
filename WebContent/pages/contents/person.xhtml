@@ -33,16 +33,26 @@
 			
 				<h3 align="center">Lista de Pessoas</h3>
 				<br/>
-				<p:dataTable id="personDataTableFormID" emptyMessage="Nenhum registro encontrado."
-					paginator="true" value="#{personController.personsDomain}" var="cursor" rows="10"
-					resizableColumns="true" resizeMode="fit" reflow="true" rowHover="true"
-					draggableColumns="true" style="text-align: center; width:90%; margin: 0 auto;">
+				<div class="ui-fluid">
+				<p:dataTable id="personDataTableFormID" 
+							 emptyMessage="Nenhum registro encontrado."
+							 paginator="true" value="#{personController.personsDomain}" 
+							 var="cursor" 
+							 rows="10"
+							 resizableColumns="true" 
+							 resizeMode="fit" 
+							 reflow="true" 
+							 rowHover="true"
+							 draggableColumns="true"
+							 liveResize="true"
+							 style="text-align: center; width:90%; margin: 0 auto;">
 
 					
 					<!-- NM_COMPLETE_NAME -->
 					<p:column headerText="Nome completo"
-							sortBy="#{cursor.completeName}"
-							filterBy="#{cursor.completeName}">
+							  sortBy="#{cursor.completeName}"
+							  filterBy="#{cursor.completeName}"
+							  style="text-align: center;">
 						<h:outputText value="#{cursor.completeName}"/>
 					</p:column>
 
@@ -143,6 +153,7 @@
 					</f:facet>
 
 				</p:dataTable>
+				</div>
 
 				
 				<!-- CONFIRM DIALOG WHEN DELETING -->
