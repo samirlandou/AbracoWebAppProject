@@ -16,7 +16,7 @@ import org.primefaces.extensions.event.ClipboardErrorEvent;
 import org.primefaces.extensions.event.ClipboardSuccessEvent;
 
 import br.com.abracowebmanagement.dao.ContractModelDAO;
-import br.com.abracowebmanagement.domain.contract.ContractModelDomain;
+import br.com.abracowebmanagement.domain.ContractModelDomain;
 
 @ManagedBean
 @ViewScoped
@@ -24,8 +24,8 @@ public class ContractModelController implements Serializable {
 	
 	private static final long serialVersionUID = -1051465978591927531L;
 	
-	private ContractModelDomain contractModelDomain;
-	private List<ContractModelDomain> contractModelsDomain;
+	private ContractModelDomain ContractModelDomain;
+	private List<ContractModelDomain> ContractModelsDomain;
 	ContractModelDomain resultDomain;
 	
 	private String textFromEditor;
@@ -44,9 +44,9 @@ public class ContractModelController implements Serializable {
 	@PostConstruct
 	public void doList(){
 		try {
-			//List Person
-			ContractModelDAO contractModelDAO = new ContractModelDAO();
-			contractModelsDomain= contractModelDAO.list();
+			//List contract Model
+			ContractModelDAO ContractModelDAO = new ContractModelDAO();
+			ContractModelsDomain= ContractModelDAO.list();
 						
 			//Login
 			FacesContext fc = FacesContext.getCurrentInstance();
@@ -68,14 +68,14 @@ public class ContractModelController implements Serializable {
 	 * @since 04/02/2020
 	 */
 	public void doNewRegister(){		
-		//Instantiate new Person
-		contractModelDomain = new ContractModelDomain();
+		//Instantiate new contract Model
+		ContractModelDomain = new ContractModelDomain();
 		
 		//Reset textFromEditor value
 		textFromEditor = new String();
 		
 		//Set Old Description
-		oldDescription = getContractModelDomain().getContractModelName();
+		oldDescription = "";
 	}
 	
 
@@ -98,22 +98,22 @@ public class ContractModelController implements Serializable {
 			//Set Save Flag
 			 boolean saveFlag = true;
 			 
-			//Save Person with merge method
-			ContractModelDAO contractModelDAO = new ContractModelDAO();
+			//Save contract Model with merge method
+			ContractModelDAO ContractModelDAO = new ContractModelDAO();
 			
 			//Instantiate Result Domain
 			resultDomain = new ContractModelDomain();
 			
-			if (oldDescription != null && (resultDomain = contractModelDAO
-					.findByContractModelName(contractModelDomain.getContractModelName())) != null) {
+			if (oldDescription != null && (resultDomain = ContractModelDAO
+					.findByContractModelName(ContractModelDomain.getContractModelName())) != null) {
 
-				if (oldDescription.equalsIgnoreCase(contractModelDomain.getContractModelName())) {
+				if (oldDescription.equalsIgnoreCase(ContractModelDomain.getContractModelName())) {
 
 					// Set Save Flag
 					saveFlag = false;
 
 					// Error Message
-					Messages.addGlobalError("O Modelo de Contrato \"" + contractModelDomain.getContractModelName() + "\" já existe.");
+					Messages.addGlobalError("O Modelo de Contrato \"" + ContractModelDomain.getContractModelName() + "\" já existe.");
 
 				}
 			}
@@ -122,22 +122,22 @@ public class ContractModelController implements Serializable {
 			if(saveFlag){
 				
 				//get byte from String
-				contractModelDomain.setContractModelDescription(textFromEditor.getBytes());
+				ContractModelDomain.setContractModelDescription(textFromEditor.getBytes());
 				
 				//Save Actual Date
-				contractModelDomain.setSaveContractModelDate(new Date());
+				ContractModelDomain.setSaveContractModelDate(new Date());
 				
 				//Set LoginUser
-				contractModelDomain.setContractModelSaveLoginUser(loginController.getLoggedUser().getUserName());
+				ContractModelDomain.setContractModelSaveLoginUser(loginController.getLoggedUser().getUserName());
 				
 				//Do Merge
-				contractModelDAO.merge(contractModelDomain);
+				ContractModelDAO.merge(ContractModelDomain);
 				
 				//Clean informations in the panelGrid
 				//doNewRegister();
 				
-				//List again Person (very import to update the list)
-				contractModelsDomain = contractModelDAO.list();
+				//List again contract Model (very import to update the list)
+				ContractModelsDomain = ContractModelDAO.list();
 				
 				//This code is used with OmniFaces and it is more practice than PrimeFaces implementation.
 				Messages.addGlobalInfo("Salvou com sucesso!");				
@@ -158,24 +158,24 @@ public class ContractModelController implements Serializable {
 	public void doDelete(ActionEvent event){
 		try {
 			
-			//Capture the event from the cursor in person.xhtml
-			contractModelDomain = (ContractModelDomain) event.getComponent().getAttributes()
-					.get("selectedPersonByCursor");
+			//Capture the event from the cursor in contractModel.xhtml
+			ContractModelDomain = (ContractModelDomain) event.getComponent().getAttributes()
+					.get("selectedContractModelByCursor");
 
-			//Delete Person
-			ContractModelDAO contractModelDAO = new ContractModelDAO();
-			contractModelDAO.delete(contractModelDomain);
+			//Delete contract Model
+			ContractModelDAO ContractModelDAO = new ContractModelDAO();
+			ContractModelDAO.delete(ContractModelDomain);
 						
-			//List again Person (very import to update the list)
-			contractModelsDomain= contractModelDAO.list();
+			//List again contract Model (very import to update the list)
+			ContractModelsDomain = ContractModelDAO.list();
 			
 			//This code is used with OmniFaces and it is more practice than PrimeFaces implementation.
-			Messages.addGlobalInfo(contractModelDomain.getContractModelName() + " foi excluido com sucesso!!!");
+			Messages.addGlobalInfo(ContractModelDomain.getContractModelName() + " foi excluido com sucesso.");
 		} catch (Exception e) {
 			if(e.equals("ConstraintViolationException")){
-				Messages.addGlobalError("Não pode deletar pois os dados de " + contractModelDomain.getContractModelName() + " está sendo usado em outro processo!!!");
+				Messages.addGlobalError("Não pode deletar \"" + ContractModelDomain.getContractModelName() + "\" pois está sendo usado em outro processo!!!");
 			} else{
-				Messages.addGlobalError("Ocorreu um erro ao tentar excluir as informações de: " + contractModelDomain.getContractModelName());
+				Messages.addGlobalError("Ocorreu um erro ao tentar excluir as informações de: \"" + ContractModelDomain.getContractModelName() + "\"");
 			}
 			e.printStackTrace();			
 		}
@@ -190,15 +190,15 @@ public class ContractModelController implements Serializable {
 	 */
 	public void doEdit(ActionEvent event){
 		try {			
-			//Capture the event from the cursor in person.xhtml
-			contractModelDomain = (ContractModelDomain) event.getComponent().getAttributes()
-					.get("selectedPersonByCursor");
-			textFromEditor = new String(contractModelDomain.getContractModelDescription(), Charset.defaultCharset());
+			//Capture the event from the cursor in contractModel.xhtml
+			ContractModelDomain = (ContractModelDomain) event.getComponent().getAttributes()
+					.get("selectedContractModelByCursor");
+			textFromEditor = new String(ContractModelDomain.getContractModelDescription(), Charset.defaultCharset());
 			
 			//Set Old Description
-			oldDescription = "";
+			oldDescription = ContractModelDomain.getContractModelName();
 		} catch (Exception e) {
-			Messages.addGlobalError("Ocorreu um erro ao editar as informações de: " + contractModelDomain.getContractModelName());
+			Messages.addGlobalError("Ocorreu um erro ao editar as informações de: \"" + ContractModelDomain.getContractModelName() + "\"");
 			e.printStackTrace();			
 		}		
 	}
@@ -222,23 +222,28 @@ public class ContractModelController implements Serializable {
 	}
 
 
+	
+	/*
+	 * Getters and Setters
+	 */
+	
 	public ContractModelDomain getContractModelDomain() {
-		return contractModelDomain;
+		return ContractModelDomain;
 	}
 
 
-	public void setContractModelDomain(ContractModelDomain contractModelDomain) {
-		this.contractModelDomain = contractModelDomain;
+	public void setContractModelDomain(ContractModelDomain ContractModelDomain) {
+		this.ContractModelDomain = ContractModelDomain;
 	}
 
 
 	public List<ContractModelDomain> getContractModelsDomain() {
-		return contractModelsDomain;
+		return ContractModelsDomain;
 	}
 
 
-	public void setContractModelsDomain(List<ContractModelDomain> contractModelsDomain) {
-		this.contractModelsDomain = contractModelsDomain;
+	public void setContractModelsDomain(List<ContractModelDomain> ContractModelsDomain) {
+		this.ContractModelsDomain = ContractModelsDomain;
 	}
 
 
@@ -250,11 +255,6 @@ public class ContractModelController implements Serializable {
 	public void setTextFromEditor(String textFromEditor) {
 		this.textFromEditor = textFromEditor;
 	}
-
-	
-	/*
-	 * Getters and Setters
-	 */
 	
 	
 }

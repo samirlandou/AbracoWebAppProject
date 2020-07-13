@@ -10,8 +10,8 @@ import javax.faces.context.FacesContext;
 import org.omnifaces.util.Messages;
 
 import br.com.abracowebmanagement.dao.ContractSettingDAO;
-import br.com.abracowebmanagement.domain.contract.ContractSettingDomain;
-import br.com.abracowebmanagement.domain.user.UserDomain;
+import br.com.abracowebmanagement.domain.ContractSettingDomain;
+import br.com.abracowebmanagement.domain.UserDomain;
 
 @ManagedBean
 @ViewScoped

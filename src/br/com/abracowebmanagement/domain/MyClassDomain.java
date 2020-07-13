@@ -10,9 +10,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import br.com.abracowebmanagement.domain.generic.GenericDomain;
-import br.com.abracowebmanagement.domain.user.UserDomain;
-
 @SuppressWarnings("serial")
 @Entity
 @Table(name = "TB_MYCLASS")

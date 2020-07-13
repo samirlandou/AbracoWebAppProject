@@ -1,13 +1,9 @@
-package br.com.abracowebmanagement.domain.accessright;
+package br.com.abracowebmanagement.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import br.com.abracowebmanagement.domain.MyClassDomain;
-import br.com.abracowebmanagement.domain.generic.GenericDomain;
-import br.com.abracowebmanagement.domain.user.UserDomain;
 
 @SuppressWarnings("serial")
 @Entity

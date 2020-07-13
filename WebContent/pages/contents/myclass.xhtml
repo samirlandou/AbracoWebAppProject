@@ -21,24 +21,43 @@
 			
 			<br/>
 			
-			Multiple files; NOTE: in simple mode, you can get all files withing a single request!
+			Multiple files; NOTE: in simple mode, you can get all files within a single request!
 			<br/>
 			<br/>
 			<h:form enctype="multipart/form-data">
 			    
-			    <h:panelGrid columns="1">
+			    <div>
+			    	<p:outputLabel value="testetetetettetstetstete"/>
+			    </div>
 			    
-			    <p:fileUpload value="#{uploadController.uploadedFile}" 
-			    			  mode="simple"
-			    			  skinSimple="true"
-			    			  multiple="false" />
 			    
-			    <p:commandButton value="Submit"
-			    				 ajax="false" 
-			    				 action="#{uploadController.upload}" />	
-			    				 			    
-			    </h:panelGrid>
+			    <br/>
 			    
+			    
+			    <div>
+				    
+				    <p:fileUpload value="#{uploadController.uploadedFile}" 
+				    			  mode="simple"
+				    			  skinSimple="true"
+				    			  multiple="false" />			    
+			    </div>
+			    
+			    
+			     <br/>
+			    
+			    
+			    <div>
+				    
+				    <p:commandButton value="Submit"
+				    				 ajax="false" 
+				    				 action="#{uploadController.upload}" />			    
+			    </div>
+		    		
+			    
+			    
+
+
+
 			
 			
 			</h:form>	

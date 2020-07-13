@@ -6,7 +6,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
-import br.com.abracowebmanagement.domain.contract.ContractDomain;
+import br.com.abracowebmanagement.domain.ContractDomain;
 import br.com.abracowebmanagement.hibernate.HibernateUtil;
 
 public class ContractDAO extends GenericDAO<ContractDomain> {

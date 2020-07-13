@@ -8,9 +8,9 @@ import javax.servlet.http.HttpServlet;
 import br.com.abracowebmanagement.dao.ContractSettingDAO;
 import br.com.abracowebmanagement.dao.PersonDAO;
 import br.com.abracowebmanagement.dao.UserDAO;
-import br.com.abracowebmanagement.domain.contract.ContractSettingDomain;
-import br.com.abracowebmanagement.domain.person.PersonDomain;
-import br.com.abracowebmanagement.domain.user.UserDomain;
+import br.com.abracowebmanagement.domain.ContractSettingDomain;
+import br.com.abracowebmanagement.domain.PersonDomain;
+import br.com.abracowebmanagement.domain.UserDomain;
 
 @SuppressWarnings("serial")
 public class InsertFirstDataServlet extends HttpServlet{		

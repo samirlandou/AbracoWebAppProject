@@ -38,7 +38,7 @@
 
 					
 					<!-- NM_CONTRACT_MODEL -->
-					<p:column headerText="Nome completo" sortBy="#{cursor.completeName}" filterBy="#{cursor.contractModelName}">
+					<p:column headerText="Nome do Modelo" sortBy="#{cursor.contractModelName}" filterBy="#{cursor.contractModelName}">
 						<h:outputText value="#{cursor.contractModelName}"/>
 					</p:column>
 
@@ -54,7 +54,7 @@
 												:contractModelRegisterFormID:contractModelInputRegisterTextFormID
 												:contractModelRegisterFormID:contractModelInputRegisterUserFormID
 												:contractModelListFormID:contractModelDataTableFormID">
-							<f:attribute name="selectedPersonByCursor" value="#{cursor}"/>
+							<f:attribute name="selectedModelByCursor" value="#{cursor}"/>
 							<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
 						</p:commandButton>
 					
@@ -64,7 +64,7 @@
 										update=":idMsgGlobal 
 												:contractModelListFormID:contractModelDataTableFormID">
 							<p:confirm header="Confirmação" message="Deseja excluir #{cursor.contractModelName}?" icon="fa fa-exclamation-triangle"/>
-							<f:attribute name="selectedPersonByCursor" value="#{cursor}"/>
+							<f:attribute name="selectedContractModelByCursor" value="#{cursor}"/>
 						</p:commandButton>
 					</p:column>
 
@@ -115,7 +115,7 @@
 					<!-- PANEL GRID FOR REGISTER CONTRACT MODEL NAME AND COMMENT -->
 					<h:panelGrid id="contractModelInputRegisterFormID" columns="2">									    
 						<p:outputLabel value="Nome do Modelo: *" />
-						<p:inputText value="#{contractModelController.contractModelDomain.contractModelName}" maxlength="30" size="27"
+						<p:inputText value="#{contractModelController.contractModelDomain.contractModelName}" maxlength="30" size="30"
 									required="true" requiredMessage="O campo 'Nome do Modelo' é obrigatório"/>
 												
 						<p:outputLabel value="Comentário: " />
@@ -209,9 +209,9 @@
 							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
 									</pe:clipboard>
 									
-									<p:outputLabel value="E-MAIL_PESSOA "/>
+									<p:outputLabel value="EMAIL_PESSOA "/>
 									<p:commandButton id="btnCopylEmailID" value="Copiar" icon="fa fa-copy" onclick="return false;"/>  
-									<pe:clipboard id="clipAjaxEmailID" trigger="btnCopylEmailID" action="copy" text="E-MAIL_PESSOA">  
+									<pe:clipboard id="clipAjaxEmailID" trigger="btnCopylEmailID" action="copy" text="EMAIL_PESSOA">  
 							            <p:ajax event="success" listener="#{contractController.successListener}" update=":idMsgGlobal"/>  
 							            <p:ajax event="error" listener="#{contractController.errorListener}" update=":idMsgGlobal"/> 
 									</pe:clipboard>										

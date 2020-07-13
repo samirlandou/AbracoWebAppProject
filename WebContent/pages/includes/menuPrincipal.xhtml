@@ -22,13 +22,26 @@
 								style="float:left;"
 								title="Ir na tela Principal"/>
 				
-				<!-- Right position -->				
-				<p:commandButton value="Sair" icon="fa fa-power-off"
-								action="#{loginController.doDisconnect}"
-								style="float:right;"
-								update=":idMsgGlobal"
-								title="Sair da Aplicação"/>
-								
+				<!-- Right position -->
+				<p:commandButton value="Sair" 
+								 icon="fa fa-power-off"
+								 action="#{loginController.doDisconnect}"
+								 style="float:right;"
+								 update=":idMsgGlobal"
+								 title="Sair da Aplicação"/>
+
+				<p:commandButton value="Config."
+								 icon="fa fa-gear"
+								 style="float:right;"
+								 title="Configuração"
+								 oncomplete="PF('sidebarRight').show()"/>
+
+				<p:commandButton value="Tema"
+								 icon="pi pi-palette"
+								 style="float:right;"
+								 title="Mudar o visual"
+								 action="client.themeSetting"/>
+								 								 								
 				<p:spacer width="10px" style="float:right;" />
 				
 				<p:outputLabel value="Bem-vindo(a), #{loginController.loggedUser.userName}" style="float:right;"/>
@@ -36,90 +49,183 @@
 				<p:spacer width="10px" style="float:right;" />
 				
 				<p:commandLink id="userLinkOnTopID" action="client.userImage" style="float:right;">
-					<p:graphicImage id="userImageOnTopID" cache="false" value="#{imageController.streamContent}" width="auto" height="20px" styleClass="imageCenter"/>
+					<p:graphicImage id="userImageOnTopID" 
+									cache="false" 
+									value="#{imageController.streamContent}" 
+									width="auto" 
+									height="20px" 
+									styleClass="imageCenter"/>
 				</p:commandLink>
 			
 			</div>
 			
 			
-			<p:sidebar widgetVar="sidebarLeft" position="left" baseZIndex="10000" appendTo="@(body)">
+			<p:sidebar widgetVar="sidebarLeft"
+					   position="left" 
+					   baseZIndex="10000" 
+					   appendTo="@(body)">
 				
 				<!-- Abraço Cultural png logo -->
-				<h:graphicImage styleClass="logo-image" library="images" name="login/logo_abraco_cultura.png" width="80%"/>				
+				<h:graphicImage styleClass="logo-image"
+								library="images" 
+								name="login/logo_abraco_cultura.png" 
+								width="80%"/>				
 				
 				<br/>
 				
 				<!-- Menu -->
-				<p:panelMenu >					
-					<p:submenu label="Relatório" outcome="/pages/contents/home.xhtml">
-						<p:menuitem value="Dashbord" icon="fa fa-bar-chart"/>
-						<p:menuitem value="Relatórios" icon="fa fa-file-pdf-o"/>						
-					</p:submenu>
+				<p:panelMenu >	
+								
+					<p:submenu label="Relatório" outcome="/pages/contents/home.xhtml">					
+						<p:menuitem value="Dashbord"
+									icon="fa fa-bar-chart"
+									title="Visualizar gráficos"/>
+						<p:menuitem value="Relatórios"
+									icon="fa fa-file-pdf-o"
+									title="Gerar relatórios"/>												
+					</p:submenu>					
 					
-		
-					<p:submenu label="Cadastro">
+					
+					
+					<p:submenu label="Cadastro" rendered="#{loginController.accessRightByProfile}">					
 						<p:menuitem value="Pessoas"
 									icon="fa fa-users"
-									outcome="/pages/contents/person.xhtml"
-									rendered="#{loginController.accessRightByProfile}"/>
+									outcome="client.person"
+									title="Cadastrar uma Pessao"/>
 									
 						<p:menuitem value="Usuarios"
 									icon="fa fa-user-plus" 
-									outcome="/pages/contents/user.xhtml" 
-									rendered="#{loginController.accessRightByProfile}"/>
+									outcome="client.person" 
+									title="Cadastrar um Usuário"/>
 									
 						<p:menuitem value="Contratos" 
 									icon="fa fa-edit" 
-									outcome="/pages/contents/contract.xhtml" 
-									rendered="#{loginController.accessRightByProfile}"/>
+									outcome="client.contract"
+									title="Cadastrar um Contrato"/>
 									
 						<p:menuitem value="Aulas" 
-									icon="fa fa-calendar-o" 
-									outcome="/pages/contents/myclass.xhtml"/>
-					</p:submenu>
+									icon="fa fa-calendar-o"
+									outcome="client.myclass"
+									title="Cadastrar uma Aula"/>
+					</p:submenu>					
+										
 					
-				
-					<p:submenu label="Outros">
-						<p:menuitem value="Configuração" 
-									icon="fa fa-gears" 
-									outcome="/pages/contents/setting.xhtml"/>
-									
+					
+					<p:submenu label="Outros">									
 						<p:menuitem value="Galeria" 
-									icon="fa fa-photo"/>
+									icon="fa fa-photo"
+									title="Visualizar a Galeria"/>
 									
 						<p:menuitem value="Contatos"
-									icon="fa fa-id-card-o"/>
+									icon="fa fa-id-card-o"
+									title="Visualiazar Contatos"/>
 									
 						<p:menuitem value="Sobre"
-									icon="fa fa-info"/>
+									icon="fa fa-info"
+									title="Sobre Abraço"/>
 									
 						<p:menuitem value="Sugestão"
-									icon="fa fa-comments-o"/>
+									icon="fa fa-comments-o"
+									title="Dar uma sugestão"/>																		
+					</p:submenu>		
+				</p:panelMenu>				
+				
+				<br/>
+								
+			    <p:commandButton value="Fechar"
+			    				 icon="fa fa-remove"
+			    				 title="Fechar o Menu"
+			    				 oncomplete="PF('sidebarLeft').hide()"/>
+			</p:sidebar>
+
+
+
+
+			<p:sidebar widgetVar="sidebarRight" 
+					   position="right" 
+					   baseZIndex="10000" 
+					   appendTo="@(body)">
+				
+				<!-- Abraço Cultural png logo -->
+				<h:graphicImage styleClass="logo-image" 
+								library="images" 
+								name="login/logo_abraco_cultura.png" 
+								width="80%"/>				
+				
+				<br/>				
+				<!-- Menu -->
+				<p:panelMenu >					
+
+					<p:submenu label="Contrato" rendered="#{loginController.accessRightByProfile}">
+						<p:menuitem value="Modelos"
+									outcome="client.contractModel"
+									title="Define Modelos de Contrato"
+									rendered="#{loginController.accessRightByProfile}"/>					
+
+						<p:menuitem value="Preços"
+									outcome="client.contractSetting"
+									title="Define os Preços do Contrato"
+									rendered="#{loginController.accessRightByProfile}"/>
+
+						<p:menuitem value="Línguas"
+									outcome="client.languageSetting"
+									title="Define uma Língua"
+									rendered="#{loginController.accessRightByProfile}"/>
+									
+						<p:menuitem value="Níveis"
+									outcome="client.levelSetting" 
+									title="Define o Nível da Língua"
+									rendered="#{loginController.accessRightByProfile}"/>
+					</p:submenu>
+					
+										
+					<p:submenu label="Outro">
+						<p:menuitem value="Agenda"
+									outcome="client.contractSetting"
+									title="Define os Parâmetros da Agenda"/>									
 					</p:submenu>
 		
 				</p:panelMenu>
 				
+				
 				<br/>
-			    <p:commandButton value="Fechar" icon="fa fa-remove" 
-			    				oncomplete="PF('sidebarLeft').hide()"
-			    				title="Fechar o Menu"/>
+				
+				
+			    <p:commandButton value="Fechar"
+			    				 icon="fa fa-remove"
+			    				 title="Fechar o Menu"
+			    				 oncomplete="PF('sidebarRight').hide()"/>
 			</p:sidebar>
 
 
+
+
 			<!-- FAB Component from extended PrimeFace -->
-			<pe:fab id="fabMenu" icon="fa fa-plus" iconActive="fa fa-times" style="background: #FF671F;">
+			<pe:fab id="fabMenu" 
+					icon="fa fa-plus" 
+					iconActive="fa fa-times" 
+					style="background: #FF671F;">
+				
 				<p:menuitem value="Configuração"
-							icon="fa fa-gears"
-							outcome="/pages/contents/setting.xhtml"
+							icon="fa fa-edit"
+							outcome="client.contract"
 							style="background: #FF671F;"/>
 							
-				<p:menuitem value="Galeria" icon="fa fa-photo" style="background: #FF9B13;"/>
+				<p:menuitem value="Galeria" 
+							icon="fa fa-photo" 
+							style="background: #FF9B13;"/>
 				
-				<p:menuitem value="Contatos" icon="fa fa-id-card-o" style="background: #FF9B13;"/>
+				<p:menuitem value="Contatos" 
+							icon="fa fa-id-card-o" 
+							style="background: #FF9B13;"/>
 				
-				<p:menuitem value="Sobre" icon="fa fa-info" style="background: #FFB400;"/>
+				<p:menuitem value="Sobre" 
+							icon="fa fa-info" 
+							style="background: #FFB400;"/>
 				
-				<p:menuitem value="Sugestão" icon="fa fa-comments-o" style="background: #FFB400;"/>
+				<p:menuitem value="Sugestão" 
+							icon="fa fa-comments-o" 
+							style="background: #FFB400;"/>
 							 
 			</pe:fab>
 

@@ -23,7 +23,7 @@
 			<!-- FORM FOR THEME SWITCHER -->
 			<h:form>
 				<f:view>
-					<h:panelGrid id="settingFormId" columns="4">
+					<h:panelGrid id="settingFormId" columns="3">
 						
 						<p:outputLabel value="Tema: " />
 						<p:themeSwitcher style="width:165px" id="defaultSwitcher" value="#{themeSwitcherController.theme}" >
@@ -31,15 +31,12 @@
 							<f:selectItems value="#{themeSwitcherController.themes}" />
 							<p:ajax global="false" listener="#{themeSwitcherController.saveTheme}" />
 						</p:themeSwitcher>
-
-					
-						<p:commandButton value="Voltar" icon="fa fa-reply" 
-										title="Voltar para a Tela 'Parâmetros'"
-										action="client.setting"/>
 										
-						<p:commandButton value="Salvar" icon="fa fa-floppy-o" action="#{themeSettingController.doSave}"
-										title="Salvar Tema"
-										update=":idMsgGlobal" />						
+						<p:commandButton value="Salvar"
+										 icon="fa fa-floppy-o" 
+										 action="#{themeSettingController.doSave}"
+										 title="Salvar o Tema"
+										 update=":idMsgGlobal" />						
 					</h:panelGrid>
 				</f:view>				
 				

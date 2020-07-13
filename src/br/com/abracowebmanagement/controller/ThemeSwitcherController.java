@@ -12,7 +12,7 @@ import javax.faces.event.AjaxBehaviorEvent;
 
 import org.primefaces.component.themeswitcher.ThemeSwitcher;
 
-import br.com.abracowebmanagement.domain.user.UserDomain;
+import br.com.abracowebmanagement.domain.UserDomain;
 
 @ManagedBean
 @SessionScoped

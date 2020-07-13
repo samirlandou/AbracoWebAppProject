@@ -1,5 +1,6 @@
 package br.com.abracowebmanagement.util;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,7 +13,10 @@ import java.util.GregorianCalendar;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
-public class DateUtil {
+public class DateUtil implements Serializable{
+
+	private static final long serialVersionUID = 1L;
+
 
 	//private Date beginDate;
 
