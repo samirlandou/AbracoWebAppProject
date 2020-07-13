@@ -5,6 +5,7 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
 	template="/pages/template/systemModel.xhtml">
 
 
@@ -30,63 +31,73 @@
 			<br/>
 			<h:form id="userListFormId">		
 			
-				<p:panel header="Lista de Usuários">
+				<h3 align="center">Lista de Usuários</h3>
+				<br/>
 					<p:dataTable id="userDataTableFormId" emptyMessage="Nenhum registro encontrado."
 						paginator="true" value="#{userController.usersDomain}" var="cursor" rows="10"
 						resizableColumns="true" resizeMode="fit" reflow="true" rowHover="true"
-						draggableColumns="true">
+						draggableColumns="true" style="text-align: center; width:90%; margin: 0 auto;">
 	
 	
 						<!-- NM_USER -->
-						<p:column headerText="Usuário:" sortBy="#{cursor.userName}" filterBy="#{cursor.userName}">
+						<p:column headerText="Usuário:" sortBy="#{cursor.userName}" filterBy="#{cursor.userName}" style="width: 18%; text-align: center;">
 							<h:outputText value="#{cursor.userName}"/>
 						</p:column>
 						
 						<!-- NM_COMPLETE_NAME -->
-						<p:column headerText="Nome completo" sortBy="#{cursor.personDomain.completeName}" filterBy="#{cursor.personDomain.completeName}">
+						<p:column headerText="Nome completo" sortBy="#{cursor.personDomain.completeName}" filterBy="#{cursor.personDomain.completeName}" style="text-align: center;">
 							<h:outputText value="#{cursor.personDomain.completeName}"/>
 						</p:column>
 	
-						<!-- DE_NATIONALITY -->
-						<p:column headerText="Nacionalidade">
-							<h:outputText value="#{cursor.personDomain.nationality}"/>
+						<!-- DE_COUNTRY -->
+						<p:column headerText="País" sortBy="#{cursor.personDomain.country}" style="width: 12%; text-align: center;">
+							<h:outputText value="#{cursor.personDomain.country.equals('República Democrática do Congo')? 'RDC' : cursor.personDomain.country}"/>
 						</p:column>
 	
 						<!-- DE_SEX -->
-						<p:column headerText="Sexo" sortBy="#{cursor.personDomain.sex}">
+						<p:column headerText="Sexo" sortBy="#{cursor.personDomain.sex}" style="width: 5%; text-align: center;">
 							<h:outputText value="#{cursor.personDomain.sex}"/>					
 						</p:column>
 						
-						<!-- DE_LANGUAGE -->
-						<p:column headerText="Língua" sortBy="#{cursor.personDomain.language}" filterBy="#{cursor.personDomain.langue}">
-							<h:outputText value="#{cursor.personDomain.language}"/>
+						<!-- DE_TEACHING LANGUAGE1 -->
+						<p:column headerText="Língua1" sortBy="#{cursor.teachingLanguage1}" style="width: 7%; text-align: center;">
+							<h:outputText value="#{cursor.teachingLanguage1}"/>
 						</p:column>
-	
+
+						<!-- DE_TEACHING LANGUAGE2 -->
+						<p:column headerText="Língua2" sortBy="#{cursor.teachingLanguage2}" style="width: 7%; text-align: center;">
+							<h:outputText value="#{cursor.teachingLanguage2}"/>
+						</p:column>	
+
 						<!-- DE_PROFILE -->
-						<p:column headerText="Perfil" sortBy="#{cursor.personDomain.profile}">
+						<p:column headerText="Perfil" sortBy="#{cursor.personDomain.profile}" style="width: 11%; text-align: center;">
 							<h:outputText value="#{cursor.personDomain.profile}"/>
 						</p:column>
 	
 						<!-- DE_STATUS -->
-						<p:column headerText="Status" sortBy="#{cursor.personDomain.status}">
-							<h:outputText value="#{cursor.personDomain.status}"/>				
+						<p:column headerText="Status" sortBy="#{cursor.personDomain.status}" style="width: 6%; text-align: center;">
+							<h:outputText value="#{cursor.personDomain.status == true? 'Ativo' : 'Inativo'}"/>				
 						</p:column>
 						
 						<!-- OPTIONS -->
-						<p:column headerText="Opções">
+						<p:column headerText="Opções" style="width: 8%; text-align: center;">
 	
 							<!-- BUTTON TO EDIT -->
-							<p:commandButton icon="ui-icon-pencil" actionListener="#{userController.doEdit}"
+							<p:commandButton icon="fa fa-edit" actionListener="#{userController.doEdit}"
 											oncomplete="PF('dlgNewUser').show();"
-											update=":idMsgGlobal :userRegisterFormId:userInputRegisterPnlId :userListFormId:userDataTableFormId">
+											update=":idMsgGlobal 
+													:userRegisterFormId:userInputRegisterPnlId 
+													:userRegisterFormId:userInputRegisterLanguagePnlId
+													:userListFormId:userDataTableFormId">
 								<f:attribute name="selectedUserByCursor" value="#{cursor}"/>
 								<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
 							</p:commandButton>
 						
 							<!-- BUTTON TO DELETE -->
-							<p:commandButton icon="ui-icon-trash" actionListener="#{userController.doDelete}"
-											update=":idMsgGlobal :userListFormId:userDataTableFormId">
-								<p:confirm header="Confirmação" message="Deseja excluir #{cursor.personDomain.completeName}?" icon="ui-icon-alert"/>
+							<p:commandButton icon="fa fa-trash" actionListener="#{userController.doDelete}"
+											update=":idMsgGlobal :userListFormId:userDataTableFormId"
+											disabled="#{cursor.id == 1 ? true : false}">
+								<p:confirm header="Confirmação" message="Deseja excluir #{cursor.personDomain.completeName}?" icon="fa fa-exclamation-triangle"/>
 								<f:attribute name="selectedUserByCursor" value="#{cursor}"/>
 							</p:commandButton>
 						</p:column>
@@ -96,12 +107,25 @@
 						<f:facet name="footer">
 	
 							<!-- NEW BUTTON -->
-							<p:commandButton value="Novo"
+							<p:commandButton value="Novo" icon="fa fa-plus"
 								actionListener="#{userController.doNewRegister}"
 								oncomplete="PF('dlgNewUser').show();"
-								update=":idMsgGlobal :userRegisterFormId:userInputRegisterPnlId">
+								update=":idMsgGlobal 
+										:userRegisterFormId:userInputRegisterPnlId
+										:userRegisterFormId:userInputRegisterLanguagePnlId">
 								<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener"/>
 							</p:commandButton>
+						
+							<!-- CHOOSE DATA TABLE COLOMNS  -->
+							<p:commandButton value="Colunas"
+							 				  type="button" 
+							 				  id="columnsDataTableID"
+							 				  icon="fa fa-edit"/>
+							 				  
+							<p:columnToggler datasource="userDataTableFormId"
+							 				  trigger="columnsDataTableID">						 
+							</p:columnToggler>
+						 							
 						</f:facet>
 	
 					</p:dataTable>
@@ -109,35 +133,54 @@
 					
 					<!-- CONFIRM DIALOG WHEN DELETING -->
 					<p:confirmDialog global="true" >
-						<p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>		
-						<p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+						<p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check"/>		
+						<p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-close"/>
 					</p:confirmDialog>
 					
-				</p:panel>
 			</h:form>
 	
 	
 			<!-- DIALOG TO REGISTER NEW USER -->
-			<p:dialog header="Cadastrar Nova pessoa" widgetVar="dlgNewUser"
-				draggable="true" resizable="false" modal="true" closable="true"
-				appendTo="@(body)">
+			<p:dialog header="Cadastrar Usuário" widgetVar="dlgNewUser"
+				draggable="true" resizable="true" modal="true" closable="false"
+				appendTo="@(body)" position="center" maximizable="true" responsive="true">
 	
 				<!-- FORM FOR THE DIALOG -->
 				<h:form id="userRegisterFormId" enctype="multipart/form-data">
 				
 					<!-- PANEL GRID TO FILL FORMS -->
-					<h:panelGrid id="userInputRegisterPnlId" columns="2">			
+					<p:scrollPanel mode="native" style="width: 400px; heigh: 300px; margin: 0 auto;">
+					
+					<h:panelGrid id="userInputRegisterPnlId" columns="2" styleClass="panelGridCenter">			
 						<p:outputLabel value="Usuário: *" />
-						<p:inputText value="#{userController.userDomain.userName}" maxlength="30" size="27"
+						<p:inputText value="#{userController.userDomain.userName}" maxlength="30" size="30"
 									required="true" requiredMessage="O campo 'Usuário' é obrigatório"/>
+									
+						<p:outputLabel value="CNPJ: *" />
+						<p:inputMask value="#{userController.userDomain.cnpj}" maxlength="14" size="30" 
+									mask="99.999.999/9999-99"
+									required="true" requiredMessage="O campo 'CNPJ' é obrigatório">
+									<p:ajax event="change"
+											process="@this"
+											global="false"
+											listener="#{userController.doValidateCNPJ}" 
+											update=":idMsgGlobal" />								
+									
+						</p:inputMask>
 						
 						<p:outputLabel value="Senha: *" />
-						<p:password value="#{userController.userDomain.passwordWithoutCryptography}" maxlength="12" size="27"
+						<p:password value="#{userController.userDomain.passwordWithoutCryptography}" maxlength="12" size="30"
 									promptLabel="Digite a senha" weakLabel="fraco" goodLabel="Intermediário" strongLabel="forte"
-									feedback="true" inline="true" 
+									feedback="true" inline="true" redisplay="true" id="passwordID"
 									required="true" requiredMessage="O campo 'Senha' é obrigatório"/>
+									
+						<p:outputLabel value="Confirmar Senha: *" />
+						<p:password value="#{userController.oldPassword}" maxlength="12" size="30"
+									promptLabel="Digite a senha" weakLabel="fraco" goodLabel="Intermediário" strongLabel="forte"
+									feedback="true" inline="true" redisplay="true" id="oldPasswordID"
+									required="true" requiredMessage="O campo 'Confirmar Senha' é obrigatório"/>									
 	
-						<p:outputLabel value="Lembre sua senha com uma frase: *" />
+						<p:outputLabel value="Lembre sua senha: *" />
 						<p:inputTextarea value="#{userController.userDomain.rememberPassword}" rows="2" cols="30" counter="display"
 							maxlength="100" counterTemplate="{0} caracteres restantes."
 							autoResize="true" required="true" requiredMessage="O campo 'Lembrar Senha' é obrigatório"/>
@@ -145,8 +188,9 @@
 						<h:outputText id="display"/>
 						
 						<p:outputLabel value="Nome da Pessoa: *" />
-						<p:selectOneMenu id="userId" filter="true" value="#{userController.userDomain.personDomain}"
-							converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="O campo 'Pessao' é obrigatório">
+						<p:selectOneMenu id="userId" filter="true" value="#{userController.userDomain.personDomain}" autoWidth="false"
+							converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="O campo 'Pessao' é obrigatório"
+							style="width:215px">
 							<f:selectItem noSelectionOption="true" itemLabel="Selecione uma pessoa" />
 							<f:selectItems value="#{userController.personsDomain}" var="person"
 							itemValue="#{person}"
@@ -155,25 +199,82 @@
 	
 						<br/>
 						<p:spacer width="10px"/>
-						<p:outputLabel value="Imagem:" />
-						<p:fileUpload  	fileUploadListener="#{userController.handleFileUpload}" mode="advanced" dragDropSupport="true"
+						
+						<p:outputLabel value="Imagem:" rendered="#{loginController.loggedUser.id == userController.userDomain.id? true : false}"/>
+						<p:fileUpload  	mode="advanced"
+										fileUploadListener="#{userController.doHandleFileUpload}"
+										value="#{userController.file}"
+										dragDropSupport="true"
 						          		skinSimple="true" auto="true"
-						          		update=":idMsgGlobal" sizeLimit="512000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" 
+						          		update=":idMsgGlobal userRegisterFormId:photoID"
+						          		sizeLimit="20480000" 
+						          		allowTypes="/(\.|\/)(gif|jpg|jpeg|png)$/" 
 						          		invalidFileMessage="São permitidas somente imagens (gif, jpeg, jpg e png)"
-						          		invalidSizeMessage="O tamanho máximo permitido é de 500KB."
+						          		invalidSizeMessage="O tamanho máximo permitido é de 2MB."
 						          		onstart="console.log('Iniciando envio de arquivo')"
 										onerror="console.log('Erro na requisição de envio')"
-										oncomplete="console.log('Envio concluído')" />
+										oncomplete="console.log('Envio concluído')"
+										label="Escolher"
+										rendered="#{loginController.loggedUser.id == userController.userDomain.id? true : false}"/>
 	   					<br/>
-	
+	   					
+	   					<p:graphicImage id="photoID" cache="false" value="#{imageController.streamContent}" width="100px" height="auto"
+	   									rendered="#{loginController.loggedUser.id == userController.userDomain.id? true : false}"/>
+						
+						<h:outputText value="Excluir Imagem" rendered="#{loginController.loggedUser.id == userController.userDomain.id? true : false}"/>
+						<p:commandButton id="deleteBtnID" value="Excluir" icon="fa fa-file-image-o" action="#{userController.doDeleteFile}"
+										rendered="#{loginController.loggedUser.id == userController.userDomain.id? true : false}"
+										update=":idMsgGlobal userRegisterFormId:photoID"/>
 					</h:panelGrid>
 					
-					<br/>				
+					
+					
+					<h:panelGrid id="userInputRegisterLanguagePnlId" columns="2" styleClass="panelGridCenter">
+						
+						<p:outputLabel value="1a língua de ensino: *"/>
+						<p:selectOneMenu id="teachingLanguage1ComboID" filter="false" value="#{userController.userDomain.teachingLanguage1}"
+							autoWidth="false" style="width: 210px"
+							converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="O campo '1a língua de ensino' é obrigatório">
+							<f:selectItem noSelectionOption="true" itemLabel="Selecione uma Língua"/>
+							<f:selectItem itemLabel="ÁRABE" itemValue="AR"/>
+							<f:selectItem itemLabel="ESPANHOL" itemValue="ES"/>
+							<f:selectItem itemLabel="FRANCÊS" itemValue="FR"/>
+							<f:selectItem itemLabel="INGLÊS" itemValue="EN"/>
+							<f:selectItem itemLabel="PORTUGUÊS" itemValue="PT"/>
+						</p:selectOneMenu>	
+						
+						<p:outputLabel value="2a língua de ensino: "/>
+						<p:selectOneMenu id="teachingLanguage2ComboID" filter="false" value="#{userController.userDomain.teachingLanguage2}"
+							autoWidth="false" style="width: 210px"
+							converter="omnifaces.SelectItemsConverter">
+							<f:selectItem noSelectionOption="true" itemLabel="Selecione uma Língua"/>
+							<f:selectItem itemLabel="ÁRABE" itemValue="AR"/>
+							<f:selectItem itemLabel="ESPANHOL" itemValue="ES"/>
+							<f:selectItem itemLabel="FRANCÊS" itemValue="FR"/>
+							<f:selectItem itemLabel="INGLÊS" itemValue="EN"/>
+							<f:selectItem itemLabel="PORTUGUÊS" itemValue="PT"/>
+						</p:selectOneMenu>					
+					
+					</h:panelGrid>
+					
+					
+					</p:scrollPanel>
+					
+					<br/>
+								
 					<!-- PANEL GRID FOR BUTTON SAVE AND CLOSE -->
-					<h:panelGrid columns="2">
+					<h:panelGrid columns="2" styleClass="panelGridCenter">
 						<p:commandButton value="Salvar" icon="fa fa-floppy-o" actionListener="#{userController.doSave}"
-										update=":idMsgGlobal :userRegisterFormId:userInputRegisterPnlId :userListFormId:userDataTableFormId"/>					
-						<p:commandButton value="Fechar"  icon="fa fa-remove" oncomplete="PF('dlgNewUser').hide();" action="#{userController.doDeleteTempfiles}"/>
+										update=":idMsgGlobal userRegisterFormId:photoID  
+										:userRegisterFormId:userInputRegisterPnlId 
+										:principalMenuFormID:userImageOnTopID"/>
+										
+						<p:commandButton immediate="true"
+										 value="Fechar"  
+										 icon="fa fa-remove" 
+										 oncomplete="PF('dlgNewUser').hide();" 
+										 action="#{userController.doDeleteTempfiles}"
+										 update=":userListFormId:userDataTableFormId"/>
 					</h:panelGrid>		
 					
 				</h:form>

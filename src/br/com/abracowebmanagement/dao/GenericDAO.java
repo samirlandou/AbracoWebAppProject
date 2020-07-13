@@ -133,6 +133,34 @@ public class GenericDAO<Entity> {
 		}
 	}
 
+
+	/**
+	 * Method to delete
+	 * @param entity
+	 */
+	public void deleteListOfEntities(List<Entity> entity){
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction transaction = null;
+		
+		try {
+			transaction = session.beginTransaction();
+			
+			//Delete all entities
+			for (Entity en : entity){
+				session.delete(en);
+			}
+			
+			transaction.commit();
+		} catch (RuntimeException error) {
+			if(transaction != null){
+				transaction.rollback();
+			}
+			throw error;
+		}finally {
+			session.close();
+		}
+	}	
+	
 	
 	/**
 	 * Method to update

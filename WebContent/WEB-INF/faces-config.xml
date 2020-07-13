@@ -34,6 +34,66 @@
 			<redirect />
 		</navigation-case>
 		
+		<navigation-case>
+			<from-outcome>client.contractModel</from-outcome>
+			<to-view-id>/pages/contents/contractModel.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+
+		<navigation-case>
+			<from-outcome>client.person</from-outcome>
+			<to-view-id>/pages/contents/person.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+
+		<navigation-case>
+			<from-outcome>client.user</from-outcome>
+			<to-view-id>/pages/contents/user.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+						
+		<navigation-case>
+			<from-outcome>client.contract</from-outcome>
+			<to-view-id>/pages/contents/contract.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+						
+		<navigation-case>
+			<from-outcome>client.myclass</from-outcome>
+			<to-view-id>/pages/contents/myclass.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+
+		<navigation-case>
+			<from-outcome>client.themeSetting</from-outcome>
+			<to-view-id>/pages/contents/themeSetting.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+						
+		<navigation-case>
+			<from-outcome>client.contractSetting</from-outcome>
+			<to-view-id>/pages/contents/contractSetting.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>		
+			
+		<navigation-case>
+			<from-outcome>client.languageSetting</from-outcome>
+			<to-view-id>/pages/contents/language.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+			
+		<navigation-case>
+			<from-outcome>client.levelSetting</from-outcome>
+			<to-view-id>/pages/contents/level.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>	
+		
+		<navigation-case>
+			<from-outcome>client.userImage</from-outcome>
+			<to-view-id>/pages/contents/userImage.xhtml</to-view-id>
+			<redirect />
+		</navigation-case>
+		
 	</navigation-rule>	
 
 </faces-config>

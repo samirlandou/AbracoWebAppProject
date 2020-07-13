@@ -1,17 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
-	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
-	id="WebApp_ID" version="3.1">
-	<!-- Application Name -->
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" id="WebApp_ID" version="3.1">
 	<display-name>abracowebmanagement</display-name>
-
-	<!-- Principal Page -->
 	<welcome-file-list>
 		<welcome-file>faces/pages/login.xhtml</welcome-file>
 	</welcome-file-list>
-
-	<!-- JSF Configuration -->
 	<servlet>
 		<servlet-name>Faces Servlet</servlet-name>
 		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
@@ -21,53 +13,44 @@
 		<servlet-name>Faces Servlet</servlet-name>
 		<url-pattern>/faces/*</url-pattern>
 	</servlet-mapping>
-	
-	<!-- Initiate Hibernate when Tomcat is starting -->
 	<listener>
 		<listener-class>br.com.abracowebmanagement.hibernate.HibernateContext</listener-class>
 	</listener>
-
-	<!-- Define PrimeFaces Type -->
 	<context-param>
 		<param-name>primefaces.UPLOADER</param-name>
-		<param-value>native</param-value>
+		<param-value>auto</param-value>
 	</context-param>
-
-	<!-- Define PrimeFaces Theme -->
 	<context-param>
 		<param-name>primefaces.THEME</param-name>
 		<param-value>#{themeSwitcherController.theme}</param-value>
-		<!-- <param-value>aristo</param-value> -->
-		<!-- <param-value>ui-lightness</param-value> -->
-		
 	</context-param>
-
-	<!-- Session Timeout -->
 	<session-config>
-	        <session-timeout>15</session-timeout>
+		<session-timeout>30</session-timeout>
 	</session-config>
-	
-	<!-- Session Listener -->
 	<listener>
 		<listener-class>br.com.abracowebmanagement.session.SessionListener</listener-class>
 	</listener>
-	
-	<!-- Error Pages -->
 	<error-page>
-        <exception-type>javax.faces.application.ViewExpiredException</exception-type>
-        <location>/pages/login.xhtml</location>
+		<exception-type>javax.faces.application.ViewExpiredException</exception-type>
+		<location>/pages/login.xhtml</location>
 	</error-page>
+	<context-param>
+		<param-name>primefaces.FONT_AWESOME</param-name>
+		<param-value>false</param-value>
+	</context-param>
+	<context-param>
+		<param-name>org.primefaces.extensions.DELIVER_UNCOMPRESSED_RESOURCES</param-name>
+		<param-value>false</param-value>
+	</context-param>
+	<servlet>
+		<servlet-name>InsertFirstDataServlet</servlet-name>
+		<servlet-class>br.com.abracowebmanagement.servlet.InsertFirstDataServlet</servlet-class>
+		<init-param>
+			<param-name>debug</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
 
-	<!-- Font Awesome -->	
-	<context-param>
-	    <param-name>primefaces.FONT_AWESOME</param-name>
-	    <param-value>true</param-value>
-	</context-param>
-	
-	<!-- PrimeFaces Extensions Uncompressed -->
-	<context-param>
-	    <param-name>org.primefaces.extensions.DELIVER_UNCOMPRESSED_RESOURCES</param-name>
-	    <param-value>false</param-value>
-	</context-param>
-	
+ 
 </web-app>

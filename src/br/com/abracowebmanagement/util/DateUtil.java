@@ -1,14 +1,22 @@
 package br.com.abracowebmanagement.util;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
-public class DateUtil {
+public class DateUtil implements Serializable{
+
+	private static final long serialVersionUID = 1L;
+
 
 	//private Date beginDate;
 
@@ -118,10 +126,29 @@ public class DateUtil {
 		return fillZero(hours) + ":" + fillZero(minutes);
 		
 	}
+
+	public static String returnDiffBetweenDatesWithQuantity(Date data1, Date data2, int date3, int quantity){
+		long difMilli = data2.getTime() - data1.getTime();
+		
+		int timeInSeconds = (int)(((difMilli / 1000) - (date3 * 60)) * quantity) ;  
+		int hours, minutes;
+		hours = timeInSeconds / 3600;  
+		timeInSeconds = timeInSeconds - (hours * 3600);  
+		minutes = timeInSeconds / 60;  
+		timeInSeconds = timeInSeconds - (minutes * 60);
+		return fillZero(hours) + ":" + fillZero(minutes);
+		
+	}	
 	
 	public static int returnDiffInMinutes(Date data1, Date data2, int date3){
 		long diffMilli = data2.getTime() - data1.getTime();
 		int diffMin = (int)(((diffMilli / 1000) - (date3 * 60))/60);
+		return diffMin;
+	}
+	
+	public static int returnDiffInMinutesWithQuantity(Date data1, Date data2, int date3, int quantity){
+		long diffMilli = data2.getTime() - data1.getTime();
+		int diffMin = (int)((((diffMilli / 1000) - (date3 * 60))/60) * quantity);
 		return diffMin;
 	}
 	
@@ -147,6 +174,67 @@ public class DateUtil {
 		sdf.applyPattern(commonsPattern);
 		return sdf.parse(value);
 		
+	}
+	
+	//Convert Date to LocalDateTime
+	public LocalDateTime convertDateToLocalDateTime(Date date) {
+	    GregorianCalendar cal = new GregorianCalendar();
+	    cal.setTime(date);
+	    ZonedDateTime zdt = cal.toZonedDateTime();
+	    return zdt.toLocalDateTime();
+	}
+
+	//Convert LocalDateTime to Date
+	public Date convertLocalDateTimeToDate(LocalDateTime ldt) {
+	    ZonedDateTime zdt = ZonedDateTime.of(ldt, ZoneId.systemDefault());
+	    GregorianCalendar cal = GregorianCalendar.from(zdt);
+	    return cal.getTime();
+	}
+
+	
+	public String formatDurationTime(int time){
+		
+		int hours = time / 60;
+		int minutes = time % 60;
+		//System.out.printf("%02d:%02d", hours, minutes);
+
+		String formatHour = String.format("%02d", hours);
+		
+		String formatMinutes = String.format("%02d", minutes % 60);
+		
+		//String formatTime = (hours == 0 ? "": formatHour + "h") + (minutes % 60 == 0 ? "": formatMinutes + "mn");
+		
+		return  (hours == 0 ? "": formatHour + "h") + (minutes % 60 == 0 ? "": formatMinutes + "mn");
+		
+	}
+
+	
+	public String convertIntoHHmm(Date date){
+		
+		//Transform Date into LocalDateTime
+		LocalDateTime ldt = convertDateToLocalDateTime(date);
+		
+		//Return date into HH:mm format
+		return (ldt.getHour() < 10 ? "0"+ ldt.getHour() : ldt.getHour()) 
+				+ "h" 
+				+ (ldt.getMinute() < 10 ? "0"+ ldt.getMinute() : ldt.getMinute());		
+	}
+	
+	
+	public String convertIntoddMMyyyy(Date date){
+		
+		//Transform Date into LocalDateTime
+		LocalDateTime ldt = convertDateToLocalDateTime(date);
+		
+		//Format day
+		String day = ldt.getDayOfMonth() < 10 ? "0" + ldt.getDayOfMonth() : String.valueOf(ldt.getDayOfMonth());
+		
+		//Format month
+		String month = (ldt.getMonthValue()) < 10 ? "0" + (ldt.getMonthValue()) : String.valueOf(ldt.getMonthValue());
+		
+		
+		//Return date into dd/MM/yyyy format		
+		return day + "/" + month + "/" + ldt.getYear();		
 	}
 	
 }

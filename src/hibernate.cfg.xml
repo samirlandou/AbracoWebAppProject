@@ -9,8 +9,9 @@
     <session-factory>
 
         <!-- Database connection settings -->
-        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="connection.url">jdbc:mysql://localhost:3306/db_abracocultural?useSSL=false&amp;serverTimezone=UTC</property>
+        <!-- <property name="connection.driver_class">com.mysql.jdbc.Driver</property> -->
+        <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/db_abracocultural?useSSL=false&amp;serverTimezone=America/Sao_Paulo</property>
         <property name="connection.username">root</property>
         <property name="connection.password">q1w2e3r4</property>
 
@@ -33,11 +34,15 @@
         <property name="hbm2ddl.auto">update</property>
 
 		<mapping class="br.com.abracowebmanagement.domain.ContractDomain"/>
+		<mapping class="br.com.abracowebmanagement.domain.ContractModelDomain"/>
+		<mapping class="br.com.abracowebmanagement.domain.ContractSettingDomain"/>
+		<mapping class="br.com.abracowebmanagement.domain.ContractStudentDomain"/>
+		<mapping class="br.com.abracowebmanagement.domain.LanguageDomain"/>
+		<mapping class="br.com.abracowebmanagement.domain.LevelDomain"/>
 		<mapping class="br.com.abracowebmanagement.domain.MyClassDomain"/>
 		<mapping class="br.com.abracowebmanagement.domain.PersonDomain"/>		
 		<mapping class="br.com.abracowebmanagement.domain.PresenceDomain"/>
-        <mapping class="br.com.abracowebmanagement.domain.StudentInMyClassDomain"/>
-        <mapping class="br.com.abracowebmanagement.domain.ScheduleEventDomain"/>
+		<mapping class="br.com.abracowebmanagement.domain.ScheduleEventDomain"/>
         <mapping class="br.com.abracowebmanagement.domain.UserDomain"/>
 
 		

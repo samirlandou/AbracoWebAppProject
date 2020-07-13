@@ -28,6 +28,15 @@ public class UserDomain extends GenericDomain{
 	@Column(name ="ID_LOGIN")
 	private Long id;*/
 	
+	
+
+
+	/*
+	 * Phone number
+	 */
+	@Column(name = "DE_CNPJ", length = 18, nullable = true)
+	private String cnpj;
+	
 	/*
 	 * User Name
 	 */
@@ -85,6 +94,7 @@ public class UserDomain extends GenericDomain{
 	 */
 	@Column(name = "DE_USER_THEME", length = 20)
 	private String userTheme;
+
 	
 	/*
 	 * User <br/>
@@ -101,6 +111,36 @@ public class UserDomain extends GenericDomain{
 	//@Lob
 	/*@JoinColumn(name = "DE_USER_IMAGE")
 	private byte[] imageUser;*/
+	
+
+	
+
+	/*
+	 * Teaching Language
+	 * Description of teaching language1
+	 * 
+	 * AR --> Arab
+	 * FR --> French
+	 * EN --> English
+	 * ES --> Spanish
+	 * PT --> Portuguese
+	 */
+	@Column(name = "DE_TEACHING_LANGUAGE1", length = 2, nullable = false)
+	private String teachingLanguage1;
+	
+
+	/*
+	 * Teaching Language
+	 * Description of teaching language2
+	 * 
+	 * AR --> Arab
+	 * FR --> French
+	 * EN --> English
+	 * ES --> Spanish
+	 * PT --> Portuguese
+	 */
+	@Column(name = "DE_TEACHING_LANGUAGE2", length = 2, nullable = true)
+	private String teachingLanguage2;
 
 	
 	
@@ -188,6 +228,36 @@ public class UserDomain extends GenericDomain{
 	}
 
 
+	public String getCnpj() {
+		return cnpj;
+	}
+
+
+	public void setCnpj(String cnpj) {
+		this.cnpj = cnpj;
+	}
+
+
+	public String getTeachingLanguage1() {
+		return teachingLanguage1;
+	}
+
+
+	public void setTeachingLanguage1(String teachingLanguage1) {
+		this.teachingLanguage1 = teachingLanguage1;
+	}
+
+
+	public String getTeachingLanguage2() {
+		return teachingLanguage2;
+	}
+
+
+	public void setTeachingLanguage2(String teachingLanguage2) {
+		this.teachingLanguage2 = teachingLanguage2;
+	}
+	
+	
 	/*public byte[] getImageUser() {
 		return imageUser;
 	}

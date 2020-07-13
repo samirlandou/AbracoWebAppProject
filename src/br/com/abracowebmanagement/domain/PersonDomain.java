@@ -19,12 +19,20 @@ public class PersonDomain extends GenericDomain{
 	 * DT -> DATE
 	 * FG -> FLAG 
 	 */
+
+
+	/*
+	 * Phone number
+	 */
+	@Column(name = "DE_CPF", length = 14, nullable = false)
+	private String cpf;		
+	
 	
 	/*
 	 * Complete name
 	 * (Name + Surname)
 	 */
-	@Column(name = "NM_COMPLETE_NAME", length = 40, nullable = false)
+	@Column(name = "NM_COMPLETE_NAME", length = 60, nullable = false)
 	private String completeName;	
 	
 	
@@ -32,8 +40,8 @@ public class PersonDomain extends GenericDomain{
 	 * Nationality
 	 * Brazil as Default
 	 */
-	@Column(name = "DE_NATIONALITY", length = 20, nullable = false)
-	private String nationality;
+	@Column(name = "DE_COUNTRY", length = 100, nullable = false)
+	private String country;
 
 	
 	/*
@@ -55,7 +63,7 @@ public class PersonDomain extends GenericDomain{
 	/*
 	 * Phone number
 	 */
-	@Column(name = "DE_TELEPHONE", length = 20, nullable = false)
+	@Column(name = "DE_TELEPHONE", length = 20, nullable = true)
 	private String telephone;
 	
 	
@@ -85,7 +93,7 @@ public class PersonDomain extends GenericDomain{
 
 	/*
 	 * Language
-	 * Description of teaching language
+	 * Description of teaching language3
 	 * 
 	 * AR --> Arab
 	 * FR --> French
@@ -93,8 +101,37 @@ public class PersonDomain extends GenericDomain{
 	 * ES --> Spanish
 	 * PT --> Portuguese
 	 */
-	@Column(name = "DE_LANGUAGE", length = 2, nullable = false)
-	private String language;
+	@Column(name = "DE_LANGUAGE1", length = 2, nullable = false)
+	private String language1;
+	
+
+	/*
+	 * Language
+	 * Description of teaching language3
+	 * 
+	 * AR --> Arab
+	 * FR --> French
+	 * EN --> English
+	 * ES --> Spanish
+	 * PT --> Portuguese
+	 */
+	@Column(name = "DE_LANGUAGE2", length = 2, nullable = true)
+	private String language2;	
+	
+
+	/*
+	 * Language
+	 * Description of teaching language3
+	 * 
+	 * AR --> Arab
+	 * FR --> French
+	 * EN --> English
+	 * ES --> Spanish
+	 * PT --> Portuguese
+	 */
+	@Column(name = "DE_LANGUAGE3", length = 2, nullable = true)
+	private String language3;
+	
 	
 	/*
 	 * Getters and Setters
@@ -110,13 +147,13 @@ public class PersonDomain extends GenericDomain{
 	}
 
 
-	public String getNationality() {
-		return nationality;
+	public String getCountry() {
+		return country;
 	}
 
 
-	public void setNationality(String nationality) {
-		this.nationality = nationality;
+	public void setCountry(String country) {
+		this.country = country;
 	}
 
 
@@ -174,19 +211,49 @@ public class PersonDomain extends GenericDomain{
 		return status;
 	}
 
-
 	public void setStatus(Boolean status) {
 		this.status = status;
 	}
 
 
-	public String getLanguage() {
-		return language;
+	public String getCpf() {
+		return cpf;
 	}
 
 
-	public void setLanguage(String language) {
-		this.language = language;
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
 	}
+
+
+	public String getLanguage1() {
+		return language1;
+	}
+
+
+	public void setLanguage1(String language1) {
+		this.language1 = language1;
+	}
+
+
+	public String getLanguage2() {
+		return language2;
+	}
+
+
+	public void setLanguage2(String language2) {
+		this.language2 = language2;
+	}
+
+
+	public String getLanguage3() {
+		return language3;
+	}
+
+
+	public void setLanguage3(String language3) {
+		this.language3 = language3;
+	}
+
 	
 }

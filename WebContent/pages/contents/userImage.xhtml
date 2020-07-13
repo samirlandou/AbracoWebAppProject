@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/pages/template/systemModel.xhtml">
+
+
+
+	<!-- MENU
+	<ui:define name="menu">
+		<ui:include src="/pages/includes/menuPrincipal.xhtml">
+		</ui:include>
+	</ui:define>  -->
+
+
+
+	<!-- CONTENT -->
+	<ui:define name="content">
+		
+		<!-- MENU -->
+		<ui:include src="/pages/includes/menuPrincipal.xhtml"/>
+				
+		<!-- BODY -->
+		
+		<!-- LISTING PANEL FORM -->
+		<div align="center">
+			<br/>
+			<f:view>
+				<!-- FORM FOR THE DIALOG -->
+				<h:form id="userRegisterFormID" enctype="multipart/form-data">
+				
+					<!-- PANEL GRID TO FILL FORMS -->
+					<p:scrollPanel mode="native" style="width: 500px; heigh: 200px; margin: 0 auto;">
+					
+					<h2 style="position: center;">Editar - Usuário</h2>
+					
+					<h:panelGrid id="userInputRegisterPnlID" columns="2">			
+						<p:outputLabel value="Usuário: *" />
+						<p:inputText value="#{imageUserController.userDomain.userName}" maxlength="30" size="30"
+									required="true" requiredMessage="O campo 'Usuário' é obrigatório"
+									disabled="true"/>
+									
+						<p:outputLabel value="CNPJ: *" />
+						<p:inputMask value="#{imageUserController.userDomain.cnpj}" maxlength="14" size="30" 
+									mask="99.999.999/9999-99" disabled="true"
+									required="true" requiredMessage="O campo 'CNPJ' é obrigatório">
+									<p:ajax event="change"
+											process="@this"
+											global="false"
+											listener="#{imageUserController.doValidateCNPJ}" 
+											update=":idMsgGlobal" />								
+									
+						</p:inputMask>
+						
+						<p:outputLabel value="Senha: *" />
+						<p:password value="#{imageUserController.userDomain.passwordWithoutCryptography}" maxlength="12" size="30"
+									promptLabel="Digite a senha" weakLabel="fraco" goodLabel="Intermediário" strongLabel="forte"
+									feedback="true" inline="true" id="passwordID" redisplay="true" 
+									required="true" requiredMessage="O campo 'Senha' é obrigatório"/>
+						
+						<p:outputLabel value="Confirmar Senha: *" />
+						<p:password value="#{imageUserController.oldPassword}" maxlength="12" size="30"
+									promptLabel="Digite a senha" weakLabel="fraco" goodLabel="Intermediário" strongLabel="forte"
+									feedback="true" inline="true" id="oldPasswordID" redisplay="true"
+									required="true" requiredMessage="O campo 'Confirmar Senha' é obrigatório"/>
+	
+						<p:outputLabel value="Lembre sua senha: *" />
+						<p:inputTextarea value="#{imageUserController.userDomain.rememberPassword}" rows="2" cols="30" counter="display"
+							maxlength="100" counterTemplate="{0} caracteres restantes."
+							autoResize="true" required="true" requiredMessage="O campo 'Lembrar Senha' é obrigatório"/>
+						<br/>
+						<h:outputText id="display"/>
+						
+						<p:outputLabel value="Nome da Pessoa: *" />
+						<p:selectOneMenu id="userId" filter="true" value="#{imageUserController.userDomain.personDomain}" disabled="true"
+							autoWidth="false" style="width: 212px"
+							converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="O campo 'Pessao' é obrigatório">
+							<f:selectItem itemValue="#{imageUserController.userDomain.personDomain}"
+											itemLabel="#{imageUserController.userDomain.personDomain.completeName}" />
+						</p:selectOneMenu>
+	
+						<br/>
+						<p:spacer width="10px"/>
+						<p:outputLabel value="Imagem:"/>
+						<p:fileUpload  	mode="advanced"
+										fileUploadListener="#{imageUserController.doHandleFileUpload}"
+										value="#{imageUserController.file}"
+										dragDropSupport="true"
+						          		skinSimple="true"
+						          		auto="true"
+						          		update=":idMsgGlobal userRegisterFormID:photoID"
+						          		sizeLimit="20480000" 
+						          		allowTypes="/(\.|\/)(gif|jpg|jpeg|png)$/" 
+						          		invalidFileMessage="São permitidas somente imagens (gif, jpeg, jpg e png)"
+						          		invalidSizeMessage="O tamanho máximo permitido é de 2MB."
+						          		onstart="console.log('Iniciando envio de arquivo')"
+										onerror="console.log('Erro na requisição de envio')"
+										previewWidth="20"
+										label="Escolher"
+										oncomplete="console.log('Envio concluído')"
+										style="width:110px;" />
+	   					<br/>
+	   					<p:graphicImage id="photoID" cache="false" value="#{imageController.streamContent}" width="100px" height="auto"/>
+						
+						<h:outputText value="Excluir Imagem"/>
+						<p:commandButton id="deleteBtnID" value="Excluir" icon="fa fa-file-image-o" action="#{imageUserController.doDeleteFile}"
+										update=":idMsgGlobal userRegisterFormID:photoID"/>
+					</h:panelGrid>
+
+					
+					<br/>				
+					<!-- PANEL GRID FOR BUTTON SAVE AND CLOSE -->
+					<h:panelGrid columns="2">
+						<p:commandButton value="Salvar" icon="fa fa-floppy-o" actionListener="#{imageUserController.doSave}"
+										update=":idMsgGlobal userRegisterFormID:photoID  
+										:userRegisterFormID:userInputRegisterPnlID
+										:principalMenuFormID:userImageOnTopID"/>
+										
+						<p:commandButton immediate="true" value="Fechar" icon="fa fa-remove" action="home" actionListener="#{imageUserController.doDeleteTempfiles}"/>
+					</h:panelGrid>		
+
+					</p:scrollPanel>
+					</h:form>
+					</f:view>	
+
+		</div>
+	</ui:define>
+</ui:composition>

@@ -12,7 +12,7 @@ import br.com.abracowebmanagement.domain.UserDomain;
 
 @ManagedBean
 @SessionScoped
-public class SettingController {
+public class ThemeSettingController {
 	
 	//Domain
 	UserDomain userDomain;
@@ -26,7 +26,7 @@ public class SettingController {
 	public void doInit() {
 		
 		//Instantiate UserDomain
-		userDomain= new UserDomain();
+		userDomain = new UserDomain();
 		
 		//FacesContext for Login
 		FacesContext fcLogin = FacesContext.getCurrentInstance();

@@ -17,28 +17,26 @@
 		<!-- BODY -->		
 		<div align="center">
 			<br/>
+			<h3 align="center">Definir Tema</h3>
 			<br/>
+			
 			<!-- FORM FOR THEME SWITCHER -->
 			<h:form>
 				<f:view>
-					<h:panelGrid id="settingFormId" columns="2">
+					<h:panelGrid id="settingFormId" columns="3">
+						
 						<p:outputLabel value="Tema: " />
 						<p:themeSwitcher style="width:165px" id="defaultSwitcher" value="#{themeSwitcherController.theme}" >
 							<f:selectItem noSelectionOption="true" itemLabel="Escolhe um tema"/>
 							<f:selectItems value="#{themeSwitcherController.themes}" />
 							<p:ajax global="false" listener="#{themeSwitcherController.saveTheme}" />
 						</p:themeSwitcher>
-						
-					</h:panelGrid>
-													
-					<br/>				
-					<br/>
-								
-					<!-- PANEL GRID FOR BUTTON SAVE AND CLOSE -->
-					<h:panelGrid columns="2">
-						<p:commandButton value="Salvar" icon="fa fa-floppy-o" action="#{settingController.doSave}"
-										update=":idMsgGlobal" />					
-						<p:commandButton value="Fechar" icon="fa fa-remove" action="home"/>
+										
+						<p:commandButton value="Salvar"
+										 icon="fa fa-floppy-o" 
+										 action="#{themeSettingController.doSave}"
+										 title="Salvar o Tema"
+										 update=":idMsgGlobal" />						
 					</h:panelGrid>
 				</f:view>				
 				

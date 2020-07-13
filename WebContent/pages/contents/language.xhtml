@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/pages/template/systemModel.xhtml">
+
+
+
+	<!-- MENU
+	<ui:define name="menu">
+		<ui:include src="/pages/includes/menuPrincipal.xhtml">
+		</ui:include>
+	</ui:define>  -->
+
+
+	<!-- CONTENT -->
+	<ui:define name="content">
+
+		<!-- MENU -->
+		<ui:include src="/pages/includes/menuPrincipal.xhtml"/>
+		
+		
+		<!-- BODY -->
+		<!-- LISTING PANEL FORM -->
+		<div>
+			<br/>
+			<h:form id="languageListFormID">
+				<h3 align="center">Lista de Língua</h3>
+				<br/>
+				<p:dataTable id="languageDataTableFormID"
+							 emptyMessage="Nenhum registro encontrado."
+							 paginator="true" 
+							 value="#{languageController.languagesDomain}" 
+							 var="cursor" 
+							 rows="10"
+							 resizableColumns="true" 
+							 resizeMode="fit" 
+							 reflow="true" 
+							 rowHover="true" 
+							 draggableColumns="true" 
+							 style="text-align: center; width: 50%; margin: 0 auto;">
+
+					
+					<!-- NM_LANGUAGE -->
+					<p:column headerText="Nome da Língua" 
+							  sortBy="#{cursor.languageName}" 
+							  filterBy="#{cursor.languageName}"
+							  filterMatchMode="contains">
+						<h:outputText value="#{cursor.languageName}"/>
+					</p:column>
+					
+					<!-- DE_LANGUAGE -->
+					<p:column headerText="Descrição da Língua" 
+							  sortBy="#{cursor.languageDescription}" 
+							  filterBy="#{cursor.languageDescription}"
+							  filterMatchMode="contains"
+							  style="width: 20%">
+						<h:outputText value="#{cursor.languageDescription}"/>
+					</p:column>					
+
+					<!-- OPTIONS -->
+					<p:column headerText="Opções" id="optionID" style="width: 20%">
+
+						<!-- BUTTON TO EDIT -->
+						<p:commandButton icon="fa fa-edit" 
+										 title="Editar o Registro"
+										 actionListener="#{languageController.doEdit}"
+										 oncomplete="PF('dlgEditLanguage').show();"
+										 update=":idMsgGlobal
+										 		 :languageRegisterFormID:languageInputRegisterFormID 
+												 :languageRegisterFormID:languageInputRegisterUserFormID">
+							<f:attribute name="selectedLanguageByCursor" value="#{cursor}"/>
+							<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener" />
+						</p:commandButton>
+					
+						<!-- BUTTON TO DELETE -->
+						<p:commandButton icon="fa fa-trash" 
+										 title="Deletar o Registro"
+										 actionListener="#{languageController.doDelete}"
+										 update=":idMsgGlobal 
+												:languageListFormID:languageDataTableFormID">
+							<p:confirm header="Confirmação"
+									   message="Deseja excluir #{cursor.languageName}?" 
+									   icon="fa fa-exclamation-triangle"/>
+							<f:attribute name="selectedLanguageByCursor" value="#{cursor}"/>
+						</p:commandButton>
+					</p:column>
+
+
+					<!-- FACET FOR THE FOOTER -->
+					<f:facet name="footer">
+							
+						<!-- NEW BUTTON -->
+						<p:commandButton value="Novo" 
+										 icon="fa fa-plus"
+										 title="Criar uma nova Língua"
+										 actionListener="#{languageController.doNewRegister}"
+										 oncomplete="PF('dlgEditLanguage').show();"
+										 update=":languageRegisterFormID:languageInputRegisterFormID 
+												:languageRegisterFormID:languageInputRegisterUserFormID">
+							<f:actionListener type="org.omnifaces.eventlistener.ResetInputAjaxActionListener"/>
+						</p:commandButton>
+						
+					</f:facet>
+
+				</p:dataTable>
+
+				
+				<!-- CONFIRM DIALOG WHILE DELETING -->
+				<p:confirmDialog global="true" >
+				
+					<h:panelGrid columns="2" styleClass="panelGridCenter">
+						<p:commandButton value="Sim" 
+										 type="button" 
+										 styleClass="ui-confirmdialog-yes" 
+										 icon="ui-icon-check"/>		
+						<p:commandButton value="Não" 
+										 type="button" 
+										 styleClass="ui-confirmdialog-no" 
+										 icon="ui-icon-close"/>
+					</h:panelGrid>
+					
+				</p:confirmDialog>
+
+			</h:form>
+			
+
+
+
+			<!-- DIALOG TO REGISTER NEW LANGUAGE -->			
+			<p:dialog header="Editar a Língua"
+					  widgetVar="dlgEditLanguage"
+					  draggable="true" 
+					  modal="true" 
+					  closable="true"
+					  appendTo="@(body)" 
+					  closeOnEscape="true"
+					  responsive="true"
+					  maximizable="true" 
+					  position="center">
+				
+				
+				<!-- FORM FOR THE DIALOG -->
+				<h:form id="languageRegisterFormID">
+					
+					<!-- PANEL GRID FOR REGISTER LANGUAGE NAME AND LANGUAGE DESCRIPTION -->
+					<h:panelGrid id="languageInputRegisterFormID" columns="2">
+														    
+						<p:outputLabel value="Nome da Língua: *" />
+						<p:inputText id="languageNameID"
+									 value="#{languageController.languageDomain.languageName}"
+									 maxlength="12"
+									 size="20"
+									 required="true" 
+									 requiredMessage="O campo 'Nome da Língua' é obrigatório"/>
+									
+						<p:outputLabel value="Descrição da Língua: *" />
+						<p:inputText id="languageDescriptionID"
+									 value="#{languageController.languageDomain.languageDescription}" 
+									 maxlength="2" 
+									 size="20"
+									 required="true" 
+									 requiredMessage="O campo 'Descrição da Língua' é obrigatório"/>
+														
+					</h:panelGrid>					
+					
+					<p:spacer height="10px"/>
+					
+					<!-- PANEL GRID FOR USER AND SAVING DATE -->
+					<h:panelGrid id="languageInputRegisterUserFormID" columns="2">
+						<p:outputLabel value="Ultima atualização: "/>						
+						<p:spacer width="5px"/>
+						
+						<p:outputLabel value="Feita no dia: "/>
+						<p:outputLabel value="#{languageController.languageDomain.saveLanguageDate}">
+							<f:convertDateTime locale="pt_BR" 
+											   pattern="dd/MM/yyyy HH:mm"
+											   timeZone="America/Sao_Paulo"/>
+						</p:outputLabel>												
+						
+						<p:outputLabel value="Pelo usário: "/>
+						<p:outputLabel value="#{languageController.languageDomain.languageSaveLoginUser}" style="color: orange;"/>						
+					</h:panelGrid>
+
+					<p:spacer width="20px"/>
+					
+					<!-- PANEL GRID FOR BUTTON SAVE AND CLOSE -->
+					<h:panelGrid columns="6" id="buttonPannelGridID" styleClass="panelGridCenter">
+
+						<p:commandButton value="Salvar" 
+										 icon="fa fa-floppy-o" 
+										 actionListener="#{languageController.doSave}"
+										 title="Salvar os Dados"
+										 update=":idMsgGlobal
+												 languageRegisterFormID:languageInputRegisterUserFormID"/>						
+						<p:commandButton value="Fechar" 
+										 icon="fa fa-close" 
+										 immediate="true"
+										 oncomplete="PF('dlgEditLanguage').hide();" 
+										 title="Fechar a Janela"
+										 actionListener="#{languageController.doClean}"
+										 update=":languageListFormID:languageDataTableFormID"/>
+																						
+					</h:panelGrid>					
+				</h:form>
+			</p:dialog>			
+			
+		</div>
+	</ui:define>
+</ui:composition>

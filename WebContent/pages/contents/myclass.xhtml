@@ -5,6 +5,7 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:pe="http://primefaces.org/ui/extensions"
 	template="/pages/template/systemModel.xhtml">
 
 
@@ -18,6 +19,51 @@
 		<div align="center">
 			<br/>
 			
+			<br/>
+			
+			Multiple files; NOTE: in simple mode, you can get all files within a single request!
+			<br/>
+			<br/>
+			<h:form enctype="multipart/form-data">
+			    
+			    <div>
+			    	<p:outputLabel value="testetetetettetstetstete"/>
+			    </div>
+			    
+			    
+			    <br/>
+			    
+			    
+			    <div>
+				    
+				    <p:fileUpload value="#{uploadController.uploadedFile}" 
+				    			  mode="simple"
+				    			  skinSimple="true"
+				    			  multiple="false" />			    
+			    </div>
+			    
+			    
+			     <br/>
+			    
+			    
+			    <div>
+				    
+				    <p:commandButton value="Submit"
+				    				 ajax="false" 
+				    				 action="#{uploadController.upload}" />			    
+			    </div>
+		    		
+			    
+			    
+
+
+
+			
+			
+			</h:form>	
+			
+			
+				<br/>
 		</div>		
 	
 	</ui:define>

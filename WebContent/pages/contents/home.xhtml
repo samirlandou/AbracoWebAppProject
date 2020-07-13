@@ -50,14 +50,23 @@
 			    allDayText: 'Todo o Dia',
 			};
 		</script>
-		
-		<!--
+
+		<!-- Color  -->
 		<style type="text/css">
-			.value {
-				width: 1000px;
+			.fc-event.eventColor {
+				background: orange !important;
+				border-color: orange !important;
 			}
-		</style>  -->
+			
+			/*.fc-event:hover.oneEvent {
+				background: pink !important;
+				border-color: red !important;
+				color: white !important;
+			}*/
+		</style>
+	
 		
+
 		<!-- MENU -->
 		<ui:include src="/pages/includes/menuPrincipal.xhtml"/>
 
@@ -73,91 +82,193 @@
 				
 					<h3 style="margin-top: 0">Agenda</h3>
 					
-					<p:schedule  id="id_schedule" value="#{scheduleEventController.lazyScheduleModel}" widgetVar="wgv_schedule"
-						tooltip="true" locale="pt_BR" timeZone="America/Sao_Paulo">
+					<p:schedule id="id_schedule"
+								value="#{scheduleEventController.lazyScheduleModel}" 
+								widgetVar="wgv_schedule"
+								tooltip="true" 
+								locale="pt_BR" 
+								timeZone="America/Sao_Paulo"
+								resizable="false"
+								draggable="false"
+								rightHeaderTemplate="dayGridMonth,timeGridWeek,timeGridDay,listMonth" >
 						
-						<p:ajax event="dateSelect" listener="#{scheduleEventController.doNewRegister}" 
-							oncomplete="PF('wgv_dialog').show();" update=":id_form_detail:id_pnlgrd_detail"/>
+						<p:ajax event="dateSelect" 
+								listener="#{scheduleEventController.doNewRegister}" 
+								oncomplete="PF('wgv_dialog').show();" 
+								update=":id_form_detail:id_pnlgrd_detail 
+										:id_form_detail:id_pnlgrd_save_detail
+										:id_form_detail:id_pnlgrd_check_detail"/>
 					
-						<p:ajax event="eventSelect" listener="#{scheduleEventController.doSelect}"
-							oncomplete="PF('wgv_dialog').show();" update=":id_form_detail:id_pnlgrd_detail"/>
+						<p:ajax event="eventSelect" 
+								listener="#{scheduleEventController.doSelect}"
+								oncomplete="PF('wgv_dialog').show();" 
+								update=":id_form_detail:id_pnlgrd_detail 
+										:id_form_detail:id_pnlgrd_save_detail
+										:id_form_detail:id_pnlgrd_check_detail"/>
 							
-						<p:ajax event="eventMove" listener="#{scheduleEventController.doEventMove}" update=":idMsgGlobal"/>
+						<p:ajax event="eventMove" 
+								listener="#{scheduleEventController.doEventMove}" 
+								update=":idMsgGlobal"/>
 						
-						<p:ajax event="eventResize" listener="#{scheduleEventController.doEventResize}" update=":idMsgGlobal"/>
+						<p:ajax event="eventResize" 
+								listener="#{scheduleEventController.doEventResize}" 
+								update=":idMsgGlobal"/>
 					
 					</p:schedule>
 				</h:panelGrid>
 			</h:form>
 		
 			<!-- DIALOG TO REGISTER NEW EVENT -->
-			<p:dialog widgetVar="wgv_dialog" header="Detalhe do Evento"
-				showEffect="clip" hideEffect="clip" draggable="false"
-				resizable="false" modal="true" closable="true" appendTo="@(body)">
+			<p:dialog widgetVar="wgv_dialog" 
+					  header="Detalhe do Evento"
+					  showEffect="clip" 
+					  hideEffect="clip" 
+					  draggable="false"
+					  resizable="false" 
+					  modal="true" 
+					  closable="true" 
+					  appendTo="@(body)">
 				
 				<!-- FORM FOR THE EVENT -->
 				<h:form id="id_form_detail">
 				
 					<!-- PANEL GRID TO FILL FORMS -->
 					<h:panelGrid id="id_pnlgrd_detail" columns="2">
+						
 						<p:outputLabel for="id_description" value="Descrição:"/>
-						<p:inputText id="id_description" value="#{scheduleEventController.scheduleEventDomain.scheduleEventDescription}"
-							maxlength="20" required="true" requiredMessage="O campo 'Descrição' é obrigatório"/>
+						<p:inputText id="id_description" 
+									 value="#{scheduleEventController.scheduleEventDomain.scheduleEventDescription}"
+									 maxlength="20" 
+									 required="true" 
+									 requiredMessage="O campo 'Descrição' é obrigatório"
+									 size="30"/>
 										
 						<p:outputLabel for="id_type" value="Típo: "/>
-						<p:selectOneMenu id="id_type" value="#{scheduleEventController.scheduleEventDomain.scheduleEventType}"
-							converter="omnifaces.SelectItemsConverter" required="true" requiredMessage="O campo 'Típo' é obrigatório">
-							<f:selectItem noSelectionOption="true" 		itemLabel="Selecione um típo" />
-							<f:selectItem itemValue="Ateliê Pedagógico" itemLabel="Ateliê Pedagógico"/>
-							<f:selectItem itemValue="Happy Hour" 		itemLabel="Happy Hour"/>
-							<f:selectItem itemValue="Palestra" 			itemLabel="Palestra"/>
+						<p:selectOneMenu id="id_type" 
+										 value="#{scheduleEventController.scheduleEventDomain.scheduleEventType}"
+										 converter="omnifaces.SelectItemsConverter" 
+										 required="true" 
+										 requiredMessage="O campo 'Típo' é obrigatório"
+										 autoWidth="false"
+										 style="width: 211px">
+													 
+										<f:selectItem noSelectionOption="true" 		itemLabel="Selecione um típo" />
+										<f:selectItem itemValue="Ateliê Pedagógico" itemLabel="Ateliê Pedagógico"/>
+										<f:selectItem itemValue="Happy Hour" 		itemLabel="Happy Hour"/>
+										<f:selectItem itemValue="Palestra" 			itemLabel="Palestra"/>
+										<f:selectItem itemValue="Outro" 			itemLabel="Outro"/>
 						</p:selectOneMenu>
 													
 						<p:outputLabel for="id_cald_beginDate" value="Início: "/>
-						<p:calendar id="id_cald_beginDate" value="#{scheduleEventController.scheduleEventDomain.scheduleEventBeginDate}"
-							locale="pt_BR" pattern="dd/MM/yyyy HH:mm" timeZone="America/Sao_Paulo" mask="99/99/9999 99:99"
-							required="true" requiredMessage="O campo 'Início' é obrigatório">
-							<f:convertDateTime locale="pt_BR" pattern="dd/MM/yyyy HH:mm" timeZone="America/Sao_Paulo"/>
+						<p:calendar id="id_cald_beginDate" 
+									value="#{scheduleEventController.scheduleEventDomain.scheduleEventBeginDate}"
+									locale="pt_BR" 
+									pattern="dd/MM/yyyy HH:mm" 
+									timeZone="America/Sao_Paulo" 
+									mask="99/99/9999 99:99"
+									required="true" 
+									requiredMessage="O campo 'Início' é obrigatório"
+									stepMinute="5"
+									size="30">
+							
 						</p:calendar>
 						
 						<p:outputLabel for="id_cald_endDate" value="Término: "/>
-						<p:calendar id="id_cald_endDate" value="#{scheduleEventController.scheduleEventDomain.scheduleEventEndDate}"
-							locale="pt_BR" pattern="dd/MM/yyyy HH:mm" timeZone="America/Sao_Paulo" mask="99/99/9999 99:99"
-							 required="true" requiredMessage="O campo 'Términio:' é obrigatório">
-							<f:convertDateTime locale="pt_BR" pattern="dd/MM/yyyy HH:mm" timeZone="America/Sao_Paulo"/>
-						</p:calendar>
-						
+						<p:calendar id="id_cald_endDate" 
+									value="#{scheduleEventController.scheduleEventDomain.scheduleEventEndDate}"
+									locale="pt_BR" 
+									pattern="dd/MM/yyyy HH:mm" 
+									timeZone="America/Sao_Paulo" 
+									mask="99/99/9999 99:99"
+									required="true" 
+									requiredMessage="O campo 'Términio:' é obrigatório"
+									stepMinute="5"
+									size="30">
+							
+						</p:calendar>							
+												
 						<p:outputLabel value="Detalhes: "/>
-						<p:inputTextarea value="#{scheduleEventController.scheduleEventDomain.scheduleEventComment}" rows="2" cols="30" counter="display"
-							maxlength="100" counterTemplate="{0} caracteres restantes."
-							autoResize="true"/>
+						<p:inputTextarea value="#{scheduleEventController.scheduleEventDomain.scheduleEventComment}" 
+										 rows="2" 
+										 cols="30" 
+										 counter="display"
+										 maxlength="100" 
+										 counterTemplate="{0} caracteres restantes."
+										 autoResize="true"/>
 						<br/>
-						<h:outputText id="display"/>
+						<h:outputText id="display"/>						
+					
+					</h:panelGrid>
+					
+					
+					<p:spacer height="10px"/>
+					
+					
+					<!-- Specify other Event details -->
+					<h:panelGrid id="id_pnlgrd_check_detail" 
+								 columns="8">
+								 
+						<p:spacer width="75px" height="0px"/>
 						
-						<br/>				
-						<p:spacer width="10px"/>
+						<p:outputLabel value="O dia todo: "/>
+						<p:selectBooleanCheckbox value="#{scheduleEventController.scheduleEventDomain.allDayFlag}"
+												 title="Permitir o evento ocorrer no dia todo."/>
+						
+						<p:spacer width="20px" height="0px"/>
+												
+						<p:outputLabel value="Público: "/>
+						<p:selectBooleanCheckbox value="#{scheduleEventController.scheduleEventDomain.publicFlag}"
+												 title="Permitir a visibilidade pública desse evento."/>
+					
+					</h:panelGrid>
+					
+										
+					<p:spacer height="10px"/>
+					
+					
+					<!-- Specify User who save the Event -->
+					<h:panelGrid id="id_pnlgrd_save_detail" columns="2">
 						
 						<p:outputLabel value="Criação do evento por: "/>
-						<p:outputLabel value="#{scheduleEventController.scheduleEventDomain.scheduleEventLoginUser}" style="color: orange;"/>												
+						<p:outputLabel value="#{scheduleEventController.scheduleEventDomain.userDomain.userName}" 
+									   style="color: orange;"/>												
+					
 					</h:panelGrid>
+
+
+					 <p:spacer height="10px"/>
+					
 					
 					<!-- PANELGRID FOR BUTTON SAVE, DELETE AND CLOSE -->
 					<h:panelGrid columns="4">
-						<p:commandButton value="Salvar" action="#{scheduleEventController.doSave}"
-							oncomplete="PF('wgv_schedule').update();" update=":idMsgGlobal id_form_detail:id_pnlgrd_detail">
+						 
+						<p:commandButton value="Excluir"
+						 				 icon="fa fa-trash"
+						 				 action="#{scheduleEventController.doDelete}"
+						 				 oncomplete="PF('wgv_dialog').hide();
+						 				  			  PF('wgv_schedule').update();"
+						 				 rendered="#{loginController.accessRightByProfile}" 
+						 				 update=":idMsgGlobal">
+						 				  
+						 				 <p:confirm header="Confirmação" 
+						 				  			message="Deseja excluir #{cursor.personDomain.completeName}?" 
+						 				  			icon="fa fa-exclamation-triangle"/>						 	
 						</p:commandButton>
 						
-						<p:commandButton value="Fechar" action="#{scheduleEventController.doClean}"
-							oncomplete="PF('wgv_dialog').hide();"
-							update=":idMsgGlobal :id_form_detail:id_pnlgrd_detail">
+						<p:spacer width="80px" height="0px"/>
+											 					
+						<p:commandButton value="Salvar"
+										 icon="fa fa-floppy-o"
+										 action="#{scheduleEventController.doSave}"
+										 oncomplete="PF('wgv_schedule').update();" 
+										 update=":idMsgGlobal">
 						</p:commandButton>
-						 
-						 <p:spacer width="150px"/>
-						 <p:commandButton value="Excluir" action="#{scheduleEventController.doDelete}"
-						 	oncomplete="PF('wgv_dialog').hide();PF('wgv_schedule').update();"
-						 	rendered="#{loginController.accessRightByProfile}" update=":idMsgGlobal">
-						 	<p:confirm header="Confirmação" message="Deseja excluir #{cursor.personDomain.completeName}?" icon="ui-icon-alert"/>						 	
-						 </p:commandButton>
+						
+						<p:commandButton value="Fechar" 
+										 icon="fa fa-remove"
+										 action="#{scheduleEventController.doClean}"
+										 oncomplete="PF('wgv_dialog').hide();">
+						</p:commandButton>
 						 			
 					</h:panelGrid>
 					

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import org.omnifaces.util.Messages;
 
+import br.com.abracowebmanagement.dao.PersonDAO;
 import br.com.abracowebmanagement.dao.UserDAO;
 import br.com.abracowebmanagement.domain.PersonDomain;
 import br.com.abracowebmanagement.domain.UserDomain;
@@ -35,6 +36,47 @@ public class LoginController implements Serializable{
 	private boolean isDisconnected = false;
 	private boolean accessRightByProfile;
 
+	PersonDomain personDomain;
+	PersonDAO personDAO = new PersonDAO();
+	
+	
+	/* public  void checkFirstData() {
+			personDomain = new PersonDomain();
+			
+			
+			personDomain = personDAO.search((long) 1);
+			
+			//Check if first data Exist
+			if(personDomain != null && personDomain.getProfile().equals("ADMINISTRADOR(A)")){
+				
+				//Inform that data exist.
+				System.out.println("Abraço Cultaral's data already exist!");
+			} else{
+				
+				//Set data
+				personDomain.setAddress("Rua dos Pinheiros, 706");
+				personDomain.setCompleteName("Abraço Cultural");
+				personDomain.setCountry("Brasil");
+				personDomain.setCpf("697.458.687-67");
+				personDomain.setEmail("abraco@abracocultural.com.br");
+				personDomain.setId(1L);
+				personDomain.setLanguage1("BR");
+				personDomain.setLanguage2("");
+				personDomain.setLanguage3("");
+				personDomain.setProfile("ADMINISTRADOR(A)");
+				personDomain.setSex('F');
+				personDomain.setStatus(true);
+				personDomain.setTelephone("(11)32323-2323");
+				
+				//Save data
+				personDAO.save(personDomain);
+				
+				//Inform that data exist.
+				System.out.println("Abraço Cultaral's data is inserted with success!");
+			}		 
+ 
+	 }*/
+	
 	
 	@PostConstruct
 	public void init() {
@@ -48,7 +90,10 @@ public class LoginController implements Serializable{
 		rememberPassword = new UserDomain();
 		rememberPassword.setPersonDomain(new PersonDomain());
 		
-		accessRightByProfile = false;
+		accessRightByProfile = false;	
+		
+		//Check First Data
+		//checkFirstData();
 	}
 
 	
@@ -94,7 +139,7 @@ public class LoginController implements Serializable{
 				
 			} else{
 				UserDAO userDAO = new UserDAO();
-				rememberPassword = userDAO.FindByUserName(user.getUserName());
+				rememberPassword = userDAO.findByUserName(user.getUserName());
 				
 				if(rememberPassword == null){
 					Messages.addGlobalWarn("Favor informar um usuário válido!");
@@ -220,5 +265,6 @@ public class LoginController implements Serializable{
 	public void setAccessRightByProfile(boolean accessRightByProfile) {
 		this.accessRightByProfile = accessRightByProfile;
 	}
+	
 	
 }

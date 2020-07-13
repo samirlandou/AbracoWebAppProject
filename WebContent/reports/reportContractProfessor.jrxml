@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.11.0.final using JasperReports Library version 6.11.0-0c4056ccaa4d25a5a8c45672d2f764ea3498bebb  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="abb3cb9f-57fd-49f2-af5d-8ce55357fe98">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<parameter name="BREAK_LINE" class="java.lang.String"/>
+	<parameter name="ContractBody" class="java.lang.String"/>
+	<parameter name="PROFESSOR_CURSO" class="java.lang.String"/>
+	<parameter name="EMAIL_PESSOA" class="java.lang.String"/>
+	<parameter name="TELEFONE_PESSOA" class="java.lang.String"/>
+	<parameter name="CPF_PESSOA" class="java.lang.String"/>
+	<parameter name="CNPJ_PESSOA" class="java.lang.String"/>
+	<parameter name="ENDERECO_PESSOA" class="java.lang.String"/>
+	<parameter name="CODIGO_CONTRATO" class="java.lang.String"/>
+	<parameter name="UNIDADE_CURSO" class="java.lang.String"/>
+	<parameter name="MODULO_CURSO" class="java.lang.String"/>
+	<parameter name="LINGUA_CURSO" class="java.lang.String"/>
+	<parameter name="NIVEL_CURSO" class="java.lang.String"/>
+	<parameter name="HORA_INICIO_CURSO" class="java.lang.String"/>
+	<parameter name="HORA_TERMINO_CURSO" class="java.lang.String"/>
+	<parameter name="PAUSA_CURSO" class="java.lang.String"/>
+	<parameter name="TEMPO_CURSO" class="java.lang.String"/>
+	<parameter name="HORA_SEMANAL_CURSO" class="java.lang.String"/>
+	<parameter name="PRIMEIRO_DIA_LETIVO" class="java.lang.String"/>
+	<parameter name="SEGUNDO_DIA_LETIVO" class="java.lang.String"/>
+	<parameter name="PRECO_PADRAO_CURSO" class="java.lang.String"/>
+	<parameter name="PRECO_PROFESSOR_CURSO" class="java.lang.String"/>
+	<parameter name="PACOTE_HORA_CURSO" class="java.lang.String"/>
+	<parameter name="PRECO_PROFESSOR_TOTAL_CURSO" class="java.lang.String"/>
+	<parameter name="DATA_INICIO_CURSO" class="java.lang.String"/>
+	<parameter name="DATA_TERMINO_CURSO" class="java.lang.String"/>
+	<parameter name="abracoLogo" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="131" splitType="Stretch">
+			<image>
+				<reportElement isPrintRepeatedValues="false" x="210" y="0" width="131" height="131" uuid="dafaa41f-43c3-44e7-b9b6-34b29609f91c"/>
+				<imageExpression><![CDATA[$P{abracoLogo}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="210" y="111" width="130" height="20" uuid="0acb769b-69ee-4313-aae2-645e3a7d650b"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Contrato do Professor]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="0" y="0" width="130" height="20" uuid="b58019da-956b-4f83-b324-9ae9b18b5757"/>
+				<textElement markup="html"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="608" splitType="Stretch">
+			<frame>
+				<reportElement x="0" y="0" width="544" height="589" uuid="d23e8350-5873-49f5-9885-c9179b3fa78e"/>
+				<textField textAdjust="StretchHeight" evaluationTime="Auto" isBlankWhenNull="false">
+					<reportElement x="0" y="0" width="544" height="589" uuid="0f2e8512-bae0-4a3d-ae45-cdadb1b68ab1"/>
+					<textElement>
+						<font isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA["\n\n" +
+"CONTRATANTE: " +
+"\n\n" +
+"Professor: " + $P{PROFESSOR_CURSO} + 
+"\n" +
+"CPF: " + $P{CPF_PESSOA} +
+"\n" +
+"CNPJ: " + $P{CNPJ_PESSOA} +
+"\n" +
+"Endereço: " + $P{ENDERECO_PESSOA} +
+"\n\n" +
+
+"INFORMAÇÕES SOBRE O CURSO:" +
+"\n\n" +
+"Período: de " + $P{DATA_INICIO_CURSO} + " a " + $P{DATA_TERMINO_CURSO} +
+"\n" +
+"Unidade: " + $P{UNIDADE_CURSO} +
+"\n" +
+"Módulo: " + $P{MODULO_CURSO} +
+"\n" +
+"Língua: " + $P{LINGUA_CURSO} +
+"\n" +
+"Nível: " + $P{NIVEL_CURSO} +
+"\n" +
+"Pacote de horas: " + $P{PACOTE_HORA_CURSO} +
+"\n" +
+"Dia de curso: " + $P{PRIMEIRO_DIA_LETIVO} +
+"\n" +
+"Horário de aula: de " + $P{TEMPO_CURSO} + " (de " + $P{HORA_INICIO_CURSO} + " a " + $P{HORA_TERMINO_CURSO} + " " + $P{PAUSA_CURSO} + ")" +
+"\n" +
+"Quantidade de aula: Uma vez por semana" +
+"\n" +
+"Hora semanal: " + $P{HORA_SEMANAL_CURSO} + "/semana" +
+"\n" +
+"Valor do Curso: R$ " + $P{PRECO_PROFESSOR_TOTAL_CURSO} +
+"\n" +
+"Forma do pagamento: Deposito Bancário" +
+"\n" +
+"Pagamento: O valor mensal será pago via transferência bancária da conta bancária informada." +
+"\n\n" +
+
+"----------------------------------------------------------------------------------------------" +
+
+"\n\n" +
+"Período: de " + $P{DATA_INICIO_CURSO} + " a " + $P{DATA_TERMINO_CURSO} +
+"\n" +
+"Unidade: " + $P{UNIDADE_CURSO} +
+"\n" +
+"Módulo: " + $P{MODULO_CURSO} +
+"\n" +
+"Língua: " + $P{LINGUA_CURSO} +
+"\n" +
+"Nível: " + $P{NIVEL_CURSO} +
+"\n" +
+"Pacote de horas: " + $P{PACOTE_HORA_CURSO} +
+"\n" +
+"Dia de curso: " + $P{PRIMEIRO_DIA_LETIVO} +
+"\n" +
+"Horário de aula: de " + $P{TEMPO_CURSO} + " (de " + $P{HORA_INICIO_CURSO} + " a " + $P{HORA_TERMINO_CURSO} + " " + $P{PAUSA_CURSO} + ")" +
+"\n" +
+"Quantidade de aula: Uma vez por semana" +
+"\n" +
+"Hora semanal: " + $P{HORA_SEMANAL_CURSO} + "/semana" +
+"\n" +
+"Valor do Curso: R$ " + $P{PRECO_PROFESSOR_TOTAL_CURSO} +
+"\n" +
+"Forma do pagamento: Deposito Bancário" +
+"\n" +
+"Pagamento: O valor mensal será pago via transferência bancária da conta bancária informada." +
+
+"\n\n" +
+
+"----------------------------------------------------------------------------------------------" +
+
+"\n\n" +
+"Período: de " + $P{DATA_INICIO_CURSO} + " a " + $P{DATA_TERMINO_CURSO} +
+"\n" +
+"Unidade: " + $P{UNIDADE_CURSO} +
+"\n" +
+"Módulo: " + $P{MODULO_CURSO} +
+"\n" +
+"Língua: " + $P{LINGUA_CURSO} +
+"\n" +
+"Nível: " + $P{NIVEL_CURSO} +
+"\n" +
+"Pacote de horas: " + $P{PACOTE_HORA_CURSO} +
+"\n" +
+"Dia de curso: " + $P{PRIMEIRO_DIA_LETIVO} +
+"\n" +
+"Horário de aula: de " + $P{TEMPO_CURSO} + " (de " + $P{HORA_INICIO_CURSO} + " a " + $P{HORA_TERMINO_CURSO} + " " + $P{PAUSA_CURSO} + ")" +
+"\n" +
+"Quantidade de aula: Uma vez por semana" +
+"\n" +
+"Hora semanal: " + $P{HORA_SEMANAL_CURSO} + "/semana" +
+"\n" +
+"Valor do Curso: R$ " + $P{PRECO_PROFESSOR_TOTAL_CURSO} +
+"\n" +
+"Forma do pagamento: Deposito Bancário" +
+"\n" +
+"Pagamento: O valor mensal será pago via transferência bancária da conta bancária informada." +
+
+"\n\n" +
+
+"----------------------------------------------------------------------------------------------" +
+
+"\n\n" +
+"Período: de " + $P{DATA_INICIO_CURSO} + " a " + $P{DATA_TERMINO_CURSO} +
+"\n" +
+"Unidade: " + $P{UNIDADE_CURSO} +
+"\n" +
+"Módulo: " + $P{MODULO_CURSO} +
+"\n" +
+"Língua: " + $P{LINGUA_CURSO} +
+"\n" +
+"Nível: " + $P{NIVEL_CURSO} +
+"\n" +
+"Pacote de horas: " + $P{PACOTE_HORA_CURSO} +
+"\n" +
+"Dia de curso: " + $P{PRIMEIRO_DIA_LETIVO} +
+"\n" +
+"Horário de aula: de " + $P{TEMPO_CURSO} + " (de " + $P{HORA_INICIO_CURSO} + " a " + $P{HORA_TERMINO_CURSO} + " " + $P{PAUSA_CURSO} + ")" +
+"\n" +
+"Quantidade de aula: Uma vez por semana" +
+"\n" +
+"Hora semanal: " + $P{HORA_SEMANAL_CURSO} + "/semana" +
+"\n" +
+"Valor do Curso: R$ " + $P{PRECO_PROFESSOR_TOTAL_CURSO} +
+"\n" +
+"Forma do pagamento: Deposito Bancário" +
+"\n" +
+"Pagamento: O valor mensal será pago via transferência bancária da conta bancária informada." +
+
+"\n\n" +
+
+"----------------------------------------------------------------------------------------------" +
+
+"\n\n" +
+"Período: de " + $P{DATA_INICIO_CURSO} + " a " + $P{DATA_TERMINO_CURSO} +
+"\n" +
+"Unidade: " + $P{UNIDADE_CURSO} +
+"\n" +
+"Módulo: " + $P{MODULO_CURSO} +
+"\n" +
+"Língua: " + $P{LINGUA_CURSO} +
+"\n" +
+"Nível: " + $P{NIVEL_CURSO} +
+"\n" +
+"Pacote de horas: " + $P{PACOTE_HORA_CURSO} +
+"\n" +
+"Dia de curso: " + $P{PRIMEIRO_DIA_LETIVO} +
+"\n" +
+"Horário de aula: de " + $P{TEMPO_CURSO} + " (de " + $P{HORA_INICIO_CURSO} + " a " + $P{HORA_TERMINO_CURSO} + " " + $P{PAUSA_CURSO} + ")" +
+"\n" +
+"Quantidade de aula: Uma vez por semana" +
+"\n" +
+"Hora semanal: " + $P{HORA_SEMANAL_CURSO} + "/semana" +
+"\n" +
+"Valor do Curso: R$ " + $P{PRECO_PROFESSOR_TOTAL_CURSO} +
+"\n" +
+"Forma do pagamento: Deposito Bancário" +
+"\n" +
+"Pagamento: O valor mensal será pago via transferência bancária da conta bancária informada." +
+
+"\n\n" +
+
+"----------------------------------------------------------------------------------------------" +
+
+"\n\n" +
+"Período: de " + $P{DATA_INICIO_CURSO} + " a " + $P{DATA_TERMINO_CURSO} +
+"\n" +
+"Unidade: " + $P{UNIDADE_CURSO} +
+"\n" +
+"Módulo: " + $P{MODULO_CURSO} +
+"\n" +
+"Língua: " + $P{LINGUA_CURSO} +
+"\n" +
+"Nível: " + $P{NIVEL_CURSO} +
+"\n" +
+"Pacote de horas: " + $P{PACOTE_HORA_CURSO} +
+"\n" +
+"Dia de curso: " + $P{PRIMEIRO_DIA_LETIVO} +
+"\n" +
+"Horário de aula: de " + $P{TEMPO_CURSO} + " (de " + $P{HORA_INICIO_CURSO} + " a " + $P{HORA_TERMINO_CURSO} + " " + $P{PAUSA_CURSO} + ")" +
+"\n" +
+"Quantidade de aula: Uma vez por semana" +
+"\n" +
+"Hora semanal: " + $P{HORA_SEMANAL_CURSO} + "/semana" +
+"\n" +
+"Valor do Curso: R$ " + $P{PRECO_PROFESSOR_TOTAL_CURSO} +
+"\n" +
+"Forma do pagamento: Deposito Bancário" +
+"\n" +
+"Pagamento: O valor mensal será pago via transferência bancária da conta bancária informada." +
+
+"\n\n" +
+
+"----------------------------------------------------------------------------------------------" +
+
+"\n\n" +
+"Período: de " + $P{DATA_INICIO_CURSO} + " a " + $P{DATA_TERMINO_CURSO} +
+"\n" +
+"Unidade: " + $P{UNIDADE_CURSO} +
+"\n" +
+"Módulo: " + $P{MODULO_CURSO} +
+"\n" +
+"Língua: " + $P{LINGUA_CURSO} +
+"\n" +
+"Nível: " + $P{NIVEL_CURSO} +
+"\n" +
+"Pacote de horas: " + $P{PACOTE_HORA_CURSO} +
+"\n" +
+"Dia de curso: " + $P{PRIMEIRO_DIA_LETIVO} +
+"\n" +
+"Horário de aula: de " + $P{TEMPO_CURSO} + " (de " + $P{HORA_INICIO_CURSO} + " a " + $P{HORA_TERMINO_CURSO} + " " + $P{PAUSA_CURSO} + ")" +
+"\n" +
+"Quantidade de aula: Uma vez por semana" +
+"\n" +
+"Hora semanal: " + $P{HORA_SEMANAL_CURSO} + "/semana" +
+"\n" +
+"Valor do Curso: R$ " + $P{PRECO_PROFESSOR_TOTAL_CURSO} +
+"\n" +
+"Forma do pagamento: Deposito Bancário" +
+"\n" +
+"Pagamento: O valor mensal será pago via transferência bancária da conta bancária informada." +
+
+"\n\n" +
+
+"----------------------------------------------------------------------------------------------" +
+
+"\n\n" +
+"Período: de " + $P{DATA_INICIO_CURSO} + " a " + $P{DATA_TERMINO_CURSO} +
+"\n" +
+"Unidade: " + $P{UNIDADE_CURSO} +
+"\n" +
+"Módulo: " + $P{MODULO_CURSO} +
+"\n" +
+"Língua: " + $P{LINGUA_CURSO} +
+"\n" +
+"Nível: " + $P{NIVEL_CURSO} +
+"\n" +
+"Pacote de horas: " + $P{PACOTE_HORA_CURSO} +
+"\n" +
+"Dia de curso: " + $P{PRIMEIRO_DIA_LETIVO} +
+"\n" +
+"Horário de aula: de " + $P{TEMPO_CURSO} + " (de " + $P{HORA_INICIO_CURSO} + " a " + $P{HORA_TERMINO_CURSO} + " " + $P{PAUSA_CURSO} + ")" +
+"\n" +
+"Quantidade de aula: Uma vez por semana" +
+"\n" +
+"Hora semanal: " + $P{HORA_SEMANAL_CURSO} + "/semana" +
+"\n" +
+"Valor do Curso: R$ " + $P{PRECO_PROFESSOR_TOTAL_CURSO} +
+"\n" +
+"Forma do pagamento: Deposito Bancário" +
+"\n" +
+"Pagamento: O valor mensal será pago via transferência bancária da conta bancária informada.";]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="63">
+			<textField>
+				<reportElement x="420" y="33" width="60" height="30" uuid="727b5c29-85a2-4cbc-a109-8b4e4d862a46"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="480" y="33" width="65" height="30" uuid="85f684d4-16f4-48d0-9fa6-27db9c8dab2c"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression><![CDATA["/" + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>
