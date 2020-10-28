@@ -4,4 +4,4 @@ The goal of this volunteer project is to build a web application for Abraço Cul
 
 This Project is built by [Samir Landou](https://www.linkedin.com/in/samir-landou-42661719a) but will be discountinued.
 
-The next projet named [**AbracoCulturalAPI**](https://github.com/samirlandou/AbracoCulturalAPI) consists to built a Restful API in Java SpringBoot for the back-end and consumed this API with Angular Framework for the front-end.
+The next projet named [**AbracoCultural-API-Docker**](https://github.com/samirlandou/AbracoCulturalAPI) consists to built a Restful API in Java SpringBoot for the back-end and consumed this API with Angular Framework for the front-end.
